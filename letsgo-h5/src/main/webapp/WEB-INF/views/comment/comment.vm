@@ -1,0 +1,1502 @@
+#set($pageTitle="游客点评")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/comment.css","$!{STATIC_URL}/resources/js/iCheck/minimal/blue.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/iCheck/icheck.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/common.js"])
+
+
+<div id="dp-container">
+    <!--title-->
+    <div class="dpTitle">
+        <div class="dpTitle1">
+            <div class="dp-title-img">
+               <!-- <img src="$!{STATIC_URL}/resources/images/img/title.png" />-->
+                #if($!scheduleEntity.featurePhoto&&$!scheduleEntity.featurePhoto!="")
+                <img src="$!scheduleEntity.featurePhoto" />
+                    #end
+            </div>
+            <div class="dp-title-text">
+                <p>$!{scheduleEntity.name}</p>
+            </div>
+        </div>
+    </div>
+    <!--8月24日-->
+    #if($commented!=2)
+
+#if(!$detailCommentResponse.detailCommentEntity.id)
+    <form class="dpDate"  action="$!{link.contextPath}/web/scheduleDetailComment/submitJournarComment" method="post">
+        <div class="dp-month">$!date.format('yyyy-MM-dd',$!{scheduleDetailEntity.scheduleDate})</div>
+        <input type="hidden" name="scheduleDetailCommentId" value="$!{scheduleDetailEntity.id}"/>
+        <!--您对今天的行程满意吗-->
+        <div class="ques1 satisfy">
+            <div class="quesTitle">
+                <span>1.</span>
+                您对今天的行程满意么?
+            </div>
+            <div class="itemList">
+                <ul>
+                    <li>
+                        <input type="radio" name="satisfiedStatus" value="5"  id="satisfiedStatus5">
+						<label for="satisfiedStatus5">非常满意</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="satisfiedStatus" value="4"  id="satisfiedStatus4">
+                        <label for="satisfiedStatus4">满意</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="satisfiedStatus" value="3"  id="satisfiedStatus3">
+                        <label for="satisfiedStatus3">一般</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="satisfiedStatus" value="2"  id="satisfiedStatus2">
+                        <label for="satisfiedStatus2">不满意</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="satisfiedStatus" value="1" id="satisfiedStatus1">
+                        <label for="satisfiedStatus1">非常不满意</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+#foreach($list in $detailCommentResponse.detailCommentEntity.scoreEntities)
+    $list
+    #end
+        <!--最不满意的地方是-->
+        <div class="ques1 ques2">
+            <div class="quesTitle">
+                <span>2.</span>
+                您对今天的行程最不满意的地方是?
+            </div>
+            <div class="itemList">
+                <ul>
+                    <li>
+                        <input type="radio" name="evaluateOption" value="0" id="evaluateOption0">
+                        <label id="evaluateId" for="evaluateOption0">无</label>
+                    </li>
+                    #if($scheduleDetailEntity.scenicList.size()>0&&$scheduleDetailEntity.scenicList[0].name!="")
+
+                    <li>
+                        <input type="radio" name="evaluateOption" value="1" id="evaluateOption1">
+                        <label for="evaluateOption1">景点</label>
+                    </li>
+                    #end
+                    <li>
+                        <input type="radio" name="evaluateOption" value="2" id="evaluateOption2">
+                        <label for="evaluateOption2">当地交通</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="evaluateOption" value="3" id="evaluateOption3">
+                        <label for="evaluateOption3">住宿</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="evaluateOption" value="4" id="evaluateOption4">
+                        <label for="evaluateOption4">用餐</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="evaluateOption" value="5" id="evaluateOption5">
+                        <label for="evaluateOption5">服务人员</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="evaluateOption" value="6" id="evaluateOption6">
+                        <label for="evaluateOption6">其它</label>
+                    </li>
+                </ul>
+                <input type="text" class="advice" style="display:none;" name="evaluateProposal"/>
+            </div>
+        </div>
+        <!--景点-->
+        <div class="ques1 viewSpot">
+            <div class="quesTitle">
+                <span>3.</span>
+                您对今天的哪个景点不满意?
+            </div>
+            <div class="itemList threeList">
+                <ul>
+#foreach($Detail in $scheduleDetailEntity.scenicList)
+                    <li>
+                        <input type="radio" name="spotsId" value="$Detail.id" id="$!{Detail.id}">
+                        <label for="$!{Detail.id}">$!{Detail.name}</label>
+                    </li>
+    #end
+                </ul>
+            </div>
+            <div class="pingfen scorerigger">
+                <span>景点</span>
+                <ul>
+                    <li>
+                        <input type="radio" name="scoreForSpots" checked value="1"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="2"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="3"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="4"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="5"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--当地交通-->
+        <div class="ques1 traffic">
+            <div class="quesTitle">
+                <span>3.</span>
+                您对当地交通最不满意的地方是?
+            </div>
+            <div class="itemList threeList">
+                <ul>
+                    <li>
+                        <input type="radio" name="reasonForTraffic" id="reasonForTraffic1" value="2-1">
+                        <label for="reasonForTraffic1">不准时</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="reasonForTraffic" id="reasonForTraffic2"  value="2-2">
+                        <label for="reasonForTraffic2">车内环境</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="reasonForTraffic" id="reasonForTraffic3"  value="2-3">
+                        <label for="reasonForTraffic3">舒适度</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="pingfen scorerigger">
+                <span>不准时</span>
+
+                <ul>
+                    <li>
+                        <input type="radio" checked name="scoreFortime" value="1"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreFortime" value="2"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreFortime" value="3"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreFortime" value="4"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreFortime" value="5"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--住宿-->
+        <div class="ques1 stay">
+            <div class="quesTitle">
+                <span>3.</span>
+                您对住宿最不满意的地方是?
+            </div>
+            <div class="itemList threeList">
+                <ul>
+                    <li>
+                        <input type="radio" name="resonForAccommodation" id="resonForAccommodation1"  value="3-1">
+                        <label for="resonForAccommodation1">卫生</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForAccommodation" id="resonForAccommodation2" value="3-2">
+                        <label for="resonForAccommodation2">设施</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForAccommodation" id="resonForAccommodation3" value="3-3">
+                        <label for="resonForAccommodation3">环境</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForAccommodation" id="resonForAccommodation4" value="3-4">
+                        <label for="resonForAccommodation4">舒适度</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForAccommodation" id="resonForAccommodation5" value="3-5">
+                        <label for="resonForAccommodation5">服务</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="pingfen scorerigger">
+                <span>住宿</span>
+
+                <ul>
+                    <li>
+                        <input type="radio" name="scoreForreson"  checked value="1"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForreson" value="2"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForreson" value="3"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForreson" value="4"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForreson" value="5"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--用餐-->
+        <div class="ques1 food">
+            <div class="quesTitle">
+                <span>3.</span>
+                您最不满意的是哪餐?
+            </div>
+            <div class="itemList threeList">
+                <ul>
+                    <li>
+                        <input type="radio" name="mealsForDinner" id="mealsForDinner1" value="4-1">
+                        <label for="mealsForDinner1">早餐</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="mealsForDinner" id="mealsForDinner2" value="4-2">
+                        <label for="mealsForDinner2">午餐</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="mealsForDinner" id="mealsForDinner3" value="4-3">
+                        <label for="mealsForDinner3">晚餐</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="ques1 food foodSub">
+            <div class="quesTitle">
+                <span>4.</span>
+                您对用餐最不满意的是?
+            </div>
+            <div class="itemList">
+                <ul>
+                    <li>
+                        <input type="radio" name="resonForDinnersub" id="resonForDinnersuba" value="4-a">
+                        <label for="resonForDinnersuba">菜量</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForDinnersub" id="resonForDinnersubb" value="4-b">
+                        <label for="resonForDinnersubb">卫生</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForDinnersub" id="resonForDinnersubc" value="4-c">
+                        <label for="resonForDinnersubc">口味</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForDinnersub" id="resonForDinnersubd" value="4-d">
+                        <label for="resonForDinnersubd">环境</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForDinnersub" id="resonForDinnersube" value="4-e">
+                        <label for="resonForDinnersube">上菜速度</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="pingfen scorerigger">
+                <span>卫生</span>
+                <ul>
+                    <li>
+                        <input type="radio" name="scoreForDinnersub2" checked value="1"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForDinnersub2" value="2"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForDinnersub2" value="3"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForDinnersub2" value="4"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForDinnersub2" value="5"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--服务人员-->
+        <div class="ques1 service">
+            <div class="quesTitle">
+                <span>3.</span>
+                您对服务最不满意的是?
+            </div>
+            <div class="itemList threeList">
+                <ul>
+                    <li>
+                        <input type="radio" name="resonForPeople" id="resonForPeople1" value="5-1">
+                        <label for="resonForPeople1">领队</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForPeople" id="resonForPeople2" value="5-2">
+                        <label for="resonForPeople2">导游</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="resonForPeople" id="resonForPeople3" value="5-3">
+                        <label for="resonForPeople3">司机</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="pingfen scorerigger">
+                <span>导游</span>
+                <ul>
+
+                    <li>
+                        <input type="radio" name="scoreForPeoplesub" checked value="1"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForPeoplesub" value="2"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForPeoplesub" value="3"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForPeoplesub" value="4"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForPeoplesub" value="5"/>
+                       <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+        #if($commented==0)
+
+        <div class="padding15"></div>
+        <!--提交-->
+        <input type="button" value="提交" id="confirmComment" class="dp-submit"/>
+        #end
+    </form>
+    #else
+        <form class="dpDate"  action="$!{link.contextPath}/web/scheduleDetailComment/submitJournarComment" method="post">
+            <div class="dp-month">$!date.format('yyyy-MM-dd',$!{scheduleDetailEntity.scheduleDate})</div>
+            <!--您对今天的行程满意吗-->
+            <div class="ques1 satisfy">
+                <div class="quesTitle">
+                    <span>1.</span>
+                    您对今天的行程满意么?
+                </div>
+                <div class="itemList">
+                    <ul>
+                        #if($detailCommentResponse.detailCommentEntity.satisfiedStatus==5)
+                            <li>
+
+                                <input type="hidden" name="satisfiedStatus" id="satisfiedStatus5" checked value="5">
+                                <label for="satisfiedStatus5">非常满意</label>
+                            </li>
+                        #end
+                        #if($detailCommentResponse.detailCommentEntity.satisfiedStatus==4)
+                        <li>
+
+                            <input type="hidden" name="satisfiedStatus" id="satisfiedStatus4" checked value="4">
+
+
+                            <label for="satisfiedStatus4">满意</label>
+                        </li>
+                        #end
+                        #if($detailCommentResponse.detailCommentEntity.satisfiedStatus==3)
+                        <li>
+
+                            <input type="hidden" name="satisfiedStatus" id="satisfiedStatus3" checked disabled value="3">
+
+
+                            <label for="satisfiedStatus3">一般</label>
+                        </li>
+                        #end
+
+                        #if($detailCommentResponse.detailCommentEntity.satisfiedStatus==2)
+                        <li>
+
+                            <input type="hidden" name="satisfiedStatus" id="satisfiedStatus2" checked value="2">
+                            <label for="satisfiedStatus2">不满意</label>
+                        </li>
+                        #end
+                        #if($detailCommentResponse.detailCommentEntity.satisfiedStatus==1)
+                        <li>
+
+                            <input type="hidden" name="satisfiedStatus" id="satisfiedStatus1" checked value="1">
+
+                            <label for="satisfiedStatus1">非常不满意</label>
+                        </li>
+                        #end
+                    </ul>
+                </div>
+            </div>
+    #foreach($list in $detailCommentResponse.detailCommentEntity.scoreEntities)
+            <!--最不满意的地方是-->
+        #if($detailCommentResponse.detailCommentEntity.satisfiedStatus==1||$detailCommentResponse.detailCommentEntity.satisfiedStatus==2)
+            <div class="ques1 ques2" style="display:block;">
+                <div class="quesTitle">
+                    <span>2.</span>
+                    您对今天的行程最不满意的地方是?
+                </div>
+                <div class="itemList">
+                    <ul>
+        #if( $list.evaluateOption==0)
+                        <li>
+                            <input type="hidden" name="evaluateOption" id="evaluateOption0" value="0">
+                            <label id="evaluateId" for="evaluateOption0">无</label>
+                        </li>
+            #end
+                        #if( $list.evaluateOption==1)
+                        <li>
+                            <input type="hidden" name="evaluateOption" id="evaluateOption1" value="1">
+                            <label for="evaluateOption1">景点</label>
+                        </li>
+                        #end
+        #if( $list.evaluateOption==2)
+                        <li>
+                            <input type="hidden" name="evaluateOption" id="evaluateOption2" value="2">
+                            <label for="evaluateOption2">当地交通</label>
+                        </li>
+            #end
+        #if( $list.evaluateOption==3)
+                        <li>
+                            <input type="hidden" name="evaluateOption" id="evaluateOption3" value="3">
+                            <label for="evaluateOption3">住宿</label>
+                        </li>
+            #end
+        #if( $list.evaluateOption==4)
+                        <li>
+                            <input type="hidden" name="evaluateOption" id="evaluateOption4" value="4">
+                            <label for="evaluateOption4">用餐</label>
+                        </li>
+            #end
+        #if( $list.evaluateOption==5)
+                        <li>
+                            <input type="hidden" name="evaluateOption" id="evaluateOption5" value="5">
+                            <label for="evaluateOption5">服务人员</label>
+                        </li>
+            #end
+        #if( $list.evaluateOption==6)
+                        <li>
+                            <input type="hidden" name="evaluateOption" id="evaluateOption6" value="6">
+                            <label for="evaluateOption6">$!{list.evaluateProposal}</label>
+                        </li>
+            #end
+                    </ul>
+                </div>
+            </div>
+            <!--景点-->
+            #if($list.evaluateOption==1)
+            <div class="ques1 viewSpot" style="display:block;">
+                <div class="quesTitle">
+                    <span>3.</span>
+                    您对今天的哪个景点不满意?
+                </div>
+                <div class="itemList">
+                    <ul>
+                        #foreach($Detail in $scheduleDetailEntity.scenicList)
+                            #if($list.evaluateId==$Detail.id)
+                            <li>
+                                <input type="hidden" name="spotsId" id="$!{Detail.id}" value="$!{Detail.id}">
+                                <label for="$!{Detail.id}">$!{Detail.name}</label>
+                            </li>
+                            #end
+                        #end
+                    </ul>
+                </div>
+                <div class="pingfen" style="display: block">
+                    <span>$!{list.scoreOption}</span>
+                    <ul>
+                #if($list.score==1)
+                        <li>
+                            <input type="radio" name="scoreForSpots" value="1"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio"  name="scoreForSpots" value="2"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio"  name="scoreForSpots" value="3"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForSpots" value="4"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForSpots" value="5"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                #elseif($list.score==2)
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="1"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="2"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="3"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="4"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="5"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                #elseif($list.score==3)
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="1"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="2"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="3"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="4"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="5"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                #elseif($list.score==4)
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="1"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="2"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="3"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="4"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="5"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                    </li>
+                #elseif($list.score==5)
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="1"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="2"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio"  name="scoreForSpots" value="3"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="4"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    <li>
+                        <input type="radio" name="scoreForSpots" value="5"/>
+                        <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                    </li>
+                    #end
+                    </ul>
+                </div>
+            </div>
+                #end
+            <!--当地交通-->
+        #if($list.evaluateOption==2)
+            <div class="ques1 traffic" style="display:block">
+                <div class="quesTitle">
+                    <span>3.</span>
+                    您对当地交通最不满意的地方是?
+                </div>
+                <div class="itemList threeList">
+                    <ul>
+        #if($list.evaluateId=="2-1")
+                        <li>
+                            <input type="hidden" name="reasonForTraffic" id="reasonForTraffic1" value="2-1">
+                            <label for="reasonForTraffic1">不准时</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="2-2")
+                        <li>
+                            <input type="hidden" name="reasonForTraffic" id="reasonForTraffic2"  value="2-2">
+                            <label for="reasonForTraffic2">车内环境</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="2-3")
+                        <li>
+                            <input type="hidden" name="reasonForTraffic" id="reasonForTraffic3"  value="2-3">
+                            <label for="reasonForTraffic3">舒适度</label>
+                        </li>
+            #end
+                    </ul>
+                </div>
+                <div class="pingfen" style="display: block;">
+                    <span>$!{list.scoreOption}</span>
+
+                    <ul>
+        #if($list.score==1)
+                        <li>
+                            <input type="radio" name="scoreFortime" value="1"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreFortime" value="2"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreFortime" value="3"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreFortime" value="4"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreFortime" value="5"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+            #elseif($list.score==2)
+                <li>
+                    <input type="radio" name="scoreFortime" value="1"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreFortime" value="2"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreFortime" value="3"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreFortime" value="4"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreFortime" value="5"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+        #elseif($list.score==3)
+            <li>
+                <input type="radio" name="scoreFortime" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+        #elseif($list.score==4)
+            <li>
+                <input type="radio" name="scoreFortime" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+        #elseif($list.score==5)
+            <li>
+                <input type="radio" name="scoreFortime" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreFortime" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            #end
+                    </ul>
+                </div>
+            </div>
+        #end
+            <!--住宿-->
+        #if($list.evaluateOption==3)
+            <div class="ques1 stay" style="display: block;">
+                <div class="quesTitle">
+                    <span>3.</span>
+                    您对住宿最不满意的地方是?
+                </div>
+                <div class="itemList threeList">
+                    <ul>
+        #if($list.evaluateId=="3-1")
+                        <li>
+                            <input type="hidden" name="resonForAccommodation" id="resonForAccommodation1" value="3-1">
+                            <label for="resonForAccommodation1">$!{list.scoreOption}</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="3-2")
+                        <li>
+                            <input type="hidden" name="resonForAccommodation" id="resonForAccommodation2" value="3-2">
+                            <label for="resonForAccommodation2">设施</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="3-3")
+                        <li>
+                            <input type="hidden" name="resonForAccommodation" id="resonForAccommodation3" value="3-3">
+                            <label for="resonForAccommodation3">环境</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="3-4")
+                        <li>
+                            <input type="hidden" name="resonForAccommodation" id="resonForAccommodation4" value="3-4">
+                            <label for="resonForAccommodation4">舒适度</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="3-5")
+                        <li>
+                            <input type="hidden" name="resonForAccommodation" id="resonForAccommodation5" value="3-5">
+                            <label for="resonForAccommodation5">服务</label>
+                        </li>
+            #end
+                    </ul>
+                </div>
+                <div class="pingfen" style="display: block">
+                    <span>$!{list.scoreOption}</span>
+
+                    <ul>
+        #if($list.score==1)
+                        <li>
+                            <input type="radio" name="scoreForreson" value="1"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForreson" value="2"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForreson" value="3"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForreson" value="4"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForreson" value="5"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+            #elseif($list.score==2)
+                <li>
+                    <input type="radio" name="scoreForreson" value="1"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreForreson" value="2"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreForreson" value="3"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreForreson" value="4"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreForreson" value="5"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+        #elseif($list.score==3)
+            <li>
+                <input type="radio" name="scoreForreson" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+        #elseif($list.score==4)
+            <li>
+                <input type="radio" name="scoreForreson" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+        #elseif($list.score==5)
+            <li>
+                <input type="radio" name="scoreForreson" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForreson" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+                #end
+                    </ul>
+                </div>
+            </div>
+            #end
+        #if($list.evaluateOption==4)
+            <!--用餐-->
+            <div class="ques1 food" style="display: block">
+                <div class="quesTitle">
+                    <span>3.</span>
+                    您最不满意的是哪餐?
+                </div>
+                <div class="itemList threeList">
+                    <ul>
+        #if($list.evaluateId=="4-1")
+                        <li>
+                            <input type="hidden" name="mealsForDinner" id="mealsForDinner1" value="4-1">
+                            <label for="mealsForDinner1">早餐</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="4-2")
+                        <li>
+                            <input type="hidden" name="mealsForDinner" id="mealsForDinner2" value="4-2">
+                            <label for="mealsForDinner2">午餐</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="4-3")
+                        <li>
+                            <input type="hidden" name="mealsForDinner" id="mealsForDinner3" value="4-3">
+                            <label for="mealsForDinner3">晚餐</label>
+                        </li>
+            #end
+                    </ul>
+                </div>
+            </div>
+            <div class="ques1 food foodSub" style="display:block;">
+                <div class="quesTitle">
+                    <span>4.</span>
+                    您对用餐最不满意的是?
+                </div>
+                <div class="itemList">
+                    <ul>
+        #if($list.evaluateSubInfo=="4-a")
+                        <li>
+                            <input type="hidden" name="resonForDinnersub" id="resonForDinnersuba" value="4-a">
+                            <label for="resonForDinnersuba">菜量</label>
+                        </li>
+            #end
+        #if($list.evaluateSubInfo=="4-b")
+                        <li>
+                            <input type="hidden" name="resonForDinnersub" id="resonForDinnersubb" value="4-b">
+                            <label for="resonForDinnersubb">卫生</label>
+                        </li>
+            #end
+        #if($list.evaluateSubInfo=="4-c")
+                        <li>
+                            <input type="hidden" name="resonForDinnersub" id="resonForDinnersubc" value="4-c">
+                            <label for="resonForDinnersubc">口味</label>
+                        </li>
+            #end
+        #if($list.evaluateSubInfo=="4-d")
+                        <li>
+                            <input type="hidden" name="resonForDinnersub" id="resonForDinnersubd" value="4-d">
+                            <label for="resonForDinnersubd">环境</label>
+                        </li>
+            #end
+        #if($list.evaluateSubInfo=="4-e")
+                        <li>
+                            <input type="hidden" name="resonForDinnersub" id="resonForDinnersube" value="4-e">
+                            <label for="resonForDinnersube">上菜速度</label>
+                        </li>
+            #end
+                    </ul>
+                </div>
+                <div class="pingfen" style="display: block">
+                    <span>$!{list.scoreOption}</span>
+                    <ul>
+        #if($list.score==1)
+                        <li>
+                            <input type="radio" name="scoreForDinnersub2" value="1"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio"  name="scoreForDinnersub2" value="2"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio"  name="scoreForDinnersub2" value="3"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForDinnersub2" value="4"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForDinnersub2" value="5"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+            #elseif($list.score==2)
+                <li>
+                    <input type="radio" name="scoreForDinnersub2" value="1"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                </li>
+                <li>
+                    <input type="radio"  name="scoreForDinnersub2" value="2"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                </li>
+                <li>
+                    <input type="radio"  name="scoreForDinnersub2" value="3"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreForDinnersub2" value="4"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+                <li>
+                    <input type="radio" name="scoreForDinnersub2" value="5"/>
+                    <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                </li>
+        #elseif($list.score==3)
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio"  name="scoreForDinnersub2" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio"  name="scoreForDinnersub2" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+        #elseif($list.score==4)
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio"  name="scoreForDinnersub2" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio"  name="scoreForDinnersub2" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+            </li>
+        #elseif($list.score==5)
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="1"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio"  name="scoreForDinnersub2" value="2"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio"  name="scoreForDinnersub2" value="3"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="4"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            <li>
+                <input type="radio" name="scoreForDinnersub2" value="5"/>
+                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+            </li>
+            #end
+                    </ul>
+                </div>
+            </div>
+            #end
+        #if($list.evaluateOption==5)
+            <!--服务人员-->
+            <div class="ques1 service" style="display: block">
+                <div class="quesTitle">
+                    <span>3.</span>
+                    您对服务最不满意的是?
+                </div>
+                <div class="itemList threeList">
+                    <ul>
+        #if($list.evaluateId=="5-1")
+                        <li>
+                            <input type="hidden" name="resonForPeople" id="resonForPeople1" value="5-1">
+                            <label for="resonForPeople1">领队</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="5-2")
+                        <li>
+                            <input type="hidden" name="resonForPeople" id="resonForPeople2" value="5-2">
+                            <label for="resonForPeople2">导游</label>
+                        </li>
+            #end
+        #if($list.evaluateId=="5-3")
+                        <li>
+                            <input type="hidden" name="resonForPeople" id="resonForPeople3" value="5-3">
+                            <label for="resonForPeople3">司机</label>
+                        </li>
+            #end
+                    </ul>
+                </div>
+                <div class="pingfen" style="display: block">
+                    <span>$!{list.scoreOption}</span>
+                    <ul>
+#if($list.score==1)
+
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="1"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="2"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="3"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="4"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="5"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        #elseif($list.score==2)
+
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="1"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="2"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="3"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="4"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="5"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                            </li>
+                        #elseif($list.score==3)
+
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="1"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="2"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="3"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="4"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="5"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                            </li>
+                        #elseif($list.score==4)
+
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="1"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="2"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="3"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="4"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                        </li>
+                        <li>
+                            <input type="radio" name="scoreForPeoplesub" value="5"/>
+                            <img src="$!{STATIC_URL}/resources/images/img/star.png" />
+                        </li>
+                        #elseif($list.score==5)
+
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="1"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="2"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="3"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="4"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                            <li>
+                                <input type="radio" name="scoreForPeoplesub" value="5"/>
+                                <img src="$!{STATIC_URL}/resources/images/img/star-bg.png" />
+                            </li>
+                        #end
+                    </ul>
+                </div>
+            </div>
+            #end
+    #end
+            #end
+            #if($commented==0)
+
+                <div class="padding15"></div>
+                <!--提交-->
+                <input type="button" value="提交" id="confirmComment" class="dp-submit"/>
+            #end
+        </form>
+    #end
+        #else
+            <div class="dp-month">$!date.format('yyyy-MM-dd',$!{scheduleDetailEntity.scheduleDate})</div>
+        <div class="ques1 satisfy">
+            <div class="quesTitle">
+
+                暂时不能点评，请等到今天中午12点之后再来点评
+            </div>
+        </div>
+
+    #end
+</div>
+
+
+#define($scriptBlock)
+	<script>
+        var flag=GetRequest(window.location.href);
+         #if($isWeChat == "Wechat")
+            var submitSurvey_url=CONTEXTPATH+"/wechat/submitJournarComment?"+parseParam(flag);
+         #else
+            var submitSurvey_url=CONTEXTPATH+"/web/scheduleDetailComment/submitJournarComment?"+parseParam(flag);
+         #end
+        $(document).ready(function() {
+            //iCheck
+            $('.itemList input').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue',
+                increaseArea: '20%' // optional
+            });
+            $(".itemList ul li").hover(function(){
+                $(this).css("background","#f0eff5");
+            },function(){
+                $(this).css("background","transparent");
+            });
+            $("label").hover(function(){
+                $(this).parent().css("background","#f0eff5");
+            },function(){
+                $(this).parent().css("background","transparent");
+            });
+            $("#evaluateOption6").on("ifChanged",function(){
+                if($(this).is(":checked")){
+                    $("[name=evaluateProposal]").show();
+                }else{
+                    $("[name=evaluateProposal]").hide();
+                }
+
+            })
+            //评分星星
+            $(".scorerigger ul li").on("click",function(){
+                $(this).parent().find("img").attr("src","$!{STATIC_URL}/resources/images/img/star.png");
+                $(this).prevAll().find("img").attr("src","$!{STATIC_URL}/resources/images/img/star-bg.png");
+                $(this).find("img").attr("src","$!{STATIC_URL}/resources/images/img/star-bg.png");
+                $(this).parent().find("[type=radio]").attr("checked",false);
+                $(this).prevAll().find("[type=radio]").attr("checked",false);
+                $(this).find("[type=radio]").attr('checked',true);
+            });
+            //点击不满意||非常不满意
+            $("[name=satisfiedStatus]").on("ifChecked",function(){
+                if($(this).parent().next().text()=="不满意" || $(this).parent().next().text()=="非常不满意"){
+                    $(".ques2").css("display","block");
+
+                }else{
+                    $(".ques2").css("display","none");
+                    $(".traffic,.viewSpot,.stay,.food,.service").css("display","none");
+                }
+            });
+
+            $("[name=evaluateOption]").on("ifChecked",function(){
+                    if ($(this).parent().next().text() == "其它" || $(this).parent().next().text() == "无") {
+                        $(".traffic,.viewSpot,.stay,.food,.service").css("display", "none");
+
+                    } else if ($(this).parent().next().text() == "景点") {
+                        $(".pingfen").css("display", "none");
+                        $(".viewSpot").css("display", "block");
+                        $(".itemList input").on("ifChecked", function () {//点击出现小星星
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen").css("display", "block");
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen span").html($(this).parent().next().html());
+                            if ($(".pingfen span").width() > "105") {
+                                $(this).parent().parent().parent().parent().parent().find(".pingfen span").css("display", "block");
+                                $(this).parent().parent().parent().parent().parent().find(".pingfen").css("margin-bottom", "30px");
+                                $(this).parent().parent().parent().parent().parent().find(".pingfen ul li img").css("margin-left", "4px");
+                            } else {
+                                $(".pingfen").css("margin-bottom", "0px");
+                            }
+                        })
+                        $(".traffic,.stay,.food,.service").css("display", "none");
+                    } else if ($(this).parent().next().text() == "当地交通") {
+                        $(".pingfen").css("display", "none");
+                        $(".traffic").css("display", "block");
+                        $(".traffic .itemList ul li div input").on("ifChecked", function () {
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen").css("display", "block");
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen span").html($(this).parent().next().html());
+                        });
+                        $(".viewSpot,.stay,.food,.service").css("display", "none");
+                    } else if ($(this).parent().next().text() == "住宿") {
+                        $(".pingfen").css("display", "none");
+                        $(".stay").css("display", "block");
+                        $(".itemList input").on("ifChecked", function () {
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen").css("display", "block");
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen span").html($(this).parent().next().html());
+                        })
+                        $(".traffic,.viewSpot,.food,.service").css("display", "none");
+                    } else if ($(this).parent().next().text() == "用餐") {
+                        $(".pingfen").css("display", "none");
+                        $(".food").css("display", "block");
+                        $(".itemList input").on("ifChecked", function () {
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen").css("display", "block");
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen span").html($(this).parent().next().html());
+                        })
+                        $(".traffic,.stay,.viewSpot,.service").css("display", "none");
+                    } else if ($(this).parent().next().text() == "服务人员") {
+                        $(".pingfen").css("display", "none");
+                        $(".service").css("display", "block");
+                        $(".itemList input").on("ifChecked", function () {
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen").css("display", "block");
+                            $(this).parent().parent().parent().parent().parent().find(".pingfen span").html($(this).parent().next().html());
+                        })
+                        $(".traffic,.stay,.food,.viewSpot").css("display", "none");
+                    }
+            })
+            //提交
+            $("#confirmComment").click(function(){
+                var that=$(this);
+                var question={};
+                var finsh=true;
+                question.scoreEntities=[];
+                question.satisfiedStatus = $(".satisfy").find("input:checked").val();
+                question.scheduleDetailId = "$!scheduleDetailEntity.id";
+                var evaluateIdsl = $(".ques1:visible").find(".threeList").find("input:checked").val();
+                var evaluateOption = $(".ques2").find("input:checked").val();
+                var evaluateProposal = $.trim($("[name=evaluateProposal]").val());
+                var evaluateSubInfo =  $(".foodSub").find(".itemList").find("input:checked").val();
+                var scheduleDetailCommentId = "$!{scheduleDetailEntity.id}";
+                var score = $(".ques1:visible").find(".pingfen ul li").find("[type=radio]:checked").val();
+                var scoreOption = $(".ques1:visible").find(".pingfen").find("span").text();
+                var obj={
+                    evaluateId: evaluateIdsl,
+                    evaluateOption:evaluateOption,
+                    evaluateProposal:evaluateProposal ,
+                    evaluateSubInfo: evaluateSubInfo,
+                    // id: "$!detailCommentResponse.detailCommentEntity.id",
+                    scheduleDetailCommentId:scheduleDetailCommentId,
+                    score:  score,
+                    scoreOption: scoreOption
+                }
+                question.scoreEntities.push(obj)
+                if(question.satisfiedStatus){
+                    finsh=true;
+                }else{
+                    finsh=false;
+                }
+                if($(".ques2").is(":visible")){
+                    if(evaluateOption){
+                        finsh=true;
+                    }else{
+                        finsh=false;
+                    }
+                }
+                if($(".ques1").find(".threeList").is(":visible")){
+                    if(evaluateIdsl){
+                        finsh=true;
+                    }else{
+                        finsh=false;
+                    }
+                }
+                if( $(".foodSub").find(".itemList").is(":visible")){
+                    if(evaluateSubInfo){
+                        finsh=true;
+                    }else{
+                        finsh=false;
+                    }
+                }
+                if($("[name=evaluateProposal]").is(":visible")){
+                    if(evaluateProposal){
+                        finsh=true;
+                    }else{
+                        finsh=false;
+                    }
+                }
+
+                if(!finsh){
+                    layer.open({
+                        btn: [ '确定'],
+                        content:"请填写必填问题后在进行下一步"
+                    })
+                    return false;
+                }
+                $.ajax({
+                    type:"post",
+                    url:submitSurvey_url,
+                    data:JSON.stringify(question),
+                    contentType:'application/json;charset=utf-8',
+                    dataType:"json",
+                    success:function(data){
+
+                        if(data.retCode==0){
+                            // startQuestionnaireActivity();
+                            layer.open({
+                                btn: [ '确定'],
+                                content:"提交成功",
+                                shadeClose:false,
+                                yes: function(index){
+                             #if($isWeChat == "Wechat")
+                                    var hrefnew=window.location.href;
+                                    var timestamp=new Date().getTime();
+                                 if(window.location.href.indexOf("?")>=0&&window.location.href.indexOf("timestamp")<0) {
+                                     window.location.href = hrefnew + "&timestamp=" + timestamp;
+                                 }else if(window.location.href.indexOf("timestamp")<0){
+                                     window.location.href = hrefnew + "?timestamp=" + timestamp;
+                                 }
+                             #else
+                                    window.location.reload();
+                             #end
+                                },
+                            })
+                        }else{
+                            layer.open({
+                                btn: [ '确定'],
+                                content:data.retMsg
+                            })
+
+                        }
+
+                    },
+                    error:function(){
+
+                    }
+                });
+            })
+        });
+
+
+
+	</script>
+#end

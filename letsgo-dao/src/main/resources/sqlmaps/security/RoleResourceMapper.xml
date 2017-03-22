@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.RoleResourceDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.RoleResourceEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="resource_id" property="resourceId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_role_resource
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.RoleResourceEntity" >
+        insert into s_role_resource (ID, role_id, resource_id, 
+            create_time, update_time, version
+            )
+        values (#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{resourceId,jdbcType=BIGINT}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.RoleResourceEntity" >
+        update s_role_resource
+        set role_id = #{roleId,jdbcType=BIGINT},
+            resource_id = #{resourceId,jdbcType=BIGINT},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, role_id, resource_id, create_time, update_time, version
+        from s_role_resource
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, role_id, resource_id, create_time, update_time, version
+        from s_role_resource
+    </select>
+</mapper>

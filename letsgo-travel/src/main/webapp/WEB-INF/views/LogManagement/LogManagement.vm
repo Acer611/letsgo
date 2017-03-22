@@ -1,0 +1,233 @@
+#set($pageTitle="日志管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+		<style type="text/css">
+			table tr td,
+			table tr th {
+				text-align: center;
+			}
+			
+			table tr td img {
+				margin: 3px 3px;
+			}
+		</style>
+
+
+		<div class="wrapper">
+
+			#parse("/WEB-INF/views/common/leftbar.vm")
+
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+            日志管理
+          </h1>
+					<ol class="breadcrumb">
+						<li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-dashboard"></i> 首页</a></li>
+						<li class="active">查看日志详情</li>
+					</ol>
+				</section>
+
+				<!-- Main content -->
+                <section class="content">
+                    <div>
+                        <div class="box box-info">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">查看日志详情</h3>
+                                <!--<div class="box-tools"><a class="btn btn-default btn-sm" href="#">预览</a></div>-->
+                            </div>
+                            <!-- /.box-header -->
+
+                            <div class="box-body">
+                                    <form class="form-horizontal" role="form"  action="$!{link.contextPath}/logManage/getLogList" method="post" id="form4">
+                                        <div class="col-md-12">
+                                            <div class="form-group col-md-4" style="margin-bottom: 20px;">
+                                                <label for="accountType" class="control-label col-lg-5">账号类型：</label>
+                                                <div class="col-lg-7">
+                                                    <select class="form-control select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="accountType" id="accountType">
+                                                        <option value="0" #if($!{request.accountType}=="0") selected
+                                                        #end>旅行社管理员</option>
+                                                        <option value="1" #if($!{request.accountType}=="1") selected
+                                                        #end>门店</option>
+                                                        <option value="2" #if($!{request.accountType}=="2") selected
+                                                        #end>计调</option>
+                                                        <option value="3" #if($!{request.accountType}=="3") selected
+                                                        #end>领队</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 20px;">
+                                                <label for="operateModel" class="control-label col-lg-5">操作模块：</label>
+                                                <div class="col-lg-7">
+                                                    <!--<input type="text" class="form-control" name="operateModel" id="operateModel" value="$!{request.operateModel}">-->
+                                                    <select class="form-control select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="operateModel" id="operateModel">
+                                                        <option value="0" #if($!{request.accountType}=="0") selected
+                                                        #end>团队行程管理</option>
+                                                        <option value="1" #if($!{request.accountType}=="1") selected
+                                                        #end>统计报表</option>
+                                                        <option value="2" #if($!{request.accountType}=="2") selected
+                                                        #end>领队导游管理</option>
+                                                        <option value="3" #if($!{request.accountType}=="3") selected
+                                                        #end>日志管理</option>
+                                                        <option value="4" #if($!{request.accountType}=="4") selected
+                                                        #end>游客管理</option>
+                                                        <option value="5" #if($!{request.accountType}=="5") selected
+                                                        #end>账户管理</option>
+                                                        <option value="6" #if($!{request.accountType}=="6") selected
+                                                        #end>账户设置</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!--时间日期-->
+                                        <div class="col-md-12">
+                                            <div class="form-group col-md-4">
+
+                                                <label for="inputEmail3"  class="control-label  col-lg-5" for="startPlace">时间：</label>
+                                                <div class="col-lg-7">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </div>
+                                                        <input type="text" id="beginTime" readonly="" autocomplete="off" name="beginTime" placeholder="yyyy-mm-dd" class="form-control" value="$!date.format('yyyy-MM-dd',$!{request.beginTime})">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <!-- /.input group -->
+                                                <label class="col-lg-1 control-label text-center" style="padding-left:10px;padding-right:10px;">至</label>
+                                                <div class="col-lg-7 ">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon">
+                                                            <i class="fa fa-calendar"></i>
+                                                        </div>
+                                                        <input type="text" id="endTime" readonly="" autocomplete="off" name="endTime" placeholder="yyyy-mm-dd" class="form-control" value="$!date.format('yyyy-MM-dd',$!{request.endTime})">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="col-md-2 col-md-offset-5">
+                                                <button type="button" id="btns" class="btn btn-block  btn-primary">查询</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                <br />
+                                <div class="col-xs-12  table-responsive" style="margin-top: 10px;">
+                                    <table class="table table-bordered table-hover" id="table3">
+                                        <thead>
+                                        <tr>
+                                            <th style="width:10%;">账号类型</th>
+                                            <th style="width:10%;">姓名</th>
+                                            <th style="width:10%;">时间</th>
+                                            <th style="width:10%;">操作模块</th>
+                                            <th style="width:10%;">操作类型</th>
+                                            <th style="width:50%;">操作内容</th>
+                                        </tr></thead>
+                                        <tbody>
+ #*#foreach($Detail in $response.logManageList)
+                                            <tr>
+                                                <td>
+                                                    #if($!Detail.accountType =="0") 旅行社管理员
+                                                        #elseif($!Detail.accountType =="1") 门店
+                                                        #elseif($!Detail.accountType =="2") 计调
+                                                        #elseif($!Detail.accountType =="3") 领队
+                                                    #end
+                                                </td>
+                                                <td>$!Detail.name</td>
+                                                <td>$!date.format('yyyy-MM-dd HH:mm:ss',$!Detail.operateTime)</td>
+                                                <td>$!Detail.operateModel</td>
+                                                <td>$!Detail.operateType</td>
+                                                <td>$!Detail.operateContent</td>
+                                            </tr>
+ #end*#
+                                        </tbody>
+                                    </table>
+                                    <div id="pagination" class="paginationjs paginationjs-small">
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                </section>
+				<!-- /.content -->
+				</div>
+				<!-- /.content-wrapper -->
+
+			#parse("/WEB-INF/views/common/footer.vm")
+
+				<!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+				<div class="control-sidebar-bg"></div>
+			</div>
+			<!-- ./wrapper -->
+
+#define($scriptBlock)
+			<script>
+                $('#beginTime').datetimepicker({
+                    language:  'zh-CN',
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    minView: "month"
+                }).on("click",function(ev){
+                    $("#beginTime").datetimepicker("endTime", $("#endTime").val());
+                });
+                $('#endTime').datetimepicker({
+                    language:  'zh-CN',
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    minView: "month"
+                }).on("click", function (ev) {
+                    $("#endTime").datetimepicker("beginTime", $("#beginTime").val());
+                });
+                $("#btns").on("click",function(){
+                    $.ajax({
+                        type: "POST",
+                        url:  CONTEXTPATH + "/logManage/getLogList",
+                        data: {accountType:$("[name=accountType]").val(),operateModel:$("[name=operateModel]").val(),beginTime:$("[name=beginTime]").val(),endTime:$("[name=endTime]").val()},
+                        dataType: "HTML",
+                        success: function (data) {
+                            $("#table3").find("tbody").empty().html(data)
+                            $("#pagination").show();
+                            if(data.indexOf("没有符合条件的数据")>=0){
+                                $("#pagination").hide();
+                            }
+                            $('#pagination').pagination({
+                                dataSource: CONTEXTPATH + "/logManage/getLogList",
+                                locator: 'data',
+                                totalNumber: totalpages,
+                                pageSize: 10,
+                                pageRange:1,
+                                alias: {
+                                    pageNumber: 'pageNum',
+                                    pageSize: 'pageSize'
+                                },
+                                ajax: {
+                                    //url:delQueStr(delQueStr(window.location.href, "pageNum"), "pageSize"),
+                                    type: "POST",
+                                    data: {accountType:$("[name=accountType]").val(),operateModel:$("[name=operateModel]").val(),beginTime:$("[name=startDate]").val(),endDate:$("[name=endDate]").val()},
+                                    dataType: 'html',
+                                    beforeSend: function () {
+                                        //$("#table2").empty().html('<td  colspan="7">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parent().show();
+                                    }
+                                },
+                                //            formatAjaxError:function(jqXHR, textStatus, errorThrown){
+                                //                //$("#table2").find("tbody").empty().html($(jqXHR.responseText).find("tbody").html())
+                                //                //console.log(jqXHR)
+                                //            },
+                                callback: function (data, pagination) {
+                                    $("#table3").find("tbody").empty().html(data);
+                                }
+                            })
+                        }
+                    });
+                })
+                $("#btns").click();
+			</script>
+#end

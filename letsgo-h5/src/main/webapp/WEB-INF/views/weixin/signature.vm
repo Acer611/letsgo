@@ -1,0 +1,76 @@
+#set($pageTitle="满意度调研")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/weixin/style/weui.css","$!{STATIC_URL}/resources/weixin/style/weixin.css?t=1"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/zepto.mint.js","$!{STATIC_URL}/resources/weixin/js/jSignature.min.js","https://res.wx.qq.com/open/js/jweixin-1.0.0.js","$!{STATIC_URL}/resources/weixin/js/weui.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js"])
+	<div class="signWarp">
+		<div class="signatureTit">请在下方区域签名：<span>（请按水平方向手写）</span></div>
+		<div class="signatureCon">
+			<div class="signaturearea" id="signature"></div>
+			<!--<div class="signIcon"></div>-->
+		</div>
+        <div class="refresh">
+		    <a href="javascript:;" class="reBtn">重新输入</a>
+		</div>
+	</div>
+	<input type="button" value="确认提交" class="surverBtn"/>
+#define($scriptBlock)
+	<script>
+	$(function(){
+		$("body").css({"backgroundColor":"#fff","height":"100%"});
+		 $("#signature").jSignature({ lineWidth: 6, width: "9.066667rem", height: "6.906667rem" });
+		 $(".reBtn").click(function(){
+			$("#signature").jSignature("reset");
+		 });
+		 var base64 = $("#signature").jSignature("getData","default");
+        var orgbese64="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAXcAAAEdCAYAAAD3ryfCAAAAAXNSR0IArs4c6QAAB2FJREFUeAHt0IEAAAAAw6D5U1/gCIVQYcCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYOAMDIdjAAHCIKCaAAAAAElFTkSuQmCC";
+
+        $("#signature").bind('change', function(e){ base64 = $("#signature").jSignature("getData","default"); })
+        $(".surverBtn").click(function(event){
+            event.preventDefault();
+            if(base64==orgbese64){
+                layer.open({
+                    btn: [ '确定'],
+                    content:"请签名后提交",
+                    shadeClose:false
+                })
+                return false;
+            }
+            layer.open({type: 2,shadeClose:false});
+            $.ajax({
+                type:"post",
+                url:CONTEXTPATH+"/wechat/submitSignUrl",
+                data:JSON.stringify({img64Str:base64,txGroupId:"$!{txGroupId}"}),
+                contentType:'application/json;charset=utf-8',
+                dataType:"json",
+                success:function(data){
+                    if(data.retCode==0){
+                        layer.closeAll();
+                        layer.open({
+                            btn: [ '确定'],
+                            content:"提交成功",
+                            shadeClose:false,
+                            yes: function(index){
+                                WeixinJSBridge.invoke('closeWindow',{},function(res){
+                                    //alert(res.err_msg);
+                                });
+                            },
+                        })
+                        //window.location.href="tlt:"
+                    }else{
+                        layer.closeAll();
+                        layer.open({
+                            btn: [ '确定'],
+                            content:"提交失败，请稍后重试",
+                            shadeClose:false
+                        })
+                    }
+                },
+                error:function(){
+                    layer.closeAll();
+                }
+            });
+        })
+
+	})
+	</script>
+#end

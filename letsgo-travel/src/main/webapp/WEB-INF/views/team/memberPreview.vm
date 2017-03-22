@@ -1,0 +1,312 @@
+#set($pageTitle="游客信息查看")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+
+    <!-- Site wrapper -->
+    <div class="wrapper">
+      #parse("/WEB-INF/views/common/leftbar.vm")
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+			游客管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">查看游客信息</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+          <!-- Default box -->
+          <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">查看游客信息</h3>
+				   <div class="box-tools col-md-5">
+					
+						<a class="btn btn-warning btn-sm col-md-3 pull-right" href="$!{link.contextPath}/member/memberEdit?id=$!{member.id}">修改</a>
+                  </div>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <div class="form-horizontal">
+                  <div class="box-body content">
+					<div class="row">
+						<div class="col-md-9">
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">姓名</label>
+								  <div class="col-xs-6">
+									 <p class="form-control-static">$!{member.realName}</p>
+								  </div>
+								</div>
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">性别</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">
+
+										#if($member.sex==1)
+                                            男
+											#else
+											女
+                                            #end</p>
+								  </div>
+								</div>
+#if($!{member.birthday}&&$!{member.birthday}!="")
+
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="sex">出生日期</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">$!{member.birthday}</p>
+								  </div>
+								</div>
+#end
+#if($!{member.phone}&&$!{member.phone}!="")
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">手机号</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">$!{member.countryCode}$!{member.phone}</p>
+								  </div>
+								</div>
+    #end
+							#if($!{member.weixin}&&$!{member.weixin}!="")
+                                <div class="form-group col-md-6">
+                                    <label class="col-xs-6 control-label" for="weixin">微信</label>
+                                    <div class="col-xs-6">
+                                        <p class="form-control-static">$!{member.weixin}</p>
+                                    </div>
+                                </div>
+							#end
+							#if($!{member.qq}&&$!{member.qq}!="")
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">QQ</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">$!{member.qq}</p>
+								  </div>
+								</div>
+							#end
+#if($!{member.cardType}&&$!{member.cardType}!="")
+                            <div class="form-group col-sm-12  table-responsive" style="padding: 0;margin:0;border:0;">
+                                <label class="col-sm-2 control-label">证件类型</label>
+                                <div class="col-sm-10">
+
+                                    <table class="table table-bordered">
+                                        <tbody>
+
+                                        <tr>
+                                            <td>$!{member.cardType}
+                                            </td>
+                                            <td>$!{member.cardNum}</td>
+                                            <td>
+                                                有效期
+                                            </td>
+                                            <td>$!{member.cardTime}</td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+    #end
+							</div>
+							<div class="col-md-2">
+								
+								<div class="demo">
+									<img src="$!{member.photoUrl}" class="profile-user-img img-responsive img-circle"/>
+									<h3 class="profile-username text-center">$!{member.realName}</h3>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-8">
+
+
+
+								<!--<div class="form-group">
+								  <label class="col-sm-2 control-label" for="inputNamel3">曾经旅游线路</label>
+								  <div class="col-sm-10">
+									  	<table class="table table-bordered">
+											<tbody>
+											
+											<tr>
+											  <td>东南亚</td>
+											  <td>泰国 新加坡 马来西亚</td>
+											</tr>
+											
+										  </tbody>
+										 </table>
+								  </div>
+								</div>-->
+								#if($member.photoLibrary1Url&&${member.photoLibrary1Url}!=""||$member.photoLibrary2Url&&${member.photoLibrary2Url}!=""||$member.photoLibrary3Url&&${member.photoLibrary3Url}!=""||$member.photoLibrary4Url&&${member.photoLibrary4Url}!=""||$member.photoLibrary5Url&&${member.photoLibrary5Url}!=""||$member.photoLibrary6Url&&${member.photoLibrary6Url}!=""||$member.photoLibrary7Url&&${member.photoLibrary7Url}!=""||$member.photoLibrary8Url&&${member.photoLibrary8Url}!=""||$member.photoLibrary9Url&&${member.photoLibrary9Url}!=""||$member.photoLibrary10Url&&${member.photoLibrary10Url}!="")
+								<div class="form-group col-sm-12">
+									<label class="col-sm-2 control-label" for="inputNamel3">游客照片</label>
+
+									<div class="col-sm-10 row">
+										#if(${member.photoLibrary1Url}&&${member.photoLibrary1Url}!="")
+                                            <div class="col-sm-6 col-md-3">
+                                                <a href="#" class="thumbnail">
+                                                    <img src="$!{member.photoLibrary1Url}"
+                                                         alt="">
+                                                </a>
+                                            </div>
+										#end
+#if(${member.photoLibrary2Url}&&${member.photoLibrary2Url}!="")
+									   <div class="col-sm-6 col-md-3">
+										  <a href="#" class="thumbnail">
+											 <img src="$!{member.photoLibrary2Url}"
+											 alt="">
+										  </a>
+									   </div>
+	#end
+#if(${member.photoLibrary3Url}&&${member.photoLibrary3Url}!="")
+									   <div class="col-sm-6 col-md-3">
+										  <a href="#" class="thumbnail">
+											 <img src="$!{member.photoLibrary3Url}"
+											 alt="">
+										  </a>
+									   </div>
+	#end
+#if(${member.photoLibrary4Url}&&${member.photoLibrary4Url}!="")
+									   <div class="col-sm-6 col-md-3">
+										  <a href="#" class="thumbnail">
+											 <img src="$!{member.photoLibrary4Url}"
+											 alt="">
+										  </a>
+									   </div>
+	#end
+#if(${member.photoLibrary5Url}&&${member.photoLibrary5Url}!="")
+                                        <div class="col-sm-6 col-md-3">
+                                            <a href="#" class="thumbnail">
+                                                <img src="$!{member.photoLibrary5Url}"
+                                                     alt="">
+                                            </a>
+                                        </div>
+	#end
+#if(${member.photoLibrary6Url}&&${member.photoLibrary6Url}!="")
+                                        <div class="col-sm-6 col-md-3">
+                                            <a href="#" class="thumbnail">
+                                                <img src="$!{member.photoLibrary6Url}"
+                                                     alt="">
+                                            </a>
+                                        </div>
+	#end
+#if(${member.photoLibrary7Url}&&${member.photoLibrary7Url}!="")
+                                        <div class="col-sm-6 col-md-3">
+                                            <a href="#" class="thumbnail">
+                                                <img src="$!{member.photoLibrary7Url}"
+                                                     alt="">
+                                            </a>
+                                        </div>
+	#end
+#if(${member.photoLibrary8Url}&&${member.photoLibrary8Url}!="")
+                                        <div class="col-sm-6 col-md-3">
+                                            <a href="#" class="thumbnail">
+                                                <img src="$!{member.photoLibrary8Url}"
+                                                     alt="">
+                                            </a>
+                                        </div>
+	#end
+#if(${member.photoLibrary9Url}&&${member.photoLibrary9Url}!="")
+                                        <div class="col-sm-6 col-md-3">
+                                            <a href="#" class="thumbnail">
+                                                <img src="$!{member.photoLibrary9Url}"
+                                                     alt="">
+                                            </a>
+                                        </div>
+	#end
+#if(${member.photoLibrary10Url}&&${member.photoLibrary10Url}!="")
+                                        <div class="col-sm-6 col-md-3">
+                                            <a href="#" class="thumbnail">
+                                                <img src="$!{member.photoLibrary10Url}"
+                                                     alt="">
+                                            </a>
+                                        </div>
+	#end
+									</div>
+								</div>
+								#end
+							</div>
+
+						</div>
+						
+                  </div><!-- /.box-body -->
+                </div>
+              </div><!-- /.box -->
+				#if($null.isNull($traveledList))
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">参加过的线路</h3>
+                </div>
+                <div class="box-body">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>线路名称</th>
+                            <th>日期</th>
+                            <th>目的地</th>
+                        </tr>
+							#foreach( $Detail in $traveledList)
+
+                            <tr>
+                                <td>$Detail.name</td>
+                                <td>$Detail.startDate~$Detail.endDate</td>
+                                <td>
+									#foreach( $Detaili in $Detail.scheduleDetailList)
+										$Detaili.destination1、$Detaili.destination2、$Detaili.destination3、$Detaili.destination4<br>
+									#end
+                                </td>
+
+                            </tr>
+
+							#end
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+            </div>
+			#end
+#if($null.isNull($prepareTravelList))
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">即将出发的线路</h3>
+                </div>
+                <div class="box-body">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>线路名称</th>
+                            <th>日期</th>
+                            <th>目的地</th>
+                        </tr>
+							#foreach( $Detail in $prepareTravelList)
+
+                            <tr>
+                                <td>$Detail.name</td>
+                                <td>$Detail.startDate~$Detail.endDate</td>
+                                <td>
+									#foreach( $Detaili in $Detail.scheduleDetailList)
+										$Detaili.destination1、$Detaili.destination2、$Detaili.destination3、$Detaili.destination4<br>
+									#end
+                                </td>
+
+                            </tr>
+
+							#end
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+            </div>
+			  #end
+
+			
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+
+
+		#parse("/WEB-INF/views/common/footer.vm")
+    </div><!-- ./wrapper -->
+
+
+

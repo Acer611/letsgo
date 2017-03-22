@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.notice.NoticeDetailDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.notice.NoticeDetailEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="notice_id" property="noticeId" jdbcType="BIGINT" />
+        <result column="group_id" property="groupId" jdbcType="BIGINT" />
+        <result column="member_id" property="memberId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="is_active" property="isActive" jdbcType="INTEGER" />
+        <result column="active_status" property="activeStatus" jdbcType="INTEGER" />
+        <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+        <result column="is_option" property="isOption" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from n_notice_detail
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.notice.NoticeDetailEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into n_notice_detail (notice_id, group_id, member_id, is_option,
+            user_id, team_id, type, 
+            is_active, active_status, active_time, 
+            create_time, update_time, version
+            )
+        values (#{noticeId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, #{isOption,jdbcType=INTEGER},
+            #{userId,jdbcType=BIGINT}, #{teamId,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+            #{isActive,jdbcType=INTEGER}, #{activeStatus,jdbcType=INTEGER}, #{activeTime,jdbcType=TIMESTAMP},
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.notice.NoticeDetailEntity" >
+        update n_notice_detail
+        set notice_id = #{noticeId,jdbcType=BIGINT},
+            group_id = #{groupId,jdbcType=BIGINT},
+            member_id = #{memberId,jdbcType=BIGINT},
+            user_id = #{userId,jdbcType=BIGINT},
+            team_id = #{teamId,jdbcType=VARCHAR},
+            type = #{type,jdbcType=INTEGER},
+            is_active = #{isActive,jdbcType=INTEGER},
+            active_status = #{activeStatus,jdbcType=INTEGER},
+            active_time = #{activeTime,jdbcType=TIMESTAMP},
+            is_option = #{isOption,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} AND version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, notice_id, group_id, member_id, user_id, team_id, type, is_active, active_status, 
+        active_time, is_option, create_time, update_time, version
+        from n_notice_detail
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, notice_id, group_id, member_id, user_id, team_id, type, is_active, active_status, 
+        active_time, is_option, create_time, update_time, version
+        from n_notice_detail
+    </select>
+    <select id="selectNoticeDetailWithConditions" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        select ID, notice_id, group_id, member_id, user_id, team_id, type, is_active, active_status,
+        active_time, is_option, create_time, update_time, version
+        from n_notice_detail
+        <where>
+            <if test="null != noticeId"> and notice_id = #{noticeId} </if>
+            <if test="null != memberId"> and member_id = #{memberId} </if>
+            <if test="null != userId"> and user_id = #{userId} </if>
+            <if test="null != type"> and type = #{type} </if>
+        </where>
+    </select>
+    <select id="selectNoticeDetailListWithConditions" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        select ID, notice_id, group_id, member_id, user_id, team_id, type, is_active, active_status,
+        active_time, is_option, create_time, update_time, version
+        from n_notice_detail
+        <where>
+            <if test="null != noticeId"> and notice_id = #{noticeId} </if>
+            <if test="null != memberId"> and member_id = #{memberId} </if>
+            <if test="null != isActive"> and is_active = #{isActive} </if>
+            <if test="null != activeStatus"> and active_status = #{activeStatus} </if>
+            <if test="null != type"> and type = #{type} </if>
+        </where>
+        ORDER BY active_time ${sort_activeTime}
+    </select>
+
+
+    <update id="updateUnReads" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        UPDATE n_notice_detail AS nd
+        SET nd.active_status = 1
+        <where>
+            <if test="null != teamId"> and nd.team_id = #{teamId} </if>
+            <if test="null != userId"> and nd.user_id = #{userId} </if>
+            <if test="null != type"> and nd.type = #{type} </if>
+            <if test="null == type"> and nd.type != 4  </if>
+            <if test="null != isActive"> and nd.is_active = #{isActive} </if>
+            <if test="null != activeStatus"> and nd.active_status = #{activeStatus} </if>
+        </where>
+    </update>
+    <select id="selectCountWithConditions" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        select COUNT(*) AS ndCount from n_notice_detail AS nd
+        LEFT JOIN t_team as t ON nd.team_id = t.tx_groupId
+        <where>
+            t.`status` != 3
+            <if test="null != userId"> and nd.user_id = #{userId} </if>
+            <if test="null != type"> and nd.type = #{type} </if>
+            <if test="type == 1">
+                AND nd.notice_id IN (
+                  SELECT ID FROM n_notice WHERE time &gt; date_sub(now(), INTERVAL 1 day) AND type = 1
+                )
+            </if>
+            <if test="null != teamId"> and nd.team_id = #{teamId} </if>
+            <if test="null != isActive"> and nd.is_active = #{isActive} </if>
+            <if test="null != activeStatus"> and nd.active_status = #{activeStatus} </if>
+        </where>
+    </select>
+    <select id="getNumsByTypeAndUserId" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        select  COUNT(*)
+        from n_notice_detail
+        <where>
+            <if test="null != userId"> and user_id = #{userId} </if>
+            <if test="null != type"> and type = #{type} </if>
+            <if test="type == 1">
+                AND notice_id IN (
+                SELECT ID FROM n_notice WHERE time &gt; date_sub(now(), INTERVAL 1 day) AND type = 1
+                )
+            </if>
+            <if test="null != isActive"> and is_active = #{isActive} </if>
+            <if test="null != activeStatus"> and active_status = #{activeStatus} </if>
+            <if test="null != teamId"> and team_id = #{teamId} </if>
+        </where>
+    </select>
+
+
+    <select id="getNotOptionCountByUserIdAndStatus" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        select  COUNT(is_option)
+        from n_notice_detail as nd LEFT JOIN t_team as t ON nd.team_id = t.tx_groupId
+        WHERE nd.user_id = #{userId} AND t.`status` = #{teamStatus}
+        AND nd.type &lt;= #{type} AND nd.is_option = 0
+    </select>
+
+    <select id="getTotalCountByUserId" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        SELECT COUNT(is_option)
+        FROM n_notice_detail AS nd
+        LEFT JOIN t_team as t ON nd.team_id = t.tx_groupId
+        WHERE t.`status` != 3 AND user_id = #{userId} AND active_status = 0 AND type &lt;= #{type}
+    </select>
+
+    <update id="updateNotClick" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        UPDATE n_notice_detail as nd LEFT JOIN t_team as t ON nd.team_id = t.tx_groupId
+        SET nd.is_option = 1,
+        nd.version = nd.version + 1
+        <where>
+            nd.is_option = 0
+            <if test="null != teamId"> and nd.team_id = #{teamId} </if>
+            <if test="null != userId"> and nd.user_id = #{userId} </if>
+            <if test="null != teamStatus"> and t.status = #{teamStatus} </if>
+        </where>
+    </update>
+
+    <select id="getNewNoticeId" resultType="java.lang.Long" parameterType="com.umessage.letsgo.domain.vo.notice.request.DetailParamRequest" >
+        select  notice_id
+        from n_notice_detail
+        <where>
+             active_status =0
+            <if test="null != type"> and type = #{type} </if>
+            <if test="null != teamId"> and team_id = #{teamId} </if>
+            <if test="null != userId"> and user_id = #{userId} </if>
+        </where>
+        ORDER BY create_time DESC LIMIT 1
+    </select>
+
+   <!-- 获取签名明细信息-->
+    <select id="getNoticeSignInfo" resultMap="NoticeResultMap"  parameterType="java.lang.Long">
+        SELECT
+        n.ID,n.t_id,n.team_id,n.user_id,n.sender_id,n.sender_name,
+        n.content,n.video_url,n.video_len,n.type,n.time,
+        n.first_remind,n.timezone,n.timezone_id,n.longitude,n.latitude,
+        n.location,n.traffic,n.sure_count,n.notsure_count,
+        n.create_time,n.update_time,n.version,n.notice_type,n.sign_count,
+
+        d.ID AS d_id,d.notice_id AS d_nid,d.member_id AS d_memberId,d.is_active,d.active_status,d.active_time,
+        d.create_time AS d_createTime,d.update_time AS d_updateTime,d.version AS d_ver,d.user_id AS d_user_id,
+
+        ns.ID AS ns_id,ns.sign_url AS ns_sign_url,ns.notice_detail_id AS ns_detail_id,
+        ns.create_time AS ns_create_time,ns.member_id AS ns_member_id,ns.member_name AS ns_member_name
+        FROM
+        n_notice AS n
+        LEFT JOIN n_notice_detail AS d ON n.ID = d.notice_id
+        LEFT JOIN n_notice_sign AS ns ON  d.ID = ns.notice_detail_id
+
+        WHERE n.ID = #{noticeId} ORDER BY ns.create_time
+    </select>
+
+    <!--根据通知的明细id获取签名信息-->
+    <select id="getNoticeSignByDetailId" resultMap="NoticeSignMap"  parameterType="java.lang.Long">
+       SELECT ID,notice_detail_id,member_id,member_name,sign_url,create_time,update_time FROM n_notice_sign
+       WHERE notice_detail_id = #{id}
+    </select>
+
+    <!--批量插入-->
+    <insert id="insterBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
+        insert into n_notice_sign (notice_detail_id, member_id, member_name, sign_url, create_time, update_time)
+        VALUES <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.noticeDetailId,jdbcType=BIGINT}, #{item.memberId,jdbcType=BIGINT},
+        #{item.signUserName,jdbcType=VARCHAR}, #{item.signUrl,jdbcType=VARCHAR},
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+    </insert>
+
+    <resultMap id="NoticeSignMap" type="com.umessage.letsgo.domain.po.notice.NoticeSignEntity" >
+        <id column="ID" property="ID" jdbcType="BIGINT" />
+        <result column="notice_detail_id" property="noticeDetailId" jdbcType="BIGINT" />
+        <result column="member_id" property="memberId" jdbcType="BIGINT" />
+        <result column="member_name" property="signUserName" jdbcType="VARCHAR" />
+        <result column="sign_url" property="signUrl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <resultMap id="NoticeResultMap" type="com.umessage.letsgo.domain.po.notice.NoticeEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="t_id" property="tId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="sender_id" property="senderId" jdbcType="BIGINT" />
+        <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+        <result column="video_len" property="videoLen" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="time" property="time" jdbcType="TIMESTAMP" />
+        <result column="first_remind" property="firstRemind" jdbcType="INTEGER" />
+        <result column="timezone" property="timezone" jdbcType="VARCHAR" />
+        <result column="timezone_id" property="timezoneId" jdbcType="VARCHAR" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="traffic" property="traffic" jdbcType="VARCHAR" />
+        <result column="sure_count" property="sureCount" jdbcType="INTEGER" />
+        <result column="notsure_count" property="notsureCount" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="t_name" property="teamName" jdbcType="VARCHAR" />
+        <result column="notice_type" property="noticeType" jdbcType="VARCHAR" />
+        <result column="sign_count" property="signCount" jdbcType="VARCHAR" />
+
+        <collection property="noticeDetailList" ofType="com.umessage.letsgo.domain.po.notice.NoticeDetailEntity">
+            <id column="d_id" property="id" jdbcType="BIGINT" />
+            <result column="notice_id" property="notifId" jdbcType="BIGINT" />
+            <result column="d_memberId" property="memberId" jdbcType="BIGINT" />
+            <result column="is_active" property="isActive" jdbcType="INTEGER" />
+            <result column="active_status" property="activeStatus" jdbcType="INTEGER" />
+            <result column="active_time" property="activeTime" jdbcType="VARCHAR" />
+            <result column="d_createTime" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="d_updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="d_ver" property="version" jdbcType="BIGINT" />
+            <result column="d_user_id" property="userId" jdbcType="BIGINT" />
+            <collection property="noticeSignEntityList" ofType="com.umessage.letsgo.domain.po.notice.NoticeSignEntity">
+                <id column="ns_id" property="ID" jdbcType="BIGINT" />
+                <result column="ns_sign_url" property="signUrl" jdbcType="VARCHAR" />
+                <result column="ns_detail_id" property="noticeDetailId" jdbcType="BIGINT" />
+                <result column="ns_create_time" property="createTime" jdbcType="TIMESTAMP" />
+                <result column="ns_member_id" property="memberId" jdbcType="BIGINT" />
+                <result column="ns_member_name" property="signUserName" jdbcType="VARCHAR" />
+            </collection>
+        </collection>
+    </resultMap>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.NationDictionaryDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.NationDictionaryEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="nationname" property="nationname" jdbcType="VARCHAR" />
+        <result column="coinsign" property="coinsign" jdbcType="VARCHAR" />
+        <result column="nationflagurl" property="nationflagurl" jdbcType="VARCHAR" />
+        <result column="nationdesc" property="nationdesc" jdbcType="VARCHAR" />
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+        <result column="useful" property="useful" jdbcType="INTEGER" />
+        <result column="continentscode" property="continentscode" jdbcType="VARCHAR" />
+        <result column="continentsname" property="continentsname" jdbcType="VARCHAR" />
+        <result column="ishot" property="ishot" jdbcType="INTEGER" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_nation_dictionary
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.NationDictionaryEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into s_nation_dictionary (code, name, nationname, 
+            coinsign, nationflagurl, nationdesc, 
+            createtime, useful, continentscode, 
+            continentsname, ishot)
+        values (#{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{nationname,jdbcType=VARCHAR}, 
+            #{coinsign,jdbcType=VARCHAR}, #{nationflagurl,jdbcType=VARCHAR}, #{nationdesc,jdbcType=VARCHAR}, 
+            #{createtime,jdbcType=TIMESTAMP}, #{useful,jdbcType=INTEGER}, #{continentscode,jdbcType=VARCHAR},
+            #{continentsname,jdbcType=VARCHAR}, #{ishot,jdbcType=INTEGER})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.NationDictionaryEntity" >
+        update s_nation_dictionary
+        set code = #{code,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            nationname = #{nationname,jdbcType=VARCHAR},
+            coinsign = #{coinsign,jdbcType=VARCHAR},
+            nationflagurl = #{nationflagurl,jdbcType=VARCHAR},
+            nationdesc = #{nationdesc,jdbcType=VARCHAR},
+            createtime = #{createtime,jdbcType=TIMESTAMP},
+            useful = #{useful,jdbcType=INTEGER},
+            continentscode = #{continentscode,jdbcType=VARCHAR},
+            continentsname = #{continentsname,jdbcType=VARCHAR},
+            ishot = #{ishot,jdbcType=INTEGER}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, code, name, nationname, coinsign, nationflagurl, nationdesc, createtime, 
+        useful, continentscode, continentsname, ishot
+        from s_nation_dictionary
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, code, name, nationname, coinsign, nationflagurl, nationdesc, createtime, 
+        useful, continentscode, continentsname, ishot
+        from s_nation_dictionary
+        ORDER BY convert(nationname USING GBK) ASC
+    </select>
+    <select id="selectHot" resultMap="BaseResultMap" >
+        select ID, code, name, nationname, coinsign, nationflagurl, nationdesc, createtime,
+        useful, continentscode, continentsname, ishot
+        from s_nation_dictionary
+        WHERE ishot > 0
+        ORDER BY ishot DESC
+    </select>
+    <select id="selectWithCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select ID, code, name, nationname, coinsign, nationflagurl, nationdesc, createtime,
+        useful, continentscode, continentsname, ishot
+        from s_nation_dictionary
+        where code = #{code}
+    </select>
+</mapper>

@@ -1,0 +1,186 @@
+#set($pageTitle="友情提示")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+
+	<input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main">
+		<section class="cd-container feiyong">
+		#if( ${response.importantInfoVo}&&${response.importantInfoVo}!="")
+			<dl>
+				<dt>重要提示:</dt>
+				<dd>
+					<ul>
+						#if(${response.importantInfoVo.weatherSituation}&&${response.importantInfoVo.weatherSituation}!="")
+                        <li>
+                            <div>天气概况
+                                <br>
+								$!response.importantInfoVo.weatherSituation.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.dressCode}&&${response.importantInfoVo.dressCode}!="")
+                        <li>
+                            <div>着装要求
+                                <br>
+								$!response.importantInfoVo.dressCode.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.timeInfo}&&${response.importantInfoVo.timeInfo}!="")
+                        <li>
+                            <div>时间
+                                <br>
+								$!response.importantInfoVo.timeInfo.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.languages}&&${response.importantInfoVo.languages}!="")
+                        <li>
+                            <div>语言
+                                <br>
+								$!response.importantInfoVo.languages.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.voltage}&&${response.importantInfoVo.voltage}!="")
+                        <li>
+                            <div>电压
+                                <br>
+								$!response.importantInfoVo.voltage.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.foods}&&${response.importantInfoVo.foods}!="")
+                        <li>
+                            <div>饮食
+                                <br>
+								$!response.importantInfoVo.foods.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.essentialItem}&&${response.importantInfoVo.essentialItem}!="")
+						<li>
+							 <div>必备物品
+							 <br>
+                                  $!response.importantInfoVo.essentialItem.replaceAll("\n|\r","<br/>")
+							</div>
+						</li>
+						#end
+						#if(${response.importantInfoVo.currency}&&${response.importantInfoVo.currency}!="")
+                        <li>
+                            <div>货币
+                                <br>
+								$!response.importantInfoVo.currency.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.telephoneCommunication}&&${response.importantInfoVo.telephoneCommunication}!="")
+                        <li>
+                            <div>电话
+                                <br>
+								$!response.importantInfoVo.telephoneCommunication.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.hotel}&&${response.importantInfoVo.hotel}!="")
+                        <li>
+                            <div>酒店住宿
+                                <br>
+								$!response.importantInfoVo.hotel.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.customsForbid}&&${response.importantInfoVo.customsForbid}!="")
+                        <li>
+                            <div>境外法规及风俗习惯
+                                <br>
+								$!response.importantInfoVo.customsForbid.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.waterActivitiesNote}&&${response.importantInfoVo.waterActivitiesNote}!="")
+                        <li>
+                            <div>水上活动的注意事项
+                                <br>
+								$!response.importantInfoVo.waterActivitiesNote.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.tipCase}&&${response.importantInfoVo.tipCase}!="")
+                        <li>
+                            <div>小费情况
+                                <br>
+								$!response.importantInfoVo.tipCase.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.customs}&&${response.importantInfoVo.customs}!="")
+                        <li>
+                            <div>海关
+                                <br>
+								$!response.importantInfoVo.customs.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+						#if(${response.importantInfoVo.chinaNotic}&&${response.importantInfoVo.chinaNotic}!="")
+                        <li>
+                            <div>中华人民共和国海关总署公告
+                                <br>
+								$!response.importantInfoVo.chinaNotic.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+						#end
+					</ul>
+				</dd>
+			</dl>
+	#end
+	#if( ${response.safeInfoVo}&&${response.safeInfoVo}!="")
+			<dl>
+				<dt>风险须知及安全提示:</dt>
+				<dd>
+					<ul>
+					#if(${response.safeInfoVo.security}&&${response.safeInfoVo.security}!="")
+						<li>
+							<div>$!response.safeInfoVo.security.replaceAll("\n|\r","<br/>")</div>
+						</li>
+					#end
+					#if(${response.safeInfoVo.specialAttention}&&${response.safeInfoVo.specialAttention}!="")
+						<li>
+							<div>$!response.safeInfoVo.specialAttention.replaceAll("\n|\r","<br/>")
+							</div>
+						</li>
+					#end
+					</ul>
+				</dd>
+			</dl>
+	#end
+			<div class="continue_loding">
+					<div></div>
+					<span>已经到底,点击左侧查看更多!</span>
+			</div>
+		</section>
+	</div>
+#if($!response.scheduleEntity.processStatus==4)
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+#parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+	<script type="text/javascript">
+        var teamId="$!{response.scheduleEntity.teamId}";
+        var iswechat="${response.isWeChat}";
+		$(function(){
+			$(".overlay").click(function(){
+				$("#joacims-menu").prop("checked",false)
+			})
+		  	/*判断是否显示已经到底*/
+		  	if($(window).height()>$("body").height()){
+		  		$(".continue_loding").hide();
+		  	} 
+		})
+	</script>
+#end

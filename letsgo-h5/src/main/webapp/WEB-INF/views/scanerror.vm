@@ -1,0 +1,17 @@
+
+		#set($pageTitle="扫错了")
+		#set($layout="/WEB-INF/views/common/layout/layoutnewweixin2.vm")
+		#set($styleUrls=["$!{STATIC_URL}/resources/css/404.css"])
+		<div class="errorbg">
+			<div class="txtdes1">Sorry，您扫描的不是供微信扫描的团队二维码</div>
+			<div class="txtdes2">
+				<p>偷偷告诉您解决方案：</p>
+
+				<p>方案一：使用跟上APP扫描此二维码</p>
+
+				<p>方案二：向团队成员索要供微信扫描的团队二维码</p>
+			</div>
+			<div class="bottomDownload">
+				<a href="http://www.igenshang.com/download.html">点击下载</a>
+			</div>
+		</div>

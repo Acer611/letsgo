@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.TravelAgencyDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.TravelAgencyEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="contact_person" property="contactPerson" jdbcType="VARCHAR" />
+        <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="`desc`" property="desc" jdbcType="LONGVARCHAR" />
+        <result column="license_url" property="licenseUrl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_travel_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.TravelAgencyEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_travel_agency (user_id, name, contact_person, 
+            contact_phone, email, address, 
+            `desc`, license_url, create_time, 
+            update_time, version)
+        values (#{userId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{contactPerson,jdbcType=VARCHAR}, 
+            #{contactPhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+            #{desc,jdbcType=LONGVARCHAR}, #{licenseUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+            #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.TravelAgencyEntity" >
+        update t_travel_agency
+        set user_id = #{userId,jdbcType=BIGINT},
+            name = #{name,jdbcType=VARCHAR},
+            contact_person = #{contactPerson,jdbcType=VARCHAR},
+            contact_phone = #{contactPhone,jdbcType=VARCHAR},
+            email = #{email,jdbcType=VARCHAR},
+            address = #{address,jdbcType=VARCHAR},
+            `desc` = #{desc,jdbcType=LONGVARCHAR},
+            license_url = #{licenseUrl,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, name, contact_person, contact_phone, email, address, `desc`, license_url, 
+        create_time, update_time, version
+        from t_travel_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, name, contact_person, contact_phone, email, address, `desc`, license_url,
+        create_time, update_time, version
+        from t_travel_agency
+        where user_id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, user_id, name, contact_person, contact_phone, email, address, `desc`, license_url, 
+        create_time, update_time, version
+        from t_travel_agency
+    </select>
+
+    <update id="setUserId" parameterType="com.umessage.letsgo.domain.po.team.TravelAgencyEntity" >
+        update t_travel_agency
+        set user_id = #{userId,jdbcType=BIGINT},
+        version =version + 1
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getByTravelerId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, name, contact_person, contact_phone, email, address, `desc`, license_url,
+        create_time, update_time, version
+        from t_travel_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+</mapper>

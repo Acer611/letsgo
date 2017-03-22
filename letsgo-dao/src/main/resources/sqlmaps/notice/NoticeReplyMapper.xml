@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.notice.NoticeReplyDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.notice.NoticeReplyEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="notice_id" property="noticeId" jdbcType="BIGINT" />
+        <result column="member_id" property="memberId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="reply" property="reply" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from n_notice_reply
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.notice.NoticeReplyEntity" useGeneratedKeys="true" keyProperty="id" >
+        insert into n_notice_reply (ID, notice_id, member_id, user_id,
+            reply, create_time, update_time, 
+            version)
+        values (#{id,jdbcType=BIGINT}, #{noticeId,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+            #{reply,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+            #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.notice.NoticeReplyEntity" >
+        update n_notice_reply
+        set notice_id = #{noticeId,jdbcType=BIGINT},
+            member_id = #{memberId,jdbcType=BIGINT},
+            user_id = #{userId,jdbcType=BIGINT},
+            reply = #{reply,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, notice_id, member_id, user_id, reply, create_time, update_time, version
+        from n_notice_reply
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, notice_id, member_id, usr_id, reply, create_time, update_time, version
+        from n_notice_reply
+    </select>
+</mapper>

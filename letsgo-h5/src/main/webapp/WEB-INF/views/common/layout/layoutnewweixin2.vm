@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    #parse("/WEB-INF/views/common/resources-css.vm")
+    #foreach($styleUrl in $styleUrls)
+		<link rel="stylesheet" href="$styleUrl" type="text/css"/>
+    #end
+	<title> #if($pageTitle) $pageTitle #else 跟上 #end </title>
+</head>
+<body ontouchstart>
+    $screen_content
+    #parse("/WEB-INF/views/common/resources-js.vm")
+    #foreach($scriptUrl in $scriptUrls)
+    	<script type="text/javascript" src="$scriptUrl"></script>
+    #end
+    $!scriptBlock
+</body>
+</html>

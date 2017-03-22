@@ -1,0 +1,859 @@
+#set($pageTitle="行程监控")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/dist/css/travelMonitoring.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/page.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js","http://ditu.google.cn/maps/api/js?v=3.exp&key=AIzaSyBok03gYzNXxJPWYkfnlaZi7_XVdkc1MVo&signed_in=false"])
+<style>
+    .disabled{
+        cursor:no-drop;
+    }
+    .buttonStyle{
+        display:inline-block;
+        margin-top:-28px;
+    }
+
+    .divStyle{
+        display:inline-block;
+    }
+</style>
+
+
+<!-- Site wrapper -->
+<div class="wrapper">
+
+    #parse("/WEB-INF/views/common/leftbar.vm")
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                团队行程管理
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active">行程监控</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">行程监控</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="span-color col-md-12" style="padding:0;">
+                        <button type="button" class="btn btn-danger btn-lg buttonStyle" >正在进行的行程</button>
+                        <div class="divStyle">
+                            <p class="p-line">有<span>$travellingCount</span>个行程</p>
+                            <p class="p-line">共有游客<span>$travellingTouristCount</span>名</p>
+                        </div>
+                    </div>
+                    <div id="map" class="col-md-10 col-md-offset-2" style="padding:0;"></div>
+                    <div class="span-color col-md-12" style="padding:0;">
+                        <button type="button" class="btn btn-success btn-lg buttonStyle" id="beginning">即将开始的行程</button>
+                        <div class="divStyle">
+                            <p class="p-line">有<span>$goToTravelCount</span>个行程</p>
+                            <p class="p-line">共有游客<span>$goToTravelTouristCount</span>名</p>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-md-offset-2">
+                        <div class="box box-info travelBeginning" style="min-height: 250px;display:none;margin-bottom:0;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title" style="margin-top:4px;">行程检索</h3>
+                                <img src="$!{STATIC_URL}/resources/dist/images/close.png" class="closeJS" style="float:right;width:25px;">
+                            </div><!-- /.box-header -->
+                            <!-- form start -->
+                            <div class="box-body content">
+                                <form class="form-horizontal"  role="form" action="$!{link.contextPath}/schedule/StartTripList"  method="get" id="form4">
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="name">行程名称</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" placeholder="行程名称" id="name" name="name" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="startDate">行程日期</label>
+                                        <div class="col-lg-6">
+                                            <div class="input-group col-lg-12  pull-left">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" id="startDate" readonly autocomplete="off" name="startDate" placeholder="yyyy-mm-dd"   class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="totalCount">团队人数</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" placeholder="团队人数" id="totalCount" name="totalCount" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="leadName">领队名称</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" placeholder="领队名称" id="leadName" name="leadName" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="phone">领队电话</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" placeholder="领队电话" id="phone" name="phone" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <div class="col-lg-2 col-md-3 col-xs-6 col-lg-offset-4 col-md-offset-3">
+                                            <button class="btn btn-primary btn-block btn-sm padding10" type="button" id="searchBegin">搜索</button>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-xs-6">
+                                            <button type="button" class="btn btn-warning btn-block btn-sm" id="clearBegin">清空</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div><!-- /.box-body -->
+                            <div class="box-body content  table-responsive">
+                                <table class="table table-hover table-bordered" id="table2" valign="middle">
+                                    <thead>
+                                    <tr>
+                                        <th>行程名称</th>
+                                        <th>行程日期</th>
+                                        <th>团队人数</th>
+                                        <th>领队名称</th>
+                                        <th>领队电话</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div id="pagination" class="paginationjs paginationjs-small">
+
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+
+                    </div>
+                    #*<div class="col-md-10 col-md-offset-2">
+                        <div class="box box-success travelBeginning" style="display:none;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">即将开始的行程</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body content  table-responsive">
+                                <table class="table table-hover table-bordered" id="table2" valign="middle">
+                                    <thead>
+                                    <tr>
+                                        <th>行程名称</th>
+                                        <th>行程日期</th>
+                                        <th>团队人数</th>
+                                        <th>领队名称</th>
+                                        <th>领队电话</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div id="pagination" class="paginationjs paginationjs-small">
+
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+
+                    </div>*#
+                    <div class="span-color col-md-12" style="padding:0;">
+                        <button type="button" class="btn btn-default btn-lg  buttonStyle" id="finished">已经结束的行程</button>
+                        <div class="divStyle">
+                            <p class="p-line">有<span>$traveledCount</span>个行程</p>
+                            <p class="p-line">共有游客<span>$traveledTouristCount</span>名</p>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-md-offset-2">
+                        <div class="box box-info travelFinished" style="min-height: 250px;display:none;margin-bottom:0;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title" style="margin-top:4px;">行程检索</h3>
+                                <img src="$!{STATIC_URL}/resources/dist/images/close.png" class="closeJS" style="float:right;width:25px;">
+                            </div><!-- /.box-header -->
+                            <!-- form start -->
+                            <div class="form-horizontal">
+                                <div class="box-body content">
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="name">行程名称</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" placeholder="行程名称" id="name" name="name" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="startDate1">行程日期</label>
+                                        <div class="col-lg-6">
+                                            <div class="input-group col-lg-12  pull-left">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" id="startDate1" readonly autocomplete="off" name="startDate" placeholder="yyyy-mm-dd"   class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="totalCount">团队人数</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" placeholder="团队人数" id="totalCount" name="totalCount" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="leadName">领队名称</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" placeholder="领队名称" id="leadName" name="leadName" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label class="col-lg-4 control-label" for="phone">领队电话</label>
+                                        <div class="col-lg-6">
+                                            <input type="text" placeholder="领队电话" id="phone" name="phone" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <div class="col-lg-2 col-md-3 col-xs-6 col-lg-offset-4 col-md-offset-3">
+                                            <button class="btn btn-primary btn-block btn-sm padding10" type="button" id="searchFinish">搜索</button>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-xs-6">
+                                            <button type="button" class="btn btn-warning btn-block btn-sm" id="clearFinish">清空</button>
+                                        </div>
+                                    </div>
+                                </div><!-- /.box-body -->
+                                <div class="box-body content  table-responsive">
+                                    <table class="table table-hover table-bordered" id="table3" valign="middle">
+                                        <thead>
+                                        <tr>
+                                            <th>行程名称</th>
+                                            <th>行程日期</th>
+                                            <th>团队人数</th>
+                                            <th>领队名称</th>
+                                            <th>领队电话</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    <div id="pagination1" class="paginationjs paginationjs-small">
+
+                                    </div>
+                                </div><!-- /.box-body -->
+                            </div>
+                        </div><!-- /.box -->
+
+                    </div>
+                    #*<div class="col-md-10 col-md-offset-2">
+                        <div class="box box-success travelFinished" style="display:none;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">已经结束的行程</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body content  table-responsive">
+                                <table class="table table-hover table-bordered" id="table3" valign="middle">
+                                    <thead>
+                                    <tr>
+                                        <th>行程名称</th>
+                                        <th>行程日期</th>
+                                        <th>团队人数</th>
+                                        <th>领队名称</th>
+                                        <th>领队电话</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div id="pagination1" class="paginationjs paginationjs-small">
+
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+
+                    </div>*#
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+
+            <!-- /.box -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    #parse("/WEB-INF/views/common/footer.vm")
+
+    <!-- Add the sidebar's background. This div must be placed
+   immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+<div id="dialogModal" style="display:none">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">消息</h4>
+            </div>
+            <div class="modal-body" style="text-align:center;font-size:14px;">
+                <p></p>
+            </div>
+            <div class="modal-footer text-center" style="text-align:center;">
+                <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                <button class="btn btn-primary" onclick="blockUIClose()" type="button">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+#define($scriptBlock)
+
+<script>
+
+    /*点击即将开始的行程*/
+    $("#beginning").on("click",function(){
+        $(".travelBeginning").show();
+        $(".travelBeginning input").val("");
+        $.ajax({
+            type: "GET",
+            url:  CONTEXTPATH + "/schedule/StartTripList",
+            dataType: "html",
+            success: function (data) {
+                $("#table2").find("tbody").empty().html(data)
+                $("#pagination").show();
+                if(data.indexOf("没有符合条件的数据")>=0){
+                    $("#pagination").hide();
+                }
+                $('#pagination').pagination({
+                    dataSource: CONTEXTPATH + "/schedule/StartTripList",
+                    locator: 'data',
+                    totalNumber:totalpages,
+                    pageSize: 10,
+                    pageRange:1,
+                    alias: {
+                        pageNumber: 'pageNum',
+                        pageSize: 'pageSize'
+                    },
+                    ajax: {
+                        type: "GET",
+                        data: {name:$(".travelBeginning [name=name]").val(),startDate:$(".travelBeginning [name=startDate]").val(),totalcount:$(".travelBeginning [name=totalCount]").val(),leadName:$(".travelBeginning [name=leadName]").val(),phone:$(".travelBeginning [name=phone]").val()},
+                        dataType: 'html',
+                        beforeSend: function () {
+//                                    $("#table2").empty().html('<td  colspan="5">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parent().show();
+                        }
+                    },
+                    callback: function (data, pagination) {
+                        $("#table2").show();
+                        $("#table2").find("tbody").empty().html(data);
+                    }
+                })
+            }
+        });
+    });
+    /*点击即将开始的行程搜索*/
+    $("#searchBegin").on("click",function(){
+        var value= $.trim($(".travelBeginning [name=totalCount]").val());
+        var reg=/^[0-9]*$/;if(reg.test(value)==false ){
+            $("#dialogModal").find(".modal-body>p").html("团队人数为数字");
+            blockUIOpenShare("dialogModal");
+            return false;
+        }
+        if(value == "0" ||value == "00"){
+            $("#dialogModal").find(".modal-body>p").html("团队人数大于0");
+            blockUIOpenShare("dialogModal");
+            return false;
+        }
+        /*验证手机号*/
+        var phoneNum = $.trim($(".travelBeginning [name=phone]").val());
+        var regPhone=/^(\+86)?((1[3,5,8][0-9])|(14[5,7])|(17[0,1,6,7,8]))\d{8}$/;
+        if(regPhone.test(phoneNum)==false &&phoneNum!=""){
+            $("#dialogModal").find(".modal-body>p").html("手机号码格式不正确");
+            blockUIOpenShare("dialogModal");
+            return false;
+        }
+        if(phoneNum == ""){
+            phoneNum=phoneNum;
+        }else{
+            if(phoneNum.indexOf("+86")==-1){
+                phoneNum="+86"+phoneNum;
+            }else{
+                phoneNum=phoneNum;
+            }
+        }
+        $.ajax({
+            type: "GET",
+            url:  CONTEXTPATH + "/schedule/StartTripList",
+            data: {name: $.trim($(".travelBeginning [name=name]").val()),startDate:$(".travelBeginning [name=startDate]").val(),totalcount: $.trim($(".travelBeginning [name=totalCount]").val()),leadName: $.trim($(".travelBeginning [name=leadName]").val()),phone:phoneNum},
+            dataType: "html",
+            success: function (data) {
+                $("#table2").find("tbody").empty().html(data)
+                $("#pagination").show();
+                if(data.indexOf("没有符合条件的数据")>=0){
+                    $("#pagination").hide();
+                }
+                $('#pagination').pagination({
+                    dataSource: CONTEXTPATH + "/schedule/StartTripList",
+                    locator: 'data',
+                    totalNumber:totalpages,
+                    pageSize: 10,
+                    pageRange:1,
+                    alias: {
+                        pageNumber: 'pageNum',
+                        pageSize: 'pageSize'
+                    },
+                    ajax: {
+                        type: "GET",
+                        data: {name: $.trim($(".travelBeginning [name=name]").val()),startDate:$(".travelBeginning [name=startDate]").val(),totalcount: $.trim($(".travelBeginning [name=totalCount]").val()),leadName: $.trim($(".travelBeginning [name=leadName]").val()),phone:phoneNum},
+                        dataType: 'html',
+                        beforeSend: function () {
+                            $("#table2").find("tbody").empty().html('<td  colspan="7">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parents(".box:eq(0)").show();
+                        }
+                    },
+                    callback: function (data, pagination) {
+                        $("#table2").show();
+                        $("#table2").find("tbody").empty().html(data);
+                    }
+                })
+            }
+        });
+    });
+    /*即将开始的行程清空*/
+    $("#clearBegin").on("click",function(){
+        $(".travelBeginning input").val("");
+        $("#searchBegin").click();
+    })
+    /*已经结束的行程*/
+    $("#finished").on("click",function(){
+        $(".travelFinished").show();
+        $(".travelFinished input").val("");
+        $.ajax({
+            type: "GET",
+            url:  CONTEXTPATH + "/schedule/EndTripList",
+            dataType: "html",
+            success: function (data) {
+                $("#table3").find("tbody").empty().html(data)
+                $("#pagination1").show();
+                if(data.indexOf("没有符合条件的数据")>=0){
+                    $("#pagination1").hide();
+                }
+                $('#pagination1').pagination({
+                    dataSource: CONTEXTPATH + "/schedule/EndTripList",
+                    locator: 'data',
+                    totalNumber:totalpages,
+                    pageSize: 10,
+                    pageRange:1,
+                    alias: {
+                        pageNumber: 'pageNum',
+                        pageSize: 'pageSize'
+                    },
+                    ajax: {
+                        type: "GET",
+                        data: {name:$(".travelFinished [name=name]").val(),startDate:$(".travelFinished [name=startDate]").val(),totalcount:$(".travelFinished [name=totalCount]").val(),leadName:$(".travelFinished [name=leadName]").val(),phone: $(".travelFinished [name=phone]").val()},
+                        dataType: 'html',
+                        beforeSend: function () {
+//                            $("#table3").find("tbody").empty().html('<td  colspan="7">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parents(".box:eq(0)").show();
+                        }
+                    },
+                    callback: function (data, pagination) {
+                        $("#table3").show();
+                        $("#table3").find("tbody").empty().html(data);
+                    }
+                })
+            }
+        });
+    });
+    /*搜索已经结束的行程*/
+    $("#searchFinish").on("click",function(){
+        var value= $.trim($(".travelFinished [name=totalCount]").val());
+        var reg=/^[0-9]*$/;
+        if(reg.test(value)==false ){
+            $("#dialogModal").find(".modal-body>p").html("团队人数为数字");
+            blockUIOpenShare("dialogModal");
+            return false;
+        }
+        if(value == "0"||value == "00"){
+            $("#dialogModal").find(".modal-body>p").html("团队人数大于0");
+            blockUIOpenShare("dialogModal");
+            return false;
+        }
+        /*验证手机号*/
+        var phoneNum = $.trim($(".travelFinished [name=phone]").val());
+        var regPhone=/^(\+86)?((1[3,5,8][0-9])|(14[5,7])|(17[0,1,6,7,8]))\d{8}$/;
+        if(regPhone.test(phoneNum)==false &&phoneNum!=""){
+            $("#dialogModal").find(".modal-body>p").html("手机号码格式不正确");
+            blockUIOpenShare("dialogModal");
+            return false;
+        }
+        if(phoneNum == ""){
+            phoneNum=phoneNum;
+        }else{
+            if(phoneNum.indexOf("+86")==-1){
+                phoneNum="+86"+phoneNum;
+            }else{
+                phoneNum=phoneNum;
+            }
+        }
+//        console.log(phoneNum)
+        $.ajax({
+            type: "GET",
+            url:  CONTEXTPATH + "/schedule/EndTripList",
+            data: {name: $.trim($(".travelFinished [name=name]").val()),startDate:$(".travelFinished [name=startDate]").val(),totalcount: $.trim($(".travelFinished [name=totalCount]").val()),leadName: $.trim($(".travelFinished [name=leadName]").val()),phone: phoneNum},
+            dataType: "html",
+            success: function (data) {
+                $("#table3").find("tbody").empty().html(data)
+                $("#pagination1").show();
+                if(data.indexOf("没有符合条件的数据")>=0){
+                    $("#pagination1").hide();
+                }
+                $('#pagination1').pagination({
+                    dataSource: CONTEXTPATH + "/schedule/EndTripList",
+                    locator: 'data',
+                    totalNumber:totalpages,
+                    pageSize: 10,
+                    pageRange:1,
+                    alias: {
+                        pageNumber: 'pageNum',
+                        pageSize: 'pageSize'
+                    },
+                    ajax: {
+                        type: "GET",
+                        data: {name: $.trim($(".travelFinished [name=name]").val()),startDate:$(".travelFinished [name=startDate]").val(),totalcount: $.trim($(".travelFinished [name=totalCount]").val()),leadName: $.trim($(".travelFinished [name=leadName]").val()),phone:phoneNum},
+                        dataType: 'html',
+                        beforeSend: function () {
+                            $("#table3").find("tbody").empty().html('<td  colspan="7">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parents(".box:eq(0)").show();
+                        }
+                    },
+                    callback: function (data, pagination) {
+                        $("#table3").show();
+                        $("#table3").find("tbody").empty().html(data);
+                    }
+                })
+            }
+        });
+    })
+    /*清空已经结束的行程*/
+    $("#clearFinish").on("click",function(){
+        $(".travelFinished input").val("");
+        $("#searchFinish").click();
+    })
+    /*关闭按钮*/
+    $(".closeJS").on("click",function(){
+        $(this).parent().parent().hide()
+    })
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+    });
+    $('#startDate').datetimepicker({
+        language:  'zh-CN',
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        minView: "month"
+    });
+    $('#startDate1').datetimepicker({
+        language:  'zh-CN',
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        minView: "month"
+    });
+
+
+    var markers = [];
+    var marker;
+    var map;
+    var defaultZoom = 7;
+    var neighborhood = [];
+    var imageinco = {
+        url: 'dist/images/beachflag.png'
+    }
+    var overlay;
+
+
+
+    USGSOverlay.prototype = new google.maps.OverlayView();
+
+    locationEntityList = [
+        #foreach( $Detail in $scheduleEntityList)
+        {
+            position: {
+                lat: $!{Detail.lat},
+                lng: $!{Detail.lng}
+            },
+        time: '<div class="progress">'+
+        '<div class="progress-bar progress-bar-red" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style=' +
+        '"width: '+($!{Detail.dimDD}/${Detail.totalDays}*100)+'%">'+
+                            '<span>第$!{Detail.dimDD}天</span></div></div>',
+                    name: "$!{Detail.name}",
+                    tcount: $!{Detail.tcount},
+                    countryId1: "$!{Detail.countryId1}",
+                    jourId: "$!{Detail.jourId}"
+               },
+		#end
+
+			]
+			function getSoneone() {
+				for (var i = 0; i < locationEntityList.length; i++) {
+					neighborhood.push(locationEntityList[i]);
+				}
+				//drop();
+				var centerui = map.getCenter();
+				var len2 = neighborhood.length;
+				var bounds = new google.maps.LatLngBounds();
+				while (len2--) {
+					bounds.extend(new google.maps.LatLng(neighborhood[len2].position.lat, neighborhood[len2].position.lng));
+				}
+				map.fitBounds(bounds);
+				var displayInfoProcess = google.maps.event.addListener(map, 'bounds_changed', function() {
+					if (displayInfoProcess) {
+						google.maps.event.removeListener(displayInfoProcess);
+					}
+				});
+				//地图缩放时触发，当地图的缩放比例大于默认比例时，恢复为默认比例
+				google.maps.event.addListener(map, 'zoom_changed', function() {
+					if (map.getZoom() > defaultZoom) {
+						map.setZoom(defaultZoom);
+					}
+				});
+			}
+
+			function initialize() {
+				map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 7,
+					center: {
+						lat: 39.323907,
+						lng: 116.109291
+					}
+					//mapTypeId: google.maps.MapTypeId.SATELLITE
+				});
+				getSoneone();
+				// The photograph is courtesy of the U.S. Geological Survey.
+				var srcImage = 'dist/images/beachflag.png';
+				for (var i = 0; i < locationEntityList.length; i++) {
+					new USGSOverlay(locationEntityList[i].position, locationEntityList[i].name, locationEntityList[i].time,locationEntityList[i].tcount,locationEntityList[i].countryId1,locationEntityList[i].jourId, map);
+				}
+				//overlay = new USGSOverlay({lat: 39.323907, lng: 116.109291}, "大皇宫",'9:00-12:00', map);
+			}
+			/** @constructor */
+
+            function RandomNum(Min, Max) {
+                var Range = Max - Min;
+                var Rand = Math.random();
+                if(Math.round(Rand * Range)==0){
+                    return Min + 1;
+                }
+                var num = Min + Math.round(Rand * Range);
+                return num;
+            }
+        function USGSOverlay(latlng, name, time,tcount,countryId1,jourId, map) {
+            // Initialize all properties.
+            this.latlng_ = latlng;
+            this.name_ = name;
+            this.time_ = time;
+            this.tcount_ = tcount;
+            this.countryId1_ = countryId1;
+    this.jourId_ = jourId;
+            this.map_ = map;
+            // Define a property to hold the image's div. We'll
+            // actually create this div upon receipt of the onAdd()
+            // method so we'll leave it null for now.
+            this.div_ = null;
+            // Explicitly call setMap on this overlay.
+            this.setMap(map);
+        }
+    /**
+     * onAdd is called when the map's panes are ready and the overlay has been
+     * added to the map.
+     */
+
+
+    USGSOverlay.prototype.draw = function() {
+        // We use the south-west and north-east
+        // coordinates of the overlay to peg it to the correct position and size.
+        // To do this, we need to retrieve the projection from the overlay.
+        var overlayProjection = this.getProjection();
+        // Retrieve the south-west and north-east coordinates of this overlay
+        // in LatLngs and convert them to pixel coordinates.
+        // We'll use these coordinates to resize the div.
+        var sw = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(this.latlng_.lat, this.latlng_.lng));
+        // Resize the image's div to fit the indicated dimensions.
+        var div = this.div_;
+        div.style.left = sw.x - $(div).width() / 2 + 'px';
+        div.style.top = sw.y - $(div).find(".pin").height() + 'px';
+        $(".warpcont").on({
+            "mouseover": function() {
+                $(this).find(".pin").addClass("pinhover");
+            },
+            "mouseout": function() {
+                $(this).find(".pin").removeClass("pinhover");
+            }
+        });
+        $(".warpcont .pin button").on({
+            "mouseover": function() {
+                $(this).css("border-color","#2b94ec")
+            },
+            "mouseout": function() {
+                $(this).css("border-color","#ef4747")
+            }
+        });
+
+        $(".warpcont .pin button").off().on("click",function(){
+            $(this).parent().parent().find(".table-detail").show();
+            var countryID1 = $(this).parent().find("[name=countryId1]").val();//当前国家countryId1的val()
+            var tablePage = $(this).parent().prev().find(".table-page tbody");
+            $.ajax({
+                type: "GET",
+                url:  CONTEXTPATH + "/schedule/getTeamByCountryName",
+                data: {countryId1: countryID1},
+                dataType: "html",
+                success: function (data) {
+//                    $(".table-page").find("tbody).empty().html(data)
+                    tablePage.empty().html(data)
+                    /*$(".pagination2").show();
+                    $('.pagination2').pagination({
+                        dataSource: CONTEXTPATH + "/schedule/getTeamByCountryName",
+                        locator: 'data',
+                        totalNumber:totalpage,
+                        pageSize:3,
+                        pageRange:1,
+                        alias: {
+                            pageNumber: 'pageNum',
+                            pageSize: 'pageSize'
+                        },
+                        ajax: {
+                            type: "GET",
+                            data:  {countryId1: countryID1},
+                            dataType: 'html'
+                        },
+                        callback: function (data, pagination) {
+                            $(".table-page").show();
+                            tablePage.empty().html(data);
+                        }
+                    })*/
+                }
+            });
+        })
+        $(".table-detail-close img").on("click",function(){
+            $(this).parent().parent().hide();
+        })
+    };
+    // The onRemove() method will be called automatically from the API if
+    // we ever set the overlay's map property to 'null'.
+    USGSOverlay.prototype.onAdd = function() {
+
+        /*一个团队信息的内容*/
+        var div1 = "<div class='pin'>" +
+                "</div>" +
+                "<a href='$!{link.contextPath}/schedule/schedulePreview?id="+ this.jourId_+"' class='name'>" + this.name_ + "</a>" +
+                "<div class='time3'>" + this.time_ + "</div>";
+        /*多个团队信息时的内容*/
+        var div2 = "<div class=' table-detail ' style='margin-top: 20px;display:none;' >" +
+                "<div class='table-detail-close' style='text-align:right;'><img src='$!{STATIC_URL}/resources/dist/images/close.png' style='width:20px;'></div>"+
+                "<table class='table table-bordered table-page'> " +
+                "<thead><tr><th>团队名称</th><th>正在进行的天数</th></tr></thead>" +
+                "<tbody class='change'></tbody>" +
+                "</table>" +
+//                "<div  class='pagination2 pagination-table paginationjspaginationjs-small'></div>" +
+                "</div>"+
+                "<div class='pin'>" +
+                "<input type='hidden' name='countryId1' value='"+ this.countryId1_+"'>" +
+                "<button>" + this.tcount_ + "个行程</button>" +
+                "</div>" ;
+        // Create the img element and attach it to the div.
+        var div = $("<div class='warpcont'></div>")[0];
+//        console.log("countryId1是:"+this.countryId1_+"    tcount是:"+this.tcount_);
+//        console.log(this);
+        if(this.tcount_==1){
+            $(div).html(div1);
+        }else if(this.tcount_>1){
+            $(div).html(div2);
+        }
+        this.div_ = div;
+        // Add the element to the "overlayLayer" pane.
+        var panes = this.getPanes();
+        panes.overlayMouseTarget.appendChild(div);
+    };
+    USGSOverlay.prototype.onRemove = function() {
+        this.div_.parentNode.removeChild(this.div_);
+        this.div_ = null;
+    };
+    // Set the visibility to 'hidden' or 'visible'.
+    USGSOverlay.prototype.hide = function() {
+        if (this.div_) {
+            // The visibility property must be a string enclosed in quotes.
+            this.div_.style.visibility = 'hidden';
+        }
+    };
+    USGSOverlay.prototype.show = function() {
+        if (this.div_) {
+            this.div_.style.visibility = 'visible';
+        }
+    };
+    USGSOverlay.prototype.mouseover = function() {
+        if (this.div_) {
+            this.div_.style.visibility = 'hidden';
+        }
+    };
+    USGSOverlay.prototype.mouseout = function() {
+        if (this.div_) {
+            this.div_.style.visibility = 'visible';
+        }
+    };
+    USGSOverlay.prototype.toggle = function() {
+        if (this.div_) {
+            if (this.div_.style.visibility === 'hidden') {
+                this.show();
+            } else {
+                this.hide();
+            }
+        }
+    };
+    // Detach the map from the DOM via toggleDOM().
+    // Note that if we later reattach the map, it will be visible again,
+    // because the containing <div> is recreated in the overlay's onAdd() method.
+    USGSOverlay.prototype.toggleDOM = function() {
+        if (this.getMap()) {
+            // Note: setMap(null) calls OverlayView.onRemove()
+            this.setMap(null);
+        } else {
+            this.setMap(this.map_);
+        }
+    };
+    var timer = [];
+
+    function drop() {
+        clearMarkers();
+        for (var i = 0; i < neighborhood.length; i++) {
+            addMarkerWithTimeout(neighborhood[i].position, i * 200);
+            (function(m) {
+                setTimeout(function() {
+                    //showNewRect(m,neighborhood[m].text,neighborhood[m].name);
+                }, 300 * m)
+            })(i);
+        }
+    }
+
+    function addMarkerWithTimeout(position, timeout, callback) {
+        window.setTimeout(function() {
+            markers.push(new google.maps.Marker({
+                position: position,
+                map: map,
+                icon: imageinco,
+                animation: google.maps.Animation.DROP
+            }));
+            // callback();
+        }, timeout);
+    }
+
+    function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+    //use
+    function showNewRect(i, txt, sex) {
+        markers[i].addListener('click', function(event) {
+            map.panTo(markers[i].getPosition());
+            return false;
+        })
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+#end

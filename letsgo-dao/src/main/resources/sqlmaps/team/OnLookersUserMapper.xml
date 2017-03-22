@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.OnlookersUserDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.OnlookersUserEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="onlooker_user_id" property="onlookerUserId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="onlookers_status" property="onlookersStatus" jdbcType="INTEGER" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="MultiResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        <id column="s_id" property="id" jdbcType="BIGINT" />
+        <result column="s_team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="s_name" property="name" jdbcType="VARCHAR" />
+        <result column="s_start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="s_end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="s_feature_photo" property="featurePhoto" jdbcType="VARCHAR" />
+        <result column="s_process_status" property="processStatus" jdbcType="INTEGER" />
+        <result column="s_type" property="type" jdbcType="INTEGER" />
+        <result column="s_del" property="del" jdbcType="INTEGER" />
+
+        <result column="s_onlookerType" property="onlookerType" jdbcType="INTEGER" />
+        <result column="s_onlookerUserId" property="onlookerUserId" jdbcType="INTEGER" />
+
+        <result column="t_status" property="status" jdbcType="INTEGER" />
+        <result column="t_tx_groupId" property="txGroupId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.OnlookersUserEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_onlookers_user (onlooker_user_id, user_id,
+        onlookers_status, schedule_id, update_time,
+        create_time,version,sex,name,phone)
+        values (
+        #{onlookerUserId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+        #{onlookersStatus,jdbcType=INTEGER}, #{scheduleId,jdbcType=BIGINT},#{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+        #{version,jdbcType=BIGINT},#{sex,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR})
+    </insert>
+    <select id="getMyFriendlist"  resultType="Long"  parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersUserRequest">
+        select  distinct onlooker_user_id
+         from t_onlookers_user
+        <where>
+            <if test="null != scheduleId"> and schedule_id = #{scheduleId} </if>
+            <if test="null != userId"> and user_id = #{userId} </if>
+        </where>
+
+    </select>
+
+    <select id="getUserIdByOnlookerUserId"  resultType="Long"  parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersUserRequest">
+        select  user_id
+        from t_onlookers_user
+        WHERE onlooker_user_id = #{userId,jdbcType=BIGINT} and  schedule_id = #{scheduleId,jdbcType=BIGINT} limit 1
+    </select>
+    <select id="getScheduleIdByOnlookerUserId"   resultMap="BaseResultMap"  parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersUserRequest">
+        select ID,onlooker_user_id, user_id,
+        onlookers_status, schedule_id, update_time,
+        create_time,version
+        from t_onlookers_user
+        WHERE onlooker_user_id = #{onlookerUserId,jdbcType=BIGINT}
+    </select>
+
+    <select id="isHas"  resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersUserRequest">
+        SELECT count(ID)
+        FROM t_onlookers_user
+        WHERE schedule_id = #{scheduleId,jdbcType=BIGINT} AND user_id =#{userId,jdbcType=BIGINT} AND onlooker_user_id =#{onlookerUserId,jdbcType=BIGINT}
+    </select>
+
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.OnlookersUserEntity" >
+     update t_onlookers_user
+     set onlooker_user_id = #{onlookerUserId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+       onlookers_status = #{onlookersStatus,jdbcType=INTEGER},
+        schedule_id = #{scheduleId,jdbcType=BIGINT},
+         update_time = #{updateTime,jdbcType=TIMESTAMP},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+           sex = #{sex,jdbcType=INTEGER},
+            name = #{name,jdbcType=VARCHAR},
+             phone = #{phone,jdbcType=VARCHAR},
+    version = version + 1
+    where ID = #{id,jdbcType=BIGINT}
+   </update>
+
+    <select id="getOnlookersUserByPhone"   resultMap="BaseResultMap"  parameterType="java.lang.String">
+        select ID,onlooker_user_id, user_id,
+        onlookers_status, schedule_id, update_time,
+        create_time,version,sex,name,phone
+        from t_onlookers_user
+        WHERE phone = #{phone}
+    </select>
+
+    <select id="isHasByPhone"  resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersUserRequest">
+        SELECT count(ID)
+        FROM t_onlookers_user
+        WHERE phone = #{phone,jdbcType=VARCHAR} AND user_id =#{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getSchedules"   resultMap="MultiResultMap"  parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersUserRequest">
+    select o.user_id AS s_onlookerUserId,o.onlookers_status AS s_onlookerType,
+    s.ID AS s_id,s.team_id AS s_team_id,s.name AS s_name,s.start_date AS s_start_date,s.end_date AS s_end_date,s.feature_photo AS s_feature_photo,s.process_status AS s_process_status,s.type AS s_type,s.del AS s_del,
+    t.status AS t_status,t.tx_groupId AS t_tx_groupId
+    from t_onlookers_user AS o
+    JOIN j_schedule AS s  ON   s.ID = o.schedule_id
+    JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+    WHERE o.onlooker_user_id = #{onlookerUserId,jdbcType=BIGINT}
+    order by  s.start_date ASC
+</select>
+
+    <select id="getEndScheduleOne"   resultMap="MultiResultMap"  parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersUserRequest">
+        select o.user_id AS s_onlookerUserId,o.onlookers_status AS s_onlookerType,
+        s.ID AS s_id,s.team_id AS s_team_id,s.name AS s_name,s.start_date AS s_start_date,s.end_date AS s_end_date,s.feature_photo AS s_feature_photo,s.process_status AS s_process_status,s.type AS s_type,s.del AS s_del,
+        t.status AS t_status,t.tx_groupId AS t_tx_groupId
+        from t_onlookers_user AS o
+        JOIN j_schedule AS s  ON   s.ID = o.schedule_id
+        JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+        WHERE o.onlooker_user_id = #{onlookerUserId,jdbcType=BIGINT} AND t.status=3
+        order by  s.start_date DESC limit 1
+    </select>
+
+    <select id="getEndSchedules"   resultMap="MultiResultMap"  parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersUserRequest">
+        select o.user_id AS s_onlookerUserId,o.onlookers_status AS s_onlookerType,
+        s.ID AS s_id,s.team_id AS s_team_id,s.name AS s_name,s.start_date AS s_start_date,s.end_date AS s_end_date,s.feature_photo AS s_feature_photo,s.process_status AS s_process_status,s.type AS s_type,s.del AS s_del,
+        t.status AS t_status,t.tx_groupId AS t_tx_groupId
+        from t_onlookers_user AS o
+        JOIN j_schedule AS s  ON   s.ID = o.schedule_id
+        JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+        WHERE o.onlooker_user_id = #{onlookerUserId,jdbcType=BIGINT} AND t.status=3
+    </select>
+
+</mapper>

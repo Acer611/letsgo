@@ -1,0 +1,40 @@
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  line-height: 1.6;
+  font-family: -apple-system-font, "Helvetica Neue", sans-serif;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+a img {
+  border: 0;
+}
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+li{list-style-type:none;}
+
+html{font-size:10px}
+@media screen and (min-width:320px){html{font-size:12px}}
+@media screen and (min-width:321px) and (max-width:375px){html{font-size:14px}}
+@media screen and (min-width:376px) and (max-width:414px){html{font-size:16px}}
+@media screen and (min-width:415px) and (max-width:639px){html{font-size:20px}}
+@media screen and (min-width:640px) and (max-width:719px){html{font-size:24px}}
+@media screen and (min-width:720px) and (max-width:749px){html{font-size:26.5px}}
+@media screen and (min-width:750px) and (max-width:799px){html{font-size:27.5px}}
+@media screen and (min-width:800px){html{font-size:25px}}
+
+
+
+html{background-color:#285b6c;}
+.errorbg{background:url(../images/none404.jpg) 0 0 no-repeat #285b6c;background-size:100% auto;width:100%;padding-top:49.2%;color:#fff;}
+.txtdes1{padding:1em 0 2em 8.53%;}
+.txtdes2{padding-bottom:4em;}
+.errorbg p{padding:0.5em 0 1em 8.53%;}
+.bottomDownload{background-color:#0c303c;text-align:center;width:100%;padding:0.7em 0;position:absolute;bottom:0;left:0;z-index:99;}
+.bottomDownload a{color:#fff;font-size:1.2em;}

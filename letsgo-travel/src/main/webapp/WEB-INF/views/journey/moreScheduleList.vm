@@ -1,0 +1,276 @@
+#set($pageTitle="团队行程管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+
+  <div >
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+
+
+      #parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- =============================================== -->
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            团队行程管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">团队行程管理</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			<div class="box box-success">
+			    <div class="box-header with-border">
+                  <h3 class="box-title">#if(${scheduleRequest.status}==1)
+                      正在进行的行程
+                      #elseif(${scheduleRequest.status}==2)
+                      即将开始的行程
+#elseif(${scheduleRequest.status}==3)
+                      已经结束的行程
+                      #else
+                      所有行程
+                  #end
+                  </h3>
+                </div><!-- /.box-header -->
+			    <div class="box-body content table-responsive">
+			  		 <table class="table table-hover" id="table2">
+						<thead>
+							<tr>
+							  <th>团号</th>
+                            #if(${scheduleRequest.clickMore}=="mainPageMore")
+                                #if(${scheduleRequest.status}==2)
+                                    <th>出行时间</th>
+                                #end
+                                #end
+							  <th>目的地</th>
+							  <th>行程名称</th>
+                                <th>领队</th>
+							  <th>人数</th>
+							  <th>状态</th>
+
+                                #if(${scheduleRequest.clickMore}=="mainPageMore")
+
+                                            <th>操作</th>
+
+                                #elseif(${scheduleRequest.clickMore}=="updateTemplateMore")
+
+                                        <th>操作</th>
+
+                                #end
+
+							</tr>
+						</thead>
+						<tbody>
+                        #if($response.scheduleList.size()>0)
+
+                        #foreach( $Detail in $response.scheduleList)
+							<tr>
+							  <td>$!{Detail.teamNum}</td>
+                                #if(${scheduleRequest.clickMore}=="mainPageMore")
+                                    #if(${scheduleRequest.status}==2)
+                                        <td>$!date.format('yyyy-MM-dd',$!Detail.startDate)</td>
+                                    #end
+                                #end
+							  <td>	#foreach( $Detailr in $Detail.scheduleDetailList) $!{Detailr.destination1}$!{Detailr.destination2}$!{Detailr.destination3}$!{Detailr.destination4}<br/> #end</td>
+							  <td>#if(${scheduleRequest.clickMore}=="mainPageMore")
+                                  <a href="$!{link.contextPath}/schedule/schedulePreview?id=$!{Detail.id}">$!{Detail.name}</a>
+                              #elseif(${scheduleRequest.clickMore}=="updateTemplateMore")
+                                  <a href="$!{link.contextPath}/schedule/scheduleInitChoose?travelTemplate=updateTemplate&id=$!{Detail.id}">$!{Detail.name}</a>
+                              #end</td>
+								<td><a href="$!{link.contextPath}/leader/leaderPreview?id=$!{Detail.leaderId}">$!{Detail.leadName}</a></td>
+							  <td><a href="$!{link.contextPath}/member/teamMembersView?tId=$!{Detail.teamId}">$!{Detail.totalCount}</a></td>
+                                <td>
+                                    #if(${Detail.status}==1)
+                                        正在进行的行程
+                                    #elseif(${Detail.status}==2)
+                                        即将开始的行程
+                                    #elseif(${Detail.status}==3)
+                                        已经结束的行程
+                                    #else
+
+                                    #end
+                                </td>
+
+							  <td>#if(${scheduleRequest.clickMore}=="mainPageMore")
+                                #if(${scheduleRequest.status}==2)
+                                  <a href="$!{link.contextPath}/schedule/scheduleEdit?id=$!{Detail.id}">修改</a>
+                                #end
+##                            #if(${scheduleRequest.status}!=2)
+##                                  <div><a href="$!{link.contextPath}/stopData/getInitStopData?id=$!{Detail.id}">停留数据</a></div>
+##                                #end
+
+                                  <div><a href="$!{link.contextPath}/survey/surveyQueryOrSave?teamId=$!{Detail.teamId}&title=$!{Detail.name}">满意度调研</a></div>
+
+##                                  #if(${scheduleRequest.status}!=2)
+##                                  <div><a href="$!{link.contextPath}/event/getEventList?id=$!{Detail.id}&pageNum=1&pageSize=10">事件查看</a></div>
+##                                  #end
+                                  #elseif(${scheduleRequest.clickMore}=="updateTemplateMore")
+                                      <a href="$!{link.contextPath}/schedule/scheduleInitChoose?travelTemplate=updateTemplate&id=$!{Detail.id}">创建</a>
+                              #end</td>
+
+							</tr>
+	                        #end
+                        #else
+                            <td  colspan='7'>没有结果</td>
+                        #end
+						  </tbody>
+						  </table>
+
+                    <div id="pagination" class="paginationjs paginationjs-small">
+
+                    </div>
+
+
+						  </div><!-- /.box-body -->
+				</div><!-- /.box -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+		#parse("/WEB-INF/views/common/footer.vm")
+
+    </div><!-- ./wrapper -->
+  </div>
+
+  #define($scriptBlock)
+	<script>
+
+
+		//iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+          checkboxClass: 'icheckbox_minimal-blue',
+          radioClass: 'iradio_minimal-blue'
+        });
+
+
+            $('#pagination').pagination({
+                dataSource: delQueStr(delQueStr(window.location.href, "pageNum"), "pageSize"),
+                locator: 'data',
+                totalNumber: $!{response.totals},
+                pageSize: 10,
+                pageRange:1,
+                alias: {
+                    pageNumber: 'pageNum',
+                    pageSize: 'pageSize'
+                },
+                ajax: {
+                    dataType: 'html',
+                    beforeSend: function () {
+                        $("#table2").find("tbody").empty().html('<td  colspan="7">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parents(".box:eq(0)").show();
+                    }
+                },
+//            formatAjaxError:function(jqXHR, textStatus, errorThrown){
+//                //$("#table2").find("tbody").empty().html($(jqXHR.responseText).find("tbody").html())
+//                //console.log(jqXHR)
+//            },
+                callback: function (data, pagination) {
+                    if($(data).find("tbody").find("tr").length>0){
+                        $("#table2").find("tbody").empty().html($(data).find("tbody").html());
+                        $("#pagination").show();
+                    }else{
+                        $("#table2").find("tbody").empty().html($(data).find("tbody").html());
+
+                    }
+
+                }
+            })
+        //获取url参数的值：name是参数名
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return (r[2]);
+            }
+            return null;
+        }
+        //设置url参数值，ref参数名,value新的参数值
+        function changeURLPar(url, ref, value){
+            var str = "";
+            if (url.indexOf('?') != -1)
+                str = url.substr(url.indexOf('?') + 1);
+            else
+                return url + "?" + ref + "=" + value;
+            var returnurl = "";
+            var setparam = "";
+            var arr;
+            var modify = "0";
+
+            if (str.indexOf('&') != -1) {
+                arr = str.split('&');
+
+                for (i in arr) {
+                    if (arr[i].split('=')[0] == ref) {
+                        setparam = value;
+                        modify = "1";
+                    }
+                    else {
+                        setparam = arr[i].split('=')[1];
+                    }
+                    returnurl = returnurl + arr[i].split('=')[0] + "=" + setparam + "&";
+                }
+
+                returnurl = returnurl.substr(0, returnurl.length - 1);
+
+                if (modify == "0")
+                    if (returnurl == str)
+                        returnurl = returnurl + "&" + ref + "=" + value;
+            }
+            else {
+                if (str.indexOf('=') != -1) {
+                    arr = str.split('=');
+
+                    if (arr[0] == ref) {
+                        setparam = value;
+                        modify = "1";
+                    }
+                    else {
+                        setparam = arr[1];
+                    }
+                    returnurl = arr[0] + "=" + setparam;
+                    if (modify == "0")
+                        if (returnurl == str)
+                            returnurl = returnurl + "&" + ref + "=" + value;
+                }
+                else
+                    returnurl = ref + "=" + value;
+            }
+            return url.substr(0, url.indexOf('?')) + "?" + returnurl;
+        }
+        //删除参数值
+        function delQueStr(url, ref) {
+            var str = "";
+            if (url.indexOf('?') != -1) {
+                str = url.substr(url.indexOf('?') + 1);
+            }
+            else {
+                return url;
+            }
+            var arr = "";
+            var returnurl = "";
+            var setparam = "";
+            if (str.indexOf('&') != -1) {
+                arr = str.split('&');
+                for (i in arr) {
+                    if (arr[i].split('=')[0] != ref) {
+                        returnurl = returnurl + arr[i].split('=')[0] + "=" + arr[i].split('=')[1] + "&";
+                    }
+                }
+                return url.substr(0, url.indexOf('?')) + "?" + returnurl.substr(0, returnurl.length - 1);
+            }
+            else {
+                arr = str.split('=');
+                if (arr[0] == ref) {
+                    return url.substr(0, url.indexOf('?'));
+                }
+                else {
+                    return url;
+                }
+            }
+        }
+	</script>
+#end

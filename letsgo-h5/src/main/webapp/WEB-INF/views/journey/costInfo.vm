@@ -1,0 +1,121 @@
+#set($pageTitle="费用信息")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+
+	<input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main">
+		<section class="cd-container feiyong">
+			#if( ${response.costInfoVo.costInclude}&&${response.costInfoVo.costInclude}!="")
+			<dl>
+				<dt>费用包含:</dt>
+				<dd>
+				<ul>
+					<!--
+				<li>
+				 <div>国际间往返机票及机票税（如遇航空公司调整燃油附加税，我社将随之调整销售价格）；</div>
+				</li>
+				<li>
+					<div>行程中所标明的酒店双人标准间或四人间住宿及早餐；</div>
+				</li>
+				<li>
+					<div>行程内所含午晚餐；</div>
+				</li>
+				<li>
+					<div>游览时20座或以上空调旅游巴士，专业司机；</div>
+				</li>
+				<li>
+					<div>日本ADS团队旅游签证费;</div>
+				</li>
+				<li>
+					<div>全程中文领队、境外导游、境外司机服务；</div>
+				</li>-->
+                    <li>
+                        <div> $!response.costInfoVo.costInclude.replaceAll("\n|\r","<br/>")</div>
+                    </li>
+
+				</ul>
+				</dd>
+			</dl>
+			#end
+			#if( ${response.costInfoVo.costNotInclude}&&${response.costInfoVo.costNotInclude}!="")
+			<dl>
+				<dt>费用不含:</dt>
+				<dd>
+				<ul>
+					<!--<li>
+						<div>护照费、申请签证中准备相关材料所需的制作、手续费；</div>
+					</li>
+					<li>
+						<div>出入境的行李海关课税，超重行李的托运费、管理费等；</div>
+					</li>
+					<li>
+						<div>旅游费用包含内容之外的所有费用：
+						<br>
+						(1)一切私人费用：例如交通工具上非免费餐饮费、洗衣、理发、电话、饮料、烟酒、付费电视、行李搬运、邮寄、购物、行程列明以外的用餐或宴请等；
+						<br>
+						(2)自由活动期间期间的餐食费及交通费；
+						</div>
+					</li>
+					<li>
+						<div>行程中未提到的其它费用：如特殊门票、游船（轮）缆车、地铁票等费用；
+			  			</div>
+					</li>-->
+                    <li>
+                        <div>$!response.costInfoVo.costNotInclude.replaceAll("\n|\r","<br/>")
+                        </div>
+                    </li>
+
+				</ul>
+			</dd>
+			</dl>
+				#end
+			#if( ${response.costInfoVo.ownExpenceInfo}&&${response.costInfoVo.ownExpenceInfo}!="")
+			<dl>
+				<dt>自费项目:</dt>
+				<dd>
+					<ul>
+						<!--
+						<li>
+							<div>迪士尼游乐场</div>
+						</li>
+						<li>
+							<div>动漫展门票</div>
+						</li>-->
+                        <li>
+                            <div>$!response.costInfoVo.ownExpenceInfo.replaceAll("\n|\r","<br/>")</div>
+                        </li>
+
+					</ul>
+				</dd>
+			</dl>
+				#end
+			<div class="continue_loding">
+					<div></div>
+					<span>已经到底,点击左侧查看更多!</span>
+			</div>
+		</section>
+	</div>
+#if($!response.scheduleEntity.processStatus==4)
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+#parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+	<script type="text/javascript">
+        var teamId="$!{response.scheduleEntity.teamId}";
+        var iswechat="${response.isWeChat}";
+		$(function(){
+			$(".overlay").click(function(){
+				$("#joacims-menu").prop("checked",false)
+			})
+		  	/*判断是否显示已经到底*/
+		  	if($(window).height()>$("body").height()){
+		  		$(".continue_loding").hide();
+		  	} 
+		})
+	</script>
+#end

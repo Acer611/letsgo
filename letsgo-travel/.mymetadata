@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="letsgo-travel"
+  id="myeclipse.1460452366591"
+  context-root="/travel"
+  j2ee-spec="5.0"
+  archive="letsgo-travel.war">
+  <attributes>
+    <attribute name="webrootdir" value="/src/main/webapp" />
+  </attributes>
+</project-module>
+

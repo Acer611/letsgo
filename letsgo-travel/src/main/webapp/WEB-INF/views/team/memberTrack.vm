@@ -1,0 +1,352 @@
+#set($layout="/WEB-INF/views/common/layout/layoutnew.vm")
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <link rel="stylesheet" href="$!{STATIC_URL}/resources/dist/css/map.css" type="text/css"/>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+</style>
+    <title>用户轨迹</title>
+</head>
+<body>
+<form id="form1" runat="server">
+    <div id="map_canvas" style="width:80%; height:700px;"></div>
+</form>
+<div id="positionList"><ul></ul></div>
+<!-- jQuery 2.1.4 -->
+<script src="$!{STATIC_URL}/resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://maps.google.cn/maps/api/js?region=cn&language=zh-CN&key=AIzaSyBJm0v_D7f-Oywc2ZIxRApmC8tAQI1q07k&libraries=places"></script>
+<script>
+##    function initialize() {
+##        var myOptions = {
+##            zoom: 5,
+##            center: new google.maps.LatLng(39.960872,116.271486),
+##            mapTypeId: google.maps.MapTypeId.ROADMAP,
+##            mapTypeControl: false,
+##            panControl: false,
+##            zoomControl: false,
+##            streetViewControl: false,
+##        };
+##        var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+##
+##        // 谷歌开发者网站 https://developers.google.com/maps/documentation/javascript/
+##        // 引入API http://maps.googleapis.com/maps/api/js?sensor=faIse
+##        var coordinates = []; //坐标集合
+##        var bounds = new google.maps.LatLngBounds(); //坐标范围集合，用于计算中心点和放大街绞
+##        var data = [];
+##        #foreach( $Detail in $locationTrack.locationHistoryEntityList)
+##                #if($Detail.latitude&&$Detail.longitude)
+##                    data.push({latitude:$!{Detail.latitude}, longitude:$!{Detail.longitude} , createTime:'$!date.format("yyyy-MM-dd HH:mm:ss",$!{Detail.createTime})' })
+##                #end
+##        #end
+##    $("#positionList").find("ul").empty();
+##        for(var i in data){
+##            var point = new google.maps.LatLng(data[i].latitude, data[i].longitude);
+##            bounds.extend(point);
+##            coordinates.push(point);
+##            addMarker(point, (parseInt(i) + 1), map);
+##            $("#positionList").find("ul").append("<li lat='"+data[i].latitude+"' lng='"+data[i].longitude+"'><strong>"+(parseInt(i) + 1)+":</strong><span>"+data[i].createTime+"</span></li>");
+##//            $("#positionList").find("li").on("mouseover",function(){
+##//                map.panTo(new google.maps.LatLng($(this).attr("lat") ,$(this).attr("lng")));
+##//            })
+##        }
+##
+##        new google.maps.Polyline({ //计算轨迹
+##            path : coordinates,
+##            strokeCoIor: '#0000FF',
+##            strokeOpacity: 1.0,
+##            strokeWeight: 4,
+##            map: map,
+##        });
+##
+##        map.fitBounds(bounds);
+##    }
+##
+##    function addMarker(location, index, map) {
+##        var marker = new google.maps.Marker({
+##            position: location,
+##            label: index.toString(),
+##            map: map
+##        });
+##    }
+##
+##    google.maps.event.addDomListener(window, 'load', initialize);
+
+    var markers = [];
+    var coordinates = []; //坐标集合
+    var marker;
+    var defaultZoom = 18;
+    var neighborhood=[];
+    var locationEntityList=[]
+    var imageinco = {
+        url: '$!{STATIC_URL}/resources/dist/images/beachflag.png'
+    }
+
+    var overlay;
+    var locationEntityList = [];
+    #foreach( $Detail in $locationTrack.locationHistoryEntityList)
+            #if($Detail.latitude&&$Detail.longitude)
+                locationEntityList.push({latitude:$!{Detail.latitude}, longitude:$!{Detail.longitude} , createTime:'$!date.format("yyyy-MM-dd HH:mm:ss",$!{Detail.createTime})', id:$!{Detail.id} })
+            #end
+    #end
+    USGSOverlay.prototype = new google.maps.OverlayView();
+
+
+    function getSoneone(){
+        for(var i=0;i<locationEntityList.length;i++){
+            neighborhood.push(locationEntityList[i]);
+        }
+        //drop();
+        var centerui=schedulemap.getCenter();
+        var len2=neighborhood.length;
+        var bounds = new google.maps.LatLngBounds();
+
+
+
+        for(var len2 in neighborhood){
+            var point = new google.maps.LatLng(neighborhood[len2].latitude, neighborhood[len2].longitude);
+            coordinates.push(point);
+            bounds.extend(point);
+            $("#positionList").find("ul").append("<li id='timeline"+neighborhood[len2].id+"' lat='"+neighborhood[len2].latitude+"' lng='"+neighborhood[len2].longitude+"'><strong>"+(parseInt(len2) + 1)+":</strong><span>"+neighborhood[len2].createTime+"<span></li>");
+
+        }
+        new google.maps.Polyline({ //计算轨迹
+            path : coordinates,
+            strokeCoIor: '#0000FF',
+            strokeOpacity: 1.0,
+            strokeWeight: 4,
+            map: schedulemap,
+        });
+
+        schedulemap.fitBounds(bounds);
+        var displayInfoProcess=google.maps.event.addListener(schedulemap, 'bounds_changed', function(){
+            if(displayInfoProcess) {
+                google.maps.event.removeListener(displayInfoProcess);
+            }
+        });
+
+        //地图缩放时触发，当地图的缩放比例大于默认比例时，恢复为默认比例
+        google.maps.event.addListener(schedulemap, 'zoom_changed', function () {
+            if (schedulemap.getZoom() > defaultZoom){
+                schedulemap.setZoom(defaultZoom);
+            }
+        });
+    }
+    function initialize() {
+        schedulemap = new google.maps.Map(document.getElementById('map_canvas'), {
+            //mapTypeId: google.maps.MapTypeId.SATELLITE
+            zoom: 5,
+            center: new google.maps.LatLng(39.960872,116.271486),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
+            panControl: true,
+            zoomControl: true,
+            streetViewControl: false
+        });
+
+        // The photograph is courtesy of the U.S. Geological Survey.
+        var srcImage = '$!{STATIC_URL}/resources/dist/images/beachflag.png';
+
+        getSoneone();
+        for(var i=0;i<locationEntityList.length;i++){
+            new USGSOverlay({lat:locationEntityList[i].latitude,lng:locationEntityList[i].longitude},i,locationEntityList[i].createTime,locationEntityList[i].id, schedulemap);
+
+
+        }
+        //overlay = new USGSOverlay({lat: 39.323907, lng: 116.109291}, "大皇宫",'9:00-12:00', map);
+    }
+    function placeDetailsByPlaceId(service, map, infowindow) {
+        // Create and send the request to obtain details for a specific place,
+        // using its Place ID.
+        var request = {
+            placeId: document.getElementById('place-id').value
+        };
+
+    }
+    /** @constructor */
+    function USGSOverlay(latlng,index, time,id,map) {
+        // Initialize all properties.
+        this.latlng_ = latlng;
+        this.ind_ = index;
+        this.id_ = id;
+        this.time_ = time;
+        this.map_ = map;
+        // Define a property to hold the image's div. We'll
+        // actually create this div upon receipt of the onAdd()
+        // method so we'll leave it null for now.
+        this.div_ = null;
+        // Explicitly call setMap on this overlay.
+        this.setMap(map);
+    }
+    /**
+     * onAdd is called when the map's panes are ready and the overlay has been
+     * added to the map.
+     */
+    USGSOverlay.prototype.onAdd = function() {
+        // Create the img element and attach it to the div.
+        var div=$("<div class='warpcont' id='warpcont"+this.id_+"'></div>")[0];
+       // $(div).html("<div class='pin'></div><div class='time2'><div class='name'><span>"+this.time_+"</span></div></div>");
+        $(div).html("<div class='pin'>"+(this.ind_+1)+"</div>");
+        this.div_ = div;
+        // Add the element to the "overlayLayer" pane.
+        var panes = this.getPanes();
+        panes.overlayMouseTarget.appendChild(div);
+    };
+    USGSOverlay.prototype.draw = function() {
+        // We use the south-west and north-east
+        // coordinates of the overlay to peg it to the correct position and size.
+        // To do this, we need to retrieve the projection from the overlay.
+        var overlayProjection = this.getProjection();
+
+        // Retrieve the south-west and north-east coordinates of this overlay
+        // in LatLngs and convert them to pixel coordinates.
+        // We'll use these coordinates to resize the div.
+        var sw = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(this.latlng_.lat,this.latlng_.lng));
+        // Resize the image's div to fit the indicated dimensions.
+        var div = this.div_;
+        div.style.left = sw.x-12 + 'px';
+        div.style.top = sw.y-$(div).find(".pin").height() + 'px';
+        var that=this;
+    };
+    // The onRemove() method will be called automatically from the API if
+    // we ever set the overlay's map property to 'null'.
+    USGSOverlay.prototype.onRemove = function() {
+        this.div_.parentNode.removeChild(this.div_);
+        this.div_ = null;
+    };
+    // Set the visibility to 'hidden' or 'visible'.
+    USGSOverlay.prototype.hide = function() {
+        if (this.div_) {
+            // The visibility property must be a string enclosed in quotes.
+            this.div_.style.visibility = 'hidden';
+        }
+    };
+
+    USGSOverlay.prototype.show = function() {
+        if (this.div_) {
+            this.div_.style.visibility = 'visible';
+        }
+    };
+    USGSOverlay.prototype.mouseover = function() {
+        if (this.div_) {
+            this.div_.style.visibility = 'hidden';
+        }
+    };
+    USGSOverlay.prototype.mouseout = function() {
+        if (this.div_) {
+            this.div_.style.visibility = 'visible';
+        }
+    };
+    USGSOverlay.prototype.toggle = function() {
+        if (this.div_) {
+            if (this.div_.style.visibility === 'hidden') {
+                this.show();
+            } else {
+                this.hide();
+            }
+        }
+    };
+
+    // Detach the map from the DOM via toggleDOM().
+    // Note that if we later reattach the map, it will be visible again,
+    // because the containing <div> is recreated in the overlay's onAdd() method.
+    USGSOverlay.prototype.toggleDOM = function() {
+        if (this.getMap()) {
+            // Note: setMap(null) calls OverlayView.onRemove()
+            this.setMap(null);
+        } else {
+            this.setMap(this.map_);
+        }
+    };
+    var timer=[];
+
+    function drop() {
+        clearMarkers();
+        for (var i = 0; i < neighborhood.length; i++) {
+            addMarkerWithTimeout({lat:neighborhood[i].latitude,lng:neighborhood[i].longitude}, i * 200);
+
+            (function(m){
+                setTimeout(function(){
+
+                    //showNewRect(m,neighborhood[m].text,neighborhood[m].name);
+
+                },300*m)
+            })(i);
+        }
+
+    }
+    function addMarkerWithTimeout(position, timeout,callback) {
+        window.setTimeout(function() {
+            markers.push(new google.maps.Marker({
+                position: position,
+                map: schedulemap,
+                icon:imageinco.url,
+                animation: google.maps.Animation.DROP
+            }));
+            // callback();
+
+        }, timeout);
+
+    }
+    function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+
+    //use
+    function showNewRect(i,txt,sex){
+        markers[i].addListener ('click', function(event) {
+            schedulemap.panTo(markers[i].getPosition());
+            return false;
+        })
+
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+    $(function(){
+        $("#map_canvas,#positionList,#positionList>ul").css("height",$(window).height());
+        $("#positionList").on("click","li",function(){
+            var id=$(this).attr("id").split("timeline");
+            $(this).addClass("on").siblings().removeClass("on");
+            $("#warpcont"+id[1]).addClass("warpconthover");
+            $("#warpcont"+id[1]).siblings().removeClass("warpconthover");
+            $(".pin").removeClass("pinhover");
+            $("#warpcont"+id[1]).find(".pin").addClass("pinhover");
+            $("#warpcont"+id[1]).css("z-index",9999).siblings().css("z-index",999);
+            schedulemap.panTo(new google.maps.LatLng($(this).attr("lat") ,$(this).attr("lng")));
+        })
+        $("#map_canvas").on("mouseenter",".warpcont",function(){
+            var id=$(this).attr("id").split("warpcont");
+            $(this).addClass("warpconthover");
+            $(this).siblings().removeClass("warpconthover");
+            $(".pin").removeClass("pinhover");
+            $(this).find(".pin").addClass("pinhover");
+            $(this).css("z-index",9999);
+            $("#timeline" + id[1]).addClass("on").siblings().removeClass("on");
+            $("#positionList").scrollTop($("#timeline" + id[1]).offset().top+$("#positionList").scrollTop());
+        })
+        $("#map_canvas").on("mouseleave",".warpcont",function(){
+            var id=$(this).attr("id").split("warpcont");
+            $(this).css("z-index",999)
+            //$(this).removeClass("active");
+            // $("#timeline" + id[1]).removeClass("active");
+        })
+    })
+</script>
+</body>
+</html>
+
+

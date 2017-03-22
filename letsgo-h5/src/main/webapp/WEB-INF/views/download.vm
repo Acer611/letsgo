@@ -1,0 +1,60 @@
+#set($pageTitle="满意度调查问卷下载")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/bootstrap.min.css"])
+
+<style type="text/css">
+    .download-title{
+        width: 100%;
+        height: 70px;
+        background: #1fbad1;
+        line-height: 70px;
+        vertical-align: middle;
+        color: #fff;
+        font-size: 30px;
+    }
+    .container{
+        margin-top: 55px;
+    }
+    .container div{
+        margin-bottom: 45px;
+    }
+    .container a:last-child{
+        display: inline-block;
+        color: #1fbad1;
+        text-decoration: none;
+        width: 74px;
+        height: 24px;
+        border: 1px solid #1fbad1;
+        border-radius: 3px;
+        text-align: center;
+        line-height: 24px;
+        font-size: 16px;
+    }
+    .container a{color: #333;}
+    .container p{
+        font-size: 16px;
+        padding: 20px 0;
+        margin: 0;
+    }
+</style>
+
+<div class="download-title text-center">
+    <img src="$!{STATIC_URL}/resources/images/edit.png"/>
+    <span>满意度调查问卷下载</span>
+</div>
+<div class="container">
+    #foreach($Detail in $response)
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        #if($!{Detail.pdfUrl}!="")
+            <a href="$!{Detail.pdfUrl}"> <img src="$!{STATIC_URL}/resources/images/pdfLogo.png"/></a>
+            <a href="$!{Detail.pdfUrl}"><p>$!{Detail.userName}.pdf</p></a>
+            <a href="$!{Detail.pdfUrl}">下载</a>
+        #elseif($!{Detail.pdfUrl}=="")
+            <img src="$!{STATIC_URL}/resources/images/pdfLogo.png"/>
+             <p>$!{Detail.userName}.pdf</p>
+            PDF生成中...
+            #end
+    </div>
+        #end
+
+</div>

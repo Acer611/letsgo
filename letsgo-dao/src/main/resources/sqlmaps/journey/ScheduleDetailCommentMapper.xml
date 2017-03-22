@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.ScheduleDetailCommentDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDetailCommentEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="satisfied_status" property="satisfiedStatus" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_schedule_detail_comment
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailCommentEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_schedule_detail_comment (user_id, satisfied_status, create_time, 
+            version, schedule_detail_id)
+        values (#{userId,jdbcType=BIGINT}, #{satisfiedStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+            #{version,jdbcType=BIGINT}, #{scheduleDetailId,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailCommentEntity" >
+        update j_schedule_detail_comment
+        set user_id = #{userId,jdbcType=BIGINT},
+            satisfied_status = #{satisfiedStatus,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT},
+            schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, satisfied_status, create_time, version, schedule_detail_id
+        from j_schedule_detail_comment
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, user_id, satisfied_status, create_time, version, schedule_detail_id
+        from j_schedule_detail_comment
+    </select>
+    <resultMap id="selectCommentMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDetailCommentEntity">
+        <id column="ID" property="id" jdbcType="BIGINT" />
+		<result property="userId" column="user_id"/> 
+		<result property="scheduleDetailId" column="schedule_detail_id"/> 
+		<result property="satisfiedStatus" column="satisfied_status"/> 
+		<collection property="scoreEntities" ofType="com.umessage.letsgo.domain.po.journey.ScoreEntity" column="s_id">
+            <id column="s_id" property="id" jdbcType="BIGINT" />
+        	<result column="evaluate_option" property="evaluateOption" />
+       		<result column="evaluate_id" property="evaluateId" />
+       		<result column="score_option" property="scoreOption" />
+            <result column="evaluate_proposal" property="evaluateProposal" />
+            <result column="evaluate_sub_info" property="evaluateSubInfo" />
+        	<result column="score" property="score" />
+
+		</collection> 
+	</resultMap>
+    <select id="selectComment" resultMap="selectCommentMap" >
+        SELECT j.ID, j.user_id,j.satisfied_status,j.schedule_detail_id,
+        s.ID as s_id, s.schedule_detail_comment_id, s.evaluate_option,s.evaluate_id, s.score_option, s.score,
+        s.evaluate_proposal,s.evaluate_sub_info
+        FROM  j_schedule_detail_comment j LEFT JOIN  j_score s on j.ID=s.schedule_detail_comment_id
+        WHERE j.schedule_detail_id=#{scheduleDetailId,jdbcType=BIGINT} and j.user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectCommentByUserIdAndScheduleDetailId" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailCommentEntity" >
+        SELECT j.ID, j.user_id, j.satisfied_status, j.create_time, j.version, j.schedule_detail_id
+        FROM  j_schedule_detail_comment j JOIN  j_schedule_detail sd on j.schedule_detail_id = sd.ID
+        WHERE j.user_id = #{userId,jdbcType=BIGINT}
+		AND j.schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT}
+    </select>
+</mapper>

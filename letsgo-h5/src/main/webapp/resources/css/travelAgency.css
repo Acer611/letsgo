@@ -1,0 +1,42 @@
+@charset "utf-8";
+
+*{margin:0;padding: 0;}
+
+html,body{
+	width:100%;
+	height:100%;
+}
+#travel-container{
+	width:100%;
+	height:100%;
+	box-sizing:border-box;
+	padding:0 0.266667rem;
+}
+/* title */
+.travel-title{
+	font-size: 18px;
+	line-height:50px;
+}
+[data-dpr="2"] .travel-title{font-size:36px;line-height:100px;}
+[data-dpr="3"] .travel-title{font-size:58px;line-height: 160px;}
+/* content */
+.travel-content{
+	font-size: 14px;
+	line-height:1.5;
+	text-align: justify;
+}
+[data-dpr="2"] .travel-content{font-size:30px;line-height:1.5;}
+[data-dpr="3"] .travel-content{font-size:50px;line-height:1.5;}
+/* 地接社信息 */
+.travel-list{
+	list-style: disc;
+	padding:0 0.37rem;
+}
+.travel-list li{
+	font-size: 14px;
+	padding-bottom:0.133333rem;
+} 
+[data-dpr="2"] .travel-list li{font-size:30px;}
+[data-dpr="3"] .travel-list li{font-size:50px;}
+
+ 

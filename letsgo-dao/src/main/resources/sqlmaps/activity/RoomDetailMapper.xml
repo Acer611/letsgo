@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.activity.RoomDetailDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.activity.RoomDetailEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="room_id" property="roomId" jdbcType="BIGINT" />
+        <result column="group_id" property="groupId" jdbcType="BIGINT" />
+        <result column="member_id" property="memberId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from a_room_detail
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.activity.RoomDetailEntity" useGeneratedKeys="true" keyProperty="id" >
+        insert into a_room_detail (ID, room_id, group_id,
+            member_id, create_time, update_time, version
+            )
+        values (#{id,jdbcType=BIGINT}, #{roomId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, 
+            #{memberId,jdbcType=BIGINT},
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.activity.RoomDetailEntity" >
+        update a_room_detail
+        set room_id = #{roomId,jdbcType=BIGINT},
+            group_id = #{groupId,jdbcType=BIGINT},
+            member_id = #{memberId,jdbcType=BIGINT},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, room_id, group_id, member_id, create_time, update_time,
+        version
+        from a_room_detail
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, room_id, group_id, member_id, create_time, update_time,
+        version
+        from a_room_detail
+    </select>
+    <select id="selectWithMenberId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, room_id, group_id, member_id, create_time, update_time,
+        version
+        from a_room_detail
+        where member_id = #{memberId,jdbcType=BIGINT}
+    </select>
+</mapper>

@@ -1,0 +1,163 @@
+#set($pageTitle="团队行程管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+
+<!-- Site wrapper -->
+<div class="wrapper">
+  #parse("/WEB-INF/views/common/leftbar.vm")
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1 style="display: inline;">
+            团队相册
+          </h1>
+
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			  <div class="box box-success">
+
+				<!-- /.box-header -->
+                  <div class="box-header">
+                      <h3 class="box-title" >$!{sch.name}</h3>
+#if($map.size()>0)
+                      <div class="box-tools">
+
+                          <button type="button"  id="visibleBtn" class="btn btn-inline btn-primary">可见</button>
+                          <button type="button"  id="hiddenBtn" class="btn btn-inline btn-primary">隐藏</button>
+					  </div>
+	#end
+                  </div>
+				<div class="box-body">
+						<div class="form-group">
+
+		#if($map.size()>0)
+#foreach( $Detail in ${map.keySet()})
+    <div class="row">
+        <p style="font-size: 18px;margin-bottom: 0;margin-top:20px;margin-left:20px;">$Detail</p>
+        #foreach( $Detailphoto in ${map.get($Detail)})
+            <div class="col-md-2 col-sm-3 col-xs-6">
+                <div class="checkbox">
+
+                    <label>
+                        #if($Detailphoto.type==1)
+                            <input type="checkbox" id="$Detailphoto.id" checked>
+                        #else
+                            <input type="checkbox" id="$!{Detailphoto.id}">
+                        #end
+
+                        <img src=" $!{Detailphoto.thumbnailUrl}" alt="" width="100%" type="${Detailphoto.type}"/>
+                    </label>
+
+
+
+                </div>
+            </div>
+        #end
+    </div>
+
+	#end
+			#else
+			<div>暂无相册</div>
+			#end
+
+            		</div>
+				</div>
+			</div>
+		</section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+
+  #parse("/WEB-INF/views/common/footer.vm")
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+
+    </div><!-- ./wrapper -->
+<div id="dialogModal" style="display:none">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">消息</h4>
+            </div>
+            <div class="modal-body" style="text-align:center;font-size:14px;">
+                <p></p>
+            </div>
+            <div class="modal-footer text-center" style="text-align:center;">
+                <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                <button class="btn btn-primary" onclick="blockUIClose()" type="button">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+#define($scriptBlock)
+
+<script>
+    $(function() {
+
+        $("#visibleBtn").on("click", function () {
+			var teamIdString=[];
+			$(".checkbox").each(function(i){
+				if($(this).find("input").is(":checked")){
+                    teamIdString.push($(this).find("input").attr("id"))
+				}
+			})
+            $.ajax({
+                url: CONTEXTPATH + '/teamAlbum/updateTeamPhotoType',//验证地址
+                data: {teamIdString: teamIdString.join(","),type: 1},
+                type: "POST",
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.retCode == 0) {
+                        $("#dialogModal").find(".modal-body>p").html("设置播放可见成功");
+                        blockUIOpenShare("dialogModal");
+                    } else {
+                        $("#dialogModal").find(".modal-body>p").html("设置播放可见失败，请稍后重试");
+                        blockUIOpenShare("dialogModal");
+                    }
+                    retCode = data.retCode;
+                    retMsg = data.retMsg;
+
+                },
+                error: function () {
+                    blockUiOpen('短信发送失败，请重新获取密码');
+                }
+            })
+        })
+    $("#hiddenBtn").on("click", function () {
+                var teamIdString=[];
+                $(".checkbox").each(function(i){
+                    if($(this).find("input").is(":checked")){
+                        teamIdString.push($(this).find("input").attr("id"))
+                    }
+                })
+                $.ajax({
+                    url: CONTEXTPATH + '/teamAlbum/updateTeamPhotoType',//验证地址
+                    data: {teamIdString: teamIdString.join(","), type: 2},
+					type: "POST",
+					cache: false,
+					dataType: "json",
+					success: function (data) {
+						if (data.retCode == 0) {
+                            $("#dialogModal").find(".modal-body>p").html("设置播放不可见成功");
+                            blockUIOpenShare("dialogModal");
+						} else {
+                            $("#dialogModal").find(".modal-body>p").html("设置播放不可见失败，请稍后重试");
+                            blockUIOpenShare("dialogModal");
+						}
+					},
+					error: function () {
+						blockUiOpen('短信发送失败，请重新获取密码');
+					}
+				})
+   		 })
+    })
+    </script>
+	#end

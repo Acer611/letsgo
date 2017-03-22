@@ -1,0 +1,88 @@
+#set($pageTitle="批量处理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/jquery.form.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+
+		<style type="text/css">
+			body,
+			html {
+				width: 100%;
+				height: 100%;
+				background:  url($!{STATIC_URL}/resources/dist/images/loginbg.jpg) no-repeat !important;
+				background-size: cover !important;
+			}
+			
+			b {
+				color: #fff;
+			}
+            .login-page{background: none;}
+			.container {
+				padding-top: 7%;
+			}
+			
+			.btn-primary {
+				border-color: #1fbad1;
+				background-color: #1fbad1;
+			}
+			
+			.btn-primary:hover,
+			.btn-primary:active {
+				background-color: #0198ae;
+				border-color: #0198ae;
+			}
+		</style>
+<div class="hold-transition login-page">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+
+					<div class="register-box-body">
+						<h3 class="login-box-msg">批量处理</h3>
+                            <div class="form-group has-feedback">
+                                <label for="pageNum" class="col-xs-offset-1 col-xs-4 col-sm-4 control-label  text-right "><span  class="text-red">*</span>页码:</label>
+                                <div class="col-xs-8 col-sm-6">
+                                    <input type="text" class="form-control" id="pageNum" name="pageNum"  autocomplete="off" placeholder="请输入页码">
+                                    <span class="help-block small">允许输入数字</span>
+                                </div>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="pageSize" class="col-xs-offset-1 col-xs-4 col-sm-4 control-label  text-right "><span  class="text-red">*</span>每页大小:</label>
+                                <div class="col-xs-8 col-sm-6">
+                                    <input type="text" class="form-control" id="pageSize" name="pageSize"  autocomplete="off" placeholder="请输入每页大小">
+                                    <span class="help-block small">允许输入数字</span>
+                                </div>
+                            </div>
+							<div class="form-group">
+                                <button type="button" class="btn btn-primary btn-block get_password_btn" id="batchUpdateLocation">批量更新城市位置</button>
+							</div>
+
+						<!-- /.form-box -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.register-box -->
+
+		#define($scriptBlock)
+
+		<script>
+			$(function() {
+                var retCode, retMsg;
+                $("#batchUpdateLocation").on("click", function () {
+                    $.ajax({
+                        url: CONTEXTPATH + '/system/batchUpdateLocation',//验证地址
+                        type: "POST",
+                        data: {pageSize: $("[name=pageSize]").val(), pageNum: $("[name=pageNum]").val()},
+                        cache: false,
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data.respmsg);
+                        },
+                        error: function () {
+                            blockUiOpen('批量更新位置异常，请重新处理');
+                        }
+                    })
+                })
+            })
+
+		</script>
+#end

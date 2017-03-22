@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.OnlookersDetailsDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.OnlookersDetailsEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="father_id" property="fatherId" jdbcType="BIGINT" />
+        <result column="onlookers_id" property="onlookersId" jdbcType="BIGINT" />
+        <result column="reply_id" property="replyId" jdbcType="BIGINT" />
+        <result column="by_reply_id" property="byReplyId" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="is_like" property="isLike" jdbcType="INTEGER" />
+        <result column="is_look" property="isLook" jdbcType="INTEGER" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+
+        <result column="type" property="type" jdbcType="INTEGER" />
+
+        <result column="reply_name" property="replyName" jdbcType="VARCHAR" />
+        <result column="by_reply_name" property="byReplyName" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="getWatchRedPoint" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersDetailsRequest" >
+        select COUNT(*) AS ndCount from t_onlookers_details
+        <where>
+            <if test="null != scheduleId"> and schedule_id = #{scheduleId} </if>
+            <if test="null != byReplyId"> and by_reply_id = #{byReplyId} </if>
+            <if test="null != isLook"> and is_look = #{isLook} </if>
+        </where>
+    </select>
+    <resultMap id="BaseReplyMap" type="com.umessage.letsgo.domain.vo.team.respone.OnlookersDetailsInfo" >
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+        <result column="reply_id" property="replyId" jdbcType="BIGINT" />
+        <result column="message" property="message" jdbcType="VARCHAR" />
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="facePhotoUrl" property="facePhotoUrl" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+    </resultMap>
+<select id="getLastReply" resultMap="BaseReplyMap" parameterType="com.umessage.letsgo.domain.po.team.OnlookersDetailsEntity">
+   SELECT t.reply_id,t.content as message,t.create_time as date,t.img_url,s.photo_url as facePhotoUrl ,s.real_name as name,t.type
+   FROM t_onlookers_details t,s_user s
+   WHERE t.reply_id=s.id AND by_reply_id =#{byReplyId,jdbcType=BIGINT} AND schedule_id =#{scheduleId,jdbcType=BIGINT}  AND  is_look=0
+</select>
+<update id="updateStatus" parameterType="com.umessage.letsgo.domain.po.team.OnlookersDetailsEntity">
+    UPDATE t_onlookers_details SET is_look=1 WHERE  by_reply_id =#{byReplyId,jdbcType=BIGINT} AND schedule_id =#{scheduleId,jdbcType=BIGINT}
+   AND  is_look=0
+</update>
+<insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.OnlookersDetailsEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_onlookers_details (onlookers_id, reply_id, by_reply_id,
+        content, is_like, is_look,
+        father_id, schedule_id,
+        type, img_url, create_time,
+        version,reply_name,by_reply_name,user_id)
+        values (#{onlookersId,jdbcType=BIGINT}, #{replyId,jdbcType=BIGINT}, #{byReplyId,jdbcType=BIGINT},
+        #{content,jdbcType=VARCHAR}, #{isLike,jdbcType=INTEGER}, #{isLook,jdbcType=INTEGER},
+        #{fatherId,jdbcType=BIGINT}, #{scheduleId,jdbcType=BIGINT},
+        #{type,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{version,jdbcType=BIGINT},#{replyName,jdbcType=VARCHAR},#{byReplyName,jdbcType=VARCHAR},#{userId,jdbcType=BIGINT})
+</insert>
+
+    <select id="isLike"  resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.team.requset.ReplyLikeRequest">
+        SELECT count(ID)
+        FROM t_onlookers_details
+        WHERE is_like=1  AND type =1 AND reply_id =#{uId,jdbcType=BIGINT} AND onlookers_id =#{onlookersId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteLike" parameterType="com.umessage.letsgo.domain.vo.team.requset.ReplyLikeRequest" >
+        delete from t_onlookers_details
+         WHERE is_like=1  AND type =1 AND reply_id =#{uId,jdbcType=BIGINT} AND onlookers_id =#{onlookersId,jdbcType=BIGINT}
+    </delete>
+
+</mapper>

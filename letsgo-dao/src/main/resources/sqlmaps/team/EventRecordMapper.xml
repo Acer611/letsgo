@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.EventRecordDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.EventRecordEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="create_by" property="createBy" jdbcType="BIGINT" />
+        <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="photos_url" property="photosUrl" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+        <result column="record_time" property="recordTime" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="video_len" property="videoLen" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="MultiResultMap" type="com.umessage.letsgo.domain.po.team.EventRecordEntity" >
+    <id column="s_id" property="id" jdbcType="BIGINT" />
+        <result column="s_leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="s_team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="s_create_by" property="createBy" jdbcType="BIGINT" />
+        <result column="s_voice_url" property="voiceUrl" jdbcType="VARCHAR" />
+        <result column="s_content" property="content" jdbcType="VARCHAR" />
+        <result column="s_photos_url" property="photosUrl" jdbcType="VARCHAR" />
+        <result column="s_lat" property="lat" jdbcType="VARCHAR" />
+        <result column="s_lon" property="lon" jdbcType="VARCHAR" />
+        <result column="s_location" property="location" jdbcType="VARCHAR" />
+        <result column="s_thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+        <result column="s_record_time" property="recordTime" jdbcType="VARCHAR" />
+        <result column="s_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="s_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="s_version" property="version" jdbcType="BIGINT" />
+        <result column="s_video_len" property="videoLen" jdbcType="VARCHAR" />
+
+        <result column="le_name" property="leadName" jdbcType="VARCHAR" />
+        <result column="le_phone" property="phone" jdbcType="VARCHAR" />
+
+        <result column="t_team_num" property="teamNum" jdbcType="VARCHAR" />
+
+        <result column="j_name" property="name" jdbcType="VARCHAR" />
+        <result column="j_start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="j_end_date" property="endDate" jdbcType="TIMESTAMP" />
+
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_event_record
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.EventRecordEntity"  >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_event_record (leader_id, team_id, 
+            create_by, voice_url, content, 
+            photos_url, lat, lon, 
+            location, thumbnail_url, record_time, 
+            create_time, update_time, version,video_len
+            )
+        values ( #{leaderId,jdbcType=BIGINT}, #{teamId,jdbcType=VARCHAR},
+            #{createBy,jdbcType=BIGINT}, #{voiceUrl,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+            #{photosUrl,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, #{lon,jdbcType=VARCHAR},
+            #{location,jdbcType=VARCHAR}, #{thumbnailUrl,jdbcType=VARCHAR}, #{recordTime,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}, #{videoLen,jdbcType=VARCHAR}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.EventRecordEntity" >
+        update t_event_record
+        set leader_id = #{leaderId,jdbcType=BIGINT},
+            team_id = #{teamId,jdbcType=VARCHAR},
+            create_by = #{createBy,jdbcType=BIGINT},
+            voice_url = #{voiceUrl,jdbcType=VARCHAR},
+            content = #{content,jdbcType=VARCHAR},
+            photos_url = #{photosUrl,jdbcType=VARCHAR},
+            lat = #{lat,jdbcType=VARCHAR},
+            lon = #{lon,jdbcType=VARCHAR},
+            video_len = #{videoLen,jdbcType=VARCHAR},
+            location = #{location,jdbcType=VARCHAR},
+            thumbnail_url = #{thumbnailUrl,jdbcType=VARCHAR},
+            record_time = #{VARCHAR,jdbcType=TIMESTAMP},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, leader_id, team_id, create_by, voice_url, content, photos_url, lat, lon, 
+        location, thumbnail_url,record_time, 
+        create_time, update_time, version,video_len
+        from t_event_record
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT t.ID, t.leader_id, t.team_id, t.create_by, t.voice_url, t.content, t.photos_url, t.lat, t.lon,
+        t.location, t.thumbnail_url,t.record_time,
+        t.create_time, t.update_time, t.version,t.video_len
+        FROM t_event_record AS t
+        where t.ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+       select ID, leader_id, team_id, create_by, voice_url, content, photos_url, lat, lon, 
+        location, thumbnail_url,record_time, 
+        create_time, update_time, version,video_len
+        from t_event_record
+    </select>
+    
+    <select id="getEventRecordList" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.EventRecordRequest">
+    SELECT t.ID, t.leader_id, t.team_id, t.create_by, t.voice_url, t.content, t.photos_url, t.lat, t.lon,
+        t.location, t.thumbnail_url,t.record_time,
+        t.create_time, t.update_time, t.version,t.video_len
+        FROM t_event_record AS t
+        <where>
+            <if test="null != createBy"> and t.create_by = #{createBy}</if>
+            <if test="null != teamId"> and t.team_id = #{teamId}</if>
+        </where>
+        order by t.create_time desc
+    </select>
+
+    <select id="getEventList"  resultMap="MultiResultMap"  parameterType="com.umessage.letsgo.domain.vo.team.requset.EventRecordRequest">
+        SELECT
+        ter.ID AS s_id,
+        ter.voice_url AS s_voice_url,
+        ter.content AS s_content,
+        ter.photos_url AS s_photos_url,
+        ter.lat AS s_lat,
+        ter.lon AS s_lon,
+        ter.location AS s_location,
+        ter.thumbnail_url AS s_thumbnail_url,
+        ter.record_time AS s_record_time,
+        ter.video_len AS s_video_len,
+        tt.team_num AS t_team_num,
+        js.`name` AS j_name,
+        js.start_date AS j_start_date,
+        js.end_date AS j_end_date,
+        su.real_name AS le_name,
+        su.phone AS le_phone
+        FROM
+        t_event_record AS ter
+        LEFT JOIN t_team AS tt ON ter.team_id = tt.tx_groupId
+        LEFT JOIN j_schedule AS js ON js.team_id = tt.ID
+        LEFT JOIN s_user AS su ON su.ID = ter.create_by
+        <where>
+            js.TYPE=#{type}
+            <if test="userIDs != null and userIDs.size()>0">
+                and ter.create_by IN
+                <foreach collection="userIDs" open="(" separator="," close=")" item="item" index="index">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by ter.create_time desc
+    </select>
+
+</mapper>

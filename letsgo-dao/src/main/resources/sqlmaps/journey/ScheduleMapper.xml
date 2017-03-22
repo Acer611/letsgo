@@ -1,0 +1,1314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.ScheduleDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="start_place" property="startPlace" jdbcType="VARCHAR" />
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="collection_time" property="collectionTime" jdbcType="TIMESTAMP" />
+        <result column="collection_place" property="collectionPlace" jdbcType="VARCHAR" />
+        <result column="leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="feature" property="feature" jdbcType="VARCHAR" />
+        <result column="feature_photo" property="featurePhoto" jdbcType="VARCHAR" />
+        <result column="emergency_contact" property="emergencyContact" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="process_status" property="processStatus" jdbcType="INTEGER" />
+        <result column="process_photos_url" property="processPhotosUrl" jdbcType="VARCHAR" />
+        <result column="end_place" property="endPlace" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="del" property="del" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+
+
+        <result column="total_count" property="totalCount" jdbcType="INTEGER"/>
+        <result column="leader_name" property="leadName"  jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+
+        <result column="country1" property="country1" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="TeamResultMap" type="com.umessage.letsgo.domain.vo.journey.response.TeamScheduleVo" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="tx_groupId" property="txGroupId" jdbcType="VARCHAR" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <resultMap id="MultiResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        <id column="s_id" property="id" jdbcType="BIGINT" />
+        <result column="s_team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="s_name" property="name" jdbcType="VARCHAR" />
+        <result column="s_start_place" property="startPlace" jdbcType="VARCHAR" />
+        <result column="s_start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="s_end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="s_collection_time" property="collectionTime" jdbcType="TIMESTAMP" />
+        <result column="s_collection_place" property="collectionPlace" jdbcType="VARCHAR" />
+        <result column="s_leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="s_feature" property="feature" jdbcType="VARCHAR" />
+        <result column="s_feature_photo" property="featurePhoto" jdbcType="VARCHAR" />
+        <result column="s_emergency_contact" property="emergencyContact" jdbcType="VARCHAR" />
+        <result column="s_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="s_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="s_version" property="version" jdbcType="BIGINT" />
+        <result column="s_process_status" property="processStatus" jdbcType="INTEGER" />
+        <result column="s_process_photos_url" property="processPhotosUrl" jdbcType="VARCHAR" />
+        <result column="s_end_place" property="endPlace" jdbcType="VARCHAR" />
+        <result column="s_type" property="type" jdbcType="INTEGER" />
+        <result column="s_del" property="del" jdbcType="INTEGER" />
+        <result column="s_user_id" property="userId" jdbcType="BIGINT" />
+
+        <result column="le_name" property="leadName" jdbcType="VARCHAR" />
+        <result column="le_sex" property="sex" jdbcType="INTEGER" />
+        <result column="le_phone" property="phone" jdbcType="VARCHAR" />
+
+        <result column="t_team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="t_status" property="status" jdbcType="INTEGER" />
+        <result column="t_total_count" property="totalCount" jdbcType="INTEGER" />
+        <result column="t_tx_groupId" property="txGroupId" jdbcType="VARCHAR" />
+        <result column="t_photo_url" property="tPhotoUrl" jdbcType="VARCHAR" />
+
+        <result column="m_role" property="role" jdbcType="VARCHAR" />
+        <result column="m_is_admin" property="isAdmin" jdbcType="VARCHAR" />
+
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+
+
+        <collection property="scheduleDetailList" ofType="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntity">
+            <id column="ID" property="id" jdbcType="BIGINT" />
+            <result column="jour_id" property="jourId" jdbcType="BIGINT" />
+            <result column="day_num" property="dayNum" jdbcType="INTEGER" />
+            <result column="schedule_date" property="scheduleDate" jdbcType="TIMESTAMP" />
+            <result column="start_place" property="startPlace" jdbcType="VARCHAR" />
+            <result column="start_place_id" property="startPlaceId" jdbcType="VARCHAR" />
+            <result column="destination1" property="destination1" jdbcType="VARCHAR" />
+            <result column="destination2" property="destination2" jdbcType="VARCHAR" />
+            <result column="destination3" property="destination3" jdbcType="VARCHAR" />
+            <result column="destination4" property="destination4" jdbcType="VARCHAR" />
+            <result column="destination_id1" property="destinationId1" jdbcType="VARCHAR" />
+            <result column="destination_id2" property="destinationId2" jdbcType="VARCHAR" />
+            <result column="destination_id3" property="destinationId3" jdbcType="VARCHAR" />
+            <result column="destination_id4" property="destinationId4" jdbcType="VARCHAR" />
+            <result column="hotel_id" property="hotelId" jdbcType="VARCHAR" />
+            <result column="schedule_photos_url1" property="schedulePhotosUrl1" jdbcType="VARCHAR" />
+            <result column="schedule_photos_url2" property="schedulePhotosUrl2" jdbcType="VARCHAR" />
+            <result column="schedule_photos_url3" property="schedulePhotosUrl3" jdbcType="VARCHAR" />
+            <result column="desc" property="desc" jdbcType="VARCHAR" />
+            <result column="hotel_confirm" property="hotelConfirm" jdbcType="INTEGER" />
+            <result column="hotel" property="hotel" jdbcType="VARCHAR" />
+            <result column="hotel_input" property="hotelInput" jdbcType="VARCHAR" />
+            <result column="same_level" property="sameLevel" jdbcType="INTEGER" />
+            <result column="flight1" property="flight1" jdbcType="VARCHAR" />
+            <result column="flight2" property="flight2" jdbcType="VARCHAR" />
+            <result column="traffic_info" property="trafficInfo" jdbcType="VARCHAR" />
+            <result column="shopp_info" property="shoppInfo" jdbcType="VARCHAR" />
+            <result column="catering_info" property="cateringInfo" jdbcType="VARCHAR" />
+            <result column="leader_id" property="leaderId" jdbcType="BIGINT" />
+            <result column="new_entry" property="newEntry" jdbcType="VARCHAR" />
+            <result column="new_contant" property="newContant" jdbcType="VARCHAR" />
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="version" property="version" jdbcType="BIGINT" />
+
+            <result column="countryId1" property="countryId1" jdbcType="VARCHAR"/>
+            <result column="country1" property="country1" jdbcType="VARCHAR"/>
+            <result column="countryId2" property="countryId2" jdbcType="VARCHAR"/>
+            <result column="country2" property="country2" jdbcType="VARCHAR"/>
+            <result column="countryId3" property="countryId3" jdbcType="VARCHAR"/>
+            <result column="country3" property="country3" jdbcType="VARCHAR"/>
+            <result column="countryId4" property="countryId4" jdbcType="VARCHAR"/>
+            <result column="country4" property="country4" jdbcType="VARCHAR"/>
+
+            <result column="countryId5" property="countryId5" jdbcType="VARCHAR"/>
+            <result column="country5" property="country5" jdbcType="VARCHAR"/>
+            <result column="destination_id5" property="destinationId5" jdbcType="VARCHAR" />
+            <result column="destination5" property="destination5" jdbcType="VARCHAR" />
+
+            <result column="traffic1" property="traffic1" jdbcType="INTEGER" />
+            <result column="traffic2" property="traffic2" jdbcType="INTEGER" />
+            <result column="traffic3" property="traffic3" jdbcType="INTEGER" />
+            <result column="traffic4" property="traffic4" jdbcType="INTEGER" />
+            <result column="traffic5" property="traffic5" jdbcType="INTEGER" />
+
+
+            <result column="l_name" property="name" jdbcType="VARCHAR" />
+            <result column="l_sex" property="sex" jdbcType="INTEGER" />
+            <result column="l_phone" property="phone" jdbcType="VARCHAR" />
+
+
+        </collection>
+        
+    </resultMap>
+
+    <resultMap id="ScheduleTeamResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        <id column="s_id" property="id" jdbcType="BIGINT" />
+        <result column="s_team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="s_name" property="name" jdbcType="VARCHAR" />
+        <result column="s_start_place" property="startPlace" jdbcType="VARCHAR" />
+        <result column="s_start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="s_end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="s_collection_time" property="collectionTime" jdbcType="TIMESTAMP" />
+        <result column="s_collection_place" property="collectionPlace" jdbcType="VARCHAR" />
+        <result column="s_leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="s_feature" property="feature" jdbcType="VARCHAR" />
+        <result column="s_feature_photo" property="featurePhoto" jdbcType="VARCHAR" />
+        <result column="s_emergency_contact" property="emergencyContact" jdbcType="VARCHAR" />
+        <result column="s_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="s_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="s_version" property="version" jdbcType="BIGINT" />
+
+        <result column="t_team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="t_tx_groupId" property="txGroupId" jdbcType="VARCHAR" />
+
+
+        <collection property="scheduleDetailList" ofType="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntity" >
+            <id column="sd_id" property="id" jdbcType="BIGINT" />
+            <result column="sd_jour_id" property="jourId" jdbcType="BIGINT" />
+            <result column="sd_day_num" property="dayNum" jdbcType="INTEGER" />
+            <result column="sd_schedule_date" property="scheduleDate" jdbcType="TIMESTAMP" />
+            <result column="sd_start_place" property="startPlace" jdbcType="VARCHAR" />
+            <result column="sd_start_place_id" property="startPlaceId" jdbcType="VARCHAR" />
+            <result column="sd_destination1" property="destination1" jdbcType="VARCHAR" />
+            <result column="sd_destination2" property="destination2" jdbcType="VARCHAR" />
+            <result column="sd_destination3" property="destination3" jdbcType="VARCHAR" />
+            <result column="sd_destination4" property="destination4" jdbcType="VARCHAR" />
+            <result column="sd_hotel_id" property="hotelId" jdbcType="VARCHAR" />
+            <result column="sd_destination_id1" property="destinationId1" jdbcType="VARCHAR" />
+            <result column="sd_destination_id2" property="destinationId2" jdbcType="VARCHAR" />
+            <result column="sd_destination_id3" property="destinationId3" jdbcType="VARCHAR" />
+            <result column="sd_destination_id4" property="destinationId4" jdbcType="VARCHAR" />
+            <result column="sd_schedule_photos_url1" property="schedulePhotosUrl1" jdbcType="VARCHAR" />
+            <result column="sd_schedule_photos_url2" property="schedulePhotosUrl2" jdbcType="VARCHAR" />
+            <result column="sd_schedule_photos_url3" property="schedulePhotosUrl3" jdbcType="VARCHAR" />
+            <result column="sd_desc" property="desc" jdbcType="VARCHAR" />
+            <result column="sd_hotel_confirm" property="hotelConfirm" jdbcType="INTEGER" />
+            <result column="sd_hotel" property="hotel" jdbcType="VARCHAR" />
+            <result column="sd_hotel_input" property="hotelInput" jdbcType="VARCHAR" />
+            <result column="sd_same_level" property="sameLevel" jdbcType="INTEGER" />
+            <result column="sd_flight1" property="flight1" jdbcType="VARCHAR" />
+            <result column="sd_flight2" property="flight2" jdbcType="VARCHAR" />
+            <result column="sd_traffic_info" property="trafficInfo" jdbcType="VARCHAR" />
+            <result column="sd_shopp_info" property="shoppInfo" jdbcType="VARCHAR" />
+            <result column="sd_catering_info" property="cateringInfo" jdbcType="VARCHAR" />
+            <result column="sd_leader_id" property="leaderId" jdbcType="BIGINT" />
+            <result column="sd_new_entry" property="newEntry" jdbcType="VARCHAR" />
+            <result column="sd_new_contant" property="newContant" jdbcType="VARCHAR" />
+            <result column="sd_create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="sd_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="sd_version" property="version" jdbcType="BIGINT" />
+
+            <result column="sd_traffic1" property="traffic1" jdbcType="INTEGER" />
+            <result column="sd_traffic2" property="traffic2" jdbcType="INTEGER" />
+            <result column="sd_traffic3" property="traffic3" jdbcType="INTEGER" />
+            <result column="sd_traffic4" property="traffic4" jdbcType="INTEGER" />
+            <result column="sd_traffic5" property="traffic5" jdbcType="INTEGER" />
+
+            <result column="sd_destination_id5" property="destinationId5" jdbcType="VARCHAR" />
+            <result column="sd_destination5" property="destination5" jdbcType="VARCHAR" />
+            <result column="sd_countryId5" property="countryId5" jdbcType="VARCHAR" />
+            <result column="sd_country5" property="country5" jdbcType="VARCHAR" />
+
+        </collection>
+    </resultMap>
+
+    <resultMap id="ScheduleLineResultMap" type="com.umessage.letsgo.domain.vo.journey.response.ScheduleLineVo" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="country_name" property="countryName" jdbcType="VARCHAR" />
+        <result column="grade" property="grade" jdbcType="DOUBLE" />
+        <result column="tourist_count" property="touristCount" jdbcType="INTEGER" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_schedule
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_schedule (team_id, name, start_place, 
+            start_date, end_date, collection_time, 
+            collection_place, leader_id, feature, 
+            feature_photo, emergency_contact, create_time, 
+            update_time, version, process_status,process_photos_url,end_place,type,del,user_id)
+        values (#{teamId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{startPlace,jdbcType=VARCHAR}, 
+            #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{collectionTime,jdbcType=TIMESTAMP},
+            #{collectionPlace,jdbcType=VARCHAR}, #{leaderId,jdbcType=BIGINT}, #{feature,jdbcType=VARCHAR},
+            #{featurePhoto,jdbcType=VARCHAR}, #{emergencyContact,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+            #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}, #{processStatus,jdbcType=INTEGER},
+            #{processPhotosUrl,jdbcType=VARCHAR}, #{endPlace,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+            #{del,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT})
+    </insert>
+
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        update j_schedule
+        set team_id = #{teamId,jdbcType=BIGINT},
+            name = #{name,jdbcType=VARCHAR},
+            start_place = #{startPlace,jdbcType=VARCHAR},
+            start_date = #{startDate,jdbcType=TIMESTAMP},
+            end_date = #{endDate,jdbcType=TIMESTAMP},
+            collection_time = #{collectionTime,jdbcType=TIMESTAMP},
+            collection_place = #{collectionPlace,jdbcType=VARCHAR},
+            leader_id = #{leaderId,jdbcType=BIGINT},
+            feature = #{feature,jdbcType=VARCHAR},
+            feature_photo = #{featurePhoto,jdbcType=VARCHAR},
+            emergency_contact = #{emergencyContact,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            end_place = #{endPlace,jdbcType=VARCHAR},
+            process_photos_url = #{processPhotosUrl,jdbcType=VARCHAR},
+            type = #{type,jdbcType=INTEGER},
+            process_status = #{processStatus,jdbcType=INTEGER},
+            del = #{del,jdbcType=INTEGER},
+            user_id = #{userId,jdbcType=BIGINT},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateSchedulePhotos" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        update j_schedule
+        set process_photos_url = #{processPhotosUrl,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+<!--    <select id="select" resultMap="MultiResultMap" parameterType="java.lang.Long" >
+        <include refid="scheduleShowField"/>
+        where s.ID = #{id,jdbcType=BIGINT} and s.del=0
+        ORDER BY sd.day_num
+    </select>-->
+
+    <select id="select" resultMap="ScheduleMultiResultMap" parameterType="java.lang.Long" >
+        SELECT
+        s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date,
+        s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact,
+        s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version, s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,
+
+        t.team_num AS t_team_num,t.status AS t_status,t.total_count AS t_total_count,t.tx_groupId AS t_tx_groupId,
+
+        l.name AS l_name,l.sex AS l_sex,l.phone AS l_phone
+
+        FROM
+        j_schedule AS s
+        JOIN t_team AS t ON s.team_id = t.ID
+        LEFT JOIN t_leader AS l ON l.`ID` = s.`leader_id`
+        where s.ID = #{id,jdbcType=BIGINT} and s.del=0
+    </select>
+
+    <select id="selectByUser" resultMap="ScheduleMultiResultMap" parameterType="java.lang.Long" >
+        SELECT
+        s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date,
+        s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact,
+        s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version, s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,
+        t.team_num AS t_team_num,t.status AS t_status,t.total_count AS t_total_count,t.tx_groupId AS t_tx_groupId
+        FROM
+        j_schedule AS s
+        JOIN t_team AS t ON s.team_id = t.ID
+        where s.ID = #{id,jdbcType=BIGINT} and s.del=0
+    </select>
+
+   <!-- <select id="selectByTeamId" resultMap="MultiResultMap" parameterType="java.lang.String" >
+        <include refid="scheduleShowField"/>
+        WHERE t.tx_groupid = #{teamId} and s.del=0
+        ORDER BY sd.day_num
+    </select>-->
+
+    <select id="selectByTeamId" resultMap="ScheduleMultiResultMap" parameterType="java.lang.String" >
+        SELECT
+        s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date,
+        s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact,
+        s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version, s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,
+        t.team_num AS t_team_num,t.status AS t_status,t.total_count AS t_total_count,t.tx_groupId AS t_tx_groupId
+        FROM
+        j_schedule AS s
+        JOIN t_team AS t ON s.team_id = t.ID
+        LEFT JOIN t_leader AS l ON l.`ID` = s.`leader_id`
+        WHERE
+	    t.tx_groupid = #{teamId} and s.del=0
+    </select>
+
+
+    <select id="selectAllPages" resultType="Long" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT s.`ID`
+        FROM j_schedule AS s
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        LEFT JOIN j_scenic AS sc ON sc.`schedule_detail_id` = sd.`ID`
+        LEFT JOIN t_leader AS l ON l.`ID` = sd.`leader_id`
+        LEFT JOIN t_leader AS le ON le.`ID` = s.`leader_id`
+        <where>
+            s.del=0
+            AND t.`travel_id` IS NOT NULL
+            <if test="null != travelId"> AND t.`travel_id` = #{travelId} </if>
+            <if test="null != status  and status !=''.toString()"> AND t.`status` = #{status} </if>
+            <if test="null != teamNum and teamNum !=''.toString()"> AND t.`team_num` = #{teamNum} </if>
+            <if test="null != name and name !=''.toString()"> AND s.`name` LIKE CONCAT('%',#{name},'%') </if>
+            <if test="null != leadName and leadName !=''.toString()"> AND le.`name` = #{leadName} </if>
+            <if test="null != startDate"> AND s.`start_date` &gt;= #{startDate} </if>
+            <if test="null != endDate"> AND s.`end_date` &lt;= #{endDate} </if>
+            <if test="null != leaderId"> AND le.`ID` = #{leaderId} </if>
+            <if test="null != userId"> AND s.`user_id` = #{userId} </if>
+        </where>
+        GROUP BY s.`ID`
+        ORDER BY s.`start_date` DESC,sd.day_num
+    </select>
+   <select id="selectAll" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        <include refid="scheduleShowField"/>
+        <where>
+             s.del=0
+            AND t.`travel_id` IS NOT NULL
+            <if test="null != travelId"> AND t.`travel_id` = #{travelId} </if>
+            <if test="null != status  and status !=''.toString()"> AND t.`status` = #{status} </if>
+            <if test="null != teamNum and teamNum !=''.toString()"> AND t.`team_num` = #{teamNum} </if>
+            <if test="null != name and name !=''.toString()"> AND s.`name` LIKE CONCAT('%',#{name},'%') </if>
+            <if test="null != leadName and leadName !=''.toString()"> AND le.`name` = #{leadName} </if>
+            <if test="null != startDate"> AND s.`start_date` &gt;= #{startDate} </if>
+            <if test="null != endDate"> AND s.`end_date` &lt;= #{endDate} </if>
+            <if test="null != leaderId"> AND le.`ID` = #{leaderId} </if>
+            <if test="null != userId"> AND s.`user_id` = #{userId} </if>
+            <if test="scheduleIds != null and scheduleIds.size()>0">
+                AND s.ID IN
+                <foreach collection="scheduleIds" open="(" separator="," close=")" item="item" index="index">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.`start_date` DESC,sd.day_num
+    </select>
+
+
+    <select id="selectAllPagesByUser" resultType="Long" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT s.`ID`
+        FROM j_schedule AS s
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        LEFT JOIN j_scenic AS sc ON sc.`schedule_detail_id` = sd.`ID`
+        LEFT JOIN s_user AS u ON u.`ID` = s.`user_id`
+        <where>
+            s.del=0
+            <if test="null != travelId"> AND t.`travel_id` = #{travelId} </if>
+            <if test="null != status  and status !=''.toString()"> AND t.`status` = #{status} </if>
+            <if test="null != teamNum and teamNum !=''.toString()"> AND t.`team_num` = #{teamNum} </if>
+            <if test="null != name and name !=''.toString()"> AND s.`name` LIKE CONCAT('%',#{name},'%') </if>
+            <if test="null != leadName and leadName !=''.toString()"> AND u.`real_name` = #{leadName} </if>
+            <if test="null != startDate"> AND s.`start_date` &gt;= #{startDate} </if>
+            <if test="null != endDate"> AND s.`end_date` &lt;= #{endDate} </if>
+            <if test="null != leaderId"> AND u.`ID` = #{leaderId} </if>
+        </where>
+        GROUP BY s.`ID`
+        ORDER BY s.`start_date` DESC,sd.day_num
+    </select>
+    <select id="selectAllByUser" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        <include refid="scheduleShowFieldByUser"/>
+        <where>
+            s.del=0
+            <if test="null != travelId"> AND t.`travel_id` = #{travelId} </if>
+            <if test="null != status  and status !=''.toString()"> AND t.`status` = #{status} </if>
+            <if test="null != teamNum and teamNum !=''.toString()"> AND t.`team_num` = #{teamNum} </if>
+            <if test="null != name and name !=''.toString()"> AND s.`name` LIKE CONCAT('%',#{name},'%') </if>
+            <if test="null != leadName and leadName !=''.toString()"> AND u.`real_name` = #{leadName} </if>
+            <if test="null != startDate"> AND s.`start_date` &gt;= #{startDate} </if>
+            <if test="null != endDate"> AND s.`end_date` &lt;= #{endDate} </if>
+            <if test="null != leaderId"> AND u.`ID` = #{leaderId} </if>
+            <if test="scheduleIds != null and scheduleIds.size()>0">
+                AND s.ID IN
+                <foreach collection="scheduleIds" open="(" separator="," close=")" item="item" index="index">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.`start_date` DESC,sd.day_num
+    </select>
+
+    <select id="selectScheduleForMember" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.WebMemberRequest">
+        <include refid="memberDetailScheduleShowField" />
+        <where>
+            s.del=0
+            <if test="null != id"> AND u.`ID` = (SELECT user_id FROM t_member WHERE `ID` = #{id})</if>
+            <if test="null != status"> AND t.`status` = #{status} </if>
+        </where>
+    </select>
+
+    <select id="selectScheduleForboundMember" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.WebMemberRequest">
+        SELECT DISTINCT(s.ID) AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date, s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact, s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version,s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,t.tx_groupId AS t_tx_groupId,t.status AS t_status,
+
+
+        sd.ID,sd.jour_id,sd.day_num,sd.schedule_date,sd.start_place,sd.destination1,sd.destination2,sd.destination3,sd.destination4,sd.schedule_photos_url1,sd.schedule_photos_url2,sd.schedule_photos_url3,sd.`desc`,sd.hotel_confirm,sd.hotel,
+        sd.hotel_input,sd.same_level,sd.flight1,sd.flight2,sd.traffic_info,sd.shopp_info,sd.catering_info,sd.leader_id,sd.new_entry,sd.new_contant,sd.create_time,sd.update_time,sd.version
+        FROM j_schedule AS s
+        JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        JOIN t_member AS m ON m.t_id = t.`ID`
+        JOIN s_user AS u ON u.`ID` = m.`user_id`
+        <where>
+            s.del=0
+            <if test="null != id"> AND u.`ID` = (SELECT user_id FROM t_member WHERE `ID` = #{id})</if>
+            AND t.`status` IN(1,2,3)
+            <if test="null != userid"> AND u.`ID` = #{userid} </if>
+            AND sd.day_num = 1
+        </where>
+        ORDER BY s.start_date DESC
+        limit 0,3
+    </select>
+
+    <select id="selectScheduleForUnboundMember" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.WebMemberRequest">
+        select DISTINCT(s.ID) AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date, s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact, s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version,s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,t.tx_groupId AS t_tx_groupId,t.status AS t_status
+        FROM j_schedule AS s
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        <where>
+            s.del=0
+            AND t.`status` IN (1,2)
+            AND t.`ID`in
+            <foreach item="item" index="index" collection="teamIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+        ORDER BY s.start_date DESC
+        limit 0,3
+    </select>
+
+    <sql id="scheduleShowFieldByUser" >
+        SELECT s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date,
+        s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact,
+        s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version, s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,
+
+        sd.ID,sd.jour_id,sd.day_num,sd.schedule_date,sd.start_place,sd.destination1,sd.destination2,sd.destination3,sd.destination4,sd.destination_id1,sd.destination_id2,sd.destination_id3,sd.destination_id4,sd.schedule_photos_url1,sd.schedule_photos_url2,sd.schedule_photos_url3,sd.`desc`,sd.hotel_confirm,sd.hotel,sd.hotel_id,
+        sd.hotel_input,sd.same_level,sd.flight1,sd.flight2,sd.traffic_info,sd.shopp_info,sd.catering_info,sd.leader_id,sd.new_entry,sd.new_contant,sd.create_time,sd.update_time,sd.version,sd.countryId1,sd.country1,sd.countryId2,sd.country2,sd.countryId3,sd.country3,sd.countryId4,sd.country4,
+        sd.traffic1,sd.traffic2,sd.traffic3,sd.traffic4,sd.traffic5,sd.destination_id5,sd.destination5,sd.countryId5,sd.country5,
+
+        t.team_num AS t_team_num,t.status AS t_status,t.total_count AS t_total_count,t.tx_groupId AS t_tx_groupId,
+
+        u.real_name AS le_name,u.sex AS le_sex,u.phone AS le_phone
+
+        FROM j_schedule AS s
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        LEFT JOIN s_user AS u ON u.`ID` = s.`user_id`
+    </sql>
+
+    <sql id="scheduleShowField" >
+        SELECT s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date,
+        s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact,
+        s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version, s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,
+
+        sd.ID,sd.jour_id,sd.day_num,sd.schedule_date,sd.start_place,sd.start_place_id,sd.destination1,sd.destination2,sd.destination3,sd.destination4,sd.destination_id1,sd.destination_id2,sd.destination_id3,sd.destination_id4,sd.schedule_photos_url1,sd.schedule_photos_url2,sd.schedule_photos_url3,sd.`desc`,sd.hotel_confirm,sd.hotel,sd.hotel_id,
+        sd.hotel_input,sd.same_level,sd.flight1,sd.flight2,sd.traffic_info,sd.shopp_info,sd.catering_info,sd.leader_id,sd.new_entry,sd.new_contant,sd.create_time,sd.update_time,sd.version,sd.countryId1,sd.country1,sd.countryId2,sd.country2,sd.countryId3,sd.country3,sd.countryId4,sd.country4,
+        sd.traffic1,sd.traffic2,sd.traffic3,sd.traffic4,sd.traffic5,sd.destination_id5,sd.destination5,sd.countryId5,sd.country5,
+
+        t.team_num AS t_team_num,t.status AS t_status,t.total_count AS t_total_count,t.tx_groupId AS t_tx_groupId,
+
+        l.name AS l_name,l.sex AS l_sex,l.phone AS l_phone,
+
+	    le.name AS le_name,le.sex AS le_sex,le.phone AS le_phone
+
+        FROM j_schedule AS s
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        LEFT JOIN t_leader AS l ON l.`ID` = sd.`leader_id`
+        LEFT JOIN t_leader AS le ON le.`ID` = s.`leader_id`
+    </sql>
+
+    <sql id="memberDetailScheduleShowField" >
+        SELECT s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date, s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact, s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version,s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,t.tx_groupId AS t_tx_groupId,t.status AS t_status,
+
+
+        sd.ID,sd.jour_id,sd.day_num,sd.schedule_date,sd.start_place,sd.destination1,sd.destination2,sd.destination3,sd.destination4,sd.schedule_photos_url1,sd.schedule_photos_url2,sd.schedule_photos_url3,sd.`desc`,sd.hotel_confirm,sd.hotel,
+        sd.hotel_input,sd.same_level,sd.flight1,sd.flight2,sd.traffic_info,sd.shopp_info,sd.catering_info,sd.leader_id,sd.new_entry,sd.new_contant,sd.create_time,sd.update_time,sd.version,
+        sd.traffic1,sd.traffic2,sd.traffic3,sd.traffic4,sd.traffic5,sd.destination_id5,sd.destination5,sd.countryId5,sd.country5
+        FROM j_schedule AS s
+        JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        JOIN t_member AS m ON m.t_id = t.`ID`
+        JOIN s_user AS u ON u.`ID` = m.`user_id`
+    </sql>
+    <!--<select id="selectScheduleWithTeamIds" resultMap="" parameterType="java.lang.String">-->
+        <!--SELECT s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date, s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,-->
+        <!--s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact, s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version,-->
+        <!--sd.ID,sd.jour_id,sd.day_num,sd.schedule_date,sd.start_place,sd.destination1,sd.destination2,sd.destination3,sd.destination4,sd.schedule_photos_url1,sd.schedule_photos_url2,sd.schedule_photos_url3,sd.`desc`,sd.hotel_confirm,sd.hotel,-->
+        <!--sd.hotel_input,sd.same_level,sd.flight1,sd.flight2,sd.traffic_info,sd.shopp_info,sd.catering_info,sd.leader_id,sd.new_entry,sd.new_contant,sd.create_time,sd.update_time,sd.version-->
+        <!--FROM j_schedule AS s-->
+        <!--LEFT JOIN j_schedule_detail AS sd-->
+        <!--ON s.ID = sd.jour_id WHERE s.team_id IN (#{teamId});-->
+    <!--</select>-->
+
+    <!--根据teamId范围，获取团队行程，不包含分页功能-->
+    <select id="selectScheduleBetweenTeamId" resultMap="ScheduleTeamResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleReq" >
+        SELECT s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date, s.end_date AS s_end_date,
+        s.collection_time AS s_collection_time, s.collection_place AS s_collection_place, s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo,
+        s.emergency_contact AS s_emergency_contact, s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version, t.team_num AS t_team_num,
+        t.tx_groupId AS t_tx_groupId,
+        sd.ID AS sd_id, sd.jour_id AS sd_jour_id, sd.day_num AS sd_day_num, sd.schedule_date AS sd_schedule_date, sd.start_place AS sd_start_place,
+        sd.destination1 AS sd_destination1, sd.destination2 AS sd_destination2, sd.destination3 AS sd_destination3, sd.destination4 AS sd_destination4,
+        sd.destination_id1 AS sd_destination_id1, sd.destination_id2 AS sd_destination_id2, sd.destination_id3 AS sd_destination_id3, sd.destination_id4 AS sd_destination_id4,
+        sd.schedule_photos_url1 as sd_schedule_photos_url1, sd.schedule_photos_url2 AS sd_schedule_photos_url2, sd.schedule_photos_url3 AS sd_schedule_photos_url3,
+        sd.`desc` AS sd_desc, sd.hotel_confirm AS sd_hotel_confirm, sd.hotel AS sd_hotel, sd.hotel_input AS sd_hotel_input, sd.same_level AS sd_same_level,
+        sd.flight1 AS sd_flight1, sd.flight2 AS sd_flight2, sd.traffic_info AS sd_traffic_info, sd.shopp_info AS sd_shopp_info, sd.catering_info AS sd_catering_info,
+        sd.leader_id AS sd_leader_id, sd.new_entry AS sd_new_entry, sd.new_contant AS sd_new_contant, sd.create_time AS sd_create_time, sd.update_time AS sd_update_time,
+        sd.version AS sd_version,
+        sd.traffic1 AS sd_traffic1,sd.traffic2 AS sd_traffic2,sd.traffic3 AS sd_traffic3,sd.traffic4 AS sd_traffic4,sd.traffic5 AS sd_traffic5,
+        sd.destination_id5 AS sd_destination_id5,sd.destination5 AS sd_destination5,sd.contryId5 AS sd_contryId5,sd.country5 AS sd_country5
+
+        FROM j_schedule AS s JOIN t_team AS t ON s.`team_id`= t.`ID`
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        <where>
+            s.del=0
+            <if test="teamIds != null">
+                AND t.ID IN
+                <foreach collection="teamIds" open="(" separator="," close=")" item="item" index="index">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="teamId != null"> AND t.ID &gt; #{teamId,jdbcType=BIGINT}</if>
+        </where>
+        ORDER BY s.create_time DESC
+    </select>
+
+    <select id="selectScheduleCityBetterDate" resultMap="ScheduleTeamResultMap" >
+        SELECT s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date, s.end_date AS s_end_date,
+        s.collection_time AS s_collection_time, s.collection_place AS s_collection_place, s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo,
+        s.emergency_contact AS s_emergency_contact, s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version,
+        t.team_num AS t_team_num, t.tx_groupId AS t_tx_groupId,
+        sd.ID AS sd_id, sd.jour_id AS sd_jour_id, sd.day_num AS sd_day_num, sd.schedule_date AS sd_schedule_date, sd.start_place AS sd_start_place, sd.start_place_id AS sd_start_place_id,
+        sd.destination1 AS sd_destination1, sd.destination2 AS sd_destination2, sd.destination3 AS sd_destination3, sd.destination4 AS sd_destination4,
+        sd.destination_id1 AS sd_destination_id1, sd.destination_id2 AS sd_destination_id2, sd.destination_id3 AS sd_destination_id3, sd.destination_id4 AS sd_destination_id4,
+        sd.schedule_photos_url1 as sd_schedule_photos_url1, sd.schedule_photos_url2 AS sd_schedule_photos_url2, sd.schedule_photos_url3 AS sd_schedule_photos_url3,
+        sd.`desc` AS sd_desc, sd.hotel_confirm AS sd_hotel_confirm, sd.hotel AS sd_hotel, sd.hotel_input AS sd_hotel_input, sd.same_level AS sd_same_level,
+        sd.flight1 AS sd_flight1, sd.flight2 AS sd_flight2, sd.traffic_info AS sd_traffic_info, sd.shopp_info AS sd_shopp_info, sd.catering_info AS sd_catering_info,
+        sd.leader_id AS sd_leader_id, sd.new_entry AS sd_new_entry, sd.new_contant AS sd_new_contant, sd.create_time AS sd_create_time, sd.update_time AS sd_update_time,
+        sd.traffic1 AS sd_traffic1,sd.traffic2 AS sd_traffic2,sd.traffic3 AS sd_traffic3,sd.traffic4 AS sd_traffic4,sd.traffic5 AS sd_traffic5,
+        sd.destination_id5 AS sd_destination_id5,sd.destination5 AS sd_destination5,sd.countryId5 AS sd_countryId5,sd.country5 AS sd_country5,
+        sd.version AS sd_version
+        FROM j_schedule AS s JOIN t_team AS t ON s.`team_id`= t.`ID`
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        WHERE sd.schedule_date &gt; date_sub(now(), INTERVAL 1 day) AND sd.schedule_date &lt; date_add(now(), INTERVAL 10 day) and s.del=0
+        ORDER BY s.create_time DESC
+    </select>
+
+    <select id="searchScheduleList" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT s.ID AS s_id,s.name AS s_name,s.start_date AS s_start_date,s.team_id AS s_team_id,
+        s.update_time AS s_update_time,s.process_status AS s_process_status,s.process_photos_url AS s_process_photos_url,s.create_time AS s_create_time,
+        le.name AS le_name,le.phone AS le_phone
+        FROM j_schedule AS s
+        LEFT JOIN t_leader AS le ON le.`ID` = s.`leader_id`
+        <where>
+            s.type =2 and s.del=0
+            <if test="null != processStatus and processStatus !=''.toString()  and processStatus !=1 "> AND s.`process_status` = #{processStatus} </if>
+            <if test="null != processStatus and processStatus !=''.toString()  and processStatus ==1 "> AND s.`process_status` IN (2,3,4)  </if>
+            <if test="null != leadName and leadName !=''.toString()"> AND le.`name` = #{leadName} </if>
+            <if test="null != startDate"> AND s.`start_date` BETWEEN date_format(#{startDate},'%Y-%m-%d 00:00:00')   AND date_format(#{startDate},'%Y-%m-%d 23:59:59')     </if>
+        </where>
+        ORDER BY s.create_time  DESC
+    </select>
+
+
+    <select id="searchScheduleListByUser" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT s.ID AS s_id,s.name AS s_name,s.start_date AS s_start_date,s.team_id AS s_team_id,
+        s.update_time AS s_update_time,s.process_status AS s_process_status,s.process_photos_url AS s_process_photos_url,s.create_time AS s_create_time,
+        u.real_name AS le_name,u.phone AS le_phone
+        FROM j_schedule AS s
+        LEFT JOIN s_user AS u ON u.`ID` = s.`user_id`
+        <where>
+            s.type =2 and s.del=0
+            <if test="null != processStatus and processStatus !=''.toString()  and processStatus !=1 "> AND s.`process_status` = #{processStatus} </if>
+            <if test="null != processStatus and processStatus !=''.toString()  and processStatus ==1 "> AND s.`process_status` IN (2,3,4)  </if>
+            <if test="null != leadName and leadName !=''.toString()"> AND u.`real_name` = #{leadName} </if>
+            <if test="null != startDate"> AND s.`start_date` BETWEEN date_format(#{startDate},'%Y-%m-%d 00:00:00')   AND date_format(#{startDate},'%Y-%m-%d 23:59:59')     </if>
+        </where>
+        ORDER BY s.create_time  DESC
+    </select>
+
+
+    <select id="getUserScheduleList" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+
+        SELECT s.ID AS s_id, s.name AS s_name, s.start_date AS s_start_date, s.end_date AS s_end_date, s.feature_photo AS s_feature_photo,s.process_status AS s_process_status,s.type AS s_type,s.del AS s_del,s.process_photos_url AS s_process_photos_url,
+
+        t.tx_groupId AS t_tx_groupId,t.status AS t_status,t.photo_url AS t_photo_url,
+
+        m.role AS m_role ,m.is_admin AS m_is_admin
+
+        FROM j_schedule AS s
+        LEFT  JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+          JOIN  t_member AS m  ON   m.t_id = s.`team_id` and  m.user_id= #{userId,jdbcType=BIGINT}
+        where
+             s.del=0
+        ORDER BY s.`start_date` ASC
+    </select>
+    <select id="getEndScheduleList" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+
+        SELECT s.ID AS s_id, s.name AS s_name, s.start_date AS s_start_date, s.end_date AS s_end_date, s.feature_photo AS s_feature_photo,s.process_status AS s_process_status,s.type AS s_type,s.del AS s_del,s.process_photos_url AS s_process_photos_url,
+
+        t.tx_groupId AS t_tx_groupId,t.status AS t_status,t.photo_url AS t_photo_url,
+
+        m.role AS m_role ,m.is_admin AS m_is_admin
+
+        FROM j_schedule AS s
+        LEFT  JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+        JOIN  t_member AS m  ON   m.t_id = s.`team_id` and  m.user_id= #{userId,jdbcType=BIGINT}
+        where
+        s.del=0 and t.status=3
+
+    </select>
+    <select id="getEndScheduleOne" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+
+        SELECT s.ID AS s_id, s.name AS s_name, s.start_date AS s_start_date, s.end_date AS s_end_date, s.feature_photo AS s_feature_photo,s.process_status AS s_process_status,s.type AS s_type,s.del AS s_del,s.process_photos_url AS s_process_photos_url,
+
+        t.tx_groupId AS t_tx_groupId,t.status AS t_status,t.photo_url AS t_photo_url,
+
+        m.role AS m_role ,m.is_admin AS m_is_admin
+
+        FROM j_schedule AS s
+        LEFT  JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+        JOIN  t_member AS m  ON   m.t_id = s.`team_id` and  m.user_id= #{userId,jdbcType=BIGINT}
+        where
+        s.del=0 and t.status=3
+        ORDER BY s.`start_date` DESC   LIMIT 1
+    </select>
+    <select id="getLeaderScheduleList" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+
+        SELECT s.ID AS s_id, s.name AS s_name, s.start_date AS s_start_date, s.end_date AS s_end_date, s.leader_id AS s_leader_id, s.feature_photo AS s_feature_photo,s.process_status AS s_process_status,s.type AS s_type,s.del AS s_del,s.process_photos_url AS s_process_photos_url,
+
+        t.tx_groupId AS t_tx_groupId,t.status AS t_status,t.photo_url AS t_photo_url
+
+        FROM j_schedule AS s
+        LEFT  JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+        <where>
+            s.del=0
+            <if test="null != status  and status !=''.toString() and status !=2 " > AND t.`status` = #{status} </if>
+            <if test="null != status  and status !=''.toString() and status ==2 " > AND (t.`status` = #{status} or s.process_status in (3,4)) </if>
+            <if test="teamIds != null and teamIds.size()>0">
+                AND s.`team_id` IN
+                <foreach collection="teamIds" open="(" separator="," close=")" item="item" index="index">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.`start_date` DESC
+    </select>
+    <select id="getSchedulesByTravelId" resultMap="TeamResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+      SELECT t.ID,t.name,t.start_date,t.end_date,t.team_num,t.tx_groupId
+      FROM  t_team t
+      WHERE t.travel_id= #{travelId,jdbcType=BIGINT} AND
+      EXISTS (SELECT 1 FROM t_team_album a WHERE t.tx_groupId=a.team_id)
+      ORDER BY t.start_date DESC
+    </select>
+
+    <update id="updateScheduleProcessStatus" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        update j_schedule
+        set process_status = #{processStatus,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="getScheduleByTeamId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT ID,process_status,leader_id  FROM  j_schedule where team_id= #{teamId,jdbcType=BIGINT}  and  del=0
+    </select>
+
+    <select id="getScheduleByTid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT ID,team_id,name,start_place,start_date,end_date,collection_time,collection_place,leader_id,
+        feature,feature_photo,emergency_contact,create_time,update_time,version,process_status,process_photos_url,
+        end_place,type,user_id,del
+        FROM  j_schedule
+        WHERE team_id= #{teamId,jdbcType=BIGINT}
+        AND del=0
+    </select>
+
+    <select id="getScheduleList" resultMap="ScheduleLineResultMap" >
+    SELECT s.ID,s.end_place AS country_name,s.end_date,s.start_date,t.travel_id,SUM(jd.satisfied_status) AS grade ,COUNT(jd.id) AS tourist_count
+     FROM j_schedule AS s
+     JOIN t_team AS t ON s.`team_id`= t.`ID`
+     LEFT JOIN j_schedule_detail_comment AS jd ON s.`ID` = jd.`schedule_id`
+     WHERE t.status=3 AND DATE_FORMAT(DATE_SUB(NOW(),INTERVAL 1 DAY),'%Y-%m-%d') = DATE_FORMAT(s.end_date, '%Y-%m-%d') and s.del=0
+     GROUP BY s.end_place,s.end_date,s.start_date,t.travel_id,s.ID
+     ORDER BY  s.end_date DESC
+
+    </select>
+
+    <select id="selectTeamIdsWithIDAndConditions" resultType="java.lang.Long" parameterType="com.umessage.letsgo.domain.vo.journey.request.TouristRequest">
+        SELECT s.team_id
+        FROM j_schedule as s JOIN t_team as t ON s.team_id = t.ID
+        WHERE t.travel_id = #{travelId} AND !ISNULL(t.tx_groupId)  and s.del=0
+        <if test="destination !=null">
+            AND s.end_place = #{destination}
+        </if>
+        <if test="startTime !=null and endTime !=null">
+            AND (DATE_FORMAT(s.start_date,'%Y-%m') BETWEEN #{startTime} AND #{endTime}
+            OR DATE_FORMAT(s.end_date,'%Y-%m') BETWEEN #{startTime} AND #{endTime})
+        </if>
+    </select>
+    <select id="getTeamName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT s.team_id,s.name
+        FROM j_schedule as s,t_team as t WHERE  s.team_id = t.ID and s.del=0
+        AND t.tx_groupId= #{teamId};
+    </select>
+
+    <select id="getAllTripList" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+
+        SELECT s.ID AS s_id, s.name AS s_name, s.start_date AS s_start_date, s.end_date AS s_end_date,
+
+        t.tx_groupId AS t_tx_groupId,t.status AS t_status
+
+        FROM j_schedule AS s
+        LEFT  JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+        <where>
+            s.del=0
+            <if test="teamIds != null and teamIds.size()>0">
+                AND s.`team_id` IN
+                <foreach collection="teamIds" open="(" separator="," close=")" item="item" index="index">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY s.`start_date` DESC
+    </select>
+    <select id="getAllTripListOne" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+
+        SELECT s.ID AS s_id, s.name AS s_name, s.start_date AS s_start_date, s.end_date AS s_end_date,
+
+        t.tx_groupId AS t_tx_groupId,t.status AS t_status
+
+        FROM j_schedule AS s
+        LEFT  JOIN  t_team AS t  ON   t.`ID` = s.`team_id`
+        where s.ID = #{id,jdbcType=BIGINT} and s.del=0
+    </select>
+    <select id="selectTeamIdsWithStartTimeAndEndTime" resultMap="ScheduleTeamResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleReq">
+        SELECT s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date, s.end_date AS s_end_date,
+        s.collection_time AS s_collection_time, s.collection_place AS s_collection_place, s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo,
+        s.emergency_contact AS s_emergency_contact, s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version,
+        t.team_num AS t_team_num
+        FROM j_schedule as s JOIN t_team as t ON s.team_id = t.ID
+        <where>
+            1=1
+            <if test="teamIds != null and teamIds.size()>0">
+                AND t.ID IN
+                <foreach collection="teamIds" index="index" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        AND !ISNULL(t.tx_groupId)
+        and s.del=0
+        AND (DATE_FORMAT(s.start_date,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime}
+        OR DATE_FORMAT(s.end_date,'%Y-%m-%d') BETWEEN #{startTime} AND #{endTime})
+    </select>
+
+    <select id="getTripCountByStatus" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT COUNT(*)
+        FROM j_schedule AS s
+        JOIN t_team AS t ON t.`ID` = s.`team_id`
+        <where>
+            t.travel_id = #{travelId}
+            AND !ISNULL(t.tx_groupId)
+            and s.del=0
+            <if test="status != null">
+                AND t.`status`= #{status}
+            </if>
+            <if test="startDate != null">
+                AND (DATE_FORMAT(#{startDate},'%Y-%m-%d') BETWEEN DATE_FORMAT(s.start_date,'%Y-%m-%d') and DATE_FORMAT(s.end_date,'%Y-%m-%d')
+                OR DATE_FORMAT(s.start_date,'%Y-%m-%d') = DATE_FORMAT(#{startDate},'%Y-%m-%d')
+                OR DATE_FORMAT(s.end_date,'%Y-%m-%d') = DATE_FORMAT(#{startDate},'%Y-%m-%d'))
+            </if>
+        </where>
+
+
+    </select>
+
+    <select id="getTripListByStatus" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT s.*
+        FROM j_schedule AS s
+        JOIN t_team AS t ON t.`ID` = s.`team_id`
+        <where>
+            t.travel_id = #{travelId}
+            and s.del=0
+            AND !ISNULL(t.tx_groupId)
+            <if test="status != null">
+                AND t.`status`= #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="getRemainingDaysByTeamId" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT COUNT(sd.ID)
+        FROM j_schedule AS s
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        WHERE t.tx_groupId = #{teamId} AND DATE_FORMAT(sd.schedule_date,'%Y-%n-%d') &gt;= DATE_FORMAT(NOW(),'%Y-%n-%d') and s.del=0;
+    </select>
+
+    <select id="getTxGroupIdByScheduleId" resultType="java.lang.String" parameterType="java.lang.Long">
+        SELECT t.tx_groupId
+        FROM j_schedule AS s
+        JOIN t_team AS t ON s.`team_id`= t.`ID`
+        WHERE s.ID = #{scheduleId,jdbcType=BIGINT} and s.del=0
+    </select>
+    <update id="delScheduleById" parameterType="java.lang.Long" >
+        update j_schedule
+        set del = 1
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectBytId" resultMap="MultiResultMap" parameterType="java.lang.Long" >
+         SELECT s.ID AS s_id,
+         sd.ID,sd.jour_id
+        FROM j_schedule AS s
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        WHERE s.team_id = #{teamId} and s.del=0
+        ORDER BY sd.day_num asc
+    </select>
+
+    <select id="getJjTripList" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT
+        s.name,
+        s.start_date,
+        t.total_count,
+        l.name as leader_name,
+        l.phone
+        FROM
+        j_schedule s
+        LEFT JOIN t_team as t ON t.ID = s.team_id
+        LEFT JOIN t_leader as l ON s.leader_id = l.ID
+        <where>
+            t.travel_id = #{travelId}
+            and s.del=0
+            AND !ISNULL(t.tx_groupId)
+            <if test="status != null  and status !=''.toString() ">
+                AND t.`status`= #{status}
+            </if>
+            <if test="name != null and name !=''.toString()  ">
+                AND s.name LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="startDate != null ">
+                AND DATE_FORMAT(s.start_date,'%Y-%m-%d')=DATE_FORMAT(#{startDate},'%Y-%m-%d')
+            </if>
+            <if test="totalcount != null and totalcount !=''.toString()">
+                AND t.total_count= #{totalcount}
+            </if>
+            <if test="leadName != null and leadName !=''.toString() ">
+                AND l.name= #{leadName}
+            </if>
+            <if test="phone != null and phone !=''.toString()  ">
+                AND l.phone= #{phone}
+            </if>
+        </where>
+        ORDER BY s.start_date DESC
+    </select>
+
+    <select id="getEndTripList" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT
+        s.name,
+        s.start_date,
+        t.total_count,
+        l.name as leader_name,
+        l.phone
+        FROM
+        j_schedule s
+        LEFT JOIN t_team as t ON t.ID = s.team_id
+        LEFT JOIN t_leader as l ON s.leader_id = l.ID
+        <where>
+            t.travel_id = #{travelId}
+            and s.del=0
+            AND !ISNULL(t.tx_groupId)
+            <if test="status != null and status !=''.toString() ">
+                AND t.`status`= #{status}
+            </if>
+            <if test="name != null and name !=''.toString() ">
+                AND s.`name` LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="startDate != null ">
+                AND DATE_FORMAT(s.start_date,'%Y-%m-%d') = DATE_FORMAT(#{startDate},'%Y-%m-%d')
+            </if>
+            <if test="totalcount != null and totalcount !=''.toString()">
+                AND t.total_count= #{totalcount}
+            </if>
+            <if test="leadName != null and leadName !=''.toString() ">
+                AND l.`name`= #{leadName}
+            </if>
+            <if test="phone != null and phone !=''.toString() ">
+                AND l.`phone`= #{phone}
+            </if>
+        </where>
+        ORDER BY s.end_date DESC
+    </select>
+
+    <select id="selectScheleName" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT
+        s.*
+        FROM j_schedule AS s
+        LEFT JOIN  j_schedule_detail AS sd ON sd.jour_id  = s.ID
+        LEFT JOIN t_team AS t ON t.`ID` = s.`team_id`
+        <where>
+            t.travel_id = #{travelId}
+            and s.del= 0
+            AND !ISNULL(t.tx_groupId)
+            <if test="status != null and status !=''.toString() ">
+                AND t.`status`= #{status}
+            </if>
+            <if test="countryId1 != null and countryId1 !=''.toString() ">
+                AND sd.countryId1=#{countryId1}
+            </if>
+            AND DATE_FORMAT(sd.schedule_date,'%Y-%m-%d') = DATE_FORMAT(#{startDate},'%Y-%m-%d')
+        </where>
+    </select>
+
+    <select id="selectTotalDayNum"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT * from j_schedule AS s where s.ID=#{id}
+    </select>
+
+    <select id="selectScheduleByTeamName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT s.*
+        from j_schedule AS s
+        LEFT JOIN t_team AS t on t.`ID` = s.`team_id`
+        WHERE t.`team_num`= #{teamNum}
+    </select>
+
+    <select id="selectScheduleForTravel"  resultMap="ScheduleMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date,
+        s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact,
+        s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version, s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del
+        FROM
+        j_schedule  AS s
+        LEFT JOIN  t_team AS t ON s.team_id = t.ID
+        <where>
+            s.del=0
+            AND t.`travel_id` IS NOT NULL
+            <if test="null != travelId"> AND t.`travel_id` = #{travelId} </if>
+            <if test="null != status  and status !=''.toString()"> AND t.`status` = #{status} </if>
+        </where>
+        GROUP BY s.ID
+        ORDER BY s.start_date DESC
+    </select>
+
+
+
+    <resultMap id="ScheduleMap" type="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        <id column="s_id" property="id" jdbcType="BIGINT" />
+        <result column="s_team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="s_name" property="name" jdbcType="VARCHAR" />
+        <result column="s_start_place" property="startPlace" jdbcType="VARCHAR" />
+        <result column="s_start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="s_end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="s_collection_time" property="collectionTime" jdbcType="TIMESTAMP" />
+        <result column="s_collection_place" property="collectionPlace" jdbcType="VARCHAR" />
+        <result column="s_leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="s_feature" property="feature" jdbcType="VARCHAR" />
+        <result column="s_feature_photo" property="featurePhoto" jdbcType="VARCHAR" />
+        <result column="s_emergency_contact" property="emergencyContact" jdbcType="VARCHAR" />
+        <result column="s_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="s_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="s_version" property="version" jdbcType="BIGINT" />
+        <result column="s_process_status" property="processStatus" jdbcType="INTEGER" />
+        <result column="s_process_photos_url" property="processPhotosUrl" jdbcType="VARCHAR" />
+        <result column="s_end_place" property="endPlace" jdbcType="VARCHAR" />
+        <result column="s_type" property="type" jdbcType="INTEGER" />
+        <result column="s_del" property="del" jdbcType="INTEGER" />
+        <result column="s_user_id" property="userId" jdbcType="BIGINT" />
+    </resultMap>
+
+
+
+
+
+    <resultMap id="ScheduleMultiResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleEntity" >
+        <id column="s_id" property="id" jdbcType="BIGINT" />
+        <result column="s_team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="s_name" property="name" jdbcType="VARCHAR" />
+        <result column="s_start_place" property="startPlace" jdbcType="VARCHAR" />
+        <result column="s_start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="s_end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="s_collection_time" property="collectionTime" jdbcType="TIMESTAMP" />
+        <result column="s_collection_place" property="collectionPlace" jdbcType="VARCHAR" />
+        <result column="s_leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="s_feature" property="feature" jdbcType="VARCHAR" />
+        <result column="s_feature_photo" property="featurePhoto" jdbcType="VARCHAR" />
+        <result column="s_emergency_contact" property="emergencyContact" jdbcType="VARCHAR" />
+        <result column="s_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="s_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="s_version" property="version" jdbcType="BIGINT" />
+        <result column="s_process_status" property="processStatus" jdbcType="INTEGER" />
+        <result column="s_process_photos_url" property="processPhotosUrl" jdbcType="VARCHAR" />
+        <result column="s_end_place" property="endPlace" jdbcType="VARCHAR" />
+        <result column="s_type" property="type" jdbcType="INTEGER" />
+        <result column="s_del" property="del" jdbcType="INTEGER" />
+        <result column="s_user_id" property="userId" jdbcType="BIGINT" />
+
+        <result column="t_team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="t_status" property="status" jdbcType="INTEGER" />
+        <result column="t_total_count" property="totalCount" jdbcType="INTEGER" />
+        <result column="t_tx_groupId" property="txGroupId" jdbcType="VARCHAR" />
+        <result column="t_photo_url" property="tPhotoUrl" jdbcType="VARCHAR" />
+
+        <result column="m_role" property="role" jdbcType="VARCHAR" />
+        <result column="m_is_admin" property="isAdmin" jdbcType="VARCHAR" />
+
+        <result column="userid" property="userid" jdbcType="BIGINT"/>
+
+        <result column="l_name" property="leadName" jdbcType="VARCHAR" />
+        <result column="l_sex" property="sex" jdbcType="INTEGER" />
+        <result column="l_phone" property="phone" jdbcType="VARCHAR" />
+
+
+        <collection property="scheduleDescEntities" ofType="com.umessage.letsgo.domain.po.journey.ScheduleDescEntity" column ="s_id" select="getScheduleDesc">
+        </collection>
+
+        <collection property="shoppingSchedules" ofType="com.umessage.letsgo.domain.po.journey.ShoppingScheduleEntity" column ="s_id" select="getShoppingScheduleByScheduleId">
+        </collection>
+
+        <collection property="ownExpenseSchedules" ofType="com.umessage.letsgo.domain.po.journey.OwnExpenseScheduleEntity" column ="s_id" select="getOwnExpenseScheduleByScheduleId">
+        </collection>
+
+        <collection property="scheduleDetailList" ofType="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntity" column ="s_id" select="getScheduleDetailByID">
+
+        </collection>
+
+    </resultMap>
+
+
+
+    <resultMap id="ScheduleDetailMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="jour_id" property="jourId" jdbcType="BIGINT" />
+        <result column="day_num" property="dayNum" jdbcType="INTEGER" />
+        <result column="schedule_date" property="scheduleDate" jdbcType="TIMESTAMP" />
+        <result column="start_place" property="startPlace" jdbcType="VARCHAR" />
+        <result column="start_place_id" property="startPlaceId" jdbcType="VARCHAR" />
+        <result column="destination1" property="destination1" jdbcType="VARCHAR" />
+        <result column="destination2" property="destination2" jdbcType="VARCHAR" />
+        <result column="destination3" property="destination3" jdbcType="VARCHAR" />
+        <result column="destination4" property="destination4" jdbcType="VARCHAR" />
+        <result column="destination_id1" property="destinationId1" jdbcType="VARCHAR" />
+        <result column="destination_id2" property="destinationId2" jdbcType="VARCHAR" />
+        <result column="destination_id3" property="destinationId3" jdbcType="VARCHAR" />
+        <result column="destination_id4" property="destinationId4" jdbcType="VARCHAR" />
+        <result column="hotel_id" property="hotelId" jdbcType="VARCHAR" />
+        <result column="schedule_photos_url1" property="schedulePhotosUrl1" jdbcType="VARCHAR" />
+        <result column="schedule_photos_url2" property="schedulePhotosUrl2" jdbcType="VARCHAR" />
+        <result column="schedule_photos_url3" property="schedulePhotosUrl3" jdbcType="VARCHAR" />
+        <result column="desc" property="desc" jdbcType="VARCHAR" />
+        <result column="hotel_confirm" property="hotelConfirm" jdbcType="INTEGER" />
+        <result column="hotel" property="hotel" jdbcType="VARCHAR" />
+        <result column="hotel_input" property="hotelInput" jdbcType="VARCHAR" />
+        <result column="same_level" property="sameLevel" jdbcType="INTEGER" />
+        <result column="flight1" property="flight1" jdbcType="VARCHAR" />
+        <result column="flight2" property="flight2" jdbcType="VARCHAR" />
+        <result column="traffic_info" property="trafficInfo" jdbcType="VARCHAR" />
+        <result column="shopp_info" property="shoppInfo" jdbcType="VARCHAR" />
+        <result column="catering_info" property="cateringInfo" jdbcType="VARCHAR" />
+        <result column="leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="new_entry" property="newEntry" jdbcType="VARCHAR" />
+        <result column="new_contant" property="newContant" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+
+        <result column="countryId1" property="countryId1" jdbcType="VARCHAR"/>
+        <result column="country1" property="country1" jdbcType="VARCHAR"/>
+        <result column="countryId2" property="countryId2" jdbcType="VARCHAR"/>
+        <result column="country2" property="country2" jdbcType="VARCHAR"/>
+        <result column="countryId3" property="countryId3" jdbcType="VARCHAR"/>
+        <result column="country3" property="country3" jdbcType="VARCHAR"/>
+        <result column="countryId4" property="countryId4" jdbcType="VARCHAR"/>
+        <result column="country4" property="country4" jdbcType="VARCHAR"/>
+
+        <result column="countryId5" property="countryId5" jdbcType="VARCHAR"/>
+        <result column="country5" property="country5" jdbcType="VARCHAR"/>
+        <result column="destination_id5" property="destinationId5" jdbcType="VARCHAR" />
+        <result column="destination5" property="destination5" jdbcType="VARCHAR" />
+
+        <result column="traffic1" property="traffic1" jdbcType="INTEGER" />
+        <result column="traffic2" property="traffic2" jdbcType="INTEGER" />
+        <result column="traffic3" property="traffic3" jdbcType="INTEGER" />
+        <result column="traffic4" property="traffic4" jdbcType="INTEGER" />
+        <result column="traffic5" property="traffic5" jdbcType="INTEGER" />
+
+
+        <result column="l_name" property="leadName" jdbcType="VARCHAR" />
+        <result column="l_sex" property="sex" jdbcType="INTEGER" />
+        <result column="l_phone" property="phone" jdbcType="VARCHAR" />
+
+        <association property="hotelSchedule" column="ID" javaType="com.umessage.letsgo.domain.po.journey.HotelScheduleEntity" select="getHotelScheduleByScheduleDetailId"></association>
+        <collection property="shoppingScheduleList" column="ID" ofType="com.umessage.letsgo.domain.po.journey.ShoppingScheduleEntity" select="getShoppingScheduleByScheduleDetailId">
+        </collection>
+        <collection property="ownExpenseScheduleList" column="ID" ofType="com.umessage.letsgo.domain.po.journey.OwnExpenseScheduleEntity" select="getOwnExpenseScheduleByScheduleDetailId">
+        </collection>
+        <collection property="scheduleDetailScenicEntitys" ofType="com.umessage.letsgo.domain.po.journey.ScheduleDetailScenicEntity"  column="ID" select="selectScheduleScenicById">
+        </collection>
+    </resultMap>
+
+    <resultMap id="ScenicMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDetailScenicEntity">
+
+        <id column="sc_id" property="id" jdbcType="BIGINT" />
+        <result column="sc_schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+        <result column="sc_name" property="scenicName" jdbcType="VARCHAR" />
+        <result column="sc_scenic_city" property="scenicCity" jdbcType="VARCHAR" />
+        <result column="sc_briefintroduction" property="briefintroduction" jdbcType="VARCHAR" />
+        <result column="sc_lon" property="lon" jdbcType="VARCHAR" />
+        <result column="sc_lat" property="lat" jdbcType="VARCHAR" />
+        <result column="sc_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="sc_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="getScheduleDetailByID"  resultMap="ScheduleDetailMap" parameterType="java.lang.Long">
+       SELECT   sd.ID,
+            sd.jour_id, sd.day_num,sd.schedule_date,sd.start_place, sd.start_place_id, sd.destination1,
+            sd.destination2, sd.destination3, sd.destination4,sd.destination_id1,sd.destination_id2,
+            sd.destination_id3,sd.destination_id4,sd.schedule_photos_url1,sd.schedule_photos_url2, sd.schedule_photos_url3, sd.`desc`,
+            sd.hotel_confirm, sd.hotel,sd.hotel_id,sd.hotel_input, sd.same_level, sd.flight1, sd.flight2,sd.traffic_info, sd.shopp_info,
+            sd.catering_info,sd.leader_id,sd.new_entry,sd.new_contant, sd.create_time,sd.update_time, sd.version,sd.countryId1,sd.country1,
+            sd.countryId2, sd.country2,sd.countryId3,sd.country3, sd.countryId4, sd.country4, sd.traffic1,sd.traffic2, sd.traffic3, sd.traffic4,sd.traffic5,
+            sd.destination_id5,sd.destination5, sd.countryId5
+             from j_schedule_detail AS sd WHERE sd.jour_id = #{s_id}
+    </select>
+
+
+    <select id="selectScheduleScenicById" parameterType="int"  resultMap="ScenicMap">
+         SELECT 	sc.ID AS sc_id,
+	          sc.scenic_name AS sc_name,
+	          sc.schedule_detail_id AS sc_schedule_detail_id,
+	          sc.scenic_city AS sc_scenic_city,
+	          sc.briefintroduction AS sc_briefintroduction,
+	          sc.lon AS sc_lon,
+	          sc.lat AS sc_lat,
+	          sc.create_time AS sc_create_time,
+	          sc.update_time AS sc_update_time FROM j_scenic_schedule AS sc WHERE sc.schedule_detail_id =#{ID}
+  </select>
+
+
+    <resultMap type="com.umessage.letsgo.domain.po.journey.ShoppingScheduleEntity" id="ShoppingScheduleResultMap">
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+        <result column="shopping_name" property="shoppingName" jdbcType="VARCHAR" />
+        <result column="shopping_city" property="shoppingCity" jdbcType="VARCHAR" />
+        <result column="sell_products" property="sellProducts" jdbcType="VARCHAR" />
+        <result column="residence_time" property="residenceTime" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <select id="getShoppingScheduleByScheduleDetailId" parameterType="java.lang.Long" resultMap="ShoppingScheduleResultMap">
+        select ID, schedule_id, schedule_detail_id, shopping_name, shopping_city, sell_products, residence_time, lon, lat, create_time, update_time
+        from j_shopping_schedule
+        where schedule_detail_id = #{ID}
+    </select>
+
+
+    <resultMap type="com.umessage.letsgo.domain.po.journey.HotelScheduleEntity" id="HotelScheduleResultMap">
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+        <result column="hotel_name" property="hotelName" jdbcType="VARCHAR" />
+        <result column="same_level" property="sameLevel" jdbcType="INTEGER" />
+        <result column="hotel_confirm" property="hotelConfirm" jdbcType="INTEGER" />
+        <result column="hotel_input" property="hotelInput" jdbcType="VARCHAR" />
+        <result column="delta" property="delta" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="star_lv" property="starLv" jdbcType="VARCHAR" />
+        <result column="briefintroduction" property="briefintroduction" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+
+    <select id="getHotelScheduleByScheduleDetailId" parameterType="java.lang.Long" resultMap="HotelScheduleResultMap">
+        select ID, schedule_detail_id, hotel_name, same_level, hotel_confirm, hotel_input, delta, country, city, star_lv, briefintroduction, lon, lat, create_time, update_time
+        from j_hotel_schedule
+        where schedule_detail_id = #{ID}
+    </select>
+
+
+
+    <resultMap id="OwnExpenseScheduleResultMap" type="com.umessage.letsgo.domain.po.journey.OwnExpenseScheduleEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="limit_number" property="limitNumber" jdbcType="VARCHAR" />
+        <result column="service_item" property="serviceItem" jdbcType="VARCHAR" />
+        <result column="reference_price" property="referencePrice" jdbcType="VARCHAR" />
+        <result column="briefintroduction" property="briefintroduction" jdbcType="VARCHAR" />
+        <result column="item_city" property="itemCity" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <select id="getOwnExpenseScheduleByScheduleDetailId" parameterType="java.lang.Long" resultMap="OwnExpenseScheduleResultMap">
+        select ID, schedule_id, schedule_detail_id, item_name, limit_number, service_item, reference_price, briefintroduction, item_city, lon, lat, create_time, update_time
+        from j_own_expense_schedule
+        where schedule_detail_id = #{ID}
+    </select>
+
+
+    <select id="getShoppingScheduleByScheduleId" parameterType="java.lang.Long" resultMap="ShoppingScheduleResultMap">
+        select ID, schedule_id, schedule_detail_id, shopping_name, shopping_city, sell_products, residence_time, lon, lat, create_time, update_time
+        from j_shopping_schedule
+        where schedule_id = #{s_id}
+    </select>
+
+    <select id="getOwnExpenseScheduleByScheduleId" parameterType="java.lang.Long" resultMap="OwnExpenseScheduleResultMap">
+        select ID, schedule_id, schedule_detail_id, item_name, limit_number, service_item, reference_price, briefintroduction, item_city, lon, lat, create_time, update_time
+        from j_own_expense_schedule
+        where schedule_id = #{s_id}
+    </select>
+
+
+    <resultMap id="ScheduleDescResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDescEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="getScheduleDesc" parameterType="java.lang.Long" resultMap="ScheduleDescResultMap">
+        SELECT  ID,schedule_id,title, content,create_time,update_time
+        FROM  j_schedule_desc
+        WHERE  schedule_id = #{s_id}
+    </select>
+
+<!--    <select id="selectScheduleInfo" parameterType="java.lang.String"  resultMap="MultiResultMaptest">
+        SELECT
+        s.ID AS s_id, s.team_id AS s_team_id, s.name AS s_name, s.start_place AS s_start_place, s.start_date AS s_start_date,
+        s.end_date AS s_end_date, s.collection_time AS s_collection_time, s.collection_place AS s_collection_place,
+        s.leader_id AS s_leader_id, s.feature AS s_feature, s.feature_photo AS s_feature_photo, s.emergency_contact AS s_emergency_contact,
+        s.create_time AS s_create_time, s.update_time AS s_update_time, s.version AS s_version, s.process_status AS s_process_status,
+        s.process_photos_url AS s_process_photos_url, s.end_place AS s_end_place,s.type AS s_type,s.user_id AS s_user_id,s.del AS s_del,
+        t.team_num AS t_team_num,t.status AS t_status,t.total_count AS t_total_count,t.tx_groupId AS t_tx_groupId
+        FROM
+        j_schedule AS s
+        JOIN t_team AS t ON s.team_id = t.ID
+        WHERE
+	    t.tx_groupid = '@TGS#1JBK2MMEG'
+  </select>-->
+
+</mapper>

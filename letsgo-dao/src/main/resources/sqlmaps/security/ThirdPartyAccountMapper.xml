@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.ThirdPartyAccountDao" >
+    <resultMap id = "BaseResultMap" type = "com.umessage.letsgo.domain.po.security.ThirdPartyAccountEntity">
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="account_type" property="accountType" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="unionid" property="unionID" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id = "ThirdPartyAccountEntity" type = "com.umessage.letsgo.domain.po.security.ThirdPartyAccountEntity">
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="account_type" property="accountType" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="unionid" property="unionID" jdbcType="VARCHAR" />
+        <association property="userEntity" column="user_id" javaType="com.umessage.letsgo.domain.po.security.UserEntity">
+            <id column="u_id" property="id" jdbcType="BIGINT" />
+            <result column="u_user_name" property="userName" jdbcType="VARCHAR" />
+            <result column="u_real_name" property="realName" jdbcType="VARCHAR" />
+            <result column="u_nick_name" property="nickName" jdbcType="VARCHAR" />
+            <result column="u_password" property="password" jdbcType="VARCHAR" />
+            <result column="u_sex" property="sex" jdbcType="INTEGER" />
+            <result column="u_birthday" property="birthday" jdbcType="VARCHAR" />
+            <result column="u_phone" property="phone" jdbcType="VARCHAR" />
+            <result column="u_mail" property="mail" jdbcType="VARCHAR" />
+            <result column="u_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+            <result column="u_type" property="type" jdbcType="INTEGER" />
+            <result column="u_userSig" property="usersig" jdbcType="VARCHAR" />
+            <result column="u_login_total_count" property="loginTotalCount" jdbcType="INTEGER" />
+            <result column="u_login_count" property="loginCount" jdbcType="INTEGER" />
+            <result column="u_create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="u_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="u_version" property="version" jdbcType="BIGINT" />
+            <result column="u_evaluationTags" property="evaluationTags" jdbcType="VARCHAR" />
+            <result column="u_languages" property="languages" jdbcType="VARCHAR" />
+            <result column="u_tourRoutes" property="tourRoutes" jdbcType="VARCHAR" />
+        </association>
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_thirdparty_account
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.ThirdPartyAccountEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into s_thirdparty_account (ID, user_id, account_type,
+        create_time, update_time, unionid)
+        values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{accountType,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{unionID,jdbcType=VARCHAR})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.ThirdPartyAccountEntity" >
+        update s_thirdparty_account
+        set user_id = #{userId,jdbcType=BIGINT},
+        account_type = #{accountType,jdbcType=INTEGER},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        unionid = #{unionID,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByUnionID" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select ID, user_id, account_type,
+        create_time, update_time, unionid
+        from s_thirdparty_account
+        where unionid = #{unionID,jdbcType=VARCHAR}
+    </select>
+
+   <!-- 根据微信唯一标识查找第三方信息，判断当前微信账户是否绑定用-->
+    <select id="selectThirdPartyInfoByUnionID" resultMap="BaseResultMap"  parameterType="java.lang.String">
+        select ID,unionid,user_id,account_type,create_time,update_time
+        from s_thirdparty_account
+        WHERE unionid = #{unionid}
+    </select>
+
+    <!-- 根据微信唯一标识和用户id查找第三方信息，判断当前微信账户是否绑定用-->
+    <select id="selectThirdPartyByUnionIDAndUserID" resultMap="BaseResultMap"  parameterType="com.umessage.letsgo.domain.po.security.ThirdPartyAccountEntity">
+        select ID,unionid,user_id,account_type,create_time,update_time
+        from s_thirdparty_account
+        WHERE unionid = #{unionID} AND user_id = #{userId}
+    </select>
+
+    <select id="selectThirdPartyAccountByUnionid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT ID, user_id, account_type,create_time, update_time
+        FROM  s_thirdparty_account
+        WHERE  unionid = #{unionID,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="selectUserInfoByOpenID" resultMap="ThirdPartyAccountEntity" parameterType="java.lang.String">
+        SELECT
+          u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+          u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version,u.evaluationTags AS u_evaluationTags,u.languages AS u_languages,u.tourRoutes AS u_tourRoutes,
+
+	      sw.ID,sw.appId,sw.city,sw.country,sw.headImgUrl,sw.headImgUrl,sw.nickname,sw.openid,sw.province,sw.`status`,
+	      st.ID,st.user_id,st.account_type,st.create_time,st.update_time,st.unionid
+        FROM
+	    s_user AS u
+        JOIN s_thirdparty_account AS st ON st.user_id = u.ID
+        JOIN s_wx_info AS sw ON sw.unionid = st.unionid
+        AND sw.openid = #{openId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

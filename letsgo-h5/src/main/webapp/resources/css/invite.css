@@ -1,0 +1,284 @@
+@charset "utf-8";
+
+*{margin:0;padding: 0;}
+
+html,body{
+	width:100%;
+	overflow-x:hidden;
+}
+a{text-decoration: none;color:#000;}
+a:link,a:visited,a:hover{
+	text-decoration: none;
+}
+#invite-container{
+	width:100%;
+}
+/* banner */
+.invite-banner{
+	width:100%;
+	min-height: 1rem;
+	position: relative;
+}
+.invite-banner img{
+	width:100%;
+	object-fit:cover;
+}
+.invite-banner p{
+	width:3.333333rem;
+	height:0.8rem;
+	background: #ffead7;
+	border-radius: 0.133333rem;
+	color:#a42835;
+	text-align: center;
+	line-height: 0.8rem;
+	position: absolute;
+	top:0.533333rem;
+	left:50%;
+	margin-left: -1.666667rem;
+	font-size: 16px;
+}
+[data-dpr="2"] .invite-banner p{font-size:32px;}
+[data-dpr="3"] .invite-banner p{font-size:54px;}
+
+/* form */
+.invite-form{
+	width:100%;
+	height:8.333333rem;
+	box-sizing:border-box;
+	padding:0 0.8rem;
+}
+.invite-form form{
+	width:100%;
+	height:100%;
+	padding-top:0.666667rem;
+	box-sizing:border-box;
+}
+.invite-form form .invite-formList{
+	width:100%;
+	height:1.186667rem;
+	border-top:1px solid #d9d9d9;
+	line-height: 1.2rem;
+}
+.invite-form form .invite-password{
+	border-bottom: 1px solid #d9d9d9;
+}
+.invite-form form .invite-formList span{
+	display: inline-block;
+	width:2.106667rem;
+	height:0.613333rem;
+	border-right: 1px solid #d9d9d9;
+	line-height: 0.613333rem;
+	color:#333333;
+	font-size: 16px;
+	vertical-align: middle;
+}
+[data-dpr="2"] .invite-form form .invite-formList span{font-size:34px;}
+[data-dpr="3"] .invite-form form .invite-formList span{font-size:50px;}
+.invite-form form .invite-formList input[type="text"],.invite-form form .invite-formList input[type="password"]{
+	border:0;
+	display: inline-block;
+	height:0.64rem;
+	font-size: 16px;
+	color:#333333;
+	width: 3.8rem;
+	text-indent: 0.2rem;
+	vertical-align: sub;
+}
+[data-dpr="2"] .invite-form form .invite-formList input{font-size:34px;}
+[data-dpr="3"] .invite-form form .invite-formList input{font-size:50px;}
+.icheckbox_minimal-blue,
+.iradio_minimal-blue {
+	width: 0.48rem !important;
+	height: 0.48rem !important;
+	background: url(../images/img/radio-off.png) 0 0 no-repeat  !important;
+	background-size: 100% auto  !important;
+}
+
+.iradio_minimal-blue.checked {
+	background: url(../images/img/radio-on.png) 0 0 no-repeat  !important;
+	background-size: 100% auto  !important;
+}
+.invite-form form .inviteSex span:nth-child(1),.invite-form form .inviteSex span:nth-child(5){
+	border-right: 0;
+}
+.invite-form form .inviteSex .iradio_minimal-blue{
+	margin-right: 0.333333rem;
+}
+.invite-form form .inviteSex .iradio_minimal-blue:nth-child(4){
+	margin-left: 0.6rem;
+}
+.invite-form form .inviteSex .boy,.invite-form form .inviteSex .girl{
+	width: 1.2rem;
+}
+.invite-form form .inviteSex .boy:first-child{
+	border-right: 1px solid #d9d9d9;
+}
+.invite-form form .invite-formList span.boy,.invite-form form .invite-formList span.girl{
+	color:#999999;
+}
+.red{
+	color:#333333 !important;
+}
+.invite-form form .invite-register{
+	width:100%;
+	height: 1.066667rem;
+	margin-top:0.546667rem;
+}
+.invite-form form .invite-register #register{
+	border:0 !important;
+	width:100% !important;
+	height: 100% !important;
+	background: #02bad3 !important;
+	border-radius: 0.133333rem !important;
+	color:#ffffff !important;
+	font-size: 18px !important;
+	line-height: 1.066667rem !important;
+	text-align: center !important;
+	-webkit-appearance:none;
+	outline:none;
+}
+[data-dpr="2"] .invite-form form .invite-register #register{font-size:36px;}
+[data-dpr="3"] .invite-form form .invite-register #register{font-size:54px;}
+#captcha{
+	width:3.35rem;
+}
+.verification{
+	display: inline-block !important;
+	color:#02bad3 !important;
+	float: right !important;
+	font-size: 14px !important;
+	border:0 !important;
+	background:#ffffff !important;
+	/*width:2.7rem;*/
+	height:100% !important;
+	text-align: right !important;
+	line-height:1.2rem !important;
+	-webkit-appearance:none;
+	outline:none
+}
+[data-dpr="2"] .verification{font-size:28px !important;}
+[data-dpr="3"] .verification{font-size:40px !important;}
+/* Say No */
+.invite-say{
+	width: 100%;
+	min-height:1.333333rem;
+	padding-top:0.666667rem;
+}
+.invite-say .invite-sayno{
+	width:100%;
+	box-sizing:border-box;
+	padding:0 1.146667rem;
+	height: 2.24rem;
+	background: url(../images/img/line.png) no-repeat center;
+	background-size: 7.666667rem 2.24rem;
+}
+.invite-say .invite-sayno p{
+	text-align: center;
+	font-size: 22px;
+	padding-bottom:0.133333rem;
+}
+[data-dpr="2"] .invite-say .invite-sayno p{font-size:40px;}
+[data-dpr="3"] .invite-say .invite-sayno p{font-size:64px;}
+
+.invite-say .invite-sayno .invite-sayno-detail{
+	padding-left: 20%;
+	font-size: 14px;
+	line-height: 0.56rem;
+	height: 0.56rem;
+}
+.invite-say .invite-sayno .invite-sayno-detail:last-child{
+	padding-left: 27%;
+}
+[data-dpr="2"] .invite-say .invite-sayno .invite-sayno-detail{font-size:26px;}
+[data-dpr="3"] .invite-say .invite-sayno .invite-sayno-detail{font-size:40px;}
+.invite-say .invite-sayno .invite-sayno-detail span:last-child{
+	line-height: 2;
+}
+.invite-say .invite-sayno .invite-sayno-detail span:first-child{
+	display: inline-block;
+	width:0.213333rem;
+	height: 0.213333rem;
+	/*margin-right: 0.266667rem;*/
+}
+.invite-say .invite-sayno .invite-sayno-detail span:first-child img{
+	width:100%;
+	height: 100%;
+}
+.invite-img{
+	width:100%;
+	margin:0.6rem 0;
+}
+.invite-img img{
+	width:100%;
+}
+.invite-bg{
+	background: #f0eff5;
+}
+.invite-bg .invite-img{
+	background: #f0eff5;
+	margin-bottom: 0;
+}
+/* 下载跟上 */
+.invite-download{
+	width:100%;
+	height: 1.066667rem;
+	box-sizing: border-box;
+	padding: 0 0.8rem;
+	margin-bottom: 0.666667rem;
+}
+.invite-download a{
+	display: inline-block;
+	width:100%;
+	height: 100%;
+	background: #02bad3;
+	border-radius: 0.133333rem;
+	color:#ffffff;
+	font-size: 18px;
+	text-align: center;
+	line-height: 1.066667rem;
+}
+[data-dpr="2"] .invite-download a{font-size:36px;}
+[data-dpr="3"] .invite-download a{font-size:54px;}
+.invite-register a{
+	display: inline-block;
+	width:100%;
+	height: 100%;
+}
+
+@media (min-width: 300px) and (max-width: 330px) {
+	.invite-say .invite-sayno p{
+		padding-bottom: 0;
+	}
+}
+@media (min-width: 550px) {
+	.invite-say .invite-sayno p{
+		font-size: 28px;
+	}
+	.invite-say .invite-sayno .invite-sayno-detail{
+		font-size:16px;
+		height:0.6rem;
+		line-height:0.6rem;
+	}
+	.invite-banner p,.invite-form form .invite-register #register,.invite-download a{
+		font-size:22px;
+	}
+	.invite-form form .invite-formList span,.invite-form form .invite-formList input[type="text"], .invite-form form .invite-formList input[type="password"]{
+		font-size: 20px;
+	}
+	.verification{
+		font-size: 18px;
+	}
+}
+@media (min-width: 600px) {
+	.invite-say .invite-sayno .invite-sayno-detail{
+		padding-left:35%;
+		line-height: 0.65rem;
+		height: 0.65rem;
+	}
+	.invite-say .invite-sayno .invite-sayno-detail:last-child{
+		padding-left:40%;
+	}
+	.invite-banner p{
+		top:0.8rem;
+	}
+}

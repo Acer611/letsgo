@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- 从properties配置文件加载配置信息 -->
+    <bean class="com.umessage.letsgo.core.config.CustomizedPropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"></property>
+        <property name="locations">
+            <list>
+                <value>classpath*:openapi.properties</value>
+            </list>
+        </property>
+        <property name="configureClasses">
+            <list>
+                <value>com.umessage.letsgo.openapi.common.constant.Constant</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 引入Service层 bean定义模块 -->
+    <import resource="classpath*:/spring/spring-beans.xml"/>
+    <!-- 引入数据源定义模块 -->
+    <import resource="classpath*:/spring/spring-datasource.xml"/>
+    <!-- 引入spring-security模块 -->
+    <import resource="spring-security.xml"/>
+    <!-- 异常处理配置模块 -->
+    <import resource="spring-exception.xml"/>
+
+</beans>

@@ -1,0 +1,72 @@
+#set($pageTitle="游记")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/travelNote.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/flexible_css.debug.js","$!{STATIC_URL}/resources/js/flexible.debug.js"])
+
+
+	<div id="travelS-container">
+<!-- header -->
+		<div class="travelS-header">
+			<!-- 头标题 -->
+			<div class="header-title">
+		
+			</div>
+			<!-- 人物信息 -->
+			<div class="peopleInfo">
+				<div class="peopleInfo-head">
+					<img src="$!{STATIC_URL}/resources/images/travelNote/head.png" alt="">
+				</div>
+				<div class="peopleInfo-name">王娇娇</div>
+				<div class="peopleInfo-date">2016-08-29</div>
+			</div>
+			<!-- 详细信息 -->
+			<div class="detailInfo">
+				日本本州樱花漫赏6日超浪漫情侣蜜月旅行的超浪漫情侣蜜月旅行。
+			</div>
+		</div>
+<!-- 第一天 -->
+		<div class="day-Info">
+			<!-- day -->
+			<ul class="day-title">
+				<li class="dayNum">
+					<img src="$!{STATIC_URL}/resources/images/travelNote/location.png" alt="">
+					<span>第一天</span>
+				</li>
+				<li class="dayDate">2016-08-27</li>
+				<li class="dayWeather">局部雷阵雨  16&#8764;30&#8451;</li>
+			</ul>
+			<!-- 北京 -->
+			<div class="day-place">
+				<span class="place">北京</span>
+				<span class="hour8">
+					<h5>8小时</h5>
+					<img src="$!{STATIC_URL}/resources/images/travelNote/arrow.png" alt="">
+				</span>
+				<span class="place">马德里</span>
+			</div>
+			<!-- map -->
+			<div class="day-map">
+				
+			</div>
+			<!-- 马德里皇宫 -->
+			<div class="day-view">
+				<p class="view-place">
+					<img src="$!{STATIC_URL}/resources/images/travelNote/location1.png" alt="">
+					<span>马德里皇宫</span>
+				</p>
+				<div class="view-pic">
+					<img src="$!{STATIC_URL}/resources/images/travelNote/snow.png" alt="">
+					<img src="$!{STATIC_URL}/resources/images/travelNote/people.png" alt="">
+				</div>
+				<p class="view-detail">
+					马德里皇宫(Palacio Real de Madrid)是仅次于凡尔赛宫和维也纳美泉宫的欧洲第三大皇宫。建于1738年,历时26年才完工,是世界上保存最完整而且最精美的宫殿之一。
+				</p>
+			</div>
+		</div>
+	</div>
+
+#define($scriptBlock)
+<script>
+
+</script>
+#end

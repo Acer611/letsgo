@@ -1,0 +1,140 @@
+#set($pageTitle="满意度调研问卷")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css","$!{STATIC_URL}/resources/css/survey.css","$!{STATIC_URL}/resources/js/iCheck/minimal/blue.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/iCheck/icheck.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+
+<input type="checkbox" id="joacims-menu"/>
+<label class="bottomLabel #if(!${response.isEditable}!="edit") fellLabel #end" for="joacims-menu"></label>
+		<div class="main" id="survey-container">
+            <section class="cd-container feiyong">
+			<!--title-->
+			<div class="surveyTitle">
+				<div class="surveyTitle1">
+					<div class="survey-title-img">
+						<img src="$!{STATIC_URL}/resources/images/img/title.png" />
+					</div>
+					<div class="survey-title-text">
+						<p>$!{response.surveyEntity.title}</p>
+					</div>
+				</div>
+			</div>
+            <!--问题-->
+#*#foreach($Detail in $response)
+				<div class="ques1">
+					<div class="quesTitle">
+						<span>1.</span>$!Detail.title
+					</div>
+				</div>
+				<div class="itemList">
+					<ul>
+						#foreach($list in $response.optionList)
+							<li>
+								<input type="radio" name="optionList" value="$!list">
+								<span>$!list</span>
+							</li>
+						#end
+					</ul>
+				</div>
+#end*#
+
+#foreach($list in $response.surveyEntity.questionEntityList)
+			<div class="ques1">
+				<div class="quesTitle">
+					<span>1.</span>$list.title
+				</div>
+				<div class="itemList">
+					<ul>
+
+						#if($list.questionType==1)
+							#foreach($list1 in $list.optionList)
+									<li>
+										<input type="radio" disabled name="reasonForSpots">
+										<span>$list1.questionOption</span>
+									</li>
+							#end
+						#end
+						#if($list.questionType==2)
+							#foreach($list1 in $list.optionList)
+                                <li>
+                                    <input type="checkbox" disabled name="reasonForSpots">
+                                    <span>$list1.questionOption</span>
+                                </li>
+							#end
+						#end
+						#if($list.questionType==3)
+                            <textarea name="" id="" disabled cols="30" rows="5" placeholder="请写下您的意见或建议..."></textarea>
+						#end
+						#if($list.questionType==4)
+							#foreach($list1 in $list.optionList)
+                                <li>
+                                    <input type="checkbox" disabled name="reasonForSpots">
+                                    <span>$list1.questionOption</span>
+                                </li>
+							#end
+
+						#end
+					</ul>
+				</div>
+			</div>
+#end
+				</section>
+
+			#if($!response.scheduleEntity.processStatus==4)
+                <div class="padding15">
+
+                </div>
+                <div class="zw-footer">
+                    <input type="button" id="errorSchedule" value="报错">
+                    <input type="button" id="confirmSchedule" value="确认无误">
+                </div>
+			#end
+		</div>
+#parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+	<script>
+        var teamId="$!{response.scheduleEntity.teamId}";
+        $(function(){
+            $(".overlay").click(function(){
+                $("#joacims-menu").prop("checked",false)
+            })
+            /*判断是否显示已经到底*/
+            if($(window).height()>$("body").height()){
+                $(".continue_loding").hide();
+            }
+            $(".qitaicon").on("click",function(){
+                if($(".qita").is(":visible")){
+                    $(".qita").slideUp();
+                    $(this).addClass("qitaicons");
+                }else{
+                    $(".qita").slideDown();
+                    $(this).removeClass("qitaicons");
+                }
+
+            })
+        })
+		$(document).ready(function() {
+			//iCheck
+			$('.itemList input').iCheck({
+				checkboxClass: 'icheckbox_minimal-blue',
+				radioClass: 'iradio_minimal-blue',
+				increaseArea: '20%' // optional
+			});
+			//背景灰色
+			$(".itemList ul li").hover(function(){
+				$(this).css("background","#f0eff5");
+			},function(){
+				$(this).css("background","transparent");
+			});
+			$("ins").hover(function(){
+				$(this).parent().parent().css("background","#f0eff5");
+			},function(){
+				$(this).parent().parent().css("background","transparent");
+			});
+			//问题号
+			var len = $(".quesTitle span").length;//总长度
+        	for(var i=0;i<len;i++){
+        		$(".quesTitle span").eq(i).html(i+1+".");
+        	}
+		});
+	</script>
+#end

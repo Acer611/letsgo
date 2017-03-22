@@ -1,0 +1,387 @@
+#set($pageTitle="停留数据")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["http://ditu.google.cn/maps/api/js?v=3.exp&key=AIzaSyBok03gYzNXxJPWYkfnlaZi7_XVdkc1MVo&signed_in=false"])
+
+<style>
+
+    #map {
+        height: 500px;
+    }
+
+    </style>
+
+
+<!-- Site wrapper -->
+<div class="wrapper">
+      <!-- =============================================== -->
+#parse("/WEB-INF/views/common/leftbar.vm")
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            停留数据
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li class="active">领队导游管理</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			<div class="box box-success">
+			    <div class="box-header with-border">
+                  <h3 class="box-title"><a href="$!{link.contextPath}/schedule/schedulePreview?id=$!{response.scheduleEntity.id}" target="_blank">$!{response.scheduleEntity.name}</a></h3>
+                    <div class="">领队姓名：$!{response.scheduleEntity.leadName}，人数：$!{response.scheduleEntity.totalCount}人，日期：$!date.format('yyyy-MM-dd',$!{response.scheduleEntity.startDate})—$!date.format('yyyy-MM-dd',$!{response.scheduleEntity.endDate})</div>
+
+				</div><!-- /.box-header -->
+			    <div class="box-body">
+					<div class="col-md-2">
+						<ul class="timeline">
+#if($response.scheduleEntity.scheduleDetailList.size()>0)
+#foreach( $Detail in $response.scheduleEntity.scheduleDetailList)
+							<!-- timeline time label -->
+							<li class="time-label">
+								<span class="bg-red  #if($!{Detail.dayNum}==1)open #end">
+									D$!{Detail.dayNum}
+
+								</span>
+							</li>
+							<!-- /.timeline-label -->
+
+							<!-- timeline item -->
+							<li class="treestop#if($!{Detail.dayNum}!=1) close #end">
+								<ul>
+	#foreach($scenicList in $Detail.scenicList)
+		#if($scenicList.stopStartTime && $scenicList.stopEndTime)
+									<li>
+										<!-- timeline icon -->
+										<i class="fa fa1"></i>
+										<div class="timeline-item" id="timeline$!{scenicList.id}">
+											#set($str=$scenicList.name)
+
+											#if($str.length()>6)
+												#set($str=$str.substring(0,6))
+                                                <h3 class="timeline-header"><a href="javascript:;" title="$!scenicList.name">$str ...</a></h3>
+											#else
+
+                                                <h3 class="timeline-header"><a href="javascript:;" title="$!scenicList.name">$!scenicList.name</a></h3>
+											#end
+
+										</div>
+									</li>
+									<!-- END timeline item -->
+			#end
+								#end
+								</ul>
+							</li>
+							<!-- END timeline item -->
+
+
+
+#end
+	#end
+							<li>
+							  <i class="fafa"></i>
+							</li>
+							<!-- END timeline item -->
+						</ul>
+					</div>
+					<div id="map" class="col-md-10"></div>
+						
+
+
+				</div><!-- /.box-body -->
+			</div><!-- /.box -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+  #parse("/WEB-INF/views/common/footer.vm")
+
+   
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+
+
+
+	
+
+#define($scriptBlock)
+    <script>
+    var markers = [];
+    var marker;
+	var map;
+    var defaultZoom = 18;
+    var neighborhood=[];
+    var locationEntityList=[]
+    var imageinco = {
+        url: 'dist/images/beachflag.png'
+    }
+	  
+	var overlay;
+	USGSOverlay.prototype = new google.maps.OverlayView();
+	#foreach( $Detail in $response.scheduleEntity.scheduleDetailList)
+		#foreach($scenicList in $Detail.scenicList)
+
+			#if($!scenicList.lat&&$!scenicList.lng)
+
+        locationEntityList.push({position:{lat:$!{scenicList.lat},lng:	$!{scenicList.lng}},time:"#if($scenicList.stopStartTime && $scenicList.stopEndTime)（$!{scenicList.stopStartTime}-$!{scenicList.stopEndTime}）#else #end",name:"$!{scenicList.name}",id:"$!{scenicList.id}"})
+		#end
+				#end
+		#end
+	function getSoneone(){
+	   for(var i=0;i<locationEntityList.length;i++){
+				neighborhood.push(locationEntityList[i]);
+	   }
+		//drop();
+		var centerui=schedulemap.getCenter();
+		var len2=neighborhood.length;
+		var bounds = new google.maps.LatLngBounds();
+		
+        
+  
+		while(len2--){
+			bounds.extend(new google.maps.LatLng(neighborhood[len2].position.lat
+					,neighborhood[len2].position.lng));
+		}
+		schedulemap.fitBounds(bounds);
+		var displayInfoProcess=google.maps.event.addListener(schedulemap, 'bounds_changed', function(){
+			if(displayInfoProcess) {
+				google.maps.event.removeListener(displayInfoProcess);
+			}
+		});
+		
+		//地图缩放时触发，当地图的缩放比例大于默认比例时，恢复为默认比例
+		google.maps.event.addListener(schedulemap, 'zoom_changed', function () {
+			if (schedulemap.getZoom() > defaultZoom){
+				schedulemap.setZoom(defaultZoom);
+			}
+		});
+	}
+function initialize() {
+  schedulemap = new google.maps.Map(document.getElementById('map'), {
+   zoom: 11,
+    center: {lat: 39.323907, lng: 116.109291}
+    //mapTypeId: google.maps.MapTypeId.SATELLITE
+  });	
+ 
+  // The photograph is courtesy of the U.S. Geological Survey.
+  var srcImage = 'dist/images/beachflag.png';
+  
+   getSoneone();
+for(var i=0;i<locationEntityList.length;i++){
+				new USGSOverlay(locationEntityList[i].position, locationEntityList[i].name,locationEntityList[i].time,locationEntityList[i].id, schedulemap);
+				
+          
+       }
+   //overlay = new USGSOverlay({lat: 39.323907, lng: 116.109291}, "大皇宫",'9:00-12:00', map);
+}
+    function placeDetailsByPlaceId(service, map, infowindow) {
+        // Create and send the request to obtain details for a specific place,
+        // using its Place ID.
+        var request = {
+            placeId: document.getElementById('place-id').value
+        };
+
+    }  /** @constructor */
+function USGSOverlay(latlng,name, time, id, map) {
+  // Initialize all properties.
+  this.latlng_ = latlng; 
+  this.name_ = name; 
+  this.time_ = time; 
+  this.map_ = map;
+	this.id_=id;
+  // Define a property to hold the image's div. We'll
+  // actually create this div upon receipt of the onAdd()
+  // method so we'll leave it null for now.
+  this.div_ = null;
+  // Explicitly call setMap on this overlay.
+  this.setMap(map);
+}
+ /**
+ * onAdd is called when the map's panes are ready and the overlay has been
+ * added to the map.
+ */
+USGSOverlay.prototype.onAdd = function() {
+
+  
+  // Create the img element and attach it to the div.
+  var div=$("<div class='warpcont' id='warpcont"+this.id_+"'></div>")[0];
+  $(div).html("<div class='pin'></div><div class='time2'><div class='name'><span>"+this.name_+this.time_+"</span></div></div>");
+  this.div_ = div;
+  // Add the element to the "overlayLayer" pane.
+  var panes = this.getPanes();
+  panes.overlayMouseTarget.appendChild(div);
+};
+USGSOverlay.prototype.draw = function() {
+  // We use the south-west and north-east
+  // coordinates of the overlay to peg it to the correct position and size.
+  // To do this, we need to retrieve the projection from the overlay.
+  var overlayProjection = this.getProjection();
+
+  // Retrieve the south-west and north-east coordinates of this overlay
+  // in LatLngs and convert them to pixel coordinates.
+  // We'll use these coordinates to resize the div.
+  var sw = overlayProjection.fromLatLngToDivPixel(new google.maps.LatLng(this.latlng_.lat
+					,this.latlng_.lng));
+  // Resize the image's div to fit the indicated dimensions.
+  var div = this.div_;
+  div.style.left = sw.x-32 + 'px';
+  div.style.top = sw.y-$(div).find(".pin").height() + 'px';
+	var that=this;
+  $(".warpcont").on(
+	{"mouseover":function(){
+		var id=$(this).attr("id").split("warpcont");
+		$(this).addClass("warpconthover");
+        $(this).siblings().removeClass("warpconthover");
+		$(this).css("z-index",9999);
+        $(".timeline-item").removeClass("active");
+        $("#timeline" + id[1]).addClass("active");
+        $("#timeline" + id[1]).parents("li").siblings(".time-label").find("span").removeClass("open");
+        $("#timeline" + id[1]).parents("li").prev().find("span").addClass("open");
+        $("#timeline" + id[1]).parents("li").siblings(".treestop").addClass("close");
+        $("#timeline" + id[1]).parents("li").removeClass("close");
+        //$("#timeline" + id[1]).parent().siblings().find(".timeline-item").removeClass("active");
+
+		},"mouseout":function(){
+        var id=$(this).attr("id").split("warpcont");
+			$(this).css("z-index",999)
+			//$(this).removeClass("active");
+       // $("#timeline" + id[1]).removeClass("active");
+		}
+	}
+	)
+};
+// The onRemove() method will be called automatically from the API if
+// we ever set the overlay's map property to 'null'.
+USGSOverlay.prototype.onRemove = function() {
+  this.div_.parentNode.removeChild(this.div_);
+  this.div_ = null;
+};
+// Set the visibility to 'hidden' or 'visible'.
+USGSOverlay.prototype.hide = function() {
+  if (this.div_) {
+    // The visibility property must be a string enclosed in quotes.
+    this.div_.style.visibility = 'hidden';
+  }
+};
+
+USGSOverlay.prototype.show = function() {
+  if (this.div_) {
+    this.div_.style.visibility = 'visible';
+  }
+};
+USGSOverlay.prototype.mouseover = function() {
+  if (this.div_) {
+    this.div_.style.visibility = 'hidden';
+  }
+};
+USGSOverlay.prototype.mouseout = function() {
+  if (this.div_) {
+    this.div_.style.visibility = 'visible';
+  }
+};
+USGSOverlay.prototype.toggle = function() {
+  if (this.div_) {
+    if (this.div_.style.visibility === 'hidden') {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+};
+
+// Detach the map from the DOM via toggleDOM().
+// Note that if we later reattach the map, it will be visible again,
+// because the containing <div> is recreated in the overlay's onAdd() method.
+USGSOverlay.prototype.toggleDOM = function() {
+  if (this.getMap()) {
+    // Note: setMap(null) calls OverlayView.onRemove()
+    this.setMap(null);
+  } else {
+    this.setMap(this.map_);
+  }
+}; 
+var timer=[];
+   
+function drop() {
+	clearMarkers();
+	for (var i = 0; i < neighborhood.length; i++) {
+		addMarkerWithTimeout(neighborhood[i].position, i * 200);
+		
+		(function(m){
+		   setTimeout(function(){
+
+			//showNewRect(m,neighborhood[m].text,neighborhood[m].name);
+   
+		   },300*m)
+		})(i);
+	}
+
+}
+ function addMarkerWithTimeout(position, timeout,callback) {
+        window.setTimeout(function() {
+            markers.push(new google.maps.Marker({
+                position: position,
+                map: schedulemap,
+                icon:imageinco,
+                animation: google.maps.Animation.DROP
+            }));
+           // callback();
+		   
+        }, timeout);
+
+    }
+function clearMarkers() {
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+	}
+	markers = [];
+}
+
+//use
+function showNewRect(i,txt,sex){
+		markers[i].addListener ('click', function(event) {
+			schedulemap.panTo(markers[i].getPosition());
+			return false;
+		})
+
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+$(function(){
+	$(".time-label").next("li").each(function (e, target) {
+	    var $target=  $(target),
+	        $ul = $target.find("ul");
+	    	$target.height($ul.outerHeight()), $ul.css("position", "absolute");
+		});
+		$(".time-label").on("click",function(){
+			if($(this).next().hasClass("close")){
+				$(this).next().removeClass("close");
+			}else{
+				$(this).next().addClass("close");
+			}
+
+	})
+
+	$(".timeline-item").on({mouseover:function(){
+            var id = $(this).attr("id").split("timeline");
+        	$(".timeline-item").removeClass("active");
+            $(this).addClass("active");
+            //$(this).parent().siblings().find(".timeline-item").removeClass("active");
+            $("#warpcont" + id[1]).addClass("warpconthover");
+            $("#warpcont" + id[1]).siblings().removeClass("warpconthover");
+       // that.map_.panTo(new google.maps.LatLng(that.latlng_.lat,that.latlng_.lng));
+
+	},mouseout:function(){
+            var id = $(this).attr("id").split("timeline");
+            //$(this).removeClass("active");
+            //$("#warpcont" + id[1]).removeClass("warpconthover");
+		}
+	})
+
+})
+</script>
+#end

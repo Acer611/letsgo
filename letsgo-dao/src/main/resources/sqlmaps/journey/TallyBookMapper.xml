@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.TallyBookDao" >
+    
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.TallyBookEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="tx_groupId" property="txGroupId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="expense" property="type" jdbcType="INTEGER" />
+        <result column="money" property="money" jdbcType="DOUBLE" />
+        <result column="equivalent_money" property="equivalentMoney" jdbcType="DOUBLE" />
+        <result column="currency" property="currency" jdbcType="VARCHAR" />
+        <result column="record_date" property="date" jdbcType="VARCHAR" />
+        <result column="payment_type" property="paymentType" jdbcType="INTEGER" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="photo_url" property="imgUrl" jdbcType="VARCHAR" />
+        <result column="currency_name" property="currencyName" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <resultMap id="staticsConsumptionInfo" type="com.umessage.letsgo.domain.po.journey.StaticsConsumptionInfo">
+    	<result column="equivalent_money" property="totalMoney" jdbcType="DOUBLE"/>
+    	<result column="expense" property="typeId" jdbcType="INTEGER"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.TallyBookEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        	insert into s_tally_book (user_id,expense,money,equivalent_money, currency, payment_type,record_date,remarks,photo_url,tx_groupId,create_time)
+        values (#{userId,jdbcType=BIGINT},#{type,jdbcType=VARCHAR},#{money,jdbcType=DOUBLE},#{equivalentMoney,jdbcType=DOUBLE},#{currency,jdbcType=BIGINT},#{paymentType,jdbcType=INTEGER},#{date,jdbcType=TIMESTAMP},#{remarks,jdbcType=VARCHAR},#{imgUrl,jdbcType=VARCHAR},#{txGroupId,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR})
+    </insert>
+   
+   <select id="selectConsumptionList" resultMap="BaseResultMap">
+       select tb.id, tx_groupId,user_id,expense,money,currency,record_date,payment_type,remarks,photo_url,
+       nd.name as currency_name
+       from s_tally_book tb
+       LEFT JOIN s_nation_dictionary nd ON tb.currency = nd.code
+       <where>
+           <if test="null != txGroupId"> and tb.tx_groupId = #{txGroupId}</if>
+           <if test="null != userId"> and tb.user_id = #{userId}</if>
+           <if test="null != typeId"> and tb.expense = #{typeId}</if>
+       </where>
+       order by tb.record_date
+   </select>
+   
+   <select id="statisticsTotalConsumptionList" resultMap="staticsConsumptionInfo">
+   		select expense as typeId,sum(equivalent_money) as totalMoney from s_tally_book where tx_groupId = #{txGroupId} and user_id = #{userId} group by expense
+   </select>
+</mapper>

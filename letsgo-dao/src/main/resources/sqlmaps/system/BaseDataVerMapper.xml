@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.BaseDataVerDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.BaseDataVerEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+        <result column="module" property="module" jdbcType="VARCHAR" />
+        <result column="version" property="version" jdbcType="VARCHAR" />
+        <result column="updateurl" property="updateurl" jdbcType="VARCHAR" />
+        <result column="checkcode" property="checkcode" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_basedata_ver
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.BaseDataVerEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into s_basedata_ver (device_type, module, version, 
+            updateurl, checkcode, create_time, 
+            update_time)
+        values (#{deviceType,jdbcType=VARCHAR}, #{module,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
+            #{updateurl,jdbcType=VARCHAR}, #{checkcode,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+            #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.BaseDataVerEntity" >
+        update s_basedata_ver
+        set device_type = #{deviceType,jdbcType=VARCHAR},
+            module = #{module,jdbcType=VARCHAR},
+            version = #{version,jdbcType=VARCHAR},
+            updateurl = #{updateurl,jdbcType=VARCHAR},
+            checkcode = #{checkcode,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, device_type, module, version, updateurl, checkcode, create_time, update_time
+        from s_basedata_ver
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, device_type, module, version, updateurl, checkcode, create_time, update_time
+        from s_basedata_ver
+    </select>
+
+    <select id="selectLasterVerInfo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, device_type, module, version, updateurl, checkcode, create_time, update_time
+        from (select ID, device_type, module, version, updateurl, checkcode, create_time, update_time
+        from s_basedata_ver
+        <where>
+            <if test="null != deviceType"> and device_type = #{deviceType} </if>
+            <if test="null != module"> and module = #{module} </if>
+        </where>
+        order by id desc) as b limit 0,1
+    </select>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.activity.LocationHistoryDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.activity.LocationHistoryEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="finish_time" property="finishTime" jdbcType="TIMESTAMP" />
+        <result column="ip" property="ip" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from a_location_history
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.activity.LocationHistoryEntity" >
+        insert into a_location_history (ID, user_id, longitude, 
+            latitude, location, finish_time, 
+            ip, create_time, version
+            )
+        values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{longitude,jdbcType=DOUBLE}, 
+            #{latitude,jdbcType=DOUBLE}, #{location,jdbcType=VARCHAR}, #{finishTime,jdbcType=TIMESTAMP}, 
+            #{ip,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.activity.LocationHistoryEntity" >
+        update a_location_history
+        set user_id = #{userId,jdbcType=BIGINT},
+            longitude = #{longitude,jdbcType=DOUBLE},
+            latitude = #{latitude,jdbcType=DOUBLE},
+            location = #{location,jdbcType=VARCHAR},
+            finish_time = #{finishTime,jdbcType=TIMESTAMP},
+            ip = #{ip,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, longitude, latitude, location, finish_time, ip, create_time, 
+        version
+        from a_location_history
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, user_id, longitude, latitude, location, finish_time, ip, create_time, 
+        version
+        from a_location_history
+    </select>
+
+    <select id="getMemberTrack" resultMap="BaseResultMap" >
+        select alh.ID, alh.user_id, alh.longitude, alh.latitude, alh.location, alh.finish_time, alh.ip, alh.create_time,
+          alh.version
+        from a_location_history alh, s_user su, t_member tm, j_schedule js
+        where alh.user_id = su.ID and tm.user_id = su.ID
+          and tm.t_id = js.team_id and (alh.create_time BETWEEN js.start_date and (js.end_date + 1))
+          and tm.t_id = #{tId,jdbcType=BIGINT}
+          and alh.user_id = #{userId, jdbcType=BIGINT}
+          ORDER BY alh.user_id, alh.create_time
+    </select>
+
+
+    <select id="selectLocationWithUserIdAndDate" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.activity.request.LocationHistoryRequest">
+        select ID, user_id, longitude, latitude, location, finish_time, ip, create_time,
+        version
+        from a_location_history
+        where user_id IN
+        <foreach collection="userIds" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        and DATE_FORMAT(create_time,'%Y-%m-%d') = #{date}
+        ORDER BY create_time
+    </select>
+
+    <select id="selectCountWithUserIdAndDate" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.activity.request.LocationHistoryRequest">
+        SELECT COUNT(ID)
+        FROM a_location_history
+        WHERE 1 = 1
+        <if test="userIds != null and userIds.size()>0">
+        AND user_id IN
+        <foreach collection="userIds" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        </if>
+        <if test="null != startDate"> AND DATE_FORMAT(create_time,'%Y-%m-%d') &gt;= DATE_FORMAT(#{startDate}, '%Y-%m-%d') </if>
+        <if test="null != endDate"> AND DATE_FORMAT(create_time,'%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate}, '%Y-%m-%d') </if>
+        <if test="null != slongitude and null != slatitude">
+        AND queryDistance(#{slongitude,jdbcType=DOUBLE},#{slatitude,jdbcType=DOUBLE},longitude,latitude) &lt;= 10
+        </if>
+    </select>
+</mapper>

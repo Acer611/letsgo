@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.UserRoleDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.UserRoleEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <resultMap id="MultiResultMap" type="com.umessage.letsgo.domain.po.security.UserRoleEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <association property="role" column="role_id" javaType="com.umessage.letsgo.domain.po.security.RoleEntity">
+            <id column="r_id" property="id" jdbcType="BIGINT" />
+            <result column="roleName" property="rolename" jdbcType="VARCHAR" />
+            <result column="descn" property="descn" jdbcType="VARCHAR" />
+            <result column="r_createTime" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="r_updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="r_ver" property="version" jdbcType="BIGINT" />
+        </association>
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_user_role
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.UserRoleEntity" >
+        insert into s_user_role (ID, user_id, role_id, 
+            create_time, update_time, version
+            )
+        values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.UserRoleEntity" >
+        update s_user_role
+        set user_id = #{userId,jdbcType=BIGINT},
+            role_id = #{roleId,jdbcType=BIGINT},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, role_id, create_time, update_time, version
+        from s_user_role
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, user_id, role_id, create_time, update_time, version
+        from s_user_role
+    </select>
+    <select id="selectUserRoleWithConditions" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.po.security.UserRoleEntity" >
+        select ur.ID, ur.user_id, ur.role_id, ur.create_time, ur.update_time, ur.version,
+        r.ID as r_id, r.roleName, r.descn, r.create_time as r_createTime, r.update_time as r_updateTime, r.version as r_ver
+        from s_user_role as ur
+        left join s_role as r on ur.role_id = r.ID
+        <where>
+        	<if test="null != userId"> and ur.user_id = #{userId}</if>
+        	<if test="null != roleId"> and ur.role_id = #{roleId}</if>
+        </where>
+    </select>
+    <update id="updateByUserId" parameterType="java.lang.Long" >
+        update s_user_role
+        set role_id = #{roleId,jdbcType=BIGINT},
+            update_time = sysdate()
+        where user_id = #{userId,jdbcType=BIGINT}
+          and role_id in (6,7)
+    </update>
+    
+</mapper>

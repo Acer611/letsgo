@@ -1,0 +1,366 @@
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <style type="text/css">
+        *{font-family: 'SimSun';}
+    </style>
+
+    <style type="text/css">
+        /*title*/
+        .surveyTitle{
+            width:100%;
+            height:96px;
+            position: relative;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #d9d9d9;
+        }
+        .surveyTitle1{
+            height:96px;
+            padding:0 4%;
+            /*display: -webkit-flex;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;*/
+        }
+        .survey-title-img{
+            display:inline-block;
+            /*width:76px;
+            height:76px;*/
+            height:80%;
+            margin-top:10px;
+
+        }
+        .survey-title-img img{
+            /*width:76px;
+            height:76px;*/
+            height:100%;
+        }
+        .survey-title-text{
+            display: inline-block;
+            font-size: 18px;
+            /*flex:1;*/
+            padding-left:10px;
+            min-width:100px;
+            max-width:250px;
+            vertical-align: middle;
+            height:100%;
+        }
+        .survey-title-text p{
+            font-size:18px;
+        }
+        /*08月24日*/
+        .survey-month{
+            width:94%;
+            height:38px;
+            padding:0 3%;
+            line-height:38px;
+            font-size: 17px;
+            color:#1fbad1;
+            float:left;
+        }
+        /*问题1*/
+        .ques1{
+            width:96%;
+            float:left;
+            margin-left:2%;
+            border-bottom:1px dotted #dcdcdc;
+        }
+        .ques1:first-child{
+            margin-top:10px;
+        }
+        .ques1:last-child{
+            border-bottom: 0;
+            margin-bottom:5px;
+        }
+        .quesTitle{
+            /*width:80%;*/
+            /*height:34px;*/
+            line-height:28px;
+            padding:0 10px;
+            color:#333333;
+            font-size: 16px;
+            margin-top:5px;
+        }
+        .itemList ul{
+            padding:0 3%;
+        }
+
+        .itemList ul li{
+            float:left;
+            /*width:44%;*/
+            height:35px;
+            display: inline-block;
+            line-height:35px;
+            padding-left:6%;
+        }
+        .itemList ul li span{
+            font-size: 14px;
+            vertical-align: middle;
+        }
+        .active-bg{
+            background: #f0eff5;
+        }
+        /*下一步*/
+        .survey-submit{
+            width:100%;
+            height:49px;
+            border:0;
+            background: #1fbad1;
+            color:#fff;
+            font-size: 18px;
+            margin-top:10px;
+            position: fixed;
+            left:0;
+            bottom:0;
+            text-decoration:none;
+            text-align: center;
+            line-height: 50px;
+            display: block;
+        }
+        .survey-submit:hover{
+            text-decoration:none;
+        }
+        @media (max-width: 300px) {
+            .survey-title-text{
+                font-size: 14px;
+                padding-left:10px;
+            }
+            .quesTitle{
+                width:84%;
+                padding:0 8%;
+            }
+            .survey-submit{
+                height:40px;
+            }
+        }
+        /*问题*/
+        .quest{
+            position: relative;
+            width:92%;
+            margin:30px 4% 0 4%;
+            border-radius:10px;
+            border:1px solid #dcdcdc;
+        }
+
+
+        /*签名*/
+        .pict{
+            width:82%;
+            float:left;
+            padding:10px 5%;
+            margin:30px 4% 20px 4%;
+            text-align: center;
+            background:#ebfafc;
+            border-radius:10px;
+            border:1px solid #dcdcdc;
+            position: relative;
+        }
+        .pict p{
+            position: absolute;
+            left:20px;
+            top:-12px;
+            color:#48c6d9;
+            font-size:20px;
+            background: -webkit-linear-gradient(top, #fff, #ebfafc);   /*Safari5.1 Chrome 10+*/
+            padding:0 5px;
+            font-weight:900;
+        }
+        .pict img{
+            width:250px;
+            height:250px;
+            margin-top:10px;
+        }
+
+        /*user*/
+        .padding50{
+            width:100%;
+            height:3rem;
+            float:left;
+        }
+        .padding15{
+            width:100%;
+            height:1.5rem;
+            float:left;
+        }
+        .itemList ul textarea{
+            width:86%;
+            margin-left: 5%;
+            margin-top:10px;
+            border-color:#f0eff5;
+            padding:5px;
+            font-size: 12px;
+        }
+        /*评分景点*/
+        .pingfen {
+            float: left;
+            padding-left: 8%;
+            width: 90%;
+            height: 30px;
+            line-height: 30px;
+            font-size: 15px;
+            color: #333333;
+            padding-left:12px;
+        }
+        .pingfen span {
+            display: inline-block;
+            min-width: 10px;
+            padding-right: 6px;
+            vertical-align: sub;
+        }
+        .pingfen b {
+            display: inline-block;
+            height: 25px;
+            width: 180px;
+            vertical-align: bottom;
+            margin-bottom: 5px;
+            font-weight: 100;
+            line-height: 25px;
+        }
+        /*.star50,.star45,.star40,.star35,.star30,.star25,.star20,.star15,.star10,.star05,.star0{
+            background:url(../images/star1.png) no-repeat;
+        }*/
+        .star50{
+            background:url(../images/star/star50.png) no-repeat;
+            /*background-position: -3px 0;*/
+        }
+        .star45{
+            background:url(../images/star/star45.png) no-repeat;
+            /*background-position: -3px -23px;*/
+        }
+        .star40{
+            background:url(../images/star/star40.png) no-repeat;
+            /*background-position: -3px -45px;*/
+        }
+        .star35{
+            background:url(../images/star/star35.png) no-repeat;
+            /*background-position: -3px -67px;*/
+        }
+        .star30{
+            background:url(../images/star/star30.png) no-repeat;
+            /*background-position: -3px -89px;*/
+        }
+        .star25{
+            background:url(../images/star/star25.png) no-repeat;
+            /*background-position: -3px -112px;*/
+        }
+        .star20{
+            background:url(../images/star/star20.png) no-repeat;
+            /*background-position: -3px -135px;*/
+        }
+        .star15{
+            background:url(../images/star/star15.png) no-repeat;
+            /*background-position: -3px -157px;*/
+        }
+        .star10{
+            background:url(../images/star/star10.png) no-repeat;
+            /*background-position: -3px -178px;*/
+        }
+        .star05{
+            background:url(../images/star/star05.png) no-repeat;
+            /*background-position: -3px -201px;*/
+        }
+        .star0{
+            background:url(../images/star/star0.png) no-repeat;
+            /*background-position: -3px -224px;*/
+        }
+
+        .itemList ul li.anwer{padding-left:12px;}
+
+        label{
+            display: inline-block;
+            width:80%;
+            font-size:14px;
+        }
+    </style>
+
+
+</head>
+
+<body>
+<div id="survey-container">
+    <!--title-->
+    <div class="surveyTitle">
+        <div class="surveyTitle1">
+            <div class="survey-title-img">
+                <img src="${titleImage}" alt=""/>
+            #*<img src="$!{STATIC_URL}/resources/images/img/title.png" />*#
+            </div>
+            <div class="survey-title-text">
+                <p>${title}</p>
+            </div>
+        </div>
+    </div>
+    <!--问题-->
+    <div class="quest">
+        <p style="position: absolute;left:20px;top:-32px;color:#48c6d9;font-size:20px;padding:0 5px;background:#fff;font-weight:900;">问卷内容</p>
+        <div style="clear:both;overflow:hidden;">
+            #set ($i=0)
+            #foreach($list in ${questionList})
+                #set($i=$i+1)
+                <div class="ques1">
+                    <div class="quesTitle">
+                        <span>$!i.</span>$!list.title
+                    </div>
+                    <div class="itemList">
+                        <ul>
+
+                            #if($list.questionType==1)
+                                #foreach($list1 in $list.optionList)
+                                    #if($list.questionOptionId==$list1.id)
+                                        <li id="$list.id" class="anwer">
+                                            <span>$!list1.questionOption</span>
+                                        </li>
+                                    #end
+                                #end
+                            #end
+
+                            #if($list.questionType==2)
+                                #foreach($list1 in $list.optionList)
+                                    #foreach($optionList in $list.moreOptionList)
+                                        #if($optionList==$list1.id)
+                                            <li  class="anwer" id="$list.id">
+                                                <span>$!list1.questionOption</span>
+
+                                            </li>
+                                        #end
+                                    #end
+                                #end
+                            #end
+
+                            #if($list.questionType==3)
+                                <li  class="anwer"  id="$list.id">
+                                    <span>$!list.content</span>
+                                </li>
+
+                            #end
+
+                            #if($list.questionType==4)
+                                <li id="$list.id" class="anwer">
+                                    <span>$!list.optionAnswer</span>
+                                </li>
+                            #end
+                        </ul>
+                    </div>
+                </div>
+            #end
+
+        </div>
+    </div>
+    <div class="pict">
+        <p>游客签名</p>
+    #*  <img src="images.jpg"/>*#
+        <img src="${signUrl}" alt=""/>
+    </div>
+    #if(${confirmStatus}==0)
+
+        <div class="padding50">
+
+        </div>
+        <!--提交-->
+        <input type="submit" value="确认" id="confirmSurvey" class="survey-submit"/>
+    #end
+</div>
+</body>
+</html>

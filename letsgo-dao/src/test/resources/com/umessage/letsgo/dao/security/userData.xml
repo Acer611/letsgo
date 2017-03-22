@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<s_user id="1001" user_name="zhajl" nick_name="Phillip" password="123456" phone="13488786266" mail="zhajl@umessage.com"/>
+
+	<s_role id="1" roleName="CAPTAIN" descn="领队" />
+
+	<s_user_role id="101" user_id="1001" role_id="1" />
+</dataset>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.SurveyDetailDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.SurveyDetailEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="confirm_status" property="confirmStatus" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="survey_id" property="surveyId" jdbcType="BIGINT" />
+        <result column="tx_groupId" property="txgroupId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="pdf_url" property="pdfUrl" jdbcType="VARCHAR" />
+        <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
+        <result column="sign_url" property="signUrl" jdbcType="VARCHAR" />
+        <result column="real_name" property="userName" jdbcType="VARCHAR" />
+        <result column="photo_url" property="userPhotoUrl" jdbcType="VARCHAR" />
+        <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR"/>
+        <result column="first" property="first" jdbcType="INTEGER" />
+
+    </resultMap>
+
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.SurveyDetailEntity">
+        INSERT INTO j_survey_detail (
+        survey_id, user_id, confirm_status,
+        create_time, version, tx_groupId, submit_time, sign_url,first)
+        VALUES (#{surveyId}, #{userId}, #{confirmStatus},
+        #{createTime}, #{version}, #{txgroupId}, #{submitTime}, #{signUrl},#{first})
+    </insert>
+
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.SurveyDetailEntity">
+        UPDATE j_survey_detail SET
+            survey_id = #{surveyId},
+            user_id = #{userId},
+            confirm_status = #{confirmStatus},
+            create_time = #{createTime},
+            version = version + 1,
+            tx_groupId = #{txgroupId},
+            submit_time = #{submitTime},
+            first = #{first},
+            sign_url = #{signUrl}
+        WHERE ID = #{id} AND version = #{version}
+    </update>
+
+  <select id="getByUseIdAndTxGroupId"  resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.SurveyDetailRequest"  >
+      select n.ID, n.confirm_status, n.user_id,n.survey_id,n.tx_groupId,n.first,
+       n.create_time
+      from j_survey_detail as n
+      <where>
+          <if test="null != confirmStatus"> and n.confirm_status = #{confirmStatus} </if>
+          <if test="null != txgroupId"> and n.tx_groupId = #{txgroupId} </if>
+          <if test="null != userId"> and n.user_id = #{userId} </if>
+      </where>
+      ORDER BY n.create_time DESC LIMIT 1
+
+  </select>
+   <select id="getPdfList" resultMap="BaseResultMap" parameterType="java.lang.Long">
+       select s.title as name,d.pdf_url,d.thumbnail_url,d.ID,d.first FROM  j_survey s,j_survey_detail d WHERE s.ID=d.survey_id AND d.survey_id=#{surveyId,jdbcType=BIGINT}
+       AND  d.confirm_status=1
+   </select>
+
+    <select id="getPdfListOne" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select s.title as name,u.real_name,d.pdf_url,d.thumbnail_url,d.ID,d.first FROM j_survey_detail d
+        LEFT JOIN j_survey  AS s ON d.survey_id = s.ID
+        LEFT JOIN s_user AS u ON d.user_id = u.ID
+        WHERE d.confirm_status=1 AND d.survey_id=#{surveyId,jdbcType=BIGINT}
+    </select>
+    <!-- 批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO j_survey_detail (survey_id, user_id, confirm_status,
+        create_time, version, tx_groupId, submit_time, sign_url,first)
+        VALUES <foreach collection="list" item="item" index="index" separator=",">
+        ( #{item.surveyId}, #{item.userId}, #{item.confirmStatus},
+        #{item.createTime}, #{item.version}, #{item.txgroupId}, #{item.submitTime}, #{item.signUrl},#{item.first} )
+        </foreach>
+    </insert>
+
+    <select id="getSurveyDetailById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT * FROM j_survey_detail WHERE ID = #{id}
+    </select>
+
+    <select id="getNotFilledSurveyDetailList" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.SurveyDetailRequest">
+        SELECT sd.ID, sd.submit_time, sd.confirm_status, sd.pdf_url,sd.thumbnail_url,
+        sd.tx_groupId, sd.survey_id, sd.user_id, sd.create_time, sd.version,sd.first,
+        u.real_name, u.photo_url
+        FROM j_survey_detail sd LEFT JOIN s_user AS u ON sd.user_id = u.ID
+        WHERE sd.tx_groupId = #{txgroupId}  AND ISNULL(sd.sign_url)
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="getFilledSurveyDetailList" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.SurveyDetailRequest">
+        SELECT sd.ID, sd.submit_time, sd.confirm_status, sd.pdf_url,sd.thumbnail_url,
+        sd.tx_groupId, sd.survey_id, sd.user_id, sd.create_time, sd.version,sd.first,
+        u.real_name, u.photo_url
+        FROM j_survey_detail sd LEFT JOIN s_user AS u ON sd.user_id = u.ID
+        WHERE sd.tx_groupId = #{txgroupId}  AND !ISNULL(sd.sign_url)
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="submitSignUrl" parameterType="com.umessage.letsgo.domain.vo.journey.request.SurveyRequest">
+        UPDATE j_survey_detail SET
+        version = version + 1,
+        submit_time = #{submitTime,jdbcType=TIMESTAMP},
+        sign_url= #{signUrl,jdbcType=VARCHAR}
+        WHERE user_id = #{userId,jdbcType=BIGINT} AND tx_groupId = #{txGroupId,jdbcType=BIGINT}
+    </update>
+
+    <select id="getConfirmSurvey"  resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.SurveyDetailRequest"  >
+        select n.ID, n.confirm_status, n.user_id,n.survey_id,n.tx_groupId,n.pdf_url,n.thumbnail_url,n.first,
+        n.create_time
+        from j_survey_detail as n
+        <where>
+            <if test="null != confirmStatus"> and n.confirm_status = #{confirmStatus} </if>
+            <if test="null != txgroupId"> and n.tx_groupId = #{txgroupId} </if>
+            <if test="null != userId"> and n.user_id = #{userId} </if>
+        </where>
+        ORDER BY n.create_time DESC
+    </select>
+
+    <select id="getConfirmSurveyOne"  resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.SurveyDetailRequest"  >
+        select n.ID, n.confirm_status, n.user_id,n.survey_id,n.tx_groupId,n.pdf_url,n.thumbnail_url,t.name,u.real_name,
+        n.create_time
+        from j_survey_detail as n
+        LEFT JOIN s_user AS u ON n.user_id = u.ID
+        LEFT JOIN t_team AS t ON n.tx_groupId = t.tx_groupId
+        <where>
+            <if test="null != confirmStatus"> and n.confirm_status = #{confirmStatus} </if>
+            <if test="null != txgroupId"> and n.tx_groupId = #{txgroupId} </if>
+        </where>
+        ORDER BY n.create_time DESC
+    </select>
+
+    <update id="updatePdfUrl" parameterType="com.umessage.letsgo.domain.po.journey.SurveyDetailEntity">
+        UPDATE  j_survey_detail n SET  n.pdf_url=#{pdfUrl} WHERE  n.ID=#{id}
+    </update>
+
+    <update id="updatePngUrl" parameterType="com.umessage.letsgo.domain.po.journey.SurveyDetailEntity">
+       UPDATE  j_survey_detail n SET  n.thumbnail_url=#{thumbnailUrl} WHERE n.ID=#{id}
+    </update>
+    <update id="updateFirst" parameterType="com.umessage.letsgo.domain.po.journey.SurveyDetailEntity">
+        UPDATE j_survey_detail SET
+        first = #{first}
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 批量确认问卷 -->
+    <update id="batchUpdate" parameterType="java.util.List" >
+        UPDATE  j_survey_detail SET  confirm_status = 1
+        WHERE id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

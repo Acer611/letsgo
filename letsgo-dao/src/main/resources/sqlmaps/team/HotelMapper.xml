@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.HotelDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.HotelEntity" >
+        <id column="hotel_id" property="hotelId" jdbcType="VARCHAR" />
+        <result column="hotel_chinese_name" property="hotelChineseName" jdbcType="VARCHAR" />
+        <result column="hotel_english_name" property="hotelEnglishName" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="delta" property="delta" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="country_name" property="countryName" jdbcType="VARCHAR" />
+        <result column="country_id" property="countryId" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+        <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+        <result column="part_icular_address" property="partIcularAddress" jdbcType="VARCHAR" />
+        <result column="star_lv" property="starLv" jdbcType="BIGINT" />
+        <result column="briefintroduction" property="briefintroduction" jdbcType="VARCHAR" />
+        <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+        <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+        <result column="hotel_pingyin_name" property="hotelPingyinName" jdbcType="VARCHAR" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.String" >
+        delete from d_hotel
+        where hotel_id = #{hotelId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.HotelEntity" >
+        insert into d_hotel (hotel_id, hotel_chinese_name, hotel_english_name,
+        lon, lat, delta,
+        country, country_name, country_id, city, city_name, city_id, part_icular_address,
+        star_lv, briefintroduction, telephone,
+        pic_url, hotel_pingyin_name)
+        values (#{hotelId,jdbcType=VARCHAR}, #{hotelChineseName,jdbcType=VARCHAR}, #{hotelEnglishName,jdbcType=VARCHAR},
+        #{lon,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, #{delta,jdbcType=VARCHAR},
+        #{country,jdbcType=VARCHAR}, #{countryName,jdbcType=VARCHAR}, #{countryId,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{partIcularAddress,jdbcType=VARCHAR},
+        #{starLv,jdbcType=BIGINT}, #{briefintroduction,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
+        #{picUrl,jdbcType=VARCHAR}, #{hotelPingyinName,jdbcType=VARCHAR})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.HotelEntity" >
+        update d_hotel
+        set hotel_chinese_name = #{hotelChineseName,jdbcType=VARCHAR},
+        hotel_english_name = #{hotelEnglishName,jdbcType=VARCHAR},
+        lon = #{lon,jdbcType=VARCHAR},
+        lat = #{lat,jdbcType=VARCHAR},
+        delta = #{delta,jdbcType=VARCHAR},
+        country = #{country,jdbcType=VARCHAR},
+        country_name = #{countryName,jdbcType=VARCHAR},
+        country_id = #{countryId,jdbcType=VARCHAR},
+        city = #{city,jdbcType=VARCHAR},
+        city_name = #{cityName,jdbcType=VARCHAR},
+        city_id = #{cityId,jdbcType=VARCHAR},
+        part_icular_address = #{partIcularAddress,jdbcType=VARCHAR},
+        star_lv = #{starLv,jdbcType=BIGINT},
+        briefintroduction = #{briefintroduction,jdbcType=VARCHAR},
+        telephone = #{telephone,jdbcType=VARCHAR},
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+        hotel_pingyin_name = #{hotelPingyinName,jdbcType=VARCHAR}
+        where hotel_id = #{hotelId,jdbcType=VARCHAR}
+    </update>
+    <select id="getHotel" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.HotelRequest" >
+        select hotel_id, hotel_chinese_name, hotel_english_name, lon, lat, delta, country, country_name, country_id,
+        city, city_name, city_id, part_icular_address, star_lv, briefintroduction, telephone, pic_url, hotel_pingyin_name
+        from d_hotel
+        where city =#{city,jdbcType=VARCHAR} AND hotel_chinese_name LIKE #{hotelChineseName,jdbcType=VARCHAR} OR city =#{city,jdbcType=VARCHAR} AND hotel_english_name LIKE  #{hotelChineseName,jdbcType=VARCHAR}  limit 1,10
+    </select>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select hotel_id, hotel_chinese_name, hotel_english_name, lon, lat, delta, country, country_name, country_id,
+        city, city_name, city_id, part_icular_address, star_lv, briefintroduction, telephone, pic_url, hotel_pingyin_name
+        from d_hotel WHERE hotel_id=#{hotelId}
+    </select>
+    <select id="getHotelByName" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.HotelRequest" >
+        select hotel_id, hotel_chinese_name, hotel_english_name, lon, lat, delta, country, country_name, country_id,
+        city, city_name, city_id, part_icular_address, star_lv, briefintroduction, telephone, pic_url, hotel_pingyin_name
+        from d_hotel
+        where hotel_chinese_name LIKE CONCAT('%',#{hotelChineseName},'%')
+    </select>
+    <select id="getHotelByNameAndCityName" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.HotelRequest" >
+        select hotel_id, hotel_chinese_name, hotel_english_name, lon, lat, delta, country, country_name, country_id,
+        city, city_name, city_id, part_icular_address, star_lv, briefintroduction, telephone, pic_url, hotel_pingyin_name
+        from d_hotel
+        where hotel_chinese_name LIKE CONCAT('%',#{hotelChineseName},'%')
+        AND city_name IN
+        <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

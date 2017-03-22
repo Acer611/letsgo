@@ -1,0 +1,437 @@
+#set($pageTitle=" #if($response.noticeEntity.type==1)集合位置 #else 事件位置#end")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/map.css?t=1"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/infobubble.js","http://maps.google.cn/maps/api/js?region=cn&language=zh-CN&key=AIzaSyBJm0v_D7f-Oywc2ZIxRApmC8tAQI1q07k","http://res.wx.qq.com/open/js/jweixin-1.0.0.js"])
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+</style>
+
+
+<div id="gMap"></div>
+<div class="mapTopnotice">
+    <div class="collcontainer">
+        <div class="decrip">$!{response.noticeEntity.content}
+            #if(${response.noticeEntity.videoUrl}&&${response.noticeEntity.videoUrl}!="")
+                <audio src="$!{response.noticeEntity.videoUrl}" id="audio" controls="controls" style="display:none;"></audio>
+                <div class="playshow">
+                    <div class="wifi-symbolnew">
+                        <div class="wifi-circle first"></div>
+                        <div class="wifi-circle second"></div>
+                        <div class="wifi-circle third"></div>
+                    </div>
+                    <div class="timecontrule">$!{response.noticeEntity.videoLen}</div>
+                </div>
+            #end
+
+        </div>
+        #if(${response.noticeEntity.time}&&${response.noticeEntity.time}!="")
+
+        <div class="detime">
+            <dl>
+                <dt>集合时间：</dt>
+                <dd>
+                     <div>$!date.format('MM月dd日 HH:mm',$!{response.noticeEntity.time})（$!{response.noticeEntity.timezone}）</div>
+                    <div class="timedus" style="display:none;">距离集合还有2小时20分</div>
+                 </dd>
+            </dl>
+        </div>
+        #end
+    </div>
+    <div class="collon"></div>
+</div>
+<div class="mapbottomnotice" style="display:none;"><div class="stepstime"></div></div>
+
+
+
+#define($scriptBlock)
+        <script>
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r!=null) return (r[2]); return null;
+    }
+    var _lngnow=Number(GetQueryString("lng"));
+    var _latnow=Number(GetQueryString("lat"));
+    var markers = [];
+    var map;
+    var marker;
+    var defaultZoom = 18;
+    var neighborhood=[];
+    var neighborhood2=[];
+    var directionsDisplay;
+    var directionsService;
+    var markerWeixin;
+##    var imageinco = {
+##        url: #if(${response.noticeEntity.type}==1) '/openapi/resources/images/mapsearch.png'#else '/openapi/resources/images/mapevent.png' #end
+##
+##    }
+    var imageinco = {
+        url: '$!{STATIC_URL}/resources/images/beachflag.png'
+
+    }
+    neighborhood.push({lat:$!{response.noticeEntity.latitude},lng:$!{response.noticeEntity.longitude}});
+    neighborhood2.push({lat:$!{response.noticeEntity.latitude},lng:$!{response.noticeEntity.longitude}});
+
+    var myLatlng = {lat: _latnow, lng:_lngnow};
+    function initialize() {
+        map = new google.maps.Map(document.getElementById('gMap'), {
+            zoom: defaultZoom,
+            center: myLatlng,
+            disableDefaultUI: true,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            draggable: true,
+            scrollwheel: true,
+            disableDoubleClickZoom: false,
+            maxZoom:18,
+            minZoom:5
+        });
+
+        marker = new google.maps.Marker({
+            position: myLatlng,
+            optimized: false,
+            map: map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                strokeColor: '#fff',
+                strokeWeight: 3,
+                fillColor: '#1484ff',
+                fillOpacity: 1,
+            },
+        });
+        infoBubble2 = new InfoBubble({
+            map: map,
+            content:#if(${response.noticeEntity.type}==1)  '<div class="jiheshijian"><img src="$!{STATIC_URL}/resources/images/jihe.png"/></div>'#else '<div class="jiheshijian"><img src="$!{STATIC_URL}/resources/images/shijian.png"/></div>' #end,
+            position: new google.maps.LatLng($!{response.noticeEntity.latitude}, $!{response.noticeEntity.longitude}),
+            shadowStyle: 0,
+            padding: 0,
+            backgroundColor: 'none',
+            borderRadius: 0,
+            arrowSize: '0px',
+            borderWidth: 'none',
+            borderColor: '#2c2c2c',
+            disableAutoPan: true,
+            hideCloseButton: true,
+            arrowPosition: '49%',
+            pixelOffset: [0,'32'],
+            backgroundClassName: 'transparent',
+            arrowStyle: 0
+        });
+
+        var trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
+        var myCity = new google.maps.Circle({
+            strokeColor: '#1484ff',
+            strokeOpacity: 0.15,
+            strokeWeight: 0,
+            fillColor: '#1484ff',
+            fillOpacity:0.15,
+            map: map,
+            center: myLatlng,
+            radius: 50
+        });
+        myCity.setMap(map);
+        drop();
+        neighborhood2.push({lat:myLatlng.lat,lng:myLatlng.lng})
+        var centerui=map.getCenter();
+        var len2=neighborhood2.length;
+        var bounds = new google.maps.LatLngBounds();
+        while(len2--){
+            bounds.extend(new google.maps.LatLng(neighborhood2[len2].lat
+                    ,neighborhood2[len2].lng));
+        }
+        map.fitBounds(bounds);
+        var displayInfoProcess=google.maps.event.addListener(map, 'bounds_changed', function(){
+            if(displayInfoProcess) {
+                google.maps.event.removeListener(displayInfoProcess);
+            }
+        });
+        //地图缩放时触发，当地图的缩放比例大于默认比例时，恢复为默认比例
+        google.maps.event.addListener(map, 'zoom_changed', function () {
+            if (map.getZoom() > defaultZoom){
+                map.setZoom(defaultZoom);
+            }
+        });
+        setTimeout(function(){ map.setCenter(neighborhood[0])},300);
+        directionsDisplay = new google.maps.DirectionsRenderer({suppressInfoWindows:true,suppressMarkers:true,suppressPolylines:false,suppressBicyclingLayer:true,preserveViewport:false});
+        directionsService = new google.maps.DirectionsService;
+        directionsDisplay.setMap(map);
+        calculateAndDisplayRoute(directionsService, directionsDisplay,myLatlng);
+
+    }
+
+    function drop() {
+        clearMarkers();
+        for (var i = 0; i < neighborhood.length; i++) {
+            addMarkerWithTimeout(neighborhood[i], i * 200);
+            (function(m){
+                setTimeout(function() {
+                    //infoBubble2.setContent('');
+                    // infoBubble2.setPosition();
+                    infoBubble2.open(map);
+                },300*10)
+        })(i);
+        }
+
+    }
+
+    function calculateAndDisplayRoute(directionsService, directionsDisplay,originPostion) {
+        var selectedMode ="WALKING";
+        directionsService.route({
+            origin: originPostion,  // Haight.
+            destination: {lat:$!{response.noticeEntity.latitude},lng:$!{response.noticeEntity.longitude}},  // Ocean Beach.
+            // Note that Javascript allows us to access the constant
+            // using square brackets and a string value as its
+            // "property."
+            travelMode: google.maps.TravelMode[selectedMode]
+        }, function(response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                //console.log(response.routes[0].legs[0].duration.text);
+                if(response.routes[0].legs[0].duration.text){
+                    $(".mapbottomnotice").show();
+                    $(".stepstime").text("步行约"+response.routes[0].legs[0].duration.text);
+                }
+            } else {
+                $(".mapbottomnotice").hide();
+                //window.alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+
+    function addMarkerWithTimeout(position, timeout,callback) {
+        window.setTimeout(function() {
+            markers.push(new google.maps.Marker({
+                position: position,
+                map: map,
+                icon:imageinco,
+                animation: google.maps.Animation.DROP
+            }));
+           // callback();
+        }, timeout);
+
+    }
+
+    function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+
+    //use
+
+   
+
+    function detectBrowser() {
+        var useragent = navigator.userAgent;
+        var mapdiv = document.getElementById("gMap");
+
+        if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+            mapdiv.style.width = '100%';
+            mapdiv.style.height = '100%';
+        } else {
+            mapdiv.style.width = '600px';
+            mapdiv.style.height = '800px';
+        }
+    }
+
+    // Run the initialize function when the window has finished loading.
+    google.maps.event.addDomListener(window, 'load', function(){
+        initialize();
+        #if(${response.isWeChat}=="Wechat")
+            if(!GetQueryString("lng")){
+            //微信定位
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: '$!{jsapiSignature.appid}', // 必填，公众号的唯一标识
+                timestamp: '$!{jsapiSignature.timestamp}' , // 必填，生成签名的时间戳
+                nonceStr: '$!{jsapiSignature.noncestr}', // 必填，生成签名的随机串
+                signature: '$!{jsapiSignature.signature}',// 必填，签名，见附录1
+                jsApiList: ['checkJsApi',
+                    'chooseImage',
+                    'previewImage',
+                    'uploadImage',
+                    'downloadImage',
+                    'getNetworkType',//网络状态接口
+                    'openLocation',//使用微信内置地图查看地理位置接口
+                    'getLocation' //获取地理位置接口
+                ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.ready(function() {
+                wx.getLocation({
+                    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                    success: function (res) {
+                        //alert(JSON.stringify(res));
+                        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                        var speed = res.speed; // 速度，以米/每秒计
+                        var accuracy = res.accuracy; // 位置精度
+                        //$(".tainer").find("a").attr("href", "$!{link.contextPath}/wechat/getGatherLocation?ID=$!{response.id}&lat=" + latitude + "&lng=" + longitude);
+                        var weixinpostion={lat:latitude,lng:longitude};
+                        markerWeixin = new google.maps.Marker({
+                            position: weixinpostion,
+                            optimized: false,
+                            //map: map,
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 8,
+                                strokeColor: '#fff',
+                                strokeWeight: 3,
+                                fillColor: '#1484ff',
+                                fillOpacity: 1,
+                            }
+                        });
+                        markerWeixin.setMap(map);
+                        calculateAndDisplayRoute(directionsService, directionsDisplay,weixinpostion)
+                    },
+                    cancel: function (res) {
+                        map.setCenter(neighborhood[0]);
+                        alert('用户拒绝授权获取地理位置');
+                    },
+                    fail: function (res) {
+                        //alert('用户拒绝授权获取地理位置');
+                        map.setCenter(neighborhood[0]);
+                    }
+                });
+
+            });
+
+            }else{
+
+            }
+        #end
+    });
+    var audio = $('#audio')[0];;
+    $(function(){
+        if(audio) {
+            hideControls('firefox');
+            $(".playshow").click(function (event) {
+                playOrPaused('firefox', $(this));
+            })
+            audio.addEventListener('ended', function () {
+                // alert('over');
+
+                $(".playshow").find("div").eq(0).attr("class","wifi-symbolnew");
+            }, false);
+        }
+
+//展开收起
+        var windowHeight = $(window).height();
+            $body = $("body");
+            $body.css("height", windowHeight);
+        var startX, startY, moveEndX, moveEndY, X, Y;
+
+        $(".collcontainer").on("touchstart", function(e) {
+            e.preventDefault();
+            startX = e.originalEvent.changedTouches[0].pageX,
+                    startY = e.originalEvent.changedTouches[0].pageY;
+        });
+        $(".collcontainer").on("touchmove", function(e) {
+            e.preventDefault();
+            moveEndX = e.originalEvent.changedTouches[0].pageX,
+                    moveEndY = e.originalEvent.changedTouches[0].pageY,
+                    X = moveEndX - startX,
+                    Y = moveEndY - startY;
+
+            if ( Math.abs(X) > Math.abs(Y) && X > 0 ) {
+                //alert("left 2 right");
+            }
+            else if ( Math.abs(X) > Math.abs(Y) && X < 0 ) {
+                //alert("right 2 left");
+            }
+            else if ( Math.abs(Y) > Math.abs(X) && Y > 0) {
+                //alert("top 2 bottom");
+            }
+            else if ( Math.abs(Y) > Math.abs(X) && Y < 0 ) {
+                $(this).slideUp("slow");
+               // $(".collon").text("展开")
+                $(".collon").css("backgroundImage","url($!{STATIC_URL}/resources/images/collonnew.png)")
+            }
+            else{
+               // alert("just touch");
+            }
+        });
+        $(".collon").on("touchstart",function(){
+            if($(".collcontainer").is(":visible")){
+                $(".collcontainer").slideUp("slow");
+               // $(".collon").text("展开")
+                $(".collon").css("backgroundImage","url($!{STATIC_URL}/resources/images/colloffbg.png)")
+            }else{
+                $(".collcontainer").slideDown("slow");
+               // $(".collon").text("收起")
+                $(".collon").css("backgroundImage","url($!{STATIC_URL}/resources/images/collonnew.png)")
+
+            }
+
+        });
+        //console.log(new Date("$!{response.noticeEntity.time}"))
+        //var newYork    = moment.tz("$!{response.noticeEntity.time}", "Australia/Sydney");
+        //var newYork    = moment.tz(new Date(), "Australia/Sydney");
+        //console.log(newYork)
+        if(Date.parse("$!{response.noticeEntity.time}")> Date.parse(new Date())) {
+
+            var diffTime = timebefore(Date.parse("$!{response.noticeEntity.time}")-Date.parse(new Date()));
+            $(".timedus").text("距离集合还有" + diffTime);
+            $(".timedus").show();
+        }else{
+            $(".timedus").hide();
+        }
+//        $(".timedus").hide();
+    })
+
+    function getCurrentTime(id){
+        //alert(parseInt(audio.currentTime) + '：秒');
+    }
+    function hideControls(id){
+        if(audio.controls){
+            audio.removeAttribute('controls');
+            // obj.innerHTML = '显示控制框'
+            return;
+        }
+        //audio.controls = 'controls';
+        //obj.innerHTML = '隐藏控制框'
+        //return;
+    }
+    function playOrPaused(id,obj){
+        if(audio.paused){
+            audio.play();
+            obj.find("div").eq(0).attr("class","wifi-symbol");
+            return;
+        }
+        audio.pause();
+        obj.find("div").eq(0).attr("class","wifi-symbolnew");
+    }
+    function timebefore(beforetime){
+        //计算出相差天数
+        var days=Math.floor(beforetime/(24*3600*1000));
+        //计算出小时数
+        var leave1=beforetime%(24*3600*1000)    //计算天数后剩余的毫秒数
+        var hours=Math.floor(leave1/(3600*1000))
+        //计算相差分钟数
+        var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
+        var minutes=Math.floor(leave2/(60*1000))
+        //计算相差秒数
+        var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
+        var seconds=Math.round(leave3/1000)
+        //var beforediff=days+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒";
+        if(days>0){
+            var beforediff=days+"天 "+hours+"小时 "+minutes+" 分钟";//+seconds+" 秒";
+        }else{
+            var beforediff=hours+"小时 "+minutes+" 分钟";//+seconds+" 秒";
+        }
+        if(hours>0){
+            var beforediff=hours+"小时 "+minutes+" 分钟";//+seconds+" 秒";
+        }else{
+            var beforediff=minutes+" 分钟";//+seconds+" 秒";
+        }
+        return beforediff;
+    }
+</script>
+#end
+

@@ -1,0 +1,156 @@
+#set($pageTitle="开通更多功能")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/weixin/style/weui.css","$!{STATIC_URL}/resources/js/iCheck/minimal/blue.css","$!{STATIC_URL}/resources/weixin/style/weixin.css?t=1"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/zepto.mint.js","$!{STATIC_URL}/resources/js/iCheck/icheck.min.js","https://res.wx.qq.com/open/js/jweixin-1.0.0.js","$!{STATIC_URL}/resources/weixin/js/weui.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js"])
+	<article class="headtit">
+		<section>
+            <div class="topTit">
+                <p class="incoTit">
+                    开通更多功能
+                </p>
+            </div>
+            <p class="titTopnew">
+                为了保证您能够准确无误的加入到旅行团中，请录入您真实的姓名与性别
+            </p>
+		</section>
+	</article>
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell weui-cell-text">
+                <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input text-input" name="name" placeholder="请输入您的真实姓名" type="text">
+                </div>
+            </div>
+			<div class="weui-cell weui-cell-radio">
+                <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
+
+                <div class="invite-formList inviteSex">
+
+                    <input class="weui-check" name="sex"  id="x11"  checked value="1" type="radio">
+                    <label  for="x11" class="radio2">
+                        <span class="boy red">男</span>
+                    </label>
+                    <input name="sex" class="weui-check radio2" id="x12"   value="2" type="radio">
+                    <label for="x12">
+                        <span class="girl">女</span>
+                    </label>
+                </div>
+            </div>
+	</div>
+	<div class="page__bd page__bd_spacing">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" id="submitBtn">跟上，欢迎您！</a>
+    </div>
+#define($scriptBlock)
+<script>
+	$(function(){
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+            //increaseArea: '20%' // optional
+        });
+        $("ins").eq(0).on("click",function(){
+            $(".boy").addClass("red");
+            $(".girl").removeClass("red");
+        });
+        $("ins").eq(1).on("click",function(){
+            $(".girl").addClass("red");
+            $(".boy").removeClass("red");
+        });
+        $(".boy").on("click",function(){
+            $(".boy").addClass("red");
+            $(".girl").removeClass("red");
+
+        });
+        $(".girl").on("click",function(){
+            $(".girl").addClass("red");
+            $(".boy").removeClass("red");
+        });
+        $("[name=name]").on("input",function(){
+            if($(this).val()){
+                $("#submitBtn").text("亲爱的"+$(this).val()+"先生，欢迎您使用跟上！")
+            }
+        })
+        $("[name=sex]").on("ifChanged",function(){
+            if($(this).val()){
+                if($(this).val()==1){
+                    $("#submitBtn").text("亲爱的"+$(this).val()+"先生，欢迎您使用跟上！")
+                }else if($(this).val()==2){
+                    $("#submitBtn").text("亲爱的"+$(this).val()+"女士，欢迎您使用跟上！")
+                }else{
+                    $("#submitBtn").text("亲爱的"+$(this).val()+"先生，欢迎您使用跟上！")
+                }
+            }
+        })
+		$("#submitBtn").on("click",function(){
+            $.ajax({
+                url: CONTEXTPATH+"/wechat/userRegister",
+                data:JSON.stringify({phone:getParam("phone"),name:$.trim($("[name=name]").val()),sex:$("[name=sex]:checked").val()}),
+                type: "post",
+                contentType:'application/json;charset=utf-8',
+                cache: false,
+                dataType: "json",
+                success: function (dataJson) {
+                    if(dataJson.retCode==0){
+//                        layer.open({
+//                            btn: [ '确定'],
+//                            content:"微信账号绑定成功!"
+//                        })
+                        $.ajax({
+                            url: CONTEXTPATH+"/wechat/binDingUserAndTeam",
+                            data:{phoneNumber: getParam("phone")},
+                            type: "GET",
+                            cache: false,
+                            dataType: "json",
+                            success: function (data) {
+                                if(data.retCode==0){
+//                                            layer.open({
+//                                                btn: [ '确定'],
+//                                                content:"微信账号绑定成功!"
+//                                            })
+                                    window.location.href=CONTEXTPATH+"/wechat/getSchedule";
+                                }else{
+                                    layer.open({
+                                        btn: [ '确定'],
+                                        content:data.retMsg
+                                    })
+                                }
+                            }
+                        })
+                    }else{
+                        layer.open({
+                            btn: [ '确定'],
+                            content:dataJson.retMsg
+                        })
+                    }
+                }
+            })
+		})
+
+	})
+    /**
+     * 获取指定的URL参数值
+     * URL:http://www.quwan.com/index?name=tyler
+     * 参数：paramName URL参数
+     * 调用方法:getParam("name")
+     * 返回值:tyler
+     */
+    function getParam(paramName) {
+        paramValue = "", isFound = !1;
+        if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+            arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+            while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+        }
+        return paramValue == "" && (paramValue = null), paramValue
+    }
+    //获取url参数的值：name是参数名
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return (r[2]);
+        }
+        return null;
+    }
+</script>
+#end
+

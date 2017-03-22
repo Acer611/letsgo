@@ -1,0 +1,472 @@
+#set($pageTitle="邀请码")
+#set($layout="/WEB-INF/views/common/layout/layoutnew.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/invitation.css","$!{STATIC_URL}/resources/js/jquery.mobile-1.4.5.css","$!{STATIC_URL}/resources/js/jquery.mobile.theme-1.4.5.min.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/zepto.mint.js","$!{STATIC_URL}/resources/js/iscroll-probe.js"])
+		<style>
+            #wrapper{position:absolute;z-index:1;top:0;bottom:1.375rem;left:0;width:100%;overflow:hidden}
+            #scroller{position:absolute;z-index:1;-webkit-tap-highlight-color:rgba(0,0,0,0);width:100%;-webkit-transform:translateZ(0);-moz-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0);-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-text-size-adjust:none;-moz-text-size-adjust:none;-ms-text-size-adjust:none;-o-text-size-adjust:none;text-size-adjust:none}
+            #scroller-pullDown,#scroller-pullUp{background:#fff;height:40px;line-height:40px;padding:5px 10px;font-weight:bold;font-size:14px;color:#888;text-align:center;position:absolute;left:0;width:100%}
+            #scroller-pullDown{top:-40px}
+            #scroller-pullUp{bottom:-40px}
+            #scroller-pullDown .pull-up-msg,#scroller-pullUp .pull-down-msg{padding-left:20px}
+            #scroller-pullDown .pull-down-icon,#scroller-pullUp .pull-up-icon{display:inline-block;color:red;font-size:1.4;-webkit-transform:rotate(0);-webkit-transition-property:-webkit-transform;-webkit-transition-duration:500ms}
+            #scroller-pullDown .pull-down-icon.reverse_icon,#scroller-pullUp .pull-up-icon.reverse_icon{-webkit-transform:rotate(-180deg)}
+
+            #wrapper {
+                position: absolute;
+                z-index: 1;
+                top:0px;
+                bottom:0px;
+                left: 0;
+                width: 100%;
+                background: #cf3f4e;
+                overflow: hidden;
+            }
+
+            #scroller {
+                position: absolute;
+                z-index: 1;
+
+            }
+
+            #scroller ul {
+                list-style: none;
+
+                position: relative;
+            }
+            /**
+ *
+ * 下拉样式 Pull down styles
+ *
+ */
+            #pullDown, #pullUp {
+                background:#cf3f4e;
+                height:40px;
+                line-height:40px;
+                padding:5px 10px;
+                font-weight:bold;
+                font-size:14px;
+                color:#fff;
+            }
+
+
+            #pullUp{
+                display:none;
+            }
+
+            #pullUp.flip{display:block}
+
+            #pullUp.loding{display:block;}
+        </style>
+<div id="hide">
+
+</div>
+<div id="yqWenzi-detail">
+    <div class="detail-close"><img src="$!{STATIC_URL}/resources/images/close.png" alt=""></div>
+    <div class="detail-intro" id="detail1">
+        <div id="scroller1">
+            <p><span>1.</span>每邀请一名出境领队注册使用跟上APP系统，一次性获取50元邀请奖励（活动期间一次性邀请奖励以被邀请者首次使用跟上APP系统出团结束为发放依据）</p>
+            <p><span>2.</span>活动期间邀请者和被邀请者同时获得使用跟上APP系统带团成员（≥5人）人数奖励，1元/成员；</p>
+            <p> <span>3.</span>奖励金额将于行程结束3个工作日内发放至用户跟上APP系统钱包账户中；</p>
+            <p> <span>4.</span>同一用户（帐号、身份、设备、手机号等）活动期间只能获取一次奖励；</p>
+            <p> <span>5.</span>行程信息须真实有效，如用户在活动期间经系统判定虚构行程或者其他违反平台规则或活动规则的情形，将取消奖励资格；</p>
+            <p> <span>6.</span>活动最终解释权归“跟上APP”所有；</p>
+            <p><span>7.</span>活动时间：2016年10月1日至11月30日；</p>
+        </div>
+    </div>
+</div>
+<div id="yq-container">
+
+            <div id="wrapper">
+                <div id="scroller">
+
+                    <!--<div id="pullDown">
+                        <span class="pullDownIcon"></span><span class="pullDownLabel">下拉刷新...</span>
+                    </div>-->
+
+
+            <div class="yq-my">
+				您的专属邀请码:
+			</div>
+			<div class="yq-num">
+				<div class="yqNum">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+                        #if($!{response.inviteCode}&&$!{response.inviteCode}!="")
+					$!{response.inviteCode}
+                            #else
+                            暂无邀请码
+                            #end
+				</div>
+			</div>
+
+			<!---->
+			<div class="yq-intro">
+				<img src="$!{STATIC_URL}/resources/images/bg-top.png" alt="" class="bg1"/>
+				<div class="yqIntro">
+					<div class="yq-wenzi">
+						<div class="yqWenzi">
+                            1.每邀请一名出境领队注册使用跟上APP系统，一次性获取50元邀请奖励（活动期间一次性邀请奖励以被邀请者首次使用跟上APP系统出团结束为发放依据）<br>
+                            2.活动期间邀请者和被邀请者同时获得使用跟上APP系统带团成员（≥5人）人数奖励，1元/成员；
+                        </div>
+					</div>
+					<div class="yq-detail">
+                        <span class="moreDetails">奖励详情&gt;&gt;</span>
+					</div>
+				</div>
+                <img src="$!{STATIC_URL}/resources/images/bg2.png" alt="" class="bg"/>
+			</div>
+			<!---->
+                    #if($!{response.inviteCount}&&$!{response.inviteCount}!="")
+			<div class="yq-people">
+				<ul class="yq-people1">
+					<li>已邀请 <span>$!{response.inviteCount}</span>人</li>
+					<li>已获得 <span>$!{response.totalRewardAmount}元</span></li>
+				</ul>
+                <div id="list">
+				#foreach($map in $response.rewardDetailsMap.entrySet())
+                    <ul class="yq-today">
+                        <li>${map.key}</li>
+                    </ul>
+					#foreach($list in $map.value)
+                        <ul class="people-detail #if($!list.isInto==0) red #end">
+                            <li class="item1">
+                                <div>
+                                    <img src="$!{list.photoUrl}" alt="" />
+                                </div>
+                            </li>
+                            <li class="item2">$!{list.phone}</li>
+                            <li class="item3"><span>${list.amount}元</span></li>
+                            #if($!list.rewardType == 3)
+                                <li class="item4 share">
+                                    <b style="font-weight: 100;">$!{list.descn} </b>
+                                    <p>(来自$!{list.realName})</p>
+                                </li>
+                            #end
+                            #if($!list.rewardType != 3)
+                                <li class="item4">$!{list.descn}</li>
+                            #end
+                        </ul>
+					#end
+
+				#end
+                </div>
+			</div>
+                    #end
+                    <div id="pullUp">
+                        <span class="pullUpIcon"></span><span class="pullUpLabel">上拉加载更多...</span>
+                    </div>
+                </div>
+                </div>
+		</div>
+
+#define($scriptBlock)
+<script>
+    var	myScroll1 = new IScroll('#detail1',{
+        checkDOMChanges:true,
+        scrollY:true
+    });
+    myScroll1.on("scrollStart",function(){
+        myScroll1.refresh();
+    });
+    //http://localhost:8080/openapi/web/user/getInviteCodeAndRewardDetails?client_id=C8BC3D6EE&var=1.0&timestamp=1467796904&sign=3BBD89E26AF169B5F297672E836BC926&access_token=9bf4a4a2-dd4f-4064-9ad7-f707cde0062d&pageNum=1
+    //加载效果
+    var dataStr={
+        "pageNum":1
+    };
+//    $("#hide").css("display","block");
+//    $("#yqWenzi-detail").css("display","block");
+    $(document).ready(function(){
+//        $.mobile.loading('show', {
+//            text: '加载中...', //加载器中显示的文字
+//            textVisible: true, //是否显示文字
+//            //theme: 'd',        //加载器主题样式a-e
+//            textonly: false,   //是否只显示文字
+//            html: ""           //要显示的html内容，如图片等
+//        });
+//        $('#pullDown').hide();
+        $(".yq-detail span.moreDetails").on("touchstart",function(){
+            $("#hide").css("display","block");
+            $("#yqWenzi-detail").css("display","block");
+        })
+        $(".detail-close img").on("touchstart",function(){
+            $("#hide").css("display","none");
+            $("#yqWenzi-detail").css("display","none");
+        })
+    })
+
+    function close(){
+        $.mobile.loading('hide');
+    }
+    //页面加载完首先执行onload
+    var ifs=true;
+    var page=1;
+    var mapItem=[];
+    var tall=0;
+    function sstz(){
+        $.ajax({
+            type:"post",
+            url:'$!{link.contextPath}/web/user/getRewardDetailsByAjax?client_id='+getQueryString("client_id")+'&ver='+getQueryString("ver")+'&timestamp='+getQueryString("timestamp")+'&sign='+getQueryString("sign")+'&access_token='+getQueryString("access_token"),
+            data:JSON.stringify(dataStr),
+            contentType:'application/json;charset=utf-8',
+            dataType:"json",
+            success:callback
+        });
+
+    }
+    //获取url参数的值：name是参数名
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return (r[2]);
+        }
+        return null;
+    }
+    function callback(data){
+        var obj=data.rewardDetailsMap;
+        var tree="";
+
+            $.each(obj,function(i,item){
+                mapItem.push(i);
+//                $("#list").append('<ul class="yq-today">\
+//                        <li>'+i+'</li>\
+//                        </ul>')
+//                $.each(item,function(m,items){
+//                    $("#list").append('<ul class="people-detail">\
+//                            <li class="item1">\
+//                            <div>\
+//                            <img src="'+items.photoUrl+'" alt="" />\
+//                            </div>\
+//                            </li>\
+//                            <li class="item2">'+items.phone+'</li>\
+//                            <li class="item3"><span>'+items.amount+'元</span></li>\
+//                            <li class="item4">'+items.descn+'</li>\
+//                             </ul> ')
+//
+//                })
+
+
+
+            })
+                   // $("#list").listview("refresh");
+            //close();
+            //myScroll = new iScroll('wrapper',{snap:false,checkDOMChange:true,vScrollbar:true});
+            //myScroll.refresh();//这条数据在上一章关于listview说明过，数据在页面加载了，但是不出现滚动条，加上这条代码就好了
+            ifs=true;
+      //  }
+//        console.log(target)
+//        if(obj.data.length!=0){
+////            $.each(obj.data,function(i,item){
+////                $("#list").append("<li><a onclick=sstzid('"+item.url+"')>"
+////                        +"<img src='image/img"+i+".png' />"
+////                        +"<h2>"+item.title+"</h2>"
+////                        +"<p><strong>"+item.date+"</strong></p></a>"
+////                        +"</li>");
+////            })
+//
+//            $("#list").listview("refresh");
+//            close();
+//            //myScroll = new iScroll('wrapper',{snap:false,checkDOMChange:true,vScrollbar:true});
+//            myScroll.refresh();//这条数据在上一章关于listview说明过，数据在页面加载了，但是不出现滚动条，加上这条代码就好了
+//            ifs=true;
+//        }else{
+//            $("#message").text("网络不稳定或者数据异常,请稍后再试");//判断没有数据的时候弹出框
+//            $("#pop").popup("open");
+//            CLoses();
+//            $('#pullDown').hide();
+//            ifs=false;
+//        }
+    }
+    //页面加载完 转圈消失
+    function CLoses(){
+        $.mobile.loading( "hide");
+    }
+    //一下就是关于iscroll下拉上拉数据的处理，
+
+    var myScroll,
+            pullDownEl, pullDownOffset,
+            pullUpEl, pullUpOffset,
+            generatedCount = 1;
+
+    /**
+     * 下拉刷新 （自定义实现此方法）
+     * myScroll.refresh();		// 数据加载完成后，调用界面更新方法
+     */
+##    function pullDownAction () {
+##        if(ifs==false){//这是我下拉刷新的时候判断，当因为网络或者是其他原因没有加载出来，我下拉再一次刷新数据
+##            $.ajax({
+##                type:"POST",
+##                url:"$!{link.contextPath}/web/user/getRewardDetailsByAjax?client_id=C8BC3D6EE&var=1.0&timestamp=1467796904&sign=49AD6F7F3686E4D039FE851EF95AE077&access_token=9bf4a4a2-dd4f-4064-9ad7-f707cde0062d",
+##                data:"",
+##                dataType:"json",
+##                success:function(data){
+##                    var obj=eval(data);
+##                    $.each(obj.data,function(i,item){
+##                        $("#list").append("<li><a>"
+##                                +"<img src='image/img"+i+".png' />"
+##                                +"<h2>"+item.title+"</h2>"
+##                                +"<p><strong>"+item.date+"</strong></p></a>"
+##                                +"</li>");
+##                    })
+##                    //$("#list").remove();
+##                    $("#list").listview("refresh");
+##                    myScroll.refresh();
+##                    $('#pullDown').hide();
+##                }
+##            });
+##        }
+##        else if(ifs==true){//网络稳定加载出来的数据，再一次下拉刷新的时候提示已经是最新信息了。因为onload已经刷新加载的是最新数据了
+##            pullDownEl.querySelector('.pullDownLabel').innerHTML = "当前为最新信息";
+##            setTimeout(function () {
+##                $('#pullDown').hide();
+##            },1500);//定时1500毫秒之后关闭下拉刷新的div
+##            // $('#pullDown').hide();
+##            // return;
+##        }
+##
+##    }
+
+    /**
+     * 滚动翻页 （自定义实现此方法）
+     * myScroll.refresh();		// 数据加载完成后，调用界面更新方法
+     */
+    function pullUpAction () {//下拉翻页加载数据
+        setTimeout(function () {	// <-- Simulate network congestion, remove setTimeout from production!
+        var el, li, i;
+        el = document.getElementById('list');
+        var tree="";
+        $.ajax({
+            type:"post",
+            url:'$!{link.contextPath}/web/user/getRewardDetailsByAjax?client_id='+getQueryString("client_id")+'&ver='+getQueryString("ver")+'&timestamp='+getQueryString("timestamp")+'&sign='+getQueryString("sign")+'&access_token='+getQueryString("access_token"),
+            data:JSON.stringify({
+                "pageNum": ++generatedCount
+            }),
+            contentType:'application/json;charset=utf-8',
+            dataType:"json",
+            context: $('body'),
+            success:function(data){
+                var obj=data.rewardDetailsMap;
+                if(!$.isEmptyObject(obj)) {
+                    $.each(obj, function (i, item) {
+                        if (mapItem.indexOf(i) >= 0) {
+                            tall = 1;
+                            // break
+                        } else {
+                            tall = 0;
+                            mapItem.push(i);
+                        }
+                        if (tall != 1) {
+
+                            $("#list").append('<ul class="yq-today">\
+                        <li>' + i + '</li>\
+                        </ul>')
+
+                        }
+                        $.each(item, function (m, items) {
+                            if (items.rewardType == 3) {
+                                var item4 = '<li class="item4 share">\
+                                <b style="font-weight: 100;">' + items.descn + ' </b>\
+                                <p>(来自' + items.realName + ')</p>\
+                                </li>'
+                            } else {
+                                var item4 = '<li class="item4">' + items.descn + '</li>';
+
+                            }
+                            if (items.isInto == 0) {
+                                var into = "red";
+                            } else {
+                                var into = "";
+                            }
+                            $("#list").append('<ul class="people-detail ' + into + '">\
+                            <li class="item1">\
+                            <div>\
+                            <img src="' + items.photoUrl + '" alt="" />\
+                            </div>\
+                            </li>\
+                            <li class="item2">' + items.phone + '</li>\
+                            <li class="item3"><span>' + items.amount.toFixed(1) + '元</span></li>' +
+                                    item4 +
+                                    '</ul> ')
+
+                        })
+
+
+                    })
+                    myScroll.refresh();
+                }else{
+                    pullUpEl.querySelector('.pullUpLabel').innerHTML = '当前栏目数据已加载完';
+                    setTimeout(function () {
+                        $('#pullUp').hide();
+                    },1000);
+                }
+
+
+            }
+        });
+
+
+
+        //	myScroll.refresh();		// 数据加载完成后，调用界面更新方法 Remember to refresh when contents are loaded (ie: on ajax completion)
+        }, 1000);	// <-- Simulate network congestion, remove setTimeout from production!
+    }
+
+    /**
+     * 一下就是初始化iScroll控件，贴的源代码上来，基本没有做任何操作，本来在iscroll.js里面添加了一段代码，但是在本次效果中没有任何效果所以屏蔽掉了
+     */
+    function loaded() {
+        //pullDownEl = document.getElementById('pullDown');
+       // pullDownOffset = pullDownEl.offsetHeight;
+        pullUpEl = document.getElementById('pullUp');
+        pullUpOffset = pullUpEl.offsetHeight;
+
+        myScroll = new IScroll('#wrapper', {
+            //scrollbarClass: 'myScrollbar', /* 重要样式 */
+            //useTransition: false, /* 此属性不知用意，本人从true改为false */
+           // topOffset: pullDownOffset,
+            probeType: 2,
+            mouseWheel: true,
+            scrollbars: false,
+            bounce:true
+           // onScrollEnd:
+        });
+
+        myScroll.on('refresh', function () {
+           if (pullUpEl.className.match('loading')) {
+                pullUpEl.className = '';
+                pullUpEl.querySelector('.pullUpLabel').innerHTML = '上拉加载更多...';
+            }
+        });
+        myScroll.on('scroll', function () {
+             if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
+                pullUpEl.className = 'flip';
+                pullUpEl.querySelector('.pullUpLabel').innerHTML = '松手开始更新...';
+                this.maxScrollY = this.maxScrollY;
+            } else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
+                pullUpEl.className = '';
+                pullUpEl.querySelector('.pullUpLabel').innerHTML = '上拉加载更多...';
+                //this.maxScrollY = pullUpOffset;
+            }
+        });
+        myScroll.on('scrollEnd', function () {
+         if (pullUpEl.className.match('flip')) {
+                pullUpEl.className = 'loading';
+                pullUpEl.querySelector('.pullUpLabel').innerHTML = '加载中...';
+                pullUpAction();	// Execute custom function (ajax call?)
+            }
+        });
+        setTimeout(function () { document.getElementById('wrapper').style.left = '0'; }, 800);
+    }
+
+    document.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+    }, false);
+    window.onload=function(){
+        sstz();
+    }
+    document.addEventListener('DOMContentLoaded', loaded, false);
+
+</script>
+#end

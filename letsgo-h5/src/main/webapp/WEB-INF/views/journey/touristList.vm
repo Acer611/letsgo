@@ -1,0 +1,134 @@
+#set($pageTitle="待确认游客名单")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css","$!{STATIC_URL}/resources/css/touristList.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+<input type="checkbox" id="joacims-menu"/>
+<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main" id="tourist-container">
+        <section class="cd-container feiyong">
+		<div class="touristLists">
+##			#if($list.optionList.pass !="")
+##				#foreach($detail in $list.optionList)
+##                    <div class="touristList">
+##                        <div class="tourist-detail">
+##                            <div class="tourist-name">
+##                                <p>
+##                                    <span class="touristName">$!detail.name</span>
+##                                    <span class="touristSex">$!detail.sex</span>
+##                                    <span class="touristNum">$!detail.num</span>
+##                                    <span style="clear:both;"></span>
+##                                </p>
+##                                <p>
+##                                    <span class="touristBirth touristSex">
+##										<span>出生日期：</span>$!detail.birth
+##									</span>
+##                                </p>
+##                            </div>
+##                            <div class="tourist-passport">
+##                                <p class="touristPassport1">
+##                                    <span class="touristBirth touristSex">$!detail.passport</span>
+##                                </p>
+##                                <p class="touristPassport2">
+##                                    <span class="touristPass touristBirth touristSex">$!detail.pass</span>
+##                                    <span class="touristDate touristSex">$!detail.date</span>
+##                                    <span style="clear:both;"></span>
+##                                </p>
+##                            </div>
+##                        </div>
+##                    </div>
+##				#end
+##			#end
+##			#if($list.optionList.pass == "")
+##				#foreach($detail in $list.optionList)
+##                    <div class="touristList touristList1">
+##                        <div class="tourist-detail">
+##                            <div class="tourist-name">
+##                                <p>
+##                                    <span class="touristName">$!detail.name</span>
+##                                    <span class="touristSex">$!detail.sex</span>
+##                                    <span class="touristNum">$!detail.num</span>
+##                                    <span style="clear:both;"></span>
+##                                </p>
+##                                <p>
+##                                    <span class="touristBirth touristSex">
+##										<span>出生日期：</span>$!detail.birth
+##									</span>
+##                                </p>
+##                            </div>
+##
+##                        </div>
+##                    </div>
+##				#end
+##			#end
+#foreach($list in $response.touristList)
+			<div class="touristList #if(!$list.cardType||$list.cardType=="")touristList1#end">
+				<div class="tourist-detail">
+					<div class="tourist-name">
+						<p>
+							<span class="touristName">$list.realName</span>
+							#if($list.sexDescn&&$list.sexDescn!="")
+							<span class="touristSex">$list.sexDescn</span>
+							#end
+							#if($list.phone&&$list.phone!="")
+							<a class="touristNum" href="tel:$list.phone">$list.phone</a>
+							#end
+							<span style="clear:both;"></span>
+						</p>
+	#if($list.birthday&&$list.birthday!="")
+						<p>
+							<span class="touristBirth touristSex">出生日期：$list.birthday</span>
+						</p>
+		#end
+					</div>
+					#if($list.cardType&&$list.cardType!="")
+					<div class="tourist-passport">
+						<p class="touristPassport1">
+							<span class="touristBirth touristSex">$list.cardType</span>
+						</p>
+						<p class="touristPassport2">
+							<span class="touristPass touristBirth touristSex">$list.cardNum</span>
+							<span class="touristDate touristSex">$list.cardTime</span>
+							<span style="clear:both;"></span>
+						</p>
+					</div>
+						#end
+				</div>
+			</div>
+	#end
+		</div>
+			</section>
+	</div>
+#if($!response.scheduleEntity.processStatus==4)
+<div class="padding15">
+
+</div>
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+#parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+<script type="text/javascript">
+    var teamId="$!{response.scheduleEntity.teamId}";
+    $(function(){
+        $(".overlay").click(function(){
+            $("#joacims-menu").prop("checked",false)
+        })
+        /*判断是否显示已经到底*/
+        if($(window).height()>$("body").height()){
+            $(".continue_loding").hide();
+        }
+        $(".qitaicon").on("click",function(){
+            if($(".qita").is(":visible")){
+                $(".qita").slideUp();
+                $(this).addClass("qitaicons");
+            }else{
+                $(".qita").slideDown();
+                $(this).removeClass("qitaicons");
+            }
+
+        })
+    })
+</script>
+#end

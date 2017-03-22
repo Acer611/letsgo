@@ -1,0 +1,125 @@
+#set($pageTitle="满意度调研")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+  <div class="sidebar-mini skin-blue-light">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+      #parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            满意度调研
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/main"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">满意度调研</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			<div class="box box-success">
+				<div class="box-body">
+                    <!--<i class="sui-icon icon-pc-right"></i>-->
+					<!--<div class="sui-steps steps-auto">
+					  <div class="wrap">
+						<div class="current">
+						  <label><span class="round">1</span><span>创建行程</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+						</div>
+					  </div>
+					  <div class="wrap">
+						<div class="todo">
+						  <label><span class="round">2</span><span>导入游客</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+						</div>
+					  </div>
+					  <div class="wrap">
+						<div class="todo">
+						  <label><span class="round">3</span><span>确认团队行程</span></label>
+						</div>
+					  </div>
+					</div>--><!--sui-steps end-->
+					 <div class="form-horizontal">
+					   <div class="form-group">
+
+						  <div class="col-sm-8 col-sm-offset-2">
+							  <!--<div class="radio">
+								  <label>
+									  <input type="radio" name="r4" class="minimal">
+									  选择已有行程
+								  </label>
+
+							  </div>-->
+							  <h3>选择已有调研问卷模板创建</h3>
+                             <ul class="clearfix">
+									  #foreach( $Detail in $list)
+                                      <li class="col-sm-6" style="height:30px;line-height:30px;">
+
+										 <!--velocityCount-->
+                                              <a href="$!{link.contextPath}/survey/getOneSurvey?surveyId=$!surveyId&oldSurveyId=$!Detail.id">${Detail.title}</a>
+                                      </li>
+									  #end
+
+
+                             </ul>
+                              <div class="col-sm-10 text-right"><a href="$!{link.contextPath}/survey/getAllSurvey">更多>></a></div>
+
+                              <!--<div class="radio">
+                                    <label>
+                                      <input type="radio" name="r4" class="minimal">
+                                      创建新行程
+                                    </label>
+
+
+                                </div>-->
+<div class="clearfix"></div>
+							  <h3>新创建满意度调研问卷</h3>
+                              <table class="table no-border">
+                                  <tbody>
+                                  <tr> <!--<button class="btn btn-primary pull-right btn-block btn-sm" type="submit">下一步</button>-->
+                                      <td colspan="2" style="text-align:left;padding-left:26px;"><a class="btn btn-primary pull-left " href="$!{link.contextPath}/survey/surveyQueryOrSave?teamId=$teamId&title=$title">使用通用模版创建</a></td>
+
+
+                                  </tr>
+                                  </tbody>
+                              </table>
+						  </div>
+						    <!---->
+					   </div>
+				   </div>
+				</div>
+			</div>
+
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+		#parse("/WEB-INF/views/common/footer.vm")
+
+    </div><!-- ./wrapper -->
+  </div>
+  #define($scriptBlock)
+	<script>
+	$(function () {
+
+		//iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+          checkboxClass: 'icheckbox_minimal-blue',
+          radioClass: 'iradio_minimal-blue'
+        });
+
+
+        //$("#example1").DataTable();
+        $('#example2').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": false,
+          "info": false,
+          "autoWidth": false
+        });
+      });
+    </script>
+  #end
+

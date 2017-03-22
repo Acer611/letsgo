@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.YahooWeatherDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.YahooWeather" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+        <result column="high" property="high" jdbcType="VARCHAR" />
+        <result column="low" property="low" jdbcType="VARCHAR" />
+        <result column="date" property="date" jdbcType="VARCHAR" />
+        <result column="day" property="day" jdbcType="VARCHAR" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="text" property="text" jdbcType="VARCHAR" />
+        <result column="descn" property="descn" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_yahoo_weather
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.YahooWeather" >
+        insert into s_yahoo_weather (ID, name, city_name, 
+            high, low, date, 
+            day, code, text, 
+            descn, update_time, version
+            )
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, 
+            #{high,jdbcType=VARCHAR}, #{low,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, 
+            #{day,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{text,jdbcType=VARCHAR}, 
+            #{descn,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.YahooWeather" >
+        update s_yahoo_weather
+        set name = #{name,jdbcType=VARCHAR},
+            city_name = #{cityName,jdbcType=VARCHAR},
+            high = #{high,jdbcType=VARCHAR},
+            low = #{low,jdbcType=VARCHAR},
+            date = #{date,jdbcType=VARCHAR},
+            day = #{day,jdbcType=VARCHAR},
+            code = #{code,jdbcType=VARCHAR},
+            text = #{text,jdbcType=VARCHAR},
+            descn = #{descn,jdbcType=VARCHAR},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, name, city_name, high, low, date, day, code, text, descn, update_time, 
+        version
+        from s_yahoo_weather
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, name, city_name, high, low, date, day, code, text, descn, update_time, 
+        version
+        from s_yahoo_weather
+    </select>
+    <select id="selectWithNameAndDate" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.YahooWeatherResquest" >
+        select ID, name, city_name, high, low, date, day, code, text, descn, update_time,
+        version
+        from s_yahoo_weather
+        where city_name = #{name} AND date = #{date}
+    </select>
+</mapper>

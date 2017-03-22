@@ -1,0 +1,309 @@
+#set($pageTitle="游客管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+<style>
+    .form-horizontal .control-label{padding-right:4px;}
+
+</style>
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+
+		#parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            游客管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/main"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">游客检索</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+          <!-- Default box -->
+          <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">游客检索</h3>
+				  <div class="box-tools  col-md-5" style="padding-left:0;padding-right:0;">
+						<div class="input-group col-md-8 pull-right">
+						  <input type="text" placeholder="请输入游客姓名" class="form-control input-sm pull-right" name="realName">
+						  <div class="input-group-btn">
+							<button class="btn btn-sm btn-primary" id="send"><i class="fa fa-search"></i></button>
+						  </div>
+						</div>
+						<!--<a class="btn btn-warning btn-sm col-md-3 pull-right" href="$!{link.contextPath}/member/memberCreate">添加</a>-->
+                  </div>
+				
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <div class="form-horizontal">
+                  <div class="box-body content">
+					<div class="">
+                        <form class="form-horizontal" action="$!{link.contextPath}/member/search" method="get" id="form3">
+							<div class="form-group">
+								  <label class="col-md-2 control-label" for="inputNamel3">性别：</label>
+								  <div class="col-md-10">
+									    <label class="checkbox-inline">
+										  <input type="radio" name="sex" value="1" class="minimal">
+										  男
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="sex" value="2" class="minimal">
+										  女
+										</label>
+								  </div>
+							</div>
+							<!--<div class="form-group">
+								  <label class="col-md-2 control-label" for="inputNamel3">游览过的目的地：</label>
+                                <div class="col-md-10">
+
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="destinationGroup1" value="港澳台" class="minimal">
+                                        港澳台
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="destinationGroup2" value="日韩" class="minimal">
+                                        日韩
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="destinationGroup3" value="东南亚" class="minimal">
+                                        东南亚
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="destinationGroup4" value="欧洲" class="minimal">
+                                        欧洲
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="destinationGroup5" value="美洲" class="minimal">
+                                        美洲
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="destinationGroup6" value="澳洲"  class="minimal">
+                                        澳洲
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="destinationGroup7"  value="中东非洲" class="minimal">
+                                        中东非洲
+                                    </label>
+
+                                </div>
+							</div>-->
+                        <!--<div class="form-group">
+                            <label class="col-md-2 control-label" for="memberTime">参团次数：</label>
+                            <div class="col-md-10">
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="memberTime" value="1" class="minimal">
+                                    1次
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="memberTime" value="2" class="minimal">
+                                    2次
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="memberTime" value="3" class="minimal">
+                                    3次
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="memberTime" value="4" class="minimal">
+                                    4次
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="memberTime" value="5+" class="minimal">
+                                   5次以上
+                                </label>
+
+                            </div>
+                        </div>-->
+                        <div class="form-group">
+                            <div class="col-md-2 "></div><div class="col-md-2" style="padding-left:35px;"><button class="btn btn-primary btn-block btn-sm" type="button" id="serchMember">搜索</button></div>
+                            <div style="padding-left:35px;" class="col-md-2">
+                                <button id="sercrLeaderset" type="button" class="btn btn-warning btn-block btn-sm">清空</button>
+                            </div>
+                        </div>
+						</form>
+					</div>
+					
+						
+                  </div><!-- /.box-body -->
+                </div>
+              </div><!-- /.box -->
+			   <div class="box box-success" style="display:none;">
+			    <div class="box-header with-border">
+                  <h3 class="box-title">找到3个结果</h3>
+                    <div class="box-tools">
+                        <a class="btn btn-primary  btn-sm pull-right" href="$!{link.contextPath}/member/memberExportExcel?pageNums=0&pageSizes=0" id="memberExportExcel">批量导出游客列表</a>
+    <input type="hidden" name="memberIdList" value="">
+                    </div>
+                </div><!-- /.box-header -->
+			    <div class="box-body content">
+			  		 <table class="table table-hover" id="memberTable">
+							 <thead>
+							<tr>
+							  <th>姓名</th>
+							  <th>性别</th>
+							  <th>年龄</th>
+							 <!-- <th>参团次数</th>-->
+							  <th>操作</th>
+							</tr>
+							</thead>
+							<tbody>
+                            <tr>
+                                <td colspan="4">
+                                    <div class="overlays">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
+                                </td>
+                            </tr>
+						  </tbody>
+                      </table>
+                    <div id="pagination" class="paginationjs paginationjs-small">
+
+                    </div>
+						  </div><!-- /.box-body -->
+				</div><!-- /.box -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+		#parse("/WEB-INF/views/common/footer.vm")
+    </div><!-- ./wrapper -->
+<div id="dialogModal" style="display:none">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">消息</h4>
+            </div>
+            <div class="modal-body" style="text-align:center;font-size:14px;">
+                <p></p>
+            </div>
+            <div class="modal-footer text-center" style="text-align:center;">
+                <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                <button class="btn btn-primary" onclick="blockUIClose()" type="button">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+#define($scriptBlock)
+<script>
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+    });
+
+    var dataSource={
+       // memberTime: $("input[name=memberTime]:checked").val()
+
+    };
+    $(document).ready(function() {
+        $('#serchMember').click(function () {
+            if($.trim($("input[name=sex]:checked").val())) {
+                dataSource = {
+                    // memberTime: $("input[name=memberTime]:checked").val(),
+                    sex: $.trim($("input[name=sex]:checked").val())
+                }
+            }
+            loadMemberList();
+            $("#memberExportExcel").attr("href","$!{link.contextPath}/member/memberExportExcel?sex="+$.trim($("input[name=sex]:checked").val()));
+        });
+        $('#send').click(function () {
+            if($.trim($("input[name=realName]").val())) {
+                dataSource = {
+                    realName: $.trim($("input[name=realName]").val())
+                }
+                loadMemberList();
+                $("#memberExportExcel").attr("href","$!{link.contextPath}/member/memberExportExcel?realName="+$.trim($("input[name=realName]").val()));
+            }else{
+                //alert("请输入姓名搜索");
+                $("#dialogModal").find(".modal-body>p").html("请输入姓名搜索");
+                blockUIOpenShare("dialogModal");
+            }
+        });
+        loadMemberList();
+        var idlist=[];
+        var dataStr=idlist;
+        $("#sercrLeaderset").on("click",function(event){
+            $(this).parents(".form-horizontal").find("input").each(function(){
+                $(this).iCheck('uncheck');
+                if($(this).attr("type")=="text"){
+                    $(this).val("")
+                }
+            });
+        });
+    })
+
+    function loadMemberList() {
+        $("#memberTable").find("tbody").empty().html('<td  colspan="4">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parents(".box:eq(0)").show();
+        $("#pagination").hide();
+        var html = "";
+        $.ajax({
+            type: "GET",
+            url: "$!{link.contextPath}/member/searchAjax",
+            data: dataSource,
+            dataType: "json",
+            success: function(data){
+                if(data.totals&&data.totals!="0") {
+                    $('#pagination').pagination({
+                        dataSource: '$!{link.contextPath}/member/searchAjax',
+                        locator: function () {
+                            // find data and return
+                            return "data.memberList";
+                        },
+                        totalNumber: data.totals,
+                        pageSize: 10,
+                        alias: {
+                            pageNumber: 'pageNums',
+                            pageSize: 'pageSizes'
+                        },
+                        ajax: {
+                            data: dataSource,
+                            beforeSend: function () {
+                               // $("#memberTable").find("tbody").empty().html("<td  colspan='4'>Loading ...</td>").end().parents(".box:eq(0)").show();
+                            }
+                        },
+                        callback: function (data, pagination) {
+                            this.totalNumber = data.totals;
+                            $("#memberTable").parent().siblings().find(".box-title").text("找到" + pagination.totalPage + "页结果");
+                            html = "";
+                            var memberList = data;
+                            if (memberList.length > 0) {
+                                for (var i = 0; i < memberList.length; i++) {
+                                    html += '<tr idval="' + memberList[i].id + '">' +
+                                            '<td><a href="$!{link.contextPath}/member/memberPreview?id=' + memberList[i].id + '">' + (memberList[i].realName ? memberList[i].realName : "") + '</a></td>' +
+                                            '<td>' + ((memberList[i].sex == "1") ? '男' : '女') + '</td>' +
+                                            '<td>' + (memberList[i].age ? memberList[i].age + "岁" : "") + '</td>' +
+                                                //'<td>' + '' + '</td>' +
+                                            '<td><a href="$!{link.contextPath}/member/memberEdit?id=' + memberList[i].id + '">修改</a></td>' +
+                                            '</tr>';
+
+                                }
+                                $("#memberTable").find("tbody").empty().append(html).end().parents(".box:eq(0)").show();
+                                $('#pagination').show();
+                            } else {
+                                $('#pagination').hide();
+                                $("#memberTable").find("tbody").empty().html("<td colspan='4'>没有结果</td>").end().parents(".box:eq(0)").show();
+                            }
+                        }
+                    })
+                }else{
+                    $('#pagination').hide();
+                    $("#memberTable").find("tbody").empty().html("<td colspan='4'>没有结果</td>").end().parents(".box:eq(0)").show();
+                }
+            }
+        });
+
+    }
+</script>
+#end
+
+

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.QuestionDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.QuestionEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="survey_id" property="surveyId" jdbcType="BIGINT" />
+        <result column="question_type" property="questionType" jdbcType="INTEGER" />
+        <result column="is_required" property="isRequired" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="j_type" property="type" jdbcType="INTEGER" />
+        <result column="a_optionAnswer" property="optionAnswer" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="BaseListMap" type="com.umessage.letsgo.domain.vo.team.respone.QuestionInfo" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="survey_id" property="surveyId" jdbcType="BIGINT" />
+        <result column="is_required" property="isRequired" jdbcType="INTEGER" />
+        <collection property="list" ofType="com.umessage.letsgo.domain.vo.journey.response.Optioninfo">
+            <result column="option_id" property="optionId" jdbcType="BIGINT" />
+            <result column="option_content" property="optionContent" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+    <resultMap id="SurveyResultMap" type="com.umessage.letsgo.domain.po.journey.QuestionEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="survey_id" property="surveyId" jdbcType="BIGINT" />
+        <result column="question_type" property="questionType" jdbcType="INTEGER" />
+        <result column="is_required" property="isRequired" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="q_type" property="type" jdbcType="INTEGER" />
+
+        <result column="a_answerId" property="answerId" jdbcType="BIGINT" />
+        <result column="a_questionOptionId" property="questionOptionId" jdbcType="BIGINT" />
+        <result column="a_content" property="content" jdbcType="VARCHAR" />
+        <result column="a_moreOption" property="moreOption" jdbcType="VARCHAR" />
+        <result column="a_optionAnswer" property="optionAnswer" jdbcType="VARCHAR" />
+
+        <collection property="optionList" ofType="com.umessage.letsgo.domain.po.journey.QuestionOptionEntity">
+            <result column="o_id" property="id" jdbcType="BIGINT" />
+            <result column="question_id" property="questionId" jdbcType="BIGINT" />
+            <result column="question_option" property="questionOption" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+   <select id="selectModel" resultMap="BaseResultMap" parameterType="java.lang.Long">
+       SELECT DISTINCT j.ID,j.survey_id,j.description,j.title,j.create_time,j.is_required,a.type AS j_type,a.option_answer AS a_optionAnswer
+       FROM j_question j
+       LEFT JOIN j_answer AS a ON j.ID = a.question_id
+       WHERE j.survey_id=#{id,jdbcType=BIGINT}
+       AND j.question_type=4
+   </select>
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="id" parameterType="com.umessage.letsgo.domain.po.journey.QuestionEntity">
+        insert into j_question (survey_id,question_type,title,description,is_required,create_time,update_time,version,type)
+        VALUES
+        (#{surveyId,jdbcType=BIGINT},#{questionType,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},
+        #{isRequired,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},#{version,jdbcType=BIGINT},#{type,jdbcType=INTEGER})
+    </insert>
+    <select id="selectQuestion" resultMap="BaseListMap" parameterType="com.umessage.letsgo.domain.po.journey.QuestionEntity">
+    SELECT j.ID,j.survey_id,j.title,j.is_required,j.type,o.ID as option_id,o.question_option as option_content
+    FROM j_question j
+    LEFT JOIN j_question_option o on j.ID=o.question_id
+    and j.survey_id=#{surveyId,jdbcType=BIGINT}
+    where j.question_type=#{questionType,jdbcType=INTEGER}
+    and j.survey_id=#{surveyId,jdbcType=BIGINT}
+</select>
+    <select id="selectAnswer" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT j.ID,j.survey_id,j.title,j.is_required,j.type FROM j_question j
+WHERE j.survey_id=#{id,jdbcType=BIGINT} AND j.question_type=3
+    </select>
+
+    <select id="getSurvey" resultMap="SurveyResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.SurveyRequest">
+        SELECT q.ID,q.survey_id,q.question_type,q.title,q.description,q.is_required,a.type AS q_type,
+        jq.ID AS o_id,jq.question_id,jq.question_option,a.option_answer AS a_optionAnswer,
+        a.question_option_id AS a_questionOptionId,a.content AS a_content,a.more_option AS a_moreOption,a.ID AS a_answerId
+        FROM j_question as q
+        LEFT JOIN j_question_option AS jq ON jq.question_id = q.ID
+        LEFT JOIN j_answer AS a ON q.ID = a.question_id
+        AND a.user_id = #{userId}
+        <where>
+            <if test="null != surveyId"> AND q.survey_id = #{surveyId} </if>
+        </where>
+        ORDER BY q.create_time DESC
+    </select>
+
+</mapper>

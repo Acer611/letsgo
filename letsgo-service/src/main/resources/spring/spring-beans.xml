@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<!-- 从properties配置文件加载配置信息 -->
+	<bean class="com.umessage.letsgo.core.config.CustomizedPropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true"></property>
+		<property name="locations">
+			<list>
+				<value>classpath*:conf.properties</value>
+			</list>
+		</property>
+		<property name="configureClasses">
+			<list>
+				<value>com.umessage.letsgo.core.config.constant.ConfigConstant</value>
+				<value>com.umessage.letsgo.service.common.constant.Constant</value>
+				<value>com.umessage.letsgo.service.common.constant.SmsConstant</value>
+				<value>com.qq.tim.constant.TimConstant</value>
+				<value>com.xiaomi.constant.MiPushConstant</value>
+				<value>com.jrmf360.constant.WalletConstant</value>
+				<value>com.huawei.constant.HuaweiPushConstant</value>
+				<value>com.umessage.letsgo.service.common.constant.WxConstant</value>
+			</list>
+		</property>		
+	</bean>
+
+	<bean id="dozerBeanMapper" class="org.dozer.DozerBeanMapper"/>
+	
+	<bean class="com.umessage.letsgo.core.extensions.spring.SpringUtil"/>
+
+	<bean class="com.umessage.letsgo.service.common.init.DataItemInitialize"/>
+
+	<bean class="com.qq.tim.init.TlsSignInitialize"/>
+
+	<bean id = "wxMpInMemoryConfigStorage" class="me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage">
+		<property name="appId" value="${APP_ID}"></property>
+		<property name="secret" value="${APP_SECRET}"></property>
+		<property name="token" value="${TOKEN}"></property>
+		<property name="aesKey" value="${AESKEY}"></property>
+	</bean>
+
+	<bean id ="wxMpService" class="me.chanjar.weixin.mp.api.impl.WxMpServiceImpl">
+		<property name="wxMpConfigStorage" ref="wxMpInMemoryConfigStorage"></property>
+	</bean>
+
+	<bean id ="SmsSingleSender" class="com.qcloud.sms.SmsSingleSender">
+		<property name="txAppid" value="${TX_SMS_APPID}"></property>
+		<property name="txAppkey" value="${TX_SMS_APPKEY}"></property>
+	</bean>
+
+	<bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="velocityProperties">
+			<props>
+				<prop key="resource.loader">class</prop>
+				<prop key="class.resource.loader.class">org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader</prop>
+				<prop key="velocimacro.library"></prop>
+			</props>
+		</property>
+	</bean>
+
+	<!--<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml"/>
+		<property name="shared" value="true"/>
+	</bean>
+
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcache"/>
+	</bean>-->
+	<!--<cache:annotation-driven/>-->
+	<!-- jedis客户端连接工厂 -->
+	<!--<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		  p:hostName="${redis.host}" p:port="${redis.port}" p:usePool="true" />
+
+
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" p:connectionFactory-ref="jedisConnectionFactory"/>
+-->
+	<!-- redis缓存管理器 -->
+	<!--<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager" c:template-ref="redisTemplate"/>
+-->
+	<bean id="pollingConnectionManager"
+		  class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager">
+		<property name="maxTotal" value="10" />
+		<property name="defaultMaxPerRoute" value="100" />
+	</bean>
+
+	<bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder"
+		  factory-method="create">
+		<property name="connectionManager" ref="pollingConnectionManager" />
+	</bean>
+
+	<bean id="httpClient" factory-bean="httpClientBuilder" factory-method="build" />
+
+	<bean id="clientHttpRequestFactory"
+		  class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+		<constructor-arg ref="httpClient" />
+		<property name="connectTimeout" value="30000" />
+		<property name="readTimeout" value="30000" />
+	</bean>
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<constructor-arg ref="clientHttpRequestFactory" />
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+					<property name="objectMapper">
+						<bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+							<property name="serializationInclusion" value="NON_NULL"/>
+							<property name="featuresToDisable">
+								<array>
+									<util:constant static-field="com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS" />
+								</array>
+							</property>
+						</bean>
+					</property>
+					<property name="supportedMediaTypes">
+						<list>
+							<value>application/json;charset=UTF-8</value>
+							<value>application/*+json;charset=UTF-8</value>
+							<value>text/json;charset=UTF-8</value>
+							<value>application/octet-stream;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="clientDetailsService" class="com.umessage.letsgo.service.common.oauth2.CacheClientDetailsService">
+		<constructor-arg index="0" ref="dataSource"/>
+	</bean>
+	<bean id="tokenStore" class="com.umessage.letsgo.service.common.oauth2.CacheTokenStore">
+		<constructor-arg index="0" ref="dataSource"/>
+	</bean>
+
+	<bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
+		<property name="userPropertyToUse" value="username"/>
+	</bean>
+	<bean id="shaPasswordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<constructor-arg name="strength" value="256"/>
+	</bean>
+
+	<bean id="userAccountUserDetailsService"
+		  class="com.umessage.letsgo.service.common.security.UserAccountUserDetailsService" />
+	<bean id="smsVerificationAuthentication"
+		  class="com.umessage.letsgo.service.common.security.verification.impl.SmsVerification">
+		<property name="userAccountUserDetailsService" ref="userAccountUserDetailsService" />
+	</bean>
+	<bean id="smsVerification"
+		  class="com.umessage.letsgo.service.common.security.verification.impl.SmsVerification">
+		<property name="userAccountUserDetailsService" ref="userAccountUserDetailsService" />
+	</bean>
+	<bean id="wxAppVerification"
+		  class="com.umessage.letsgo.service.common.security.verification.impl.WxAppVerification">
+		<property name="userAccountUserDetailsService" ref="userAccountUserDetailsService" />
+	</bean>
+	<bean id="wxVerification"
+		  class="com.umessage.letsgo.service.common.security.verification.impl.WxVerification">
+		<property name="userAccountUserDetailsService" ref="userAccountUserDetailsService" />
+	</bean>
+	<bean id="userAuthenticationProvider"
+		  class="com.umessage.letsgo.service.common.security.CustomUserAuthenticationProvider">
+		<property name="userDetailsService" ref="userAccountUserDetailsService"/>
+		<property name="clientDetailsService" ref="clientDetailsService"/>
+		<property name="passwordEncoder" ref="shaPasswordEncoder"/>
+		<property name="saltSource" ref="saltSource"/>
+	</bean>
+
+	<context:component-scan base-package="com.umessage.letsgo.core.annotation"/>	
+	<context:component-scan base-package="com.umessage.letsgo.service" />
+	<context:component-scan base-package="com.qq.tim" />
+	<context:component-scan base-package="com.jrmf360" />
+	<context:component-scan base-package="com.weixin" />
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+
+	<!-- 支持异步方法执行 -->
+	<task:annotation-driven />
+	<task:executor id="htmlPdfExecutor" pool-size="1-50" queue-capacity="50" />
+</beans>

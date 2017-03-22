@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="info">
+	<appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		</Console>
+
+		<RollingFile name="logfile" fileName="/data0/logs/letsgo-openapi.log"
+					 filePattern="/data0/logs/letsgo-openapi.log.%d{yyyyMMdd}">
+			<PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"/>
+			</Policies>
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<root level="info">
+			<appender-ref ref="console" />
+			<appender-ref ref="logfile" />
+		</root>
+
+		<!-- Application Loggers -->
+		<logger name="com.umessage.letsgo" level="debug">
+		</logger>
+
+		<logger name="com.github.pagehelper" level="debug">
+		</logger>
+
+		<logger name="org.apache.ibatis" level="debug">
+		</logger>
+
+		<logger name="com.github.pagehelper.mapper" level="trace">
+		</logger>
+
+		<logger name="org.springframework.test.context.junit4" level="info">
+		</logger>
+
+		<!-- 3rdparty Loggers -->
+		<logger name="org.springframework.core" level="info">
+		</logger>
+
+		<logger name="org.springframework.beans" level="info">
+		</logger>
+
+		<logger name="org.springframework.context" level="info">
+		</logger>
+
+		<logger name="org.springframework.http" level="info">
+		</logger>
+
+		<logger name="org.springframework.web" level="info">
+		</logger>
+
+		<logger name="com.umessage.letsgo.core.logging.LoggingFilter" level="DEBUG">
+		</logger>
+
+		<logger name="com.umessage.letsgo.core.extensions.velocity.VelocityToolbox2View" level="info">
+		</logger>
+
+		<logger name="org.apache.http" level="info">
+		</logger>
+
+		<logger name="com.google.maps" level="debug">
+		</logger>
+	</loggers>
+</configuration>

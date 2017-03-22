@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.PushDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.PushEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="secretKey" property="secretkey" jdbcType="VARCHAR" />
+        <result column="msgId" property="msgid" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="param" property="param" jdbcType="LONGVARCHAR" />
+        <result column="push_status" property="pushStatus" jdbcType="INTEGER" />
+        <result column="error_message" property="errorMessage" jdbcType="VARCHAR" />
+        <result column="error_code" property="errorCode" jdbcType="INTEGER" />
+        <result column="result" property="result" jdbcType="VARCHAR" />
+        <result column="msgResult" property="msgresult" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_push
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.PushEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into s_push (user_id, secretKey, msgId, 
+            title, description, param, 
+            push_status, error_message, error_code, 
+            result, msgResult, create_time, 
+            version)
+        values (#{userId,jdbcType=BIGINT}, #{secretkey,jdbcType=VARCHAR}, #{msgid,jdbcType=VARCHAR}, 
+            #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{param,jdbcType=LONGVARCHAR}, 
+            #{pushStatus,jdbcType=INTEGER}, #{errorMessage,jdbcType=VARCHAR}, #{errorCode,jdbcType=INTEGER}, 
+            #{result,jdbcType=VARCHAR}, #{msgresult,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+            #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.PushEntity" >
+        update s_push
+        set user_id = #{userId,jdbcType=BIGINT},
+            secretKey = #{secretkey,jdbcType=VARCHAR},
+            msgId = #{msgid,jdbcType=VARCHAR},
+            title = #{title,jdbcType=VARCHAR},
+            description = #{description,jdbcType=VARCHAR},
+            param = #{param,jdbcType=LONGVARCHAR},
+            push_status = #{pushStatus,jdbcType=INTEGER},
+            error_message = #{errorMessage,jdbcType=VARCHAR},
+            error_code = #{errorCode,jdbcType=INTEGER},
+            result = #{result,jdbcType=VARCHAR},
+            msgResult = #{msgresult,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} AND version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, secretKey, msgId, title, description, param, push_status, error_message, 
+        error_code, result, msgResult, create_time, version
+        from s_push
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, user_id, secretKey, msgId, title, description, param, push_status, error_message, 
+        error_code, result, msgResult, create_time, version
+        from s_push
+    </select>
+
+    <select id="selectPushList" resultMap="BaseResultMap" >
+        select ID, user_id, secretKey, msgId, title, description, param, push_status, error_message,
+        error_code, result, msgResult, create_time, version
+        from s_push
+        where NOT ISNULL(secretKey) AND NOT ISNULL(msgId) AND ISNULL(msgResult);
+    </select>
+</mapper>

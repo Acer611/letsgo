@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.notice.AnnouncementDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.notice.AnnouncementEntity" >
+        <id column="a_id" property="id" jdbcType="BIGINT" />
+        <result column="t_id" property="tId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="d_active_status" property="activeStatus" jdbcType="INTEGER" />
+        <result column="t_name" property="teamName" jdbcType="VARCHAR" />
+        <result column="s_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="j_schedule_name" property="scheduleName" jdbcType="VARCHAR" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from n_announcement
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.notice.AnnouncementEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into n_announcement (t_id, team_id, title,
+            content, user_id, sender_name, create_time,
+            update_time, version)
+        values (#{tId,jdbcType=BIGINT}, #{teamId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+            #{content,jdbcType=VARCHAR},#{userId,jdbcType=BIGINT}, #{senderName,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.notice.AnnouncementEntity" >
+        update n_announcement
+        set t_id = #{tId,jdbcType=BIGINT},
+            team_id = #{teamId,jdbcType=VARCHAR},
+            title = #{title,jdbcType=VARCHAR},
+            content = #{content,jdbcType=VARCHAR},
+            user_id = #{userId,jdbcType=BIGINT},
+            sender_name = #{senderName,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select a.ID AS a_id, a.t_id, a.team_id, a.title, a.content, a.user_id, a.sender_name, a.create_time, a.update_time, a.version, t.`name` AS t_name
+        from n_announcement AS a
+        JOIN t_team AS t ON t.tx_groupId = a.team_id
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select a.ID AS a_id, a.t_id, a.team_id, a.title, a.content, a.user_id, a.sender_name, a.create_time, a.update_time, a.version, t.`name` AS t_name
+        from n_announcement AS a
+        JOIN t_team AS t ON t.tx_groupId = a.team_id
+    </select>
+    <select id="selectAnnouncementListWithConditions" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.AnnouRequest" >
+        select a.ID AS a_id, a.t_id, a.team_id, a.title, a.content, a.user_id AS user_id, a.sender_name, a.create_time, a.update_time, a.version, u.photo_url AS s_photo_url,t.`name` AS t_name
+        from n_announcement AS a
+        JOIN t_team AS t ON t.tx_groupId = a.team_id
+        JOIN s_user AS u ON u.ID = a.user_id
+        <where>
+        	<if test="null != teamId"> and a.team_id = #{teamId,jdbcType=BIGINT}</if>
+        	<if test="null != teamIds"> and a.team_id in
+        		<foreach item="item" index="index" collection="teamIds" open="(" separator="," close=")">
+				  	#{item}
+				</foreach>
+        	</if>
+            <if test="null != lastId"> and a.ID &gt; #{lastId} </if>
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="selectAnnouncementByUserIdAndTeamId" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.AnnouncementRequest" >
+        select a.ID AS a_id,a.team_id, a.title, a.content,a.create_time,d.active_status AS d_active_status
+        from n_announcement AS a
+        left join n_notice_detail as d on a.ID = d.notice_id AND d.user_id=a.user_id
+        <where>
+            <if test="null != teamId"> and a.team_id = #{teamId} </if>
+            <if test="null != userId"> and (a.user_id = #{userId} or d.user_id = #{userId})  </if>
+        </where>
+        ORDER BY a.create_time DESC LIMIT 1
+    </select>
+    <select id="selectAnnouncementByUserIdAndTeamIdToTourist" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.AnnouncementRequest" >
+        select a.ID AS a_id,a.team_id, a.title, a.content,a.create_time,d.active_status AS d_active_status
+        from n_announcement AS a
+        left join n_notice_detail as d on a.ID = d.notice_id
+        <where>
+            <if test="null != teamId"> and a.team_id = #{teamId} </if>
+            <if test="null != userId"> and d.user_id = #{userId} </if>
+        </where>
+        ORDER BY a.create_time DESC LIMIT 1
+    </select>
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select a.ID AS a_id, a.t_id, a.team_id, a.title, a.content, a.user_id, a.sender_name, a.create_time, a.update_time, a.version
+        from n_announcement AS a
+        where a.ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectWxAnnouncementById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select a.ID AS a_id, a.t_id, a.team_id, a.title, a.content, a.user_id, a.sender_name, a.create_time, a.update_time, a.version,
+        s.photo_url AS s_photo_url,j.name AS j_schedule_name
+        from n_announcement AS a
+        LEFT join s_user AS s ON a.user_id = s.ID
+        LEFT JOIN t_team AS t on t.tx_groupId = a.team_id
+        LEFT JOIN j_schedule AS j on t.ID = j.team_id
+        where a.ID = #{id,jdbcType=BIGINT}
+    </select>
+
+</mapper>

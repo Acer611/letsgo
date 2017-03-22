@@ -1,0 +1,179 @@
+#set($pageTitle="行程介绍")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/mainnew.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/flexible_css.debug.js","$!{STATIC_URL}/resources/js/flexible.debug.js","$!{STATIC_URL}/resources/js/zepto.mint.js"])
+
+
+	<input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main warp">
+		<div class="zw_top"></div>
+		<section class="cd-container" id="cd-timeline">
+			<ul>
+				<li class="cd-timeline-label">
+					<div class="cd-timeline-img1 cd-picture"> 
+			            启程
+			        </div>  
+			      
+				</li>
+				<li class="cd-timeline-block">
+					<div class="cd-timeline-img cd-picture"> 
+			            D1 
+			        </div>
+			        <div class="cd-timeline-line"></div>
+			        <div class="cd-timeline-content"> 
+			        	<a href="D1.html"><h2 class="t1">2016年4月8日</h2>
+			        	<p>北京&gt;名古屋</p> </a>
+			        </div>
+				</li>
+				
+				<li class="cd-timeline-block">
+					<div class="cd-timeline-img cd-picture"> 
+			            D2 
+			        </div>
+			        <div class="cd-timeline-line"></div>
+			        <div class="cd-timeline-content"> 
+			        	<a href="D2.html"><h2 class="t2">2016年4月9日</h2>
+			        	<p>大阪</p> </a>
+			        </div>
+				</li>
+				<li class="cd-timeline-block">
+					<div class="cd-timeline-img cd-picture"> 
+			            D3
+			        </div>
+			        <div class="cd-timeline-line"></div>
+			        <div class="cd-timeline-content"> 
+			        	<a href="D3.html"><h2 class="t3">2016年4月10日</h2>
+			        	<p>名古屋&gt;大阪&gt;箱根</p> </a>
+			        </div>
+				</li>
+				<li class="cd-timeline-block">
+					<div class="cd-timeline-img cd-picture"> 
+			            D4
+			        </div>
+			        <div class="cd-timeline-line"></div>
+			        <div class="cd-timeline-content"> 
+			        	<a href="D4.html"><h2 class="t4">2016年4月11日</h2>
+			        	<p>东京</p> </a>
+			        </div>
+				</li>
+				<li class="cd-timeline-block">
+					
+					<div class="cd-timeline-img cd-picture"> 
+			            D5 
+			        </div>
+			        <div class="cd-timeline-line"></div>
+			        <div class="cd-timeline-content"> 
+			        	<a href="D5.html"><h2 class="t5">2016年4月12日</h2>
+			        	<p>北京&gt;名古屋</p> </a>
+			        </div>
+				</li>
+			</ul>
+		</section>
+		<div class="zw-footer">
+			<input type="button" value="报错">
+			<input type="submit" value="确认无误">
+		</div>
+	</div>
+	<div class="overlay"></div>
+	<div class="cd-time-lay">
+		<ul>
+			<li class="cd-time_list"><a href="mainnew.html"><span class="inco-js"></span>行程介绍</a></li>
+			<li class="cd-child_list">
+				<div>
+					<ul>
+						<li><a href="D1.html"><span class="inco_child"></span><span class="cd-child-day">D1</span>北京> 冲绳</a></li>
+						<li><a href="D2.html"><span class="inco_child"></span><span class="cd-child-day">D2</span>冲绳</a></li>
+						<li><a href="D3.html"><span class="inco_child"></span><span class="cd-child-day">D3</span>冲绳</a></li>
+						<li><a href="D4.html"><span class="inco_child"></span><span class="cd-child-day">D4</span>冲绳</a></li>
+						<li><a href="D5.html"><span class="inco_child"></span><span class="cd-child-day">D5</span>冲绳> 北京</a></li>
+					</ul>
+				</div>
+			</li>
+			<li class="cd-time_list"><a href="gaishu.html"><span class="inco-gs"></span>行程概述</a></li>
+			<li class="cd-time_list"><a href="feiyong.html"><span class="inco-fy"></span>费用信息</a></li>
+			<li class="cd-time_list"><a href="gouwu.html"><span class="inco-gw"></span>购物场所</a></li>
+			<li class="cd-time_list"><a href="tishi.html"><span class="inco-yq"></span>友情提示</a></li>
+			<!--<li class="cd-time_list"><a href="dijieshe.html"><span class="inco-dj"></span>地接社信息</a></li>-->
+		</ul>
+	</div>
+
+
+
+
+#define($scriptBlock)
+<script type="text/javascript">
+    $(function(){
+
+        $(".overlay").click(function(){
+            $("#joacims-menu").prop("checked",false)
+        })
+        $(".warp").parents("html").css("backgroundColor","#1fbad1");
+        $(".t1").text(getNewDay(getNowFormatDate(),-2));
+        $(".t2").text(getNewDay(getNowFormatDate(),-1));
+        $(".t3").text(getNowFormatDate2());
+        $(".t4").text(getNewDay(getNowFormatDate(),1));
+        $(".t5").text(getNewDay(getNowFormatDate(),2));
+    })
+    // 日期，在原有日期基础上，增加days天数，默认增加1天
+    function getNewDay(date, days) {
+        if (days == undefined || days == '') {
+            days = 1;
+        }
+        var date = new Date(date);
+        date.setDate(date.getDate() + days);
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        return date.getFullYear() + '年' + getFormatDate(month) + '月' + getFormatDate(day) +'日';
+    }
+
+    // 日期月份/天的显示，如果是1位数，则在前面加上'0'
+    function getFormatDate(arg) {
+        if (arg == undefined || arg == '') {
+            return '';
+        }
+
+        var re = arg + '';
+        if (re.length < 2) {
+            re = '0' + re;
+        }
+
+        return re;
+    }
+
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+    function getNowFormatDate2() {
+        var date = new Date();
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + "年" + month + "月" + strDate +"日";
+        return currentdate;
+    }
+    //添加节点去除白色线段
+    $("section ul li:last-child").append('<div class="trans-line"></div>');
+</script>
+#end

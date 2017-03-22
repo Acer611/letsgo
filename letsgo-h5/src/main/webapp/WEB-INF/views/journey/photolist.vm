@@ -1,0 +1,66 @@
+#set($pageTitle="$!{hotelScheduleEntity.hotelName}图片")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css?t=1.0"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js"])
+<input type="checkbox" id="joacims-menu"/>
+##	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+<div class="main">
+	<section class="cd-container feiyong">
+		<div class="desionConphoto">
+			<ul class="imagelist">
+
+				#if($!hotelScheduleEntity.albumScheduleList.size()>0)
+				#foreach( $Detailalbum in $hotelScheduleEntity.albumScheduleList)
+				<li>
+					<img src="$!{Detailalbum.photoUrl}"/>
+				</li>
+				#end
+				#end
+
+			</ul>
+		</div>
+	</section>
+
+</div>
+
+
+<!-- Swiper -->
+<div class="loopwarp" style="display: none;">
+	<div class="close"></div>
+	<div class="swiper-container">
+		<div class="swiper-wrapper">
+			#if($!hotelScheduleEntity.albumScheduleList.size()>0)
+				#foreach( $Detailalbum in $hotelScheduleEntity.albumScheduleList)
+			<div class="swiper-slide"><img src="$!{Detailalbum.photoUrl}"/></div>
+			#end
+			#end
+
+		</div>
+		<!-- Add Pagination -->
+
+	</div>
+	<div class="swiper-pagination"></div>
+</div>
+###parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+<script type="text/javascript">
+	$(function() {
+
+		var swiper = new Swiper('.swiper-container', {
+
+			pagination: '.swiper-pagination',
+			paginationType: 'fraction',
+			observer:true,//修改swiper自己或子元素时，自动初始化swiper
+			observeParents:true//修改swiper的父元素时，自动初始化swiper
+		});
+		$(".imagelist").find("li").on("click",function(){
+            var index=$(this).index();
+            swiper.slideTo(index, 1000, false);//切换到第一个slide，速度为1秒
+			$(".loopwarp").fadeIn();
+		})
+		$(".loopwarp .close").on("click",function(){
+			$(".loopwarp").fadeOut();
+		})
+	})
+</script>
+#end

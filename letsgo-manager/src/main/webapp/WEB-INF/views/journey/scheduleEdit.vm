@@ -1,0 +1,2779 @@
+#set($pageTitle="团队行程管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/dist/js/jquery-ui.min.css","$!{STATIC_URL}/resources/plugins/gallery/jquery.ad-gallery.css","$!{STATIC_URL}/resources/dist/css/lunbo.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/jquery.form.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js","$!{STATIC_URL}/resources/dist/js/jquery-ui.min.js","$!{STATIC_URL}/resources/dist/js/swiper-3.3.1.jquery.min.js","$!{STATIC_URL}/resources/plugins/gallery/jquery.ad-gallery.js","$!{STATIC_URL}/resources/dist/js/schedule.js"])
+<style>body{position:relative;}
+.messages-menu a{background-color:#00a65a !important;border-color:#367fa9;border-radius:3px;box-shadow: none;font-size: 12px;
+    line-height: 1.5;
+    padding: 5px 10px;}
+.returnBus{top:5px;right:212px;}
+.returnBus > ul > li > a{padding: 5px 10px;}
+.swiper-container{margin:18px 15px;}
+
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+    }
+    /* IE 6 doesn't support max-height
+     * we use height instead, but this forces the menu to always be this tall
+     */
+    * html .ui-autocomplete {
+        height: 200px;
+    }
+.item1{
+    float:left;
+}
+.ad-gallery {
+    width:auto;
+}
+
+.ad-gallery .ad-image-wrapper {
+    height: 300px;
+}
+.ad-image{
+    left:0;
+}
+img{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+#drag {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    width: 500px;
+    height: 360px;
+    background: #e9e9e9;
+    border: 1px solid #444;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px 2px #666;
+    z-index:9999;
+    display:none;
+}
+
+#drag .title {
+    position: relative;
+    height: 27px;
+    margin: 5px;
+}
+
+#drag .title h2 {
+    font-size: 14px;
+    height: 27px;
+    line-height: 24px;
+    border-bottom: 1px solid #A1B4B0;
+    margin-top:0;
+}
+
+#drag .title div {
+    position: absolute;
+    height: 19px;
+    top: 2px;
+    right: 0;
+}
+
+#drag .title a,
+a.open {
+    float: left;
+    width: 21px;
+    height: 19px;
+    display: block;
+    margin-left: 5px;
+    background: url(../resources/dist/images/tool.png) no-repeat;
+}
+
+a.open {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    margin-left: -10px;
+    background-position: 0 0;
+}
+
+a.open:hover {
+    background-position: 0 -29px;
+}
+
+#drag .title a.min {
+    background-position: -29px 0;
+}
+
+#drag .title a.min:hover {
+    background-position: -29px -29px;
+}
+
+#drag .title a.max {
+    background-position: -60px 0;
+}
+
+#drag .title a.max:hover {
+    background-position: -60px -29px;
+}
+
+#drag .title a.revert {
+    background-position: -149px 0;
+    display: none;
+}
+
+#drag .title a.revert:hover {
+    background-position: -149px -29px;
+}
+
+#drag .title a.close {
+    background-position: -89px 0;
+}
+
+#drag .title a.close:hover {
+    background-position: -89px -29px;
+}
+
+#drag .contentImg {
+    overflow: auto;
+    text-align:center;
+    box-sizing: border-box;
+    padding:10px;
+    position:absolute;
+    left:0;
+    top:34px;
+    width:96%;
+    height:80%;
+    margin-left:2%;
+    text-align: center;
+    vertical-align: middle;display: table-cell;
+}
+#drag .contentImg img{
+    width:100%;
+    height:auto;
+    vertical-align: middle;
+}
+#drag .resizeBR {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    cursor: nw-resize;
+    /*background: url(img/resize.png) no-repeat;*/
+}
+
+#drag .resizeL,
+#drag .resizeT,
+#drag .resizeR,
+#drag .resizeB,
+#drag .resizeLT,
+#drag .resizeTR,
+#drag .resizeLB {
+    position: absolute;
+    background: #000;
+    overflow: hidden;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+#drag .resizeL,
+#drag .resizeR {
+    top: 0;
+    width: 5px;
+    height: 100%;
+    cursor: w-resize;
+}
+
+#drag .resizeR {
+    right: 0;
+}
+
+#drag .resizeT,
+#drag .resizeB {
+    width: 100%;
+    height: 5px;
+    cursor: n-resize;
+}
+
+#drag .resizeT {
+    top: 0;
+}
+
+#drag .resizeB {
+    bottom: 0;
+}
+
+#drag .resizeLT,
+#drag .resizeTR,
+#drag .resizeLB {
+    width: 8px;
+    height: 8px;
+    background: #FF0;
+}
+
+#drag .resizeLT {
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+}
+
+#drag .resizeTR {
+    top: 0;
+    right: 0;
+    cursor: ne-resize;
+}
+
+#drag .resizeLB {
+    left: 0;
+    bottom: 0;
+    cursor: ne-resize;
+}
+
+</style>
+#*<div id="Drigging">
+    <div class="closeImg"><img src="$!{STATIC_URL}/resources/dist/images/close1.png"></div>
+   <div class="bigImg">
+
+   </div>
+</div>*#
+<div id="drag">
+    <div id="drag1">
+        <div class="title">
+            <h2>拖动这里</h2>
+            <div>
+                <a class="min" href="javascript:;" title="最小化"></a>
+                <a class="max" href="javascript:;" title="最大化"></a>
+                <a class="revert" href="javascript:;" title="还原"></a>
+                <a class="close" href="javascript:;" title="关闭"></a>
+            </div>
+        </div>
+
+        <div class="contentImg">
+
+        </div>
+    </div>
+    <div class="resizeL"></div>
+    <div class="resizeT"></div>
+    <div class="resizeR"></div>
+    <div class="resizeB"></div>
+    <div class="resizeLT"></div>
+    <div class="resizeTR"></div>
+    <div class="resizeBR"></div>
+    <div class="resizeLB"></div>
+</div>
+    <!-- Site wrapper -->
+    <div class="wrapper">
+		#parse("/WEB-INF/views/common/leftbar.vm")
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            团队行程管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/main"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li class="active">修改团队行程</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			  <div class="box box-info">
+				<div class="box-header with-border">
+				  <h3 class="box-title">编辑行程</h3>
+                   <!-- <div class="navbar-custom-menu returnBus pull-right">
+                        <ul class="nav navbar-nav">
+
+                            <li class="dropdown messages-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+                                    <span class="label label-success">还原已删除项目</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header">0个删除项目</li>
+                                    <li>
+
+                                        <ul class="menu">
+
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>-->
+                    <div class="box-tools pull-right" style="margin-right:14px;">
+					  <input type="hidden" autocomplete="off" name="tId" value="$!{scheduleEntity.teamId}"/>
+                       <!-- <button class="btn btn-sm  btn-primary" id="submitJour" style="margin-right:20px;">导入游客</button>-->
+                      <a class="btn btn-sm  btn-warning" id="viewSchedule" href="javascript:;">预览行程</a>
+                    </div>
+				</div><!-- /.box-header -->
+				
+				<div class="box-body">
+                #*轮播*#
+                    <div class="col-md-4" >
+                    ##                        <h3 style="text-align: center;color:#0000cc;">泰国-曼谷-芭提雅7日游</h3>
+                        <!--轮播-->
+                        <center>
+                            <div id="gallery" class="ad-gallery">
+                                <div class="ad-image-wrapper">
+                                </div>
+                                <div class="ad-nav">
+                                    <div class="ad-thumbs">
+                                        <ul class="ad-thumb-list">
+                                        #*<li>
+                                            <a href="$!{STATIC_URL}/resources/dist/images/img1/13.jpg">
+                                                <img src="$!{STATIC_URL}/resources/dist/images/img1/thumbs/t13.jpg">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="$!{STATIC_URL}/resources/dist/images/img1/10.jpg">
+                                                <img src="$!{STATIC_URL}/resources/dist/images/img1/thumbs/t10.jpg">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="$!{STATIC_URL}/resources/dist/images/img1/11.jpg">
+                                                <img src="$!{STATIC_URL}/resources/dist/images/img1/thumbs/t11.jpg">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="$!{STATIC_URL}/resources/dist/images/img1/12.jpg">
+                                                <img src="$!{STATIC_URL}/resources/dist/images/img1/thumbs/t12.jpg">
+                                            </a>
+                                        </li>*#
+
+                                        ##                                                $response.scheduleList.processPhotosUrls
+                                        ##                                            #if($map.size()>0)
+                                        ##                                                #foreach( $Detail in ${map.keySet()})
+                                        ##                                                    #foreach( $Detailphoto in ${map.get($Detail)})
+                                        ##                                                        <li>
+                                        ##                                                            <a href=" $Detailphoto.photoUrl">
+                                        ##                                                                <img src=" $Detailphoto.thumbnailUrl"  class="image$!{Detailphoto.id}">
+                                        ##                                                            </a>
+                                        ##                                                        </li>
+                                        ##                                                    #end
+                                        ##                                                #end
+                                        ##                                            #else
+                                        ##                                                <div>暂无相册</div>
+                                        ##                                            #end
+                                        #*#foreach( $Detail in ${map.keySet()})
+                                            #foreach( $Detailphoto in ${map.get($Detail)})
+                                                <li>
+                                                    <a href=" $Detailphoto.photoUrl">
+                                                        <img src=" $Detailphoto.thumbnailUrl"  class="image$!{Detailphoto.id}">
+                                                    </a>
+                                                </li>
+                                            #end
+                                        #end*#
+                                            #if($!scheduleEntity.processPhotosUrls.size()>0)
+                                                #foreach( $list in $!scheduleEntity.processPhotosUrls)
+                                                ##                                                    #foreach( $Detailphoto in ${map.get($Detail)})
+                                                    <li>
+                                                        <a href="$!list">
+                                                            <img src="$!list"  height="66">
+                                                        </a>
+                                                    </li>
+                                                ##                                                    #end
+                                                #end
+                                            #else
+                                                <div>暂无相册</div>
+                                            #end
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </center>
+                    </div>
+                #*内容*#
+                    <div class="col-md-8">
+                    <div class="sui-steps swiper-container">
+                        <div class="swiper-wrapper">
+                        <div class="wrap swiper-slide">
+                            <div class="finished">
+                                <label><span class="round"><i class="sui-icon icon-pc-right"></i></span><span>基本行程</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                            </div>
+                        </div>
+                        #if($scheduleEntity.scheduleDetailList.size()>0)
+                            #foreach( $Detail in $scheduleEntity.scheduleDetailList)
+                                #set( $dayNumserlis=$!{Detail.dayNum} + 1)
+                                <div class="wrap swiper-slide">
+                                    <div class="finished">
+                                        <label><span class="round"><i class="sui-icon icon-pc-right"></i></span><span>D$!{Detail.dayNum}</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                    </div>
+                                </div>
+                            #end
+                                <div class="wrap swiper-slide">
+                                    <div class="#if($!{promptEntity.id}&&$!{promptEntity.id}!="")finished #else current #end">
+                                        #set($step3=${dayNumserlis} + 1)
+                                        <label><span class="round">#if($!{promptEntity.id}&&$!{promptEntity.id}!="")<i class="sui-icon icon-pc-right"></i>#else $step3 #end</span><span>更多说明</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                    </div>
+                                </div>
+                                <div class="wrap swiper-slide">
+                                    <div class="#if($!{promptEntity.id}&&$!{promptEntity.id}!="")#if($!{scheduleEntity.txGroupId}&&$!{scheduleEntity.txGroupId}!="")finished #else current #end #else todo #end">
+                                        #set($step4=${step3} + 1)
+                                        <label><span class="round">#if($!{promptEntity.id}&&$!{promptEntity.id}!="")<i class="sui-icon icon-pc-right"></i>#else $step4 #end</span><span>导入游客</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                    </div>
+                                </div>
+                                <!--<div class="wrap swiper-slide" id="sureSetps">
+                                    <div class="#if($!{scheduleEntity.txGroupId}&&$!{scheduleEntity.txGroupId}!="")finished #else todo #end">
+                                        #set($step5=${step4} + 1)
+                                        <label><span class="round">#if($!{scheduleEntity.txGroupId}&&$!{scheduleEntity.txGroupId}!="")<i class="sui-icon icon-pc-right"></i>#else$step5#end</span><span>确认行程</span></label>
+                                    </div>
+                                </div>-->
+                        #else
+                            <div class="wrap swiper-slide">
+                                <div class="current">
+                                    <label><span class="round">2</span><span>D1</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                </div>
+                            </div>
+                            <div class="wrap swiper-slide">
+                                <div class="todo">
+                                    <label><span class="round">3</span><span>更多说明</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                </div>
+                            </div>
+                            <div class="wrap swiper-slide">
+                                <div class="todo">
+                                    <label><span class="round">4</span><span>导入游客</span></label><i class="triangle-right-bg"></i><i class="triangle-right"></i>
+                                </div>
+                            </div>
+                            <!--<div class="wrap swiper-slide" id="sureSetps">
+                                <div class="todo">
+                                    <label><span class="round">5</span><span>确认行程</span></label>
+                                </div>
+                            </div>-->
+                        #end
+
+
+                        </div>
+                        <div class="swiper-scrollbar">
+                            &nbsp;</div>
+                    </div><!--sui-steps end-->
+					<!-- Default box -->
+                    <div class="col-xs-12" id="editArea">
+                        <div class="box box-info">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">行程概述</h3>
+                            </div><!-- /.box-header -->
+                            <!-- form start -->
+                            <form role="form" action="$!{link.contextPath}/schedule/scheduleUpdate" method="post" id="form1" class="form-horizontal">
+                                <input type="hidden" autocomplete="off" name="id" value="$!{scheduleEntity.id}"/>
+
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="teamNum"><strong>*</strong>团号：</label>
+                                        <div class="col-sm-6">
+                                            <p class="form-control-static">$!{scheduleEntity.teamNum}</p>
+                                            <input type="hidden"  id="teamNum" class="form-control" value="$!{scheduleEntity.teamNum}" name="teamNum">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label  col-sm-3" for="name"><strong>*</strong>行程名称：</label>
+                                        <div class="col-sm-6">
+                                            <p class="form-control-static">$!{scheduleEntity.name}</p>
+                                            <input type="hidden" placeholder="行程名称" id="name" value="$!{scheduleEntity.name}" class="form-control" name="name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label  col-sm-3" for="startPlace"><strong>*</strong>出发地：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" placeholder="出发地" id="startPlace" value="$!{scheduleEntity.startPlace}" class="form-control" autocomplete="off" name="startPlace">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label  col-sm-3" for="endPlace"><strong>*</strong>目的地国家：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" placeholder="目的地国家" id="endPlace" value="$!{scheduleEntity.endPlace}" class="form-control" name="endPlace">
+                                            <p class="help-block small">重要提示：如有多个目的地国家，请用英文分号隔开！</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" for="startDate"><strong>*</strong>行程日期：</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group  pull-left">
+
+                                                <p class="form-control-static">$!date.format('yyyy-MM-dd',$!{scheduleEntity.startDate})</p>
+                                                <input type="hidden" id="startDate" name="startDate" autocomplete="off" readonly value="$!date.format('yyyy-MM-dd',$!{scheduleEntity.startDate})"  placeholder="yyyy-mm-dd"  class="form-control">
+                                            </div>
+                                            <div class="col-sm-2  pull-left control-label text-center" style="text-align:center;padding-left:10px;padding-right:10px;">至</div>
+                                            <div class="input-group  pull-left">
+
+                                                <p class="form-control-static">$!date.format('yyyy-MM-dd',$!{scheduleEntity.endDate})</p>
+                                                <input type="hidden" id="endDate" name="endDate" readonly autocomplete="off" value="$!date.format('yyyy-MM-dd',$!{scheduleEntity.endDate})" placeholder="yyyy-mm-dd" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="collectionTime">集合时间：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text"  id="collectionTime" class="form-control" readonly autocomplete="off" value="$!date.format('yyyy-MM-dd HH:mm',$!{scheduleEntity.collectionTime})" placeholder="yyyy-mm-dd HH:mm:ss" name="collectionTime">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label  col-sm-3" for="collectionPlace">集合地点：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" placeholder="集合地点" id="collectionPlace" value="$!{scheduleEntity.collectionPlace}" class="form-control" name="collectionPlace">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" >
+                                        <label class="control-label  col-sm-3" for="leadName"><strong>*</strong>领队姓名：</label>
+                                        <div class="col-sm-9 row">
+                                            <div class="col-sm-4">
+                                                <p class="form-control-static">$!{scheduleEntity.leadName}</p>
+                                                <input type="hidden" placeholder="领队姓名"  readonly value="$!{scheduleEntity.leadName}" class="form-control" name="leadName">
+                                            </div>
+                                           <!-- <div class="col-sm-3 col-md-2 padding10">
+                                                <button class="btn btn-primary btn-block btn-sm leaderSend" id="leaderSend1" type="button">搜索</button>
+                                            </div>
+                                            <div class="col-sm-3 col-md-2">
+                                                <button class="btn btn-primary btn-block btn-sm leaderadd" id="leaderAdd1" type="button">添加</button>
+                                            </div>-->
+                                            <input type="hidden" autocomplete="off" name="leaderId" value="$!{scheduleEntity.leaderId}"/>
+                                            <input type="hidden" autocomplete="off" name="sex"  value="$!{scheduleEntity.sex}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="phone"><strong>*</strong>联系电话：</label>
+                                        <div class="col-sm-6">
+                                            <p class="form-control-static">$!{scheduleEntity.phone}</p>
+                                            <input type="hidden" placeholder="联系电话" id="phone" value="$!{scheduleEntity.phone}" readonly class="form-control" name="phone">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="featurePhoto " class="control-label  col-sm-3">行程特色：</label>
+                                        <div class="col-sm-9">
+                                            <div id="featurePhoto">
+
+                                            </div>
+                                            <div class="parentFileBox">
+                                                <ul class="fileBoxUl">
+                                                    #if(${scheduleEntity.featurePhoto}&&${scheduleEntity.featurePhoto}!="")
+                                                        <li class="" id="featurePhoto">
+                                                            <div class="viewThumb">
+                                                                <img src="$!{scheduleEntity.featurePhoto}"/>
+                                                            </div>
+                                                            <div class="diyCancel"></div>
+                                                            <div title="删除" class="diySuccess" srcimg="$!{scheduleEntity.featurePhoto}" style="display: block;"></div>
+                                                            <div class="diyBar" style="display: none;">
+                                                                <div class="diyProgress" style="width: 100%;"></div>
+                                                                <div class="diyProgressText">上传完成</div>
+                                                            </div>
+                                                        </li>
+                                                    #end
+
+                                                </ul>
+                                            </div>
+                                            <p class="help-block small">可上传1张图片，上传图片格式为png,jpeg,jpg,gif格式，单个图片大小不超过1024KB</p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <input type="hidden" autocomplete="off" name="featurePhoto" value="$!{scheduleEntity.featurePhoto}"/>
+                                                    <textarea name="feature" class="form-control">$!{scheduleEntity.feature}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="emergencyContact" class="control-label col-sm-3">紧急联系人：</label>
+                                        <div class="col-sm-6">
+                                            <textarea name="emergencyContact" class="form-control" id="emergencyContact"   value="$!{scheduleEntity.emergencyContact}" placeholder="紧急联系人">$!{scheduleEntity.emergencyContact}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <button class="btn btn-primary btn-block btn-sm" type="submit">下一步</button>
+                                        </div>
+                                    </div>
+                                </div><!-- /.box-body -->
+                            </form>
+                            <div class="overlays" style="display:none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                        </div><!-- /.box -->
+                        <!--行程概述end-->
+                        #if($scheduleEntity.scheduleDetailList.size()>0)
+
+                            #foreach( $Detail in $scheduleEntity.scheduleDetailList)
+                                <!--D$!{Detail.dayNum}-->
+                                #if($!{Detail.dayNum}==1)
+                                    <div class="box box-info" style="display:none;">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">D$!{Detail.dayNum}</h3>
+                                        </div><!-- /.box-header -->
+                                        <!-- form start -->
+                                        <form role="form" action="$!{link.contextPath}/schedule/scheduleDetailUpdate"  method="post" onsubmit="return validateCallback($!Detail.dayNum,this)" id="form2$!Detail.dayNum"  class="form-horizontal">
+                                            <input type="hidden" autocomplete="off" name="jourId" value="$!Detail.jourId"/>
+                                            <input type="hidden" autocomplete="off" name="id" value="$!Detail.id"/>
+                                            <input type="hidden" autocomplete="off" name="dayNum" value="$!Detail.dayNum"/>
+                                            <div class="box-body">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="startPlace"><strong>*</strong>日期：</label>
+                                                    <div class="col-sm-6">
+                                                        <p class="form-control-static">$!date.format('yyyy-MM-dd',$!Detail.scheduleDate)</p>
+                                                        <input type="hidden" id="scheduleDate" value="$!date.format('yyyy-MM-dd',$!Detail.scheduleDate)" placeholder="yyyy-mm-dd" name="scheduleDate" class="form-control" readonly autocomplete="off">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="startPlace"><strong>*</strong>出发地：</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" id="startPlace" value="$!Detail.startPlace" name="startPlace" class="form-control" autocomplete="off" placeholder="出发地">
+                                                    </div>
+                                                </div>
+
+                                                #if($!Detail.destination1&&$!Detail.destination1!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="destination1"><strong>*</strong>目的地：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="destination1" value="$!Detail.destination1" name="destination1" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId1">
+                                                            <input type="hidden"  value="$!{Detail.destinationId1}" name="destinationId1" >
+                                                            <input type="hidden"  value="$!{Detail.country1}" name="country1" >
+                                                            <input type="hidden"  value="$!{Detail.countryId1}" name="countryId1" >
+                                                            <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-block btn-warning" id="destinationBtn" type="button">增加</button>
+                                                        </div>
+                                                    </div>
+                                                #else
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="destination1"><strong>*</strong>目的地：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="destination1" value="$!Detail.destination1" name="destination1" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId1">
+                                                            <input type="hidden"  value="$!{Detail.destinationId1}" name="destinationId1" >
+                                                            <input type="hidden"  value="$!{Detail.country1}" name="country1" >
+                                                            <input type="hidden"  value="$!{Detail.countryId1}" name="countryId1" >
+                                                            <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-block btn-warning" id="destinationBtn" type="button">增加</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                #if($!Detail.destination2&&$!Detail.destination2!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="destination2">目的地2：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="destination2" value="$!{Detail.destination2}" name="destination2" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId2">
+                                                            <input type="hidden"  value="$!{Detail.destinationId2}" name="destinationId2" >
+                                                            <input type="hidden"  value="$!{Detail.country2}" name="country2" >
+                                                            <input type="hidden"  value="$!{Detail.countryId2}" name="countryId2" >
+                                                            <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button type="button" class="btn btn-block btn-danger destinationremove">删除</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                #if($!Detail.destination3&&$!Detail.destination3!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="destination1">目的地3：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="destination3" value="$!Detail.destination3" name="destination3" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId3">
+                                                            <input type="hidden" value="$!Detail.destinationId3" name="destinationId3" >
+                                                            <input type="hidden"  value="$!{Detail.country3}" name="country3" >
+                                                            <input type="hidden"  value="$!{Detail.countryId3}" name="countryId3" >
+                                                            <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button type="button" class="btn btn-block btn-danger destinationremove">删除</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                #if($!Detail.destination4&&$!Detail.destination4!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="destination1">目的地4：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="destination4" value="$!Detail.destination4" name="destination4" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId4">
+                                                            <input type="hidden" value="$!Detail.destinationId4" name="destinationId4" >
+                                                            <input type="hidden"  value="$!{Detail.country4}" name="country4" >
+                                                            <input type="hidden"  value="$!{Detail.countryId4}" name="countryId4" >
+                                                            <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button type="button" class="btn btn-block btn-danger destinationremove">删除</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">行程图片：</label>
+                                                    <div class="col-sm-9">
+                                                        <div id="schedulePhotosUrl1">
+
+                                                        </div>
+
+                                                        <div class="parentFileBox">
+                                                            <ul class="fileBoxUl">
+                                                                #if(${Detail.schedulePhotosUrl1}&&${Detail.schedulePhotosUrl1}!="")
+                                                                    <li class="schedulePhotos1">
+                                                                        <div class="viewThumb">
+                                                                            <img src="${Detail.schedulePhotosUrl1}"/>
+                                                                        </div>
+                                                                        <div class="diyCancel"></div>
+                                                                        <div title="删除" class="diySuccess" srcimg="${Detail.schedulePhotosUrl1}" style="display: block;"></div>
+                                                                        <div class="diyBar" style="display: none;">
+                                                                            <div class="diyProgress" style="width: 100%;"></div>
+                                                                            <div class="diyProgressText">上传完成</div>
+                                                                        </div>
+                                                                    </li>
+                                                                #end
+                                                                #if(${Detail.schedulePhotosUrl2}&&${Detail.schedulePhotosUrl2}!="")
+                                                                    <li class="schedulePhotos2">
+                                                                        <div class="viewThumb">
+                                                                            <img src="${Detail.schedulePhotosUrl2}"/>
+                                                                        </div>
+                                                                        <div class="diyCancel"></div>
+                                                                        <div title="删除" class="diySuccess" srcimg="${Detail.schedulePhotosUrl2}" style="display: block;"></div>
+                                                                        <div class="diyBar" style="display: none;">
+                                                                            <div class="diyProgress" style="width: 100%;"></div>
+                                                                            <div class="diyProgressText">上传完成</div>
+                                                                        </div>
+                                                                    </li>
+                                                                #end
+                                                                #if(${Detail.schedulePhotosUrl3}&&${Detail.schedulePhotosUrl3}!="")
+                                                                    <li class="schedulePhotos3">
+                                                                        <div class="viewThumb">
+                                                                            <img src="${Detail.schedulePhotosUrl3}"/>
+                                                                        </div>
+                                                                        <div class="diyCancel"></div>
+                                                                        <div title="删除" class="diySuccess" srcimg="${Detail.schedulePhotosUrl3}" style="display: block;"></div>
+                                                                        <div class="diyBar" style="display: none;">
+                                                                            <div class="diyProgress" style="width: 100%;"></div>
+                                                                            <div class="diyProgressText">上传完成</div>
+                                                                        </div>
+                                                                    </li>
+                                                                #end
+                                                            </ul>
+                                                        </div>
+                                                        <p class="help-block small">每日行程可上传3张图片，上传图片格式为png,jpeg,jpg,gif格式，单个图片大小不超过1024KB</p>
+                                                    </div>
+                                                    <div id="photoLibrary1" style="display: none;">
+                                                        <input type="hidden" autocomplete="off" name="schedulePhotosUrl1" value="$!Detail.schedulePhotosUrl1"/>
+                                                        <input type="hidden" autocomplete="off" name="schedulePhotosUrl2" value="$!Detail.schedulePhotosUrl2"/>
+                                                        <input type="hidden" autocomplete="off" name="schedulePhotosUrl3" value="$!Detail.schedulePhotosUrl3"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="desc"><strong>*</strong>行程概述：</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea placeholder="行程概述" rows="3" class="form-control" value="$!Detail.desc" name="desc" id="desc">$!Detail.desc</textarea>
+                                                    </div>
+                                                </div>
+                                    #if($Detail.scenicList.size()>0)
+                                    #set($isce=0)
+                                    #foreach($scenicList in $Detail.scenicList)
+                                        #set($iscew=$isce + 1)
+                                        #if($iscew==1)
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="scenicList">景点$iscew：</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" placeholder="景点" id="scenicList$!iscew" autocomplete="off" name="scenicList[$!isce].name" value="$!scenicList.name" class="form-control">
+                                                    <input type="hidden"  id="spotId$!{iscew}"  name="scenicList[$!isce].spotId" value="$!scenicList.spotId">
+
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <button class="btn btn-block btn-warning" id="scenicListBtn" type="button">增加</button>
+                                                </div>
+                                            </div>
+                                            #else
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="scenicList">景点$iscew：</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" placeholder="景点" id="scenicList$!iscew" autocomplete="off" name="scenicList[$!isce].name" value="$!scenicList.name" class="form-control">
+                                                        <input type="hidden" id="spotId$!{iscew}"  name="scenicList[$!isce].spotId" value="$!scenicList.spotId">
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <button type="button" class="btn btn-block btn-danger scenicListmove">删除</button>
+                                                    </div>
+                                                </div>
+                                        #end
+
+                                        #set($isce=$isce+1)
+                                                #end
+                                #else
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="scenicList">景点：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" placeholder="景点" id="scenicList1" name="scenicList[0].name" autocomplete="off" value="" class="form-control">
+                                            <input type="hidden"  id="spotId1"  name="scenicList[0].spotId">
+
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button class="btn btn-block btn-warning" id="scenicListBtn" type="button">增加</button>
+                                        </div>
+                                    </div>
+                                #end
+                                                <div class="form-group ">
+                                                    <label class="control-label  col-sm-3" for="hotel">
+                                                        酒店已确认：
+                                                        <input type="radio" name="hotelConfirm" #if($!Detail.hotelConfirm==1) checked #end value="$!Detail.hotelConfirm" checked/>
+                                                    </label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" placeholder="酒店名称" id="hotel" #if($!Detail.hotelConfirm==0) disabled #end name="hotel" autocomplete="off" value="$!Detail.hotel" class="form-control">
+                                                        <input type="hidden"   name="hotelId" #if($!Detail.hotelConfirm==0) disabled #end value="$!Detail.hotelId" class="form-control">
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+
+
+                                                        <label  for="sameLevel" class="control-label"><input type="checkbox" #if($!Detail.hotelConfirm==0) disabled #end name="sameLevel" value="$!Detail.sameLevel"  #if($!Detail.sameLevel==1) checked #end id="sameLevel"/>同级酒店</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="hotelInput">
+                                                        酒店未确认：
+                                                        <input type="radio" name="hotelConfirm" #if($!Detail.hotelConfirm==0) checked #end value="$!Detail.hotelConfirm"/>
+
+                                                    </label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" placeholder="酒店名称" id="hotelInput"  #if($!Detail.hotelConfirm==1) disabled #end value="$!Detail.hotelInput" autocomplete="off" name="hotelInput" class="form-control">
+                                                        <input type="hidden"   name="hotelId" value="$!Detail.hotelId" #if($!Detail.hotelConfirm==1) disabled #end class="form-control">
+
+                                                    </div>
+                                                </div>
+
+
+                                                #if($!Detail.flight1&&$!Detail.flight1!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="flight1">航班信息：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" placeholder="航班" id="flight1" name="flight1" autocomplete="off" value="$!Detail.flight1" class="form-control">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-block btn-warning" type="button" id="flightAdd">增加</button>
+                                                        </div>
+                                                    </div>
+                                                #else
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="flight1">航班信息：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" placeholder="航班" id="flight1" name="flight1" autocomplete="off" value="$!Detail.flight1" class="form-control">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-block btn-warning" type="button" id="flightAdd">增加</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                #if($!Detail.flight2&&$!Detail.flight2!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="flight1">航班信息：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" placeholder="航班" id="flight2" name="flight2" autocomplete="off" value="$!Detail.flight2" class="form-control">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button type="button" class="btn btn-block btn-danger flightremove">删除</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                <div class="form-group">
+                                                    <label class="control-label  col-sm-3" for="inputNamel3">交通信息：</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" placeholder="交通信息" id="trafficInfo$!{Detail.dayNum}" value="$!Detail.trafficInfo" name="trafficInfo" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="shoppInfo">购物点：</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea placeholder="购物点" rows="3" class="form-control" value="$!Detail.shoppInfo" name="shoppInfo" id="shoppInfo">$!Detail.shoppInfo</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="cateringInfo"><strong>*</strong>餐饮说明：</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea placeholder="餐饮说明" rows="3" id="cateringInfo$!{Detail.dayNum}" value="$!Detail.cateringInfo" name="cateringInfo" class="form-control">$!Detail.cateringInfo</textarea>
+                                                    </div>
+                                                </div>
+#if($!Detail.leaderId&&$!Detail.leaderId!="")
+    <div class="form-group" >
+        <label class="control-label  col-sm-3" for="leadName">导游姓名：</label>
+        <div class="col-sm-9 row">
+            <div class="col-sm-4">
+                <p class="form-control-static">$!Detail.name</p>
+                <input type="hidden" placeholder="导游姓名"  readonly class="form-control"  value="$!Detail.name" name="name">
+            </div>
+            <div class="col-sm-2 padding10" style="display:none">
+                <button class="btn btn-primary btn-block btn-sm leaderSend" id="leaderSend21" type="button">搜索</button>
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary btn-block btn-sm leaderadd" id="leaderAdd1" type="button">添加</button>
+            </div>
+            <input type="hidden" autocomplete="off" name="leaderId" value="$!Detail.leaderId"/>
+            <input type="hidden" autocomplete="off" name="sex" value="$!Detail.sex"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-3" for="leaderphone$!{Detail.dayNum}">导游电话：</label>
+        <div class="col-sm-6">
+            <p class="form-control-static">$!{Detail.phone}</p>
+            <input type="hidden" placeholder="联系电话" id="leaderphone$!{Detail.dayNum}" value="$!{Detail.phone}" readonly class="form-control" name="phone">
+        </div>
+    </div>
+
+    #else
+        <div class="form-group" >
+            <label class="control-label  col-sm-3" for="leadName">导游姓名：</label>
+            <div class="col-sm-9 row">
+                <div class="col-sm-4" style="display:none;">
+                    <p class="form-control-static">$!{Detail.phone}</p>
+                    <input type="hidden" placeholder="导游姓名"  readonly class="form-control"  value="$!Detail.name" name="name">
+                </div>
+                <div class="col-sm-2 padding10" style="display:none">
+                    <button class="btn btn-primary btn-block btn-sm leaderSend" id="leaderSend2$!{Detail.dayNum}" type="button">搜索</button>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-primary btn-block btn-sm leaderadd" id="leaderAdd1" type="button">添加</button>
+                </div>
+                <input type="hidden" autocomplete="off" name="leaderId" value="$!Detail.leaderId"/>
+                <input type="hidden" autocomplete="off" name="sex" value="$!Detail.sex"/>
+            </div>
+        </div>
+        <div class="form-group" style="display:none;">
+            <label class="control-label col-sm-3" for="leaderphone$!{Detail.dayNum}">导游电话：</label>
+            <div class="col-sm-6">
+                <p class="form-control-static">$!{Detail.phone}</p>
+                <input type="hidden" placeholder="联系电话" id="leaderphone$!{Detail.dayNum}" value="$!{Detail.phone}" readonly class="form-control" name="phone">
+            </div>
+        </div>
+#end
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="newEntry">新增标题：</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" placeholder="新增标题" id="newEntry$!{Detail.dayNum}"  value="$!Detail.newEntry" name="newEntry" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="newContant">新增内容：</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea placeholder="新增内容" rows="3" id="newContant$!{Detail.dayNum}" name="newContant" value="$!Detail.newContant" class="form-control">$!Detail.newContant</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group-btn">
+                                                    <div class="col-sm-6 col-sm-offset-3">
+                                                        <button class="btn btn-primary pull-right btn-block btn-sm scheduleDetailSave" type="submit">下一步</button>
+                                                    </div>
+                                                </div>
+
+                                            </div><!-- /.box-body -->
+                                        </form>
+                                        <div class="overlays" style="display:none;">
+                                            <i class="fa fa-refresh fa-spin"></i>
+                                        </div>
+                                    </div><!-- /.box -->
+
+                                    <!--D end-->
+                                #else
+                                    #set( $num=$!{Detail.dayNum} - 1)
+                                    <div class="box box-info" style="display:none;">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">D$!{Detail.dayNum}</h3>
+                                        </div><!-- /.box-header -->
+                                        <!-- form start -->
+                                        <form role="form" action="$!{link.contextPath}/schedule/scheduleDetailUpdate"  onsubmit="return validateCallback($!Detail.dayNum,this)" method="post" id="form2$!Detail.dayNum"  class="form-horizontal">
+                                            <input type="hidden" autocomplete="off" name="jourId" value="$!Detail.jourId"/>
+                                            <input type="hidden" autocomplete="off" name="id" value="$!Detail.id"/>
+                                            <input type="hidden" autocomplete="off" name="dayNum" value="$!Detail.dayNum"/>
+                                            <div class="box-body">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="startPlace"><strong>*</strong>日期：</label>
+                                                    <div class="col-sm-6">
+                                                        <p class="form-control-static">$!date.format('yyyy-MM-dd',$!Detail.scheduleDate)</p>
+                                                        <input type="hidden" id="scheduleDate$!{Detail.dayNum}" value="$!date.format('yyyy-MM-dd',$!Detail.scheduleDate)" name="scheduleDate" placeholder="yyyy-mm-dd" class="form-control" readonly autocomplete="off">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="startPlace"><strong>*</strong>出发地：</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" id="startPlace$!{Detail.dayNum}" value="$!Detail.startPlace" name="startPlace" class="form-control" autocomplete="off" placeholder="出发地">
+                                                    </div>
+                                                </div>
+                                                #if($!Detail.destination1&&$!Detail.destination1!="")
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="destination1"><strong>*</strong>目的地：</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" id="destination${num}1" value="$!Detail.destination1" name="destination1" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId1">
+                                                        <input type="hidden" value="$!Detail.destinationId1" name="destinationId1" >
+                                                        <input type="hidden"  value="$!{Detail.country1}" name="country1" >
+                                                        <input type="hidden"  value="$!{Detail.countryId1}" name="countryId1" >
+                                                        <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <button class="btn btn-block btn-warning" id="destinationBtn$!{Detail.dayNum}" type="button">增加</button>
+                                                    </div>
+                                                </div>
+                                                    #else
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-3" for="destination1"><strong>*</strong>目的地：</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" id="destination${num}1" value="$!Detail.destination1" name="destination1" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId1">
+                                                                <input type="hidden" value="$!Detail.destinationId1" name="destinationId1" >
+                                                                <input type="hidden"  value="$!{Detail.country1}" name="country1" >
+                                                                <input type="hidden"  value="$!{Detail.countryId1}" name="countryId1">
+                                                                <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <button class="btn btn-block btn-warning" id="destinationBtn$!{Detail.dayNum}" type="button">增加</button>
+                                                            </div>
+                                                        </div>
+                                                #end
+                                    #if($!Detail.destination2&&$!Detail.destination2!="")
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="destination1">目的地2：</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" id="destination${num}2" value="$!Detail.destination2" name="destination2" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId2">
+                                                        <input type="hidden"  value="$!Detail.destinationId2" name="destinationId2" >
+                                                        <input type="hidden"  value="$!{Detail.country2}" name="country2" >
+                                                        <input type="hidden"  value="$!{Detail.countryId2}" name="countryId2" >
+                                                        <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <button type="button" class="btn btn-block btn-danger destinationremove">删除</button>
+                                                    </div>
+                                                </div>
+                                        #end
+                                                #if($!Detail.destination3&&$!Detail.destination3!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="destination1">目的地3：</label>
+
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="destination${num}3" value="$!Detail.destination3" name="destination3" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId3">
+                                                            <input type="hidden"  value="$!Detail.destinationId3" name="destinationId3" >
+                                                            <input type="hidden"  value="$!{Detail.country3}" name="country3" >
+                                                            <input type="hidden"  value="$!{Detail.countryId3}" name="countryId3" >
+                                                            <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button type="button" class="btn btn-block btn-danger destinationremove">删除</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                #if($!Detail.destination4&&$!Detail.destination4!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="destination1">目的地4：</label>
+
+                                                        <div class="col-sm-6">
+                                                            <input type="text" id="destination${num}4" value="$!Detail.destination4" name="destination4" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId4">
+                                                            <input type="hidden" value="$!Detail.destinationId4" name="destinationId4" >
+                                                            <input type="hidden"  value="$!{Detail.country4}" name="country4" >
+                                                            <input type="hidden"  value="$!{Detail.countryId4}" name="countryId4" >
+                                                            <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button type="button" class="btn btn-block btn-danger destinationremove">删除</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3">行程图片：</label>
+                                                    <div class="col-sm-9">
+                                                        <div id="schedulePhotosUrl$!{Detail.dayNum}">
+
+                                                        </div>
+
+
+                                                        <div class="parentFileBox">
+                                                            <ul class="fileBoxUl">
+                                                                #if(${Detail.schedulePhotosUrl1}&&${Detail.schedulePhotosUrl1}!="")
+                                                                    <li  class="schedulePhotos2">
+                                                                        <div class="viewThumb">
+                                                                            <img src="${Detail.schedulePhotosUrl1}"/>
+                                                                        </div>
+                                                                        <div class="diyCancel"></div>
+                                                                        <div title="删除" class="diySuccess" srcimg="${Detail.schedulePhotosUrl1}" style="display: block;"></div>
+                                                                        <div class="diyBar" style="display: none;">
+                                                                            <div class="diyProgress" style="width: 100%;"></div>
+                                                                            <div class="diyProgressText">上传完成</div>
+                                                                        </div>
+                                                                    </li>
+                                                                #end
+                                                                #if(${Detail.schedulePhotosUrl2}&&${Detail.schedulePhotosUrl2}!="")
+                                                                    <li class="schedulePhotos2">
+                                                                        <div class="viewThumb">
+                                                                            <img src="${Detail.schedulePhotosUrl2}"/>
+                                                                        </div>
+                                                                        <div class="diyCancel"></div>
+                                                                        <div title="删除" class="diySuccess" srcimg="${Detail.schedulePhotosUrl2}" style="display: block;"></div>
+                                                                        <div class="diyBar" style="display: none;">
+                                                                            <div class="diyProgress" style="width: 100%;"></div>
+                                                                            <div class="diyProgressText">上传完成</div>
+                                                                        </div>
+                                                                    </li>
+                                                                #end
+                                                                #if(${Detail.schedulePhotosUrl3}&&${Detail.schedulePhotosUrl3}!="")
+                                                                    <li class="schedulePhotos3">
+                                                                        <div class="viewThumb">
+                                                                            <img src="${Detail.schedulePhotosUrl3}"/>
+                                                                        </div>
+                                                                        <div class="diyCancel"></div>
+                                                                        <div title="删除" class="diySuccess" srcimg="${Detail.schedulePhotosUrl3}" style="display: block;"></div>
+                                                                        <div class="diyBar" style="display: none;">
+                                                                            <div class="diyProgress" style="width: 100%;"></div>
+                                                                            <div class="diyProgressText">上传完成</div>
+                                                                        </div>
+                                                                    </li>
+                                                                #end
+                                                            </ul>
+                                                        </div>
+                                                        <div id="photoLibrary$!{Detail.dayNum}" style="display: none;">
+                                                            <input type="hidden" autocomplete="off" name="schedulePhotosUrl1" value="$!Detail.schedulePhotosUrl1"/>
+                                                            <input type="hidden" autocomplete="off" name="schedulePhotosUrl2" value="$!Detail.schedulePhotosUrl2"/>
+                                                            <input type="hidden" autocomplete="off" name="schedulePhotosUrl3" value="$!Detail.schedulePhotosUrl3"/>
+                                                        </div>
+                                                        <p class="help-block small">每日行程可上传3张图片，上传图片格式为png,jpeg,jpg,gif格式，单个图片大小不超过1024KB</p>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="desc"><strong>*</strong>行程概述：</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea placeholder="行程概述" rows="3" class="form-control" value="$!{Detail.desc}" name="desc" id="desc$!{Detail.dayNum}">$!{Detail.desc}</textarea>
+                                                    </div>
+                                                </div>
+                                                #if($Detail.scenicList.size()>0)
+
+                                                #set($isce=0)
+                                                #foreach($scenicList in $Detail.scenicList)
+                                                    #set($iscew=$isce + 1)
+                                                    #if($iscew==1)
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-3" for="scenicList">景点${iscew}：</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" placeholder="景点" id="scenicList$num$!iscew" autocomplete="off" name="scenicList[$!isce].name" value="$!scenicList.name" class="form-control">
+                                                                <input type="hidden" id="spotId$num$!iscew"  name="scenicList[$!isce].spotId" value="$!scenicList.spotId">
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <button class="btn btn-block btn-warning" id="scenicListBtn$!{Detail.dayNum}" type="button">增加</button>
+                                                            </div>
+                                                        </div>
+                                                    #else
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-3" for="scenicList">景点${iscew}：</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" placeholder="景点" id="scenicList${num}$!{iscew}" autocomplete="off" name="scenicList[$!isce].name" value="$!scenicList.name" class="form-control">
+                                                                <input type="hidden" id="spotId$num$!{iscew}"  name="scenicList[$!isce].spotId" value="$!scenicList.spotId">
+
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <button type="button" class="btn btn-block btn-danger scenicListmove">删除</button>
+                                                            </div>
+                                                        </div>
+                                                    #end
+
+                                                    #set($isce=$isce+1)
+                                                #end
+                                                    #else
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-3" for="scenicList">景点：</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" placeholder="景点" id="scenicList$!{num}1" autocomplete="off" name="scenicList[0].name" value="" class="form-control">
+                                                                <input type="hidden"  id="spotId${num}1"  name="scenicList[0].spotId">
+
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <button class="btn btn-block btn-warning" id="scenicListBtn$!{Detail.dayNum}" type="button">增加</button>
+                                                            </div>
+                                                        </div>
+                                                #end
+                                                <div class="form-group ">
+                                                    <label class="control-label  col-sm-3" for="hotel">
+                                                        酒店已确认：
+                                                        <input type="radio" name="hotelConfirm"  #if($!Detail.hotelConfirm==1) checked #end value="$!Detail.hotelConfirm" checked/>
+                                                    </label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" placeholder="酒店名称" id="hotel$!{Detail.dayNum}"  #if($!Detail.hotelConfirm==0) disabled #end name="hotel" value="$!Detail.hotel" autocomplete="off" class="form-control">
+                                                        <input type="hidden"   name="hotelId" #if($!Detail.hotelConfirm==0) disabled #end value="$!Detail.hotelId" class="form-control">
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+
+                                                        <input type="checkbox" name="sameLevel" value="$!Detail.sameLevel"   #if($!Detail.hotelConfirm==0) disabled #end #if($!Detail.sameLevel==1) checked #end id="sameLevel$!{Detail.dayNum}"/>
+                                                        <label  for="sameLevel">同级酒店</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="hotelInput">
+                                                        酒店未确认：
+                                                        <input type="radio" name="hotelConfirm"  #if($!Detail.hotelConfirm==0) checked #end value="$!Detail.hotelConfirm"/>
+                                                    </label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" placeholder="酒店名称" id="hotelInput$!{Detail.dayNum}"  #if($!Detail.hotelConfirm==1) disabled #end value="$!Detail.hotelInput" name="hotelInput" autocomplete="off" class="form-control">
+                                                        <input type="hidden"   name="hotelId" #if($!Detail.hotelConfirm==1) disabled #end  value="$!Detail.hotelId" class="form-control">
+
+                                                    </div>
+                                                </div>
+
+
+                                                #if($!Detail.flight1&&$!Detail.flight1!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="flight1">航班信息：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" placeholder="航班" id="flight${num}1" name="flight1" autocomplete="off" value="$!Detail.flight1" class="form-control">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-block btn-warning" type="button" id="flightAdd$!{Detail.dayNum}">增加</button>
+                                                        </div>
+                                                    </div>
+                                                #else
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="flight1">航班信息：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" placeholder="航班" id="flight${num}1" name="flight1" autocomplete="off" value="$!Detail.flight1" class="form-control">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-block btn-warning" type="button" id="flightAdd$!{Detail.dayNum}">增加</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                #if($!Detail.flight2&&$!Detail.flight2!="")
+                                                    <div class="form-group">
+                                                        <label class="control-label col-sm-3" for="flight1">航班信息2：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" placeholder="航班" id="flight${num}1" name="flight2" autocomplete="off" value="$!Detail.flight2" class="form-control">
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button type="button" class="btn btn-block btn-danger flightremove">删除</button>
+                                                        </div>
+                                                    </div>
+                                                #end
+                                                <div class="form-group">
+                                                    <label class="control-label  col-sm-3" for="trafficInfo$!{Detail.dayNum}">交通信息：</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" placeholder="交通信息" id="trafficInfo$!{Detail.dayNum}" value="$!Detail.trafficInfo" name="trafficInfo" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="shoppInfo$!{Detail.dayNum}">购物点：</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea placeholder="购物点" rows="3" class="form-control" value="$!Detail.shoppInfo" name="shoppInfo" id="shoppInfo$!{Detail.dayNum}">$!Detail.shoppInfo</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="cateringInfo$!{Detail.dayNum}"><strong>*</strong>餐饮说明：</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea placeholder="餐饮说明" rows="3" id="cateringInfo$!{Detail.dayNum}" value="$!Detail.cateringInfo" name="cateringInfo" class="form-control">$!Detail.cateringInfo</textarea>
+                                                    </div>
+                                                </div>
+#if($!Detail.leaderId&&$!Detail.leaderId!="")
+
+
+                                                <div class="form-group" >
+                                                    <label class="control-label  col-sm-3" for="leadName">导游姓名：</label>
+                                                    <div class="col-sm-9 row">
+                                                        <div class="col-sm-4">
+                                                            <p class="form-control-static">$!{Detail.name}</p>
+                                                            <input type="hidden" placeholder="导游姓名"  readonly class="form-control"  value="$!Detail.name" name="name">
+                                                        </div>
+                                                        <div class="col-sm-2 padding10" style="display:none;">
+                                                            <button class="btn btn-primary btn-block btn-sm leaderSend" id="leaderSend2$!{Detail.dayNum}" type="button">搜索</button>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <button class="btn btn-primary btn-block btn-sm leaderadd" id="leaderAdd1" type="button">添加</button>
+                                                        </div>
+                                                        <input type="hidden" autocomplete="off" name="leaderId" value="$!Detail.leaderId"/>
+                                                        <input type="hidden" autocomplete="off" name="sex" value="$!Detail.sex"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="leaderphone$!{Detail.dayNum}">导游电话：</label>
+                                                    <div class="col-sm-6">
+                                                        <p class="form-control-static">$!{Detail.phone}</p>
+                                                        <input type="hidden" placeholder="联系电话" id="leaderphone$!{Detail.dayNum}" value="$!{Detail.phone}" readonly class="form-control" name="phone">
+                                                    </div>
+                                                </div>
+    #else
+        <div class="form-group" >
+            <label class="control-label  col-sm-3" for="leadName">导游姓名：</label>
+            <div class="col-sm-9 row">
+                <div class="col-sm-4" style="display:none;">
+                    <p class="form-control-static">$!{Detail.name}</p>
+                    <input type="hidden" placeholder="导游姓名"  readonly class="form-control"  value="$!Detail.name" name="name">
+                </div>
+                <div class="col-sm-2 padding10" style="display:none;">
+                    <button class="btn btn-primary btn-block btn-sm leaderSend" id="leaderSend2$!{Detail.dayNum}" type="button">搜索</button>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-primary btn-block btn-sm leaderadd" id="leaderAdd1" type="button">添加</button>
+                </div>
+                <input type="hidden" autocomplete="off" name="leaderId" value="$!Detail.leaderId"/>
+                <input type="hidden" autocomplete="off" name="sex" value="$!Detail.sex"/>
+            </div>
+        </div>
+        <div class="form-group" style="display:none;">
+            <label class="control-label col-sm-3" for="leaderphone$!{Detail.dayNum}">导游电话：</label>
+            <div class="col-sm-6">
+                <p class="form-control-static">$!{Detail.phone}</p>
+                <input type="hidden" placeholder="联系电话" id="leaderphone$!{Detail.dayNum}" value="$!{Detail.phone}" readonly class="form-control" name="phone">
+            </div>
+        </div>
+#end
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="newEntry">新增标题：</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" placeholder="新增标题" id="newEntry"  value="$!Detail.newEntry" name="newEntry" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="newContant">新增内容：</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea placeholder="新增内容" rows="3" id="newContant$!{Detail.dayNum}" name="newContant" value="$!Detail.newContant" class="form-control">$!Detail.newContant</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group-btn">
+                                                    <div class="col-sm-6 col-sm-offset-3">
+                                                        <button class="btn btn-primary pull-right btn-block btn-sm" type="submit">下一步</button>
+                                                    </div>
+                                                </div>
+
+                                            </div><!-- /.box-body -->
+                                        </form>
+                                        <div class="overlays" style="display:none;">
+                                            <i class="fa fa-refresh fa-spin"></i>
+                                        </div>
+                                    </div><!-- /.box -->
+
+                                    <!--D end-->
+                                #end
+                            #end
+                        #else
+                            <!--D1-->
+                            <div class="box box-info" style="display:none;">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">D1</h3>
+                                </div><!-- /.box-header -->
+                                <!-- form start -->
+                                <form role="form" action="$!{link.contextPath}/schedule/scheduleDetailUpdate"  method="post" id="form21" onsubmit="return validateCallback(1,this)"  class="form-horizontal">
+                                    <input type="hidden" autocomplete="off" name="jourId" value="$!{scheduleEntity.id}"/>
+                                    <input type="hidden" autocomplete="off" name="dayNum" value="1"/>
+                                    <input type="hidden" autocomplete="off" name="id" value=""/>
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="startPlace"><strong>*</strong>日期：</label>
+                                            <div class="col-sm-6">
+                                                <p class="form-control-static">$!date.format('yyyy-MM-dd',$!Detail.scheduleDate)</p>
+                                                <input type="hidden" id="scheduleDate" value="$!date.format('yyyy-MM-dd',$!Detail.scheduleDate)" placeholder="yyyy-mm-dd" name="scheduleDate" class="form-control" readonly autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="startPlace"><strong>*</strong>出发地：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" id="startPlace" value="$!Detail.startPlace" name="startPlace" class="form-control" autocomplete="off" placeholder="出发地">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="destination1"><strong>*</strong>目的地：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" id="destination1" value="$!Detail.destination1" name="destination1" class="form-control" autocomplete="off"  placeholder="目的地" areaid="$!Detail.destinationId1">
+                                                <input type="hidden" value="$!Detail.destinationId1" name="destinationId1" >
+                                                <input type="hidden"  value="$!{Detail.country1}" name="country1" >
+                                                <input type="hidden"  value="$!{Detail.countryId1}" name="countryId1" >
+                                                <p class="help-block small">为了便于我们给游客展示准确的天气信息，请录入标准的目的地城市名称</p>
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <button class="btn btn-block btn-warning" id="destinationBtn" type="button">增加</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3">行程图片：</label>
+                                            <div class="col-sm-9">
+                                                <div id="schedulePhotosUrl1">
+
+                                                </div>
+
+                                                <p class="help-block small">每日行程可上传3张图片，上传图片格式为png,jpeg,jpg,gif格式，单个图片大小不超过1024KB</p>
+                                                <div id="photoLibrary1" style="display: none;">
+                                                    <input type="hidden" autocomplete="off" name="schedulePhotosUrl1" value="$!Detail.schedulePhotosUrl1"/>
+                                                    <input type="hidden" autocomplete="off" name="schedulePhotosUrl2" value="$!Detail.schedulePhotosUrl2"/>
+                                                    <input type="hidden" autocomplete="off" name="schedulePhotosUrl3" value="$!Detail.schedulePhotosUrl3"/>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="desc"><strong>*</strong>行程概述：</label>
+                                            <div class="col-sm-9">
+                                                <textarea placeholder="行程概述" rows="3" class="form-control" value="$!Detail.desc" name="desc" id="desc">$!Detail.desc</textarea>
+                                            </div>
+                                        </div>
+
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-3" for="scenicList">景点：</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" placeholder="景点" id="scenicList1" autocomplete="off" name="scenicList[0].name" value="" class="form-control">
+                                                        <input type="hidden" id="spotId1"  name="scenicList[0].spotId">
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <button class="btn btn-block btn-warning" id="scenicListBtn" type="button">增加</button>
+                                                    </div>
+                                                </div>
+
+                                        <div class="form-group ">
+                                            <label class="control-label  col-sm-3" for="hotel">
+                                                酒店已确认：
+                                                <input type="radio" name="hotelConfirm" value="1" checked/>
+                                            </label>
+                                            <div class="col-sm-6">
+                                                <input type="text" placeholder="酒店名称" id="hotel" name="hotel" value="$!Detail.hotel" autocomplete="off" class="form-control">
+                                                <input type="hidden"   name="hotelId" value="$!Detail.hotelId" class="form-control">
+
+                                            </div>
+                                            <div class="col-sm-3">
+
+                                                <input type="checkbox" name="sameLevel"  value="0" id="sameLevel"/>
+                                                <label  for="sameLevel">同级酒店</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="hotelInput">
+                                                酒店未确认：
+                                                <input type="radio" name="hotelConfirm" value="0"/>
+                                            </label>
+                                            <div class="col-sm-6">
+                                                <input type="text" placeholder="酒店名称" id="hotelInput" value="$!Detail.hotelInput" name="hotelInput" autocomplete="off" class="form-control" disabled>
+                                                <input type="hidden"   name="hotelId" value="$!Detail.hotelId" class="form-control" disabled>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="flight1">航班信息：</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" placeholder="航班" id="flight1" name="flight1" autocomplete="off" value="$!Detail.flight1" class="form-control">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <button class="btn btn-block btn-warning" type="button" id="flightAdd">增加</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label  col-sm-3" for="inputNamel3">交通信息：</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" placeholder="交通信息" id="trafficInfo" value="$!Detail.trafficInfo" name="trafficInfo" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="shoppInfo">购物点：</label>
+                                            <div class="col-sm-9">
+                                                <textarea placeholder="购物点" rows="3" class="form-control" value="$!Detail.shoppInfo" name="shoppInfo" id="shoppInfo">$!Detail.shoppInfo</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="cateringInfo"><strong>*</strong>餐饮说明：</label>
+                                            <div class="col-sm-9">
+                                                <textarea placeholder="餐饮说明" rows="3" id="cateringInfo" value="$!Detail.cateringInfo" name="cateringInfo" class="form-control">$!Detail.cateringInfo</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" >
+                                            <label class="control-label  col-sm-3" for="name">导游姓名：</label>
+                                            <div class="col-sm-9 row">
+                                                <div class="col-sm-4" style="display:none;">
+                                                    <p class="form-control-static"></p>
+                                                    <input type="hidden" placeholder="导游姓名"  readonly class="form-control"  value="$!Detail.name" name="name">
+                                                </div>
+                                                <div class="col-sm-2 padding10" style="display:none;">
+                                                    <button class="btn btn-primary btn-block btn-sm leaderSend" id="leaderSend21" type="button">搜索</button>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <button class="btn btn-primary btn-block btn-sm leaderadd" id="leaderAdd1" type="button">添加</button>
+                                                </div>
+                                                <input type="hidden" autocomplete="off" name="leaderId" value="$!Detail.leaderId"/>
+                                                <input type="hidden" autocomplete="off" name="sex" value="$!Detail.sex"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none">
+                                            <label class="control-label col-sm-3" for="leaderphone$!{Detail.dayNum}">导游电话：</label>
+                                            <div class="col-sm-6">
+                                                <p class="form-control-static">$!{Detail.phone}</p>
+                                                <input type="hidden" placeholder="联系电话" id="leaderphone$!{Detail.dayNum}" value="$!{Detail.phone}" readonly class="form-control" name="phone">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="newEntry">新增标题：</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" placeholder="新增标题" id="newEntry"  value="$!Detail.newEntry" name="newEntry" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="newContant">新增内容：</label>
+                                            <div class="col-sm-9">
+                                                <textarea placeholder="新增内容" rows="3" id="newContant" name="newContant" value="$!Detail.newContant" class="form-control">$!Detail.newContant</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <button class="btn btn-primary pull-right btn-block btn-sm scheduleDetailSave" type="submit">下一步</button>
+                                            </div>
+                                        </div>
+
+                                    </div><!-- /.box-body -->
+                                </form>
+                                <div class="overlays" style="display:none;">
+                                    <i class="fa fa-refresh fa-spin"></i>
+                                </div>
+                            </div><!-- /.box -->
+
+                            <!--D end-->
+                        #end
+                       <!-- <div class="plusDay"></div>-->
+                        <div class="box box-info plusDay" style="display:none;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">提示信息</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="proptCheck" style="float:none;height:90px;">
+                                    #if(${promptEntity.costInclude}&&${promptEntity.costInclude}!="")
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            费用包含
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval"  class="minimal">
+                                            费用包含
+                                        </label>
+                                    #end
+                                    #if(${promptEntity.costNotInclude}&&${promptEntity.costNotInclude}!="")
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            费用不包含
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval"  class="minimal">
+                                            费用不包含
+                                        </label>
+                                    #end
+                                    #if(${promptEntity.ownExpenceInfo}&&${promptEntity.ownExpenceInfo}!="")
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            自费项目介绍
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval"  class="minimal">
+                                            自费项目介绍
+                                        </label>
+                                    #end
+                                    #if(${promptEntity.shoppingPlace}&&${promptEntity.shoppingPlace}!="")
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            购物场所
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval"  class="minimal">
+                                            购物场所
+                                        </label>
+                                    #end
+                                    #if(${promptEntity.travelAgencyInfo}&&${promptEntity.travelAgencyInfo}!="")
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            组团社信息
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval"  class="minimal">
+                                            组团社信息
+                                        </label>
+                                    #end
+                                    #if(${promptEntity.groupClubInfo}&&${promptEntity.groupClubInfo}!="")
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            接团社信息
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" class="minimal">
+                                            接团社信息
+                                        </label>
+                                    #end
+                                    #if(${promptEntity.security}&&${promptEntity.security}!=""||${promptEntity.specialAttention}&&${promptEntity.specialAttention}!=""||${promptEntity.chinaNotic}&&${promptEntity.chinaNotic}!=""||${promptEntity.customs}&&${promptEntity.customs}!=""||${promptEntity.tipCase}&&${promptEntity.tipCase}!=""||${promptEntity.waterActivitiesNote}&&${promptEntity.waterActivitiesNote}!=""||${promptEntity.customsForbid}&&${promptEntity.customsForbid}!=""||${promptEntity.hotel}&&${promptEntity.hotel}!=""||${promptEntity.telephoneCommunication}&&${promptEntity.telephoneCommunication}!=""||${promptEntity.currency}&&${promptEntity.currency}!=""||${promptEntity.essentialItem}&&${promptEntity.essentialItem}!=""||${promptEntity.foods}&&${promptEntity.foods}!=""||${promptEntity.voltage}&&${promptEntity.voltage}!=""||${promptEntity.languages}&&${promptEntity.languages}!=""||${promptEntity.timeInfo}&&${promptEntity.timeInfo}!=""||${promptEntity.dressCode}&&${promptEntity.dressCode}!=""||${promptEntity.weatherSituation}&&${promptEntity.weatherSituation}!="")
+
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            重要信息提示
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval"  class="minimal">
+                                            重要信息提示
+                                        </label>
+                                    #end
+                                    #if(${promptEntity.security}&&${promptEntity.security}!="")
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            风险须知
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval"  class="minimal">
+                                            风险须知
+                                        </label>
+                                    #end
+                                    #if(${promptEntity.specialAttention}&&${promptEntity.specialAttention}!="")
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" checked class="minimal">
+                                            安全提示书
+                                        </label>
+                                    #else
+                                        <label class="col-md-3 col-xs-4">
+                                            <input type="checkbox" name="interval" class="minimal">
+                                            安全提示书
+                                        </label>
+                                    #end
+                                </div>
+                                <form action="$!{link.contextPath}/schedule/promptInfoUpdate"  id="form3" method="post"  id="form3" class="form-horizontal">
+                                    <input type="hidden" autocomplete="off" name="id" value="$!{promptEntity.id}"/>
+                                    <input type="hidden" autocomplete="off" name="scheduleId" value="$!{scheduleEntity.id}"/>
+                                    <div class="box" id="customsection-4">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">费用包含</h4>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="costInclude">费用包含：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea name="costInclude" class="form-control" id="costInclude" value="$!{promptEntity.costInclude}">$!{promptEntity.costInclude}</textarea>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+
+                                    <div class="box"  id="customsection-5">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">费用不包含</h4>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="costNotInclude">费用不包含：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea name="costNotInclude" class="form-control" id="costNotInclude" value="$!{promptEntity.costNotInclude}">$!{promptEntity.costNotInclude}</textarea>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+
+                                    <div class="box"  id="customsection-6">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">自费项目介绍</h4>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="ownExpenceInfo">自费项目介绍：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea name="ownExpenceInfo"  class="form-control" id="ownExpenceInfo" value="$!{promptEntity.ownExpenceInfo}">$!{promptEntity.ownExpenceInfo}</textarea>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+
+                                    <div class="box"  id="customsection-7">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">购物场所</h4>
+                                        </div>
+                                        <div class="box-body rel">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="shoppingPlace">购物场所：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea name="shoppingPlace"  class="form-control" id="shoppingPlace" value="$!{promptEntity.shoppingPlace}">$!{promptEntity.shoppingPlace}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box"  id="customsection-8">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">组团社信息</h4>
+                                        </div>
+                                        <div class="box-body rel">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="travelAgencyInfo">组团社信息：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea name="travelAgencyInfo"  class="form-control" id="travelAgencyInfo" value="$!{promptEntity.travelAgencyInfo}">$!{promptEntity.travelAgencyInfo}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box"  id="customsection-9">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">接团社信息</h4>
+                                        </div>
+                                        <div class="box-body rel">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="groupClubInfo">接团社信息：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea name="groupClubInfo"  class="form-control" value="$!{promptEntity.groupClubInfo}" id="groupClubInfo">$!{promptEntity.groupClubInfo}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box"  id="customsection-10">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">重要信息提示</h4>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="desc">天气概况：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="weatherSituation" value="111111" id="weatherSituation">$!{promptEntity.weatherSituation}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="dressCode">着装要求：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" value="$!{promptEntity.dressCode}" rows="3" class="form-control" name="dressCode" id="dressCode">$!{promptEntity.dressCode}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="timeInfo">时间：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" value="$!{promptEntity.timeInfo}" name="timeInfo" id="timeInfo">$!{promptEntity.timeInfo}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="languages">语言：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="languages" value="$!{promptEntity.languages}" id="languages">$!{promptEntity.languages}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="voltage">电压：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="voltage" value="$!{promptEntity.voltage}" id="voltage">$!{promptEntity.voltage}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="foods">饮食：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="foods" value="$!{promptEntity.foods}" id="foods">$!{promptEntity.foods}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="essentialItem">必备物品：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" value="$!{promptEntity.essentialItem}" name="essentialItem" id="essentialItem">$!{promptEntity.essentialItem}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="currency">货币：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" value="$!{promptEntity.currency}" name="currency" id="currency">$!{promptEntity.currency}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="telephoneCommunication">电话通讯：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" value="$!{promptEntity.telephoneCommunication}" name="telephoneCommunication" id="telephoneCommunication">$!{promptEntity.telephoneCommunication}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="hotel">酒店住宿：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" value="$!promptEntity.hotel" name="hotel" id="hotel">$!promptEntity.hotel</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="customsForbid">风俗禁忌：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" value="$!promptEntity.customsForbid" name="customsForbid" id="customsForbid">$!promptEntity.customsForbid</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="waterActivitiesNote">水上活动注意事项：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" value="$!promptEntity.waterActivitiesNote" name="waterActivitiesNote" id="waterActivitiesNote">$!promptEntity.waterActivitiesNote</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="tipCase">小费情况：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" value="$!promptEntity.tipCase" name="tipCase" id="tipCase">$!promptEntity.tipCase</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="customs">海关：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="customs" value="$!promptEntity.customs" id="customs">$!promptEntity.customs</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="chinaNotic">中华人民共和国海关总署公告：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="chinaNotic" value="$!promptEntity.chinaNotic" id="chinaNotic">$!promptEntity.chinaNotic</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="newTitle">新增标题：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="newTitle" value="$!promptEntity.newTitle" id="newTitle">$!promptEntity.newTitle</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="newContant">新增内容：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="newContant" value="$!promptEntity.newContant" id="newContant">$!promptEntity.newContant</textarea>
+                                                </div>
+                                            </div>
+
+
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+
+                                    <div class="box"  id="customsection-11">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">风险须知</h4>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="newContant">安全与防范：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="security" value="$!promptEntity.security"  id="security">$!promptEntity.security</textarea>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+                                    <div class="box"  id="customsection-12">
+                                        <div class="box-header with-border">
+                                            <h4 class="box-title">安全提示书</h4>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body">
+                                            <div class="form-group">
+                                                <label class="control-label col-sm-3" for="newContant">特别注意：</label>
+                                                <div class="col-sm-9">
+                                                    <textarea placeholder="" rows="3" class="form-control" name="specialAttention" value="$!promptEntity.specialAttention" id="specialAttention">$!promptEntity.specialAttention</textarea>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div><!-- /.box -->
+                                    <div class="input-group-btn">
+                                        <div class="col-sm-6 col-sm-offset-3">
+                                            <button class="btn btn-primary pull-right btn-block btn-sm" type="submit">下一步</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div><!-- /.box-body -->
+                            <div class="overlays" style="display:none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                        </div><!-- /.box -->
+
+                        <!--导入游客-->
+                        <div class="box box-info" style="display:none">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">导入游客</h3>
+                                <button class="btn btn-sm btn-danger" id="noneMember" type="button">没有名单，跳过</button>
+                            </div>
+                            <div class="box-body">
+                                <div id="accordion" class="box-group">
+                                    <div class="panel  box box-success">
+                                        <div class="box-header">
+                                            <h3 class="box-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                    批量添加游客信息
+                                                </a>
+                                            </h3>
+                                        </div><!-- /.box-header -->
+                                        <div id="collapseOne" class="panel-collapse collapse in">
+                                            <div class="box-body">
+                                                <form name="exampleInputFile" class="form-horizontal"  id="exampleInputFile" action="$!{link.contextPath}/member/memberImportExcel" method="post" enctype="multipart/form-data">
+                                                    <div class="form-group">
+                                                        <label for="firstname" class="col-md-5 control-label">批量添加游客信息</label>
+                                                        <div class="col-md-5" style="margin-top: 6px;">
+                                                            <input type="file" name="file" placeholder="选择游客资料文件">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button class="btn btn-primary btn-block btn-sm memberImportExcel" type="button">导入</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-8 col-md-offset-3">
+                                                            <a href="$!{link.contextPath}/member/templateDownloads">导入文件模板下载</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div><!--box end-->
+
+                                    <div class="panel box box-success">
+                                        <div class="box-header">
+                                            <h3 class="box-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                                    单个添加游客信息
+                                                </a>
+                                            </h3>
+                                        </div><!-- /.box-header -->
+                                        <div id="collapseTwo" class="panel-collapse collapse">
+                                            <div class="box-body">
+                                                <form class="form-horizontal" action="$!{link.contextPath}/member/memberAdd" method="get" id="importMemberform" onsubmit="return importMemberCallback(this)">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label" for="realName"><strong>*</strong>姓名</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" placeholder="姓名" id="realName" name="realName" class="form-control">
+                                                            <input type="hidden" autocomplete="off" name="tId" value="$!{scheduleEntity.teamId}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label" for="sex"><strong>*</strong>性别</label>
+                                                        <div class="col-sm-5">
+                                                            <select class="form-control" name="sex">
+                                                                <option value="1">男</option>
+                                                                <option value="2">女</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label" for="birthday">出生日期</label>
+                                                        <div class="col-sm-5">
+                                                            <div class="input-group">
+                                                                <div class="input-group-addon">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </div>
+                                                                <input type="text" id="birthday" class="form-control" placeholder="yyyy-mm-dd" readonly autocomplete="off" name="birthday">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label" for="inputNamel3">手机号</label>
+                                                        <div class="col-sm-2" style="padding-right:0px;">
+                                                            <select class="form-control" style="padding-right:0;" name="countryCode" id="areaCodeMember">
+
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <input type="text" placeholder="手机号" id="phone" name="phone" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label" for="cardType">证件类型</label>
+                                                        <div class="col-sm-5">
+                                                            <select class="form-control" id="cardType">
+                                                                <option vulue="">无</option>
+                                                                <option value="身份证">身份证</option>
+                                                                <option value="导游证">导游证</option>
+                                                                <option value="军人证">军人证</option>
+                                                                <option value="港澳通行证">港澳通行证</option>
+                                                                <option value="护照">护照</option>
+                                                            </select>
+                                                            <input type="hidden"  name="cardType" value="">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label" for="cardNum"><strong>*</strong>证件号码</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" placeholder="证件号码" id="cardNum" name="cardNum" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label" for="cardTime"><strong>*</strong>有效期</label>
+                                                        <div class="col-sm-5">
+                                                            <input type="text" placeholder="yyyy-mm-dd" id="cardTime" name="cardTime" readonly class="form-control">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <div class="col-md-3 col-sm-offset-4"><button class="btn btn-primary btn-block btn-sm" type="submit">保存</button></div>
+
+                                                    </div>
+                                                </form>
+                                                <div class="overlays" style="display:none;">
+                                                    <i class="fa fa-refresh fa-spin"></i>
+                                                </div>
+                                            </div><!-- /.box-body -->
+                                        </div>
+                                    </div><!--box end-->
+                                </div>
+                                <div class="col-md-12 row" style="margin-top:20px;display:none;padding-right:0;margin-right:0;">
+                                    <table class="table table-bordered" id="memberImportExcel">
+                                        <thead>
+                                        <tr>
+                                            <th>姓名</th>
+                                            <th>性别</th>
+                                            <th>出生日期</th>
+                                            <th>手机</th>
+                                            <th>证件类型</th>
+                                            <th>证件号码</th>
+                                            <th>有效期</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <!--<form role="form" class="form-horizontal" action="$!{link.contextPath}/schedule/confirmSchedule" method="get" id="confirmScheduleInitform" class="form-horizontal">
+                                        <input type="hidden" autocomplete="off" name="tId" value="$!{scheduleEntity.teamId}"/>-->
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-md-6 col-sm-offset-3">
+                                                <button class="btn btn-block btn-sm btn-primary" id="confirmScheduleBtn" type="button" style="margin-top:40px;margin-bottom:60px;">保存</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--</form>-->
+                                </div>
+                            </div><!--boxbody end-->
+                            <div class="overlays" style="display:none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                        </div>
+                        <!--导入游客end-->
+                        <!--确认行程-->
+                        <!--<div class="box box-success" style="display:none;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">确认行程</h3>
+                            </div>
+                            <div class="box-body">
+
+                                <div class="row">
+                                    <div class="col-sm-12 text-center" style="margin-top:40px;">
+                                        <form role="form" action="$!{link.contextPath}/schedule/confirmSchedule" method="get" id="confirmForm" class="form-horizontal">
+                                            <h3>请确保已和领队沟通好行程安排，我们将给游客发送短信登录App</h3>
+                                            <input type="hidden" name="tId" value="$!{scheduleEntity.teamId}"/>
+                                            <div class="form-group">
+                                                <div class="col-sm-3 col-sm-offset-4">
+                                                    #if(${scheduleEntity.txGroupId}&&${scheduleEntity.txGroupId}!="")
+                                                        <button class="btn btn-primary btn-block" type="button" id="disabledBtn" style="margin-top:40px;margin-bottom:60px;">确认提交行程</button>
+
+                                                    #else
+    <button class="btn btn-primary btn-block" type="submit" style="margin-top:40px;margin-bottom:60px;">确认提交行程</button>
+
+                                                    #end
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="overlays" style="display:none;">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                        </div>-->
+                        <!--确认行程end-->
+
+                    </div>
+                    </div>
+              </div>
+			</div>
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+        <!--导游信息弹层-->
+        <div id="leaderLay" style="width:90%;margin:0 auto;display:none;">
+            <!-- Main content -->
+            <section>
+                <!-- Default box -->
+                <div class="box box-info" style="margin-bottom: 0px;">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">指派领队</h3>
+                        <div class="box-tools col-md-4">
+                            <div class="input-group pull-left">
+                                <input type="text" placeholder="请输入领队姓名" class="form-control input-sm pull-right" name="leader_serch">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-default" id="leaderSearchBtn"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /.box-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal">
+                        <div class="box-body" style="margin-bottom: 0px;">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="inputNamel3">状态：</label>
+                                <div class="col-sm-10">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="leaderStatus" class="minimal" value="1">
+                                        专职
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="leaderStatus" class="minimal" value="2">
+                                        兼职
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="leaderStatus" class="minimal" value="3">
+                                        离职
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="inputNamel3">性别：</label>
+                                <div class="col-md-10">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="sex" class="minimal" value="1">
+                                        男
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="sex" class="minimal" value="2">
+                                        女
+                                    </label>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="inputNamel3">带团时间：</label>
+                                <div class="col-md-10">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="interval" class="minimal" value="0-1">
+                                        一年以内
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="interval" class="minimal" value="1-3">
+                                        1-3年
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="interval" class="minimal" value="3-5">
+                                        3-5年
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="interval" class="minimal" value="5-10">
+                                        5-10年
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" name="interval" class="minimal" value="10-100">
+                                        10年以上
+                                    </label>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </form>
+                </div><!-- /.box -->
+                <div class="box box-success" id="leader2" style="margin-bottom:0;display:none;">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">找到3个结果</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <table class="table table-hover" >
+                            <thead>
+                            <tr>
+                                <th> </th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>状态</th>
+                                <th>带团时间</th>
+                                <!-- <th>已带团数</th>-->
+                                <!--<th>擅长线路</th>-->
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                            </tbody>
+                        </table>
+                        <div id="pagination" class="paginationjs paginationjs-small" style="margin-bottom:0px;">
+
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </section><!-- /.content -->
+
+        </div>
+        <!--end-->
+
+        <div id="dialogModal" style="display:none">
+            <div class="modal-dialog" style="width:400px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">消息</h4>
+                    </div>
+                    <div class="modal-body" style="text-align:center;font-size:14px;">
+                        <p></p>
+                    </div>
+                    <div class="modal-footer text-center" style="text-align:center;">
+                        <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                        <button class="btn btn-primary" onclick="blockUIClose()" type="button">确定</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        <div id="dialogModal2" style="display:none">
+            <div class="modal-dialog" style="width:400px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                       <!-- <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                            <span aria-hidden="true">×</span></button>-->
+                        <h4 class="modal-title">消息</h4>
+                    </div>
+                    <div class="modal-body" style="text-align:center;font-size:14px;">
+                        <p></p>
+                    </div>
+                    <div class="modal-footer text-center" style="text-align:center;">
+                        <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                        <button class="btn btn-primary" id="sure" type="button">确定</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <div id="dialogModal3" style="display:none">
+            <div class="modal-dialog" style="width:400px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                             <span aria-hidden="true">×</span></button>-->
+                        <h4 class="modal-title">消息</h4>
+                    </div>
+                    <div class="modal-body" style="text-align:center;font-size:14px;">
+                        <p>确认需要删除此位游客吗？</p>
+                    </div>
+                    <div class="modal-footer text-center" style="text-align:center;">
+                        <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                        <button class="btn btn-primary" id="sureMember" type="button">确定</button>
+                        <button class="btn btn-primary" onclick="blockUIClose()" type="button">取消</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        <!--leader add-->
+        <div id="leaderAddcontent" style="display:none;width:800px;overflow-y:auto;">
+            <section class="content">
+
+                <!-- Default box -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">添加领队/导游</h3>
+                    </div><!-- /.box-header -->
+                    <!-- form start -->
+                    <form class="form-horizontal" action="$!{link.contextPath}/leader/leaderSaveAjax" method="get" id="leaderAddForm">
+                        <div class="box-body">
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="name"><strong>*</strong>姓名</label>
+                                <div class="col-md-6">
+                                    <input type="name" placeholder="姓名" id="name" name="name" class="form-control">
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <label class="col-md-3 control-label"><strong>*</strong>性别</label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="sex">
+                                        <option value="1">男</option>
+                                        <option value="2">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><strong>*</strong>类别</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" name="leaderType">
+                                        <option value="1">领队</option>
+                                        <option value="2">导游</option>
+                                        <option value="3">领队兼导游</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><strong>*</strong>状态</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" name="leaderStatus">
+                                        <option value="1">专职</option>
+                                        <option value="2">兼职</option>
+                                        <option value="3">离职</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="leadTime"><strong>*</strong>开始带团时间</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group" >
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" name="leadTime" id="leadTime" autocomplete="off" placeholder="yyyy-mm-dd"  readonly  class="form-control">
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="form-group">
+
+
+                                <label class="col-sm-3 control-label" for="phone"><strong>*</strong>手机号</label>
+                                <div class="col-sm-2" style="padding-right:0px;">
+                                    <select class="form-control" style="padding-right:0;" name="countryCode" id="areaCode">
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="name" placeholder="手机号" id="phone" name="phone" class="form-control">
+                                </div>
+                            </div>
+                            <div class="input-group-btn">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary pull-right btn-block btn-sm" type="submit">提交</button>
+                                </div>
+                            </div>
+
+                        </div><!-- /.box-body -->
+
+                    </form>
+                    <div class="overlays" style="display:none;">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                </div><!-- /.box -->
+
+            </section><!-- /.content -->
+        </div><!-- /.content-wrapper -->
+        <!--leader add end-->
+        <!--修改游客-->
+        <div id="memberUpdateLay" style="display:none;width:800px;">
+            <section class="content">
+                <div class="box box-info">
+                    <div class="box-header">
+                        <h3 class="box-title">修改游客信息</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <form class="form-horizontal" action="$!{link.contextPath}/member/memberUpdateAjax" method="post" id="updateMemberform">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="realNameupdate"><strong>*</strong>姓名</label>
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="姓名" id="realNameupdate" name="realName" class="form-control">
+                                    <input type="hidden" autocomplete="off" name="tId" value="$!{scheduleEntity.teamId}"/>
+                                    <input type="hidden" autocomplete="off" name="id" value=""/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="sex"><strong>*</strong>性别</label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="sex">
+                                        <option value="1">男</option>
+                                        <option value="2">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="birthdayupdate">出生日期</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" id="birthdayupdate" class="form-control" placeholder="yyyy-mm-dd" readonly autocomplete="off" name="birthday">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="phoneupdate"><strong>*</strong>手机号</label>
+                                <div class="col-sm-2" style="padding-right:0px;">
+                                    <select class="form-control" style="padding-right:0;" name="countryCode" id="areaCodeMemberLay">
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="text" placeholder="手机号" id="phoneupdate" name="phone" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="cardTypeupdate">证件类型</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="cardTypeupdate">
+                                        <option vulue="">无</option>
+                                        <option value="身份证">身份证</option>
+                                        <option value="导游证">导游证</option>
+                                        <option value="军人证">军人证</option>
+                                        <option value="港澳通行证">港澳通行证</option>
+                                        <option value="护照">护照</option>
+                                    </select>
+                                    <input type="hidden"  name="cardType" value="">
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="cardNumupdate"><strong>*</strong>证件号码</label>
+                                <div class="col-sm-6">
+                                    <input type="text" placeholder="证件号码" id="cardNumupdate" name="cardNum" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="cardTimeupdate"><strong>*</strong>有效期</label>
+                                <div class="col-sm-6">
+                                    <input type="text" placeholder="yyyy-mm-dd" id="cardTimeupdate" name="cardTime" readonly class="form-control">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-3 col-md-offset-4"><button class="btn btn-primary btn-block btn-sm" id="memberUpdateBtn" type="submit">保存</button></div>
+
+                            </div>
+                        </form>
+                    </div><!-- /.box-body -->
+                </div><!--box end-->
+            </section>
+        </div>
+        <!--xiugai end-->
+		#parse("/WEB-INF/views/common/footer.vm")
+
+    </div><!-- ./wrapper -->
+  #define($scriptBlock)
+	<script>
+    $(document).ready(function (){
+
+    var getinit = {
+        byId: function(id) {
+            return typeof id === "string" ? document.getElementById(id) : id
+        },
+        byClass: function(sClass, oParent) {
+            var aClass = [];
+            var reClass = new RegExp("(^| )" + sClass + "( |$)");
+            var aElem = this.byTagName("*", oParent);
+            for(var i = 0; i < aElem.length; i++) reClass.test(aElem[i].className) && aClass.push(aElem[i]);
+            return aClass
+        },
+        byTagName: function(elem, obj) {
+            return(obj || document).getElementsByTagName(elem)
+        }
+    };
+    var dragMinWidth = 330;
+    var dragMinHeight = 220;
+    /*-------------------------- +
+      拖拽函数
+     +-------------------------- */
+    function drag(oDrag, handle) {
+        var disX = dixY = 0;
+        var oMin = getinit.byClass("min", oDrag)[0];
+        var oMax = getinit.byClass("max", oDrag)[0];
+        var oRevert = getinit.byClass("revert", oDrag)[0];
+        var oClose = getinit.byClass("close", oDrag)[0];
+        handle = handle || oDrag;
+        handle.style.cursor = "move";
+        handle.onmousedown = function(event) {
+            var event = event || window.event;
+            disX = event.clientX - oDrag.offsetLeft;
+            disY = event.clientY - oDrag.offsetTop;
+
+            document.onmousemove = function(event) {
+                var event = event || window.event;
+                var iL = event.clientX - disX;
+                var iT = event.clientY - disY;
+                oDrag.style.left = iL + "px";
+                oDrag.style.top = iT + "px";
+
+                return false
+            };
+
+            document.onmouseup = function() {
+                document.onmousemove = null;
+                document.onmouseup = null;
+                this.releaseCapture && this.releaseCapture()
+            };
+            this.setCapture && this.setCapture();
+            return false
+        };
+        //最大化按钮
+        oMax.onclick = function() {
+            oDrag.style.top = oDrag.style.left = 0;
+            oDrag.style.width = document.documentElement.clientWidth - 2 + "px";
+            oDrag.style.height = document.documentElement.clientHeight - 2 + "px";
+            this.style.display = "none";
+            oRevert.style.display = "block";
+        };
+        //还原按钮
+        oRevert.onclick = function() {
+            oDrag.style.width = dragMinWidth + "px";
+            oDrag.style.height = dragMinHeight + "px";
+            oDrag.style.left = (document.documentElement.clientWidth - oDrag.offsetWidth) / 2 + "px";
+            oDrag.style.top = (document.documentElement.clientHeight - oDrag.offsetHeight) / 2 + "px";
+            this.style.display = "none";
+            oMax.style.display = "block";
+        };
+        //最小化按钮
+        oMin.onclick = oClose.onclick = function() {
+            oDrag.style.display = "none";
+            var oA = document.createElement("a");
+            oA.className = "open";
+            oA.href = "javascript:;";
+            oA.title = "还原";
+            document.body.appendChild(oA);
+            oA.onclick = function() {
+                oDrag.style.display = "block";
+                document.body.removeChild(this);
+                this.onclick = null;
+            };
+        };
+        //阻止冒泡
+        oMin.onmousedown = oMax.onmousedown = oClose.onmousedown = function(event) {
+            this.onfocus = function() {
+                this.blur()
+            };
+            (event || window.event).cancelBubble = true
+        };
+    }
+    /*-------------------------- +
+      改变大小函数
+     +-------------------------- */
+    function resize(oParent, handle, isLeft, isTop, lockX, lockY) {
+        handle.onmousedown = function(event) {
+            var event = event || window.event;
+            var disX = event.clientX - handle.offsetLeft;
+            var disY = event.clientY - handle.offsetTop;
+            var iParentTop = oParent.offsetTop;
+            var iParentLeft = oParent.offsetLeft;
+            var iParentWidth = oParent.offsetWidth;
+            var iParentHeight = oParent.offsetHeight;
+
+            document.onmousemove = function(event) {
+                var event = event || window.event;
+
+                var iL = event.clientX - disX;
+                var iT = event.clientY - disY;
+//                    var maxW = document.documentElement.clientWidth - oParent.offsetLeft - 2;
+//                    var maxH = document.documentElement.clientHeight - oParent.offsetTop - 2;
+                var iW = isLeft ? iParentWidth - iL : handle.offsetWidth + iL;
+                var iH = isTop ? iParentHeight - iT : handle.offsetHeight + iT;
+
+                isLeft && (oParent.style.left = iParentLeft + iL + "px");
+                isTop && (oParent.style.top = iParentTop + iT + "px");
+
+                iW < dragMinWidth && (iW = dragMinWidth);
+//                    iW > maxW && (iW = maxW);
+                lockX || (oParent.style.width = iW + "px");
+
+                iH < dragMinHeight && (iH = dragMinHeight);
+//                    iH > maxH && (iH = maxH);
+                lockY || (oParent.style.height = iH + "px");
+
+//                    if((isLeft && iW == dragMinWidth) || (isTop && iH == dragMinHeight)) document.onmousemove = null;
+
+                return false;
+            };
+            document.onmouseup = function() {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            };
+            return false;
+        }
+    };
+    window.onload = window.onresize = function() {
+        var oDrag = document.getElementById("drag");
+        var oDrag1 = document.getElementById("drag1");
+        var oTitle = getinit.byClass("title", oDrag)[0];
+        var oL = getinit.byClass("resizeL", oDrag)[0];
+        var oT = getinit.byClass("resizeT", oDrag)[0];
+        var oR = getinit.byClass("resizeR", oDrag)[0];
+        var oB = getinit.byClass("resizeB", oDrag)[0];
+        var oLT = getinit.byClass("resizeLT", oDrag)[0];
+        var oTR = getinit.byClass("resizeTR", oDrag)[0];
+        var oBR = getinit.byClass("resizeBR", oDrag)[0];
+        var oLB = getinit.byClass("resizeLB", oDrag)[0];
+        drag(oDrag,oDrag1);
+        //四角
+        resize(oDrag, oLT, true, true, false, false);
+        resize(oDrag, oTR, false, true, false, false);
+        resize(oDrag, oBR, false, false, false, false);
+        resize(oDrag, oLB, true, false, false, false);
+        //四边
+        resize(oDrag, oL, true, false, false, true);
+        resize(oDrag, oT, false, true, true, false);
+        resize(oDrag, oR, false, false, false, true);
+        resize(oDrag, oB, false, false, true, false);
+    }
+    $(".ad-gallery .ad-image-wrapper").on("click",".ad-image",function(){
+        $("#drag").css("display","block");
+        $("#drag .contentImg").html($(this).html());
+    });
+    var galleries = $('.ad-gallery').adGallery();//轮播
+        #if($scheduleEntity.scheduleDetailList.size()>0)
+
+            #foreach( $Detail in $scheduleEntity.scheduleDetailList)
+                dotform($!{Detail.dayNum})
+                $("#schedulePhotosUrl$!{Detail.dayNum}").each(function(){
+                    if($(this).next().find("li").length>=3){
+                        $("#schedulePhotosUrl$!{Detail.dayNum}").hide();
+                    }
+                    $(this).next().find(".diySuccess").click(function(){
+                        removeImages($(this));
+                        $(this).parents("li").remove();
+                        $("#schedulePhotosUrl$!{Detail.dayNum}").show();
+                        $("#schedulePhotosUrl$!{Detail.dayNum}").find("label").parent().css({width:$("#schedulePhotosUrl$!{Detail.dayNum}").find("button").outerWidth(),height:$("#schedulePhotosUrl$!{Detail.dayNum}").find("button").outerHeight()})
+                    })
+                })
+
+            #end
+        #end
+        var options = {
+            success: function (data) {
+                $("#responseText").text(data);
+            }
+        };
+        #if(${scheduleEntity.featurePhoto}&&${scheduleEntity.featurePhoto}!="")
+
+            $("#featurePhoto").hide();
+            $("#featurePhoto").next().find(".diySuccess").click(function(){
+                removeImages($(this));
+                $(this).parents("li").remove();
+                $("#featurePhoto").css("display","block");
+                $("#featurePhoto").find("label").parent().css({width: $("#featurePhoto").find("button").outerWidth(),height:$("#featurePhoto").find("button").outerHeight()})
+            })
+        #end
+
+        $("[name=dayNum]").each(function(){
+            totalNum=$(this).val();
+        })
+      #if($scheduleEntity.scheduleDetailList.size()<=0)
+
+          //行程开始日期和结束日期的天数差
+          $("#scheduleDate").val(startDate);
+          $("#scheduleDate").siblings("p").text(startDate)
+          #end
+        addNumDay();
+
+        //游客列表
+        $.ajax({
+            type: "GET",
+            url: CONTEXTPATH+"/member/memberImportInit",
+            data: {tId:"$!{scheduleEntity.teamId}"},
+            dataType: "json",
+            success: function (returndata) {
+                var html="";
+                tId="$!{scheduleEntity.teamId}";
+                if(returndata.retCode==0) {
+                    var dataObj = returndata.memberList;
+                    if (dataObj.length > 0) {
+                        $("#noneMember").hide();
+                        for (var i = 0; i < dataObj.length; i++) {
+                            var realName=dataObj[i].realName?dataObj[i].realName:"";
+                            var sex=(dataObj[i].sex == "1") ? '男' : '女';
+                            var sexnum=dataObj[i].sex;
+                            var birthday=(dataObj[i].birthday?dataObj[i].birthday:"");
+                            var phone=(dataObj[i].phone?dataObj[i].phone:"");
+                            var cardType=(dataObj[i].cardType?dataObj[i].cardType:"");
+                            var cardNum=(dataObj[i].cardNum?dataObj[i].cardNum:"");
+                            var cardTime=dataObj[i].cardTime?dataObj[i].cardTime:"";
+                            var countryCode=dataObj[i].countryCode?dataObj[i].countryCode:"";
+                            html += '<tr>' +
+                                    '<td>' + realName + '</td>' +
+                                    '<td>' + sex + '</td>' +
+                                    '<td>' + birthday + '</td>' +
+                                    '<td>' + phone + '</td>' +
+                                    '<td>' + cardType + '</td>' +
+                                    '<td>' + cardNum + '</td>' +
+                                    '<td>' + cardTime + '</td>' +
+                                    '<td><a href="javascript:;" onclick="memberUpdate(\''+dataObj[i].id+'\',\''+realName+'\',\''+sexnum+'\',\''+birthday+'\',\''+phone+'\',\''+cardType+'\',\''+cardNum+'\',\''+cardTime+'\',\''+countryCode+'\',this)" class="memberUpdate">修改</a>|<a href="javascript:;" onclick="memberDelete('+dataObj[i].id+',this);" class="memberDelete">删除</a></td>' +
+                                    '</tr>';
+
+                        }
+                        $("#memberImportExcel").find("tbody").append(html);
+                        $("#memberImportExcel").parent().show();
+                        $("#sureSetps").siblings().find("div").removeClass("current").addClass("finished");
+                        if(txGroupId) {
+                            $("#sureSetps").find("div").removeClass().addClass("finished");
+                        }else{
+                            $("#sureSetps").find("div").removeClass().addClass("current");
+                        }
+                        var _indsetps=$("#sureSetps").index();
+                        $("#editArea>div.box").eq(_indsetps).show().siblings(".box").hide();
+                        mySwiper.slideTo(_indsetps, 1000, true);
+                    }
+                }else{
+                    //alert(returndata.retMsg);
+                    $("#dialogModal").find(".modal-body>p").html(returndata.retMsg);
+                    blockUIOpenShare("dialogModal");
+                }
+                $(".overlays").hide();
+            },
+            error: function (returndata) {
+                $(".overlays").hide();
+                console.log(returndata);
+            }
+        })
+    });
+    var types="";
+    var currentdayNum="$scheduleEntity.scheduleDetailList.size()";
+    var totalNum="";
+    var startDate=$("#startDate").val();
+    var endDate=$("#endDate").val();
+    var diffnumedits= parseInt(dateDiff(startDate,endDate))+1;
+    var newDateEdit=startDate;
+    var msumlength= $("#editArea").find("form").find("[name=dayNum]").length;
+    var txGroupId="$!{scheduleEntity.txGroupId}";
+        function addNumDay(){
+            if(currentdayNum<diffnumedits) {
+                if (diffnumedits == 2 && msumlength < diffnumedits) {
+                    newDateEdit = getNewDay(newDateEdit, 1);
+                    addDaynum(1, newDateEdit);
+                    if(currentdayNum>0) {
+                        $(".sui-steps").find(".wrap").each(function (i) {
+                            if (i == 2) {
+                                $(this).find("div").removeClass().addClass("current");
+
+                            }
+                            if (i > 2) {
+                                $(this).find("div").removeClass("current").addClass("todo");
+
+                            }
+                            if ($(this).children("div").hasClass("current")) {
+                                var _ind = $(this).index();
+                                $("#editArea>div.box").eq(_ind).show().siblings(".box").hide();
+                            }
+                        })
+                    }
+                } else if (msumlength < (diffnumedits)) {
+                    if (msumlength > 1) {
+                        newDateEdit = getNewDay(newDateEdit, (msumlength - 1));
+                    }
+                    for (var i = msumlength; i < diffnumedits; i++) {
+                        newDateEdit = getNewDay(newDateEdit, 1);
+                        addDaynum(i, newDateEdit);
+                        if(currentdayNum>0) {
+                            $(".sui-steps").find(".wrap").each(function (i) {
+                                if (i == (msumlength + 1)) {
+                                    $(this).find("div").removeClass().addClass("current");
+                                }
+                                if (i > (msumlength + 1)) {
+                                    $(this).find("div").removeClass("current").addClass("todo");
+
+                                }
+                                if ($(this).children("div").hasClass("current")) {
+                                    var _ind = $(this).index();
+                                    $("#editArea>div.box").eq(_ind).show().siblings(".box").hide();
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        }
+
+    </script>
+	  #end
+

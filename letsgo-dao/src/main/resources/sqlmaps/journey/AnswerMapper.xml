@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.AnswerDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.AnswerEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="question_id" property="questionId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="question_option_id" property="questionOptionId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="survey_id" property="surveyId" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="more_option" property="moreOption" jdbcType="VARCHAR" />
+        <result column="option_answer" property="optionAnswer" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="CustomResultMap" type="com.umessage.letsgo.domain.vo.journey.response.vo.AnswerVo" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="u_real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="u_sex" property="sex" jdbcType="INTEGER" />
+        <result column="u_phone" property="phone" jdbcType="VARCHAR" />
+        <result column="t_team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="sc_name" property="name" jdbcType="VARCHAR" />
+        <result column="sc_start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="sc_end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="question_id" property="questionId" jdbcType="BIGINT" />
+        <result column="question_option_id" property="questionOptionId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="survey_id" property="surveyId" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="more_option" property="moreOption" jdbcType="VARCHAR" />
+        <result column="option_answer" property="optionAnswer" jdbcType="VARCHAR" />
+        <result column="q_title" property="title" jdbcType="VARCHAR" />
+        <result column="q_question_type" property="questionType" jdbcType="INTEGER" />
+        <result column="q_type" property="type" jdbcType="INTEGER" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.AnswerEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_answer (question_id,user_id, question_option_id,
+        survey_id, content, more_option,
+        update_time,
+        create_time, version,option_answer,type)
+        values (#{questionId,jdbcType=BIGINT},#{userId,jdbcType=BIGINT}, #{questionOptionId,jdbcType=BIGINT}, #{surveyId,jdbcType=BIGINT},
+        #{content,jdbcType=VARCHAR}, #{moreOption,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},
+        #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}, #{optionAnswer,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER})
+    </insert>
+
+    <select id="hasAnswer" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.journey.request.AnswerRequest" >
+        select COUNT(*) AS ndCount from j_answer
+        <where>
+            <if test="null != userId"> and user_id = #{userId} </if>
+            <if test="null != surveyId"> and survey_id = #{surveyId} </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.AnswerEntity" >
+        update j_answer
+        set  survey_id= #{surveyId,jdbcType=BIGINT},
+        user_id = #{userId,jdbcType=BIGINT},
+        question_id = #{questionId,jdbcType=BIGINT},
+        content = #{content,jdbcType=VARCHAR},
+        more_option = #{moreOption,jdbcType=VARCHAR},
+        question_option_id= #{questionOptionId,jdbcType=BIGINT},
+        option_answer= #{optionAnswer,jdbcType=VARCHAR},
+        type= #{type,jdbcType=INTEGER},
+        version = version + 1
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectAnswerByUserIdAndTeamId" resultMap="CustomResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.AnswerRequest" >
+        SELECT DISTINCT a.ID , a.user_id, u.real_name AS u_real_name, u.sex AS u_sex, u.phone AS u_phone, t.team_num AS t_team_num, sc.`name` AS sc_name, sc.start_date AS sc_start_date, sc.end_date AS sc_end_date,
+        a.survey_id, a.question_id, a.question_option_id, a.content, a.more_option, a.option_answer, a.create_time,
+        q.title AS q_title, q.question_type AS q_question_type, q.type AS q_type
+        FROM j_answer AS a
+        JOIN j_question AS q ON a.question_id = q.ID
+        JOIN j_survey AS s ON s.ID = q.survey_id
+        JOIN j_survey_detail AS sd ON sd.survey_id = s.ID
+        JOIN s_user AS u ON a.user_id = u.ID
+        JOIN t_team AS t ON s.team_id = t.ID
+        JOIN j_schedule AS sc ON sc.team_id = t.ID
+        <where>
+            sd.sign_url IS NOT NULL
+            <if test="null != userId"> and a.user_id = #{userId} </if>
+            <if test="null != teamId"> and s.team_id = #{teamId} </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,130 @@
+#set($pageTitle="行程概述")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+<style>
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-slide {
+        width:auto;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+</style>
+	<input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main">
+		<section class="cd-container gaishu">
+#if( ${response.scheduleEntity.featurePhoto}&&${response.scheduleEntity.featurePhoto}!="")
+
+    <div class="lunbo">
+				<ul >
+					<li>
+                        <img src="$!{response.scheduleEntity.featurePhoto}"/>
+					</li>
+
+				</ul>
+
+			</div>
+	#end
+			<div class="cd-type">
+				#if(${response.scheduleEntity.name})<dl><dt class="nameinco"></dt><dt>名称：</dt><dd>$!{response.scheduleEntity.name}</dd></dl>#end
+				#if(${response.scheduleEntity.teamNum})<dl><dt class="teamnuminco"></dt><dt>团号：</dt><dd>$!{response.scheduleEntity.teamNum}</dd></dl>#end
+				#if(${response.scheduleEntity.startPlace})<dl><dt class="sectueinco"></dt><dt>出发地：</dt><dd>$!{response.scheduleEntity.startPlace}</dd></dl>#end
+
+#if(${response.scheduleEntity.collectionTime}&&${response.scheduleEntity.collectionTime}!="")<dl><dt class="jhtimeinco"></dt><dt>集合时间：</dt><dd>$!date.format('yyyy-MM-dd HH:mm:ss',$!{response.scheduleEntity.collectionTime})</dd></dl>#end
+#if(${response.scheduleEntity.collectionPlace}&&${response.scheduleEntity.collectionPlace}!="")<dl><dt class="jhwinco"></dt><dt>集合地点：</dt><dd>$!{response.scheduleEntity.collectionPlace}</dd></dl>#end
+			</div>
+#if(${response.scheduleEntity.feature}&&${response.scheduleEntity.feature}!="")
+			<div class="cd-type-msg">
+				<dl>
+                    <dt class="tueinco"></dt>
+				<dt>行程特色：</dt>
+				<dd>
+				<!--<p>
+				东京乐逍遥：“放松身心，乐享旅途”是我们的设计理念。此行程为您提供繁都东京的畅玩之旅。漫步秋叶原，感受日本“御宅族天堂”，畅游银座，零距离触碰亚洲潮流时尚前沿，亲临富士五合目一览富士山壮丽风景。特别设计东京两天自由活动，您可以事先查阅东京攻略，和朋友一起踏遍年轻活力创意的时尚街区，畅享东京特色美食，品味现代流行食尚风味，零距离接触经典建筑景观，探访典藏罕见美术品，登高望远，俯瞰东京浪漫街景，将繁华绚丽的都市风情尽收眼底。
+				</p>
+				<p>
+				品质享受：特别安排箱根地区一晚温泉住宿,让您忘却凡尘，慵懒地在温泉池里倾听大自然欢快的乐章；
+				</p>
+				<p>
+				直航抵达：乘坐安心，安全，活力的中国国际航空公司航班，直航抵达，安心舒适，五天带领您畅游浪漫东京！
+				</p>-->
+                    <div class="featuretext">
+##                    $!response.scheduleEntity.feature.replaceAll("\n|\r","<br/>")
+	$!{response.scheduleEntity.feature}
+					</div>
+				</dd>
+				</dl>
+			</div>
+	#end
+			<div class="continue_loding">
+					<div></div>
+					<span>已经到底,点击左侧查看更多!</span>
+			</div>
+		</section>
+	</div>
+#if($!response.scheduleEntity.processStatus==4)
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+
+#parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+	<script type="text/javascript">
+        var teamId="$!{response.scheduleEntity.teamId}";
+        var iswechat="${response.isWeChat}";
+		$(function(){
+			$(".overlay").click(function(){
+				$("#joacims-menu").prop("checked",false)
+			});
+			#if( $response.scheduleEntity.featurePhoto)
+        /*var mySwiper = new Swiper ('.swiper-container', {
+			    loop: false,
+			    autoplay: false,
+			    pagination: '.swiper-pagination',
+				onSlideChangeStart: function(swiper,even){
+			    }
+		  	});*/
+		#end
+		  	/*判断是否显示已经到底*/
+		  	if($(window).height()>$("body").height()){
+		  		$(".continue_loding").hide();
+		  	}
+            $(".qitaicon").on("click",function(){
+                if($(".qita").is(":visible")){
+                    $(".qita").slideUp();
+                    $(this).addClass("qitaicons");
+                }else{
+                    $(".qita").slideDown();
+                    $(this).removeClass("qitaicons");
+                }
+
+            })
+            $(".featuretext img").css({
+                display: "block",
+                height:"auto",
+                marginLeft:"3%",
+                maxWidth:"90%"
+            });
+            var marr=[];
+            $(".featuretext table").each(function(i){
+                $(this).wrap("<div class='swiper-container'><div class='swiper-wrapper wrappertable"+i+"'><div class='swiper-slide'></div></div></div>");
+                $(".wrappertable"+i).parent().append('<div class="swiper-scrollbar"></div>');
+                marr[i]=new Swiper('.swiper-container', {
+                    scrollbar: '.swiper-scrollbar',
+                    direction: 'horizontal',
+                    slidesPerView: 'auto',
+                    mousewheelControl: true,
+                    freeMode: true
+                });
+            })
+
+        });
+
+	</script>
+#end

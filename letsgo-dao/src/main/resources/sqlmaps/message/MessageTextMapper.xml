@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.message.IQMessageDao">
+
+    <resultMap id="MessageEntity" type="com.umessage.letsgo.domain.po.message.MessageEntity">
+        <id column="id" property="ID" jdbcType="BIGINT"/>
+        <result column="travel_id" property="teavelId" jdbcType="BIGINT"/>
+        <result column="member_id" property="memberId" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="team_id" property="teamId" jdbcType="BIGINT"/>
+        <result column="photo_url" property="headUrl" jdbcType="VARCHAR"/>
+        <result column="travel_headUrl" property="travelHeadUrl" jdbcType="VARCHAR"/>
+        <result column="t_group_id" property="tGroupId" jdbcType="VARCHAR"/>
+        <result column="team_name" property="teamName" jdbcType="VARCHAR"/>
+        <result column="team_num" property="teamNum" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <collection property="messageTextEntityList" ofType="com.umessage.letsgo.domain.po.message.MessageTextEntity">
+            <id column="mt_id" property="id" jdbcType="BIGINT"/>
+            <result column="m_id" property="mId" jdbcType="BIGINT"/>
+            <result column="sender_id" property="senderId" jdbcType="BIGINT"/>
+            <result column="sender_name" property="senderName" jdbcType="VARCHAR"/>
+            <result column="message" property="message" jdbcType="VARCHAR"/>
+            <result column="post_time" property="postTime" jdbcType="TIMESTAMP"/>
+            <result column="role_status" property="status" jdbcType="INTEGER"/>
+            <result column="photo_url1" property="photoUrl1" jdbcType="VARCHAR"/>
+            <result column="photo_url2" property="photoUrl2" jdbcType="VARCHAR"/>
+            <result column="photo_url3" property="photoUrl3" jdbcType="VARCHAR"/>
+            <result column="photo_url4" property="photoUrl4" jdbcType="VARCHAR"/>
+            <result column="photo_url5" property="photoUrl5" jdbcType="VARCHAR"/>
+            <result column="photo_url6" property="photoUrl6" jdbcType="VARCHAR"/>
+            <result column="photo_url7" property="photoUrl7" jdbcType="VARCHAR"/>
+            <result column="photo_url8" property="photoUrl8" jdbcType="VARCHAR"/>
+            <result column="photo_url9" property="photoUrl9" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <!--根据腾讯组ID和用户ID 获取回复信息列表-->
+    <select id="getMessageListByTgroupId" resultMap="MessageEntity" parameterType="com.umessage.letsgo.domain.po.message.MessageEntity">
+      SELECT m.id,m.member_id,m.create_time,m.travel_headUrl,m.photo_url,m.`status`,m.team_id,
+	  m.team_name,m.team_num,m.travel_id,m.t_group_id,m.update_time,mt.id AS mt_id,mt.message,mt.m_id,mt.photo_url1,
+	  mt.photo_url2,mt.photo_url3,mt.photo_url4,mt.photo_url5,mt.photo_url6,mt.photo_url7,mt.photo_url8,mt.photo_url9,mt.post_time,mt.sender_id,mt.sender_name,
+	  mt.`status` AS role_status
+      FROM m_message AS m
+      JOIN m_message_text AS mt
+      ON m.id = mt.m_id
+      AND m.t_group_id = #{tGroupId,jdbcType=VARCHAR}  AND m.user_id = #{userId,jdbcType=BIGINT} ORDER BY mt.post_time DESC  , mt.sender_id ASC
+    </select>
+
+
+    <!--根据腾讯组ID和用户ID 获取行程反馈问题主题信息-->
+    <select id="getSubjectMessageByTGroupId" resultMap="MessageEntity" parameterType="com.umessage.letsgo.domain.po.message.MessageEntity">
+        SELECT
+            m.id,m.member_id,m.user_id, m.create_time, m.travel_headUrl, m.photo_url,m.`status`, m.team_id,
+            m.team_name, m.team_num, m.travel_id, m.t_group_id, m.update_time
+        FROM
+            m_message AS m
+
+        <where>
+            <if test="null != userId"> AND  m.user_id = #{userId}</if>
+            <if test="null != tGroupId"> AND m.t_group_id = #{tGroupId}</if>
+        </where>
+    </select>
+
+    <!--用户反馈问题问题信息插入-->
+    <insert id="insertSubjectMessage" useGeneratedKeys="true" keyProperty="ID"  parameterType="com.umessage.letsgo.domain.po.message.MessageEntity" >
+     <!--   <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>-->
+        INSERT INTO `m_message`(member_id, user_id, create_time,
+        travel_headUrl,photo_url,`status`,
+        team_id,team_name,team_num,
+        travel_id,t_group_id,update_time)
+        VALUES
+        (#{memberId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+        #{travelHeadUrl,jdbcType=VARCHAR},#{headUrl,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+         #{teamId,jdbcType=BIGINT},#{teamName,jdbcType=INTEGER},#{teamNum,jdbcType=INTEGER},
+        #{teavelId,jdbcType=BIGINT},#{tGroupId,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <!--用户反馈问题回复信息插入-->
+    <insert id="insertMessageText"  parameterType="com.umessage.letsgo.domain.po.message.MessageTextEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id"  >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO `m_message_text` (m_id, sender_id, sender_name,
+        message,post_time,`status`,
+        photo_url1,photo_url2,photo_url3,
+        photo_url4,photo_url5,photo_url6,
+        photo_url7,photo_url8,photo_url9)
+        VALUES
+        (#{mId,jdbcType=BIGINT}, #{senderId,jdbcType=BIGINT}, #{senderName,jdbcType=VARCHAR},
+        #{message,jdbcType=VARCHAR},#{postTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},
+        #{photoUrl1,jdbcType=VARCHAR},#{photoUrl2,jdbcType=INTEGER},#{photoUrl3,jdbcType=VARCHAR},
+        #{photoUrl4,jdbcType=VARCHAR},#{photoUrl5,jdbcType=VARCHAR},#{photoUrl6,jdbcType=VARCHAR},
+        #{photoUrl7,jdbcType=VARCHAR},#{photoUrl8,jdbcType=VARCHAR},#{photoUrl9,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!--修改主题信息修改时间和状态-->
+    <update id="updateSubjectMessage" parameterType="com.umessage.letsgo.domain.po.message.MessageEntity" >
+         update m_message
+          SET update_time =  #{updateTime,jdbcType=TIMESTAMP},
+              `status` = #{status,jdbcType=INTEGER}
+              WHERE  id =  #{ID,jdbcType=BIGINT}
+    </update>
+
+    <!--获取行程问题反馈列表-->
+    <select id="getSubjectMessageByRequest" resultMap="MessageEntity" parameterType="com.umessage.letsgo.domain.po.message.MessageEntity">
+        SELECT
+        m.id,m.member_id,m.user_id, m.create_time, m.travel_headUrl, m.photo_url,m.`status`, m.team_id,
+        m.team_name, m.team_num, m.travel_id, m.t_group_id, m.update_time
+        FROM
+        m_message AS m
+
+        <where>
+            <if test="null != teavelId"> AND m.travel_id = #{teavelId}</if>
+            <if test="null != teamId"> AND  m.team_id = #{teamId}</if>
+            <if test="null != status"> AND  m.status = #{status}</if>
+            <if test="null != teamNum">AND m.team_num LIKE concat('%',#{teamNum},'%')</if>
+        </where>
+
+        ORDER BY m.update_time DESC
+    </select>
+
+
+    <!--根据腾讯组ID和用户ID 获取回复信息列表-->
+    <select id="getMessageTextListByRequest" resultMap="MessageEntity" parameterType="com.umessage.letsgo.domain.po.message.MessageEntity">
+        SELECT m.id,m.member_id,m.user_id,m.create_time,m.travel_headUrl,m.photo_url,m.`status`,m.team_id,
+        m.team_name,m.team_num,m.travel_id,m.t_group_id,m.update_time,mt.id AS mt_id,mt.message,mt.m_id,mt.photo_url1,
+        mt.photo_url2,mt.photo_url3,mt.photo_url4,mt.photo_url5,mt.photo_url6,mt.photo_url7,mt.photo_url8,mt.photo_url9,mt.post_time,mt.sender_id,mt.sender_name,
+        mt.`status` AS role_status
+        FROM m_message AS m
+        JOIN m_message_text AS mt
+        ON m.id = mt.m_id
+        <where>
+            <if test="null != ID">  AND m.id = #{ID,jdbcType=BIGINT} </if>
+            <if test="null != memberId">AND m.member_id = #{memberId,jdbcType=BIGINT}</if>
+        </where>
+          ORDER BY mt.post_time ASC  , mt.sender_id DESC
+    </select>
+
+    <!--根据id获取反馈的主题信息-->
+    <select id="getSubjectMessageById" resultMap="MessageEntity" parameterType="java.lang.String">
+        SELECT
+        m.id,m.member_id,m.user_id, m.create_time, m.travel_headUrl, m.photo_url,m.`status`, m.team_id,
+        m.team_name, m.team_num, m.travel_id, m.t_group_id, m.update_time
+        FROM
+        m_message AS m
+        WHERE m.id = #{mId}
+    </select>
+
+    <!--修改主题信息状态-->
+    <update id="updateSubjectMessageStatus" parameterType="com.umessage.letsgo.domain.po.message.MessageEntity" >
+        update m_message
+        SET
+        `status` = #{status,jdbcType=INTEGER}
+        WHERE  id =  #{ID,jdbcType=BIGINT}
+    </update>
+
+</mapper>

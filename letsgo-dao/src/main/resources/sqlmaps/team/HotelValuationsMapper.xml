@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.HotelValuationsDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.HotelEvaluationsEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="hotel_name" property="hotelName" jdbcType="VARCHAR" />
+        <result column="hotel_eng_name" property="hotelEngName" jdbcType="VARCHAR" />
+        <result column="hotel_level" property="hotelLevel" jdbcType="VARCHAR" />
+        <result column="grade" property="grade" jdbcType="INTEGER" />
+        <result column="totalScore" property="totalScore" jdbcType="INTEGER" />
+        <result column="evaluateCount" property="evaluateCount" jdbcType="INTEGER" />
+        <result column="state" property="state" jdbcType="VARCHAR" />
+        <result column="evaluate_time" property="evaluateTime" jdbcType="TIMESTAMP" />
+        <result column="continent" property="continent" jdbcType="VARCHAR"  />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="hotel_id" property="hotelId" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="selectHotel" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.HotelValuationsRequest">
+        SELECT COUNT(ID) AS evaluateCount,hotel_name,hotel_level,SUM(grade) as totalScore,state,continent FROM  j_hotel_evaluations
+        WHERE travel_id=#{travelId,jdbcType=BIGINT}
+        <if test="null != continent"> and continent = #{continent}</if>
+        <if test="null != state">and state = #{state}</if>
+        <if test="null != hotelLevel">AND hotel_level = #{hotelLevel}</if>
+        <if test="null != startDate">AND DATE_FORMAT(evaluate_time, '%Y-%m-%d') &gt;= DATE_FORMAT(#{startDate}, '%Y-%m-01')</if>
+        <if test="null != endDate">AND DATE_FORMAT(evaluate_time, '%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate}, '%Y-%m-31')</if>
+        GROUP BY hotel_id
+    </select>
+    <select id="selectStatis" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.HotelValuationsRequest">
+       SELECT d.ID, d.hotel_id,d.travel_id,d.satisfied_status as grade,d.create_time as evaluate_time,e.country as state,e.delta as continent,e.hotel_chinese_name as hotel_name,e.hotel_english_name as hotel_eng_name,e.star_lv as hotel_level
+       FROM j_schedule_detail_comment d ,
+        d_hotel e where d.hotel_id=e.hotel_id
+        AND d.create_time &gt; #{startDate}
+    </select>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.HotelEvaluationsEntity">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_hotel_evaluations (hotel_name,hotel_eng_name,hotel_level,evaluate_time,
+        grade,state,continent,create_time,travel_id	,hotel_id
+        )
+        values (#{hotelName,jdbcType=VARCHAR},#{hotelEngName,jdbcType=VARCHAR},  #{hotelLevel,jdbcType=VARCHAR},#{evaluateTime,jdbcType=TIMESTAMP},  #{grade,jdbcType=INTEGER},
+        #{state,jdbcType=VARCHAR},  #{continent,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},  #{travelId	,jdbcType=BIGINT},
+        #{hotelId,jdbcType=VARCHAR}
+        )
+    </insert>
+
+</mapper>

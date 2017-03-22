@@ -1,0 +1,29 @@
+#set($pageTitle="登录")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+<style type="text/css">
+	#img-wrap{width:100%;}
+	.mui-input-group{background: none; border: none;}
+	.mui-input-group input{border: 1px solid #DDD;background-color: #FFF;}
+	.code-phone{position: relative;}
+	.mui-input-group .send_ident{position: absolute;right: 0; bottom: 0;padding: 9px 15px;background-color: #FC9;color: #FFF;}
+</style>
+<script>
+	var hgt = window.screen.width / 2;
+	document.getElementById("img-wrap").style.height = hgt + "px";
+</script>
+<div class="mui-content">
+	<div id="img-wrap">
+		<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/bg.jpg" alt="" width="100%" class="login_banner">
+	</div>
+	<p class="pad10 mui-text-center ft18">艺叮咚</p>
+	<form class="mui-input-group mrr10" action="$!{link.contextPath}/j_spring_security_check" method="POST">
+		<input type="hidden"  name="targetUrl" value="$!targetUrl"/>
+		<div class="mui-input-row mb10">
+			<input type="text" name="j_username" id="phoneNum" class="mui-input-clear" placeholder="请输入电话">
+		</div>
+		<div class="code-phone">
+			<input type="password" name="j_password" class="mui-input-clear" placeholder="请输入密码">
+		</div>
+	</form>
+	<button type="button" class="mui-btn btn-w210 mui-btn-primary" onclick="javascript:$('form').submit()">登录</button>
+</div>

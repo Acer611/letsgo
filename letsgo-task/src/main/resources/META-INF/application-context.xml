@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:reg="http://www.dangdang.com/schema/ddframe/reg"
+       xmlns:job="http://www.dangdang.com/schema/ddframe/job"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.dangdang.com/schema/ddframe/reg
+                        http://www.dangdang.com/schema/ddframe/reg/reg.xsd
+                        http://www.dangdang.com/schema/ddframe/job
+                        http://www.dangdang.com/schema/ddframe/job/job.xsd">
+    <!-- 引入Service层 bean定义模块 -->
+    <import resource="classpath*:/spring/spring-beans.xml"/>
+    <!-- 引入数据源定义模块 -->
+    <import resource="classpath*:/spring/spring-datasource.xml"/>
+
+    <context:component-scan base-package="com.umessage.letsgo.task" />
+    <context:property-placeholder location="classpath*:*-conf.properties" />
+
+    <reg:zookeeper id="regCenter"
+                   server-lists="${serverLists}" namespace="${namespace}"
+                   base-sleep-time-milliseconds="${baseSleepTimeMilliseconds}"
+                   max-sleep-time-milliseconds="${maxSleepTimeMilliseconds}" max-retries="${maxRetries}"
+                   nested-port="${nestedPort}" nested-data-dir="${nestedDataDir}"/>
+
+
+    <job:dataflow id="teamStatusJob" class="com.umessage.letsgo.task.job.TeamStatusJob"
+                  registry-center-ref="regCenter" sharding-total-count="${teamStatusJob.shardingTotalCount}"
+                  cron="${teamStatusJob.cron}" sharding-item-parameters="${teamStatusJob.shardingItemParameters}"
+                  monitor-execution="${teamStatusJob.monitorExecution}"
+                  failover="${teamStatusJob.failover}" description="${teamStatusJob.description}"
+                  disabled="${teamStatusJob.disabled}" overwrite="${teamStatusJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="remindNoticeJob" class="com.umessage.letsgo.task.job.RemindNoticeJob"
+                  registry-center-ref="regCenter" sharding-total-count="${remindNoticeJob.shardingTotalCount}"
+                  cron="${remindNoticeJob.cron}" sharding-item-parameters="${remindNoticeJob.shardingItemParameters}"
+                  monitor-execution="${remindNoticeJob.monitorExecution}"
+                  failover="${remindNoticeJob.failover}" description="${remindNoticeJob.description}"
+                  disabled="${remindNoticeJob.disabled}" overwrite="${remindNoticeJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="systemMessageJob" class="com.umessage.letsgo.task.job.SystemMessageJob"
+                  registry-center-ref="regCenter" sharding-total-count="${systemMessageJob.shardingTotalCount}"
+                  cron="${systemMessageJob.cron}" sharding-item-parameters="${systemMessageJob.shardingItemParameters}"
+                  monitor-execution="${systemMessageJob.monitorExecution}"
+                  failover="${systemMessageJob.failover}" description="${systemMessageJob.description}"
+                  disabled="${systemMessageJob.disabled}" overwrite="${systemMessageJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="uploadMessageJob" class="com.umessage.letsgo.task.job.UploadLocationMessageJob"
+                  registry-center-ref="regCenter" sharding-total-count="${uploadMessageJob.shardingTotalCount}"
+                  cron="${uploadMessageJob.cron}" sharding-item-parameters="${uploadMessageJob.shardingItemParameters}"
+                  monitor-execution="${uploadMessageJob.monitorExecution}"
+                  failover="${uploadMessageJob.failover}" description="${uploadMessageJob.description}"
+                  disabled="${uploadMessageJob.disabled}" overwrite="${uploadMessageJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="yahooWeatherJob" class="com.umessage.letsgo.task.job.YahooWeatherJob"
+                  registry-center-ref="regCenter" sharding-total-count="${yahooWeatherJob.shardingTotalCount}"
+                  cron="${yahooWeatherJob.cron}" sharding-item-parameters="${yahooWeatherJob.shardingItemParameters}"
+                  monitor-execution="${yahooWeatherJob.monitorExecution}"
+                  failover="${yahooWeatherJob.failover}" description="${yahooWeatherJob.description}"
+                  disabled="${yahooWeatherJob.disabled}" overwrite="${yahooWeatherJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="yahooRateJob" class="com.umessage.letsgo.task.job.YahooRateJob"
+                  registry-center-ref="regCenter" sharding-total-count="${yahooRateJob.shardingTotalCount}"
+                  cron="${yahooRateJob.cron}" sharding-item-parameters="${yahooRateJob.shardingItemParameters}"
+                  monitor-execution="${yahooRateJob.monitorExecution}"
+                  failover="${yahooRateJob.failover}" description="${yahooRateJob.description}"
+                  disabled="${yahooRateJob.disabled}" overwrite="${yahooRateJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="tracerPushMsgJob" class="com.umessage.letsgo.task.job.TracerPushMsgJob"
+                  registry-center-ref="regCenter" sharding-total-count="${tracerPushMsgJob.shardingTotalCount}"
+                  cron="${tracerPushMsgJob.cron}" sharding-item-parameters="${tracerPushMsgJob.shardingItemParameters}"
+                  monitor-execution="${tracerPushMsgJob.monitorExecution}"
+                  failover="${tracerPushMsgJob.failover}" description="${tracerPushMsgJob.description}"
+                  disabled="${tracerPushMsgJob.disabled}" overwrite="${tracerPushMsgJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+    <job:dataflow id="hotelStatisticalJob" class="com.umessage.letsgo.task.job.HotelStatisticalJob"
+                  registry-center-ref="regCenter" sharding-total-count="${hotelStatisticalJob.shardingTotalCount}"
+                  cron="${hotelStatisticalJob.cron}" sharding-item-parameters="${hotelStatisticalJob.shardingItemParameters}"
+                  monitor-execution="${hotelStatisticalJob.monitorExecution}"
+                  failover="${hotelStatisticalJob.failover}" description="${hotelStatisticalJob.description}"
+                  disabled="${hotelStatisticalJob.disabled}" overwrite="${hotelStatisticalJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <!--
+    <job:dataflow id="scheduleReportsJob" class="com.umessage.letsgo.task.job.ScheduleReportsJob"
+                  registry-center-ref="regCenter" sharding-total-count="${scheduleReportsJob.shardingTotalCount}"
+                  cron="${scheduleReportsJob.cron}" sharding-item-parameters="${scheduleReportsJob.shardingItemParameters}"
+                  monitor-execution="${scheduleReportsJob.monitorExecution}"
+                  failover="${scheduleReportsJob.failover}" description="${scheduleReportsJob.description}"
+                  disabled="${scheduleReportsJob.disabled}" overwrite="${scheduleReportsJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+    -->
+
+    <job:dataflow id="userCommentJob" class="com.umessage.letsgo.task.job.UserCommentJob"
+                  registry-center-ref="regCenter" sharding-total-count="${userCommentJob.shardingTotalCount}"
+                  cron="${userCommentJob.cron}" sharding-item-parameters="${userCommentJob.shardingItemParameters}"
+                  monitor-execution="${userCommentJob.monitorExecution}"
+                  failover="${userCommentJob.failover}" description="${userCommentJob.description}"
+                  disabled="${userCommentJob.disabled}" overwrite="${userCommentJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="rewardJob" class="com.umessage.letsgo.task.job.RewardJob"
+                  registry-center-ref="regCenter" sharding-total-count="${rewardJob.shardingTotalCount}"
+                  cron="${rewardJob.cron}" sharding-item-parameters="${rewardJob.shardingItemParameters}"
+                  monitor-execution="${rewardJob.monitorExecution}"
+                  failover="${rewardJob.failover}" description="${rewardJob.description}"
+                  disabled="${rewardJob.disabled}" overwrite="${rewardJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="everyDayCommentJob" class="com.umessage.letsgo.task.job.EveryDayCommentJob"
+                  registry-center-ref="regCenter" sharding-total-count="${everyDayCommentJob.shardingTotalCount}"
+                  cron="${everyDayCommentJob.cron}" sharding-item-parameters="${everyDayCommentJob.shardingItemParameters}"
+                  monitor-execution="${everyDayCommentJob.monitorExecution}"
+                  failover="${everyDayCommentJob.failover}" description="${everyDayCommentJob.description}"
+                  disabled="${everyDayCommentJob.disabled}" overwrite="${everyDayCommentJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+    <job:dataflow id="everyDayScoreJob" class="com.umessage.letsgo.task.job.EveryDayScoreJob"
+                  registry-center-ref="regCenter" sharding-total-count="${everyDayScoreJob.shardingTotalCount}"
+                  cron="${everyDayScoreJob.cron}" sharding-item-parameters="${everyDayScoreJob.shardingItemParameters}"
+                  monitor-execution="${everyDayScoreJob.monitorExecution}"
+                  failover="${everyDayScoreJob.failover}" description="${everyDayScoreJob.description}"
+                  disabled="${everyDayScoreJob.disabled}" overwrite="${everyDayScoreJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+
+    <job:dataflow id="everyDayQuestionJob" class="com.umessage.letsgo.task.job.EveryDayQuestionJob"
+                  registry-center-ref="regCenter" sharding-total-count="${everyDayQuestionJob.shardingTotalCount}"
+                  cron="${everyDayQuestionJob.cron}" sharding-item-parameters="${everyDayQuestionJob.shardingItemParameters}"
+                  monitor-execution="${everyDayQuestionJob.monitorExecution}"
+                  failover="${everyDayQuestionJob.failover}" description="${everyDayQuestionJob.description}"
+                  disabled="${everyDayQuestionJob.disabled}" overwrite="${everyDayQuestionJob.overwrite}">
+        <job:listener class="com.umessage.letsgo.task.listener.SimpleListener"/>
+    </job:dataflow>
+
+</beans>

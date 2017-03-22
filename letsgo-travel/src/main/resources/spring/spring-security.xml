@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+       http://www.springframework.org/schema/security/oauth2  http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
+
+    <security:http pattern="/resources/**" security="none"/>
+    <security:http pattern="/login" security="none"/>
+    <security:http pattern="/signin" security="none"/>
+    <security:http pattern="/user/userForgotPassword" security="none"/>
+    <security:http pattern="/user/userNewPassword" security="none"/>
+    <security:http pattern="/user/validateMobileCode" security="none"/>
+    <security:http pattern="/user/retrievePassword" security="none"/>
+    <security:http pattern="/**" auto-config="false" access-denied-page="/login">
+        <!-- 表单登录过滤器 -->
+        <security:anonymous enabled = "true" username = "anonymousUser" granted-authority = "ROLE_ANONYMOUS" />
+        <!--<security:intercept-url pattern="/system/**" access="ROLE_TRAVEL,ROLE_ANONYMOUS"/>-->
+        <security:intercept-url pattern="/schedule/mainPage" access="ROLE_OPERATOR,ROLE_SALER,ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/schedule/getTeamList" access="ROLE_OPERATOR, ROLE_SALER,ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/schedule/travelMonitor" access="ROLE_OPERATOR,ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/teamAlbum/getTeamPhotoLists" access="ROLE_OPERATOR,ROLE_TRAVEL,ROLE_SALER"/>
+        <security:intercept-url pattern="/leader/searchAjax" access="ROLE_OPERATOR,ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/hotel/**" access="ROLE_TRAVEL,ROLE_OPERATOR,ROLE_SALER"/>
+        <security:intercept-url pattern="/lineEvaluate/**" access="ROLE_TRAVEL,ROLE_OPERATOR,ROLE_SALER"/>
+        <security:intercept-url pattern="/data/**" access="ROLE_TRAVEL,ROLE_OPERATOR,ROLE_SALER"/>
+        <security:intercept-url pattern="/user/userEdit" access="ROLE_TRAVEL,ROLE_OPERATOR,ROLE_SALER"/>
+        <security:intercept-url pattern="/user/userUpdatePassword" access="ROLE_TRAVEL,ROLE_OPERATOR,ROLE_SALER"/>
+        <security:intercept-url pattern="/leader/search" access="ROLE_TRAVEL,ROLE_OPERATOR,ROLE_SALER"/>
+        <security:intercept-url pattern="logManage/goLogList" access="ROLE_TRAVEL,ROLE_OPERATOR,ROLE_SALER"/>
+        <security:intercept-url pattern="/user/**" access="ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/schedule/**" access="ROLE_OPERATOR,ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/leader/**" access="ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/member/**" access="ROLE_OPERATOR,ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/event/**" access="ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/logManage/**" access="ROLE_TRAVEL"/>
+        <security:intercept-url pattern="/travelAgency/**" access="ROLE_OPERATOR,ROLE_TRAVEL,ROLE_SALER"/>
+        <security:form-login login-page="/login"
+                             authentication-failure-url="/login?error=true"
+                             default-target-url="/schedule/mainPage"/>
+        <security:logout logout-url="/singout" logout-success-url="/login"/>
+        <security:remember-me/>
+    </security:http>
+
+    <!--user-->
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="userAuthenticationProvider">
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <!--user-->
+</beans>

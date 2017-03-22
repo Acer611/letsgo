@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.ScenicAgencyDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.ScenicAgencyEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="mafeng_id" property="mafengId" jdbcType="VARCHAR" />
+        <result column="scenic_name" property="scenicName" jdbcType="VARCHAR" />
+        <result column="scenic_en_name" property="ScenicEnName" jdbcType="VARCHAR" />
+        <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+        <result column="scenic_city" property="scenicCity" jdbcType="VARCHAR" />
+        <result column="briefintroduction" property="briefintroduction" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <collection property="albumAgencyEntities" ofType="com.umessage.letsgo.domain.po.team.AlbumAgencyEntity">
+            <id column="taa_ID" property="id" jdbcType="BIGINT" />
+            <result column="taa_object_id" property="objectId" jdbcType="BIGINT" />
+            <result column="taa_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+            <result column="taa_travel_id" property="travelId" jdbcType="BIGINT" />
+            <result column="taa_type" property="type" jdbcType="VARCHAR" />
+            <result column="taa_create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="taa_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        </collection>
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_scenic_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.ScenicAgencyEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_scenic_agency (travel_id,mafeng_id, scenic_name, scenic_en_name,scenic_city,city_id ,briefintroduction, lon, lat, create_time, update_time)
+        values (#{travelId,jdbcType=BIGINT},#{mafengId,jdbcType=VARCHAR}, #{scenicName,jdbcType=VARCHAR},#{scenicEnName,jdbcType=VARCHAR}, #{scenicCity,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR},
+        #{briefintroduction,jdbcType=VARCHAR},#{lon,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.ScenicAgencyEntity" >
+        update t_scenic_agency
+        set travel_id = #{travelId,jdbcType=BIGINT},
+            scenic_name = #{scenicName,jdbcType=VARCHAR},
+            scenic_en_name =#{scenicEnName,jdbcType=VARCHAR},
+            scenic_city = #{scenicCity,jdbcType=VARCHAR},
+            city_id =  #{cityId,jdbcType=VARCHAR},
+            briefintroduction = #{briefintroduction,jdbcType=VARCHAR},
+            lon = #{lon,jdbcType=VARCHAR},
+            lat = #{lat,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long"  >
+        select ID, travel_id,mafeng_id, scenic_name,scenic_en_name,city_id, briefintroduction, lon, lat, create_time, update_time
+        from t_scenic_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, travel_id, mafeng_id,scenic_name, briefintroduction, lon, lat, create_time, update_time
+        from t_scenic_agency
+    </select>
+
+
+    <select id="selectScheduleDetailScenic" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.team.ScenicAgencyEntity" >
+        select ID, travel_id, mafeng_id,scenic_name,scenic_city,scenic_en_name,city_id, briefintroduction, lon, lat, create_time, update_time
+        from t_scenic_agency AS tsa
+        <where>
+            <if test="null != travelId"> AND  tsa.travel_id = #{travelId}</if>
+            <if test="null != scenicName"> AND  tsa.scenic_name = #{scenicName}</if>
+            <if test="null != scenicCity"> AND  tsa.scenic_city = #{scenicCity}</if>
+        </where>
+    </select>
+
+    <select id="selectLike" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.team.ScenicAgencyEntity" >
+        SELECT
+        tsa.ID,
+        tsa.travel_id,
+        tsa.mafeng_id,
+        tsa.scenic_name,
+        tsa.scenic_en_name,
+        tsa.scenic_city,
+        tsa.city_id, briefintroduction,
+        tsa.lon,
+        tsa.lat,
+        tsa.create_time,
+        tsa.update_time,
+        taa.ID AS taa_ID,
+        taa.object_id AS taa_object_id,
+        taa.photo_url AS taa_photo_url,
+        taa.travel_id AS taa_travel_id,
+        taa.create_time AS taa_create_time,
+        taa.type AS taa_type,
+        taa.update_time AS taa_update_time
+        FROM
+        t_scenic_agency AS tsa
+        LEFT JOIN  t_album_agency taa ON tsa.ID = taa.object_id AND taa.type =1
+
+        <where>
+            <if test="scenicName != null">
+                tsa.scenic_name LIKE CONCAT('%' ,#{scenicName} ,'%')
+            </if>
+            AND  tsa.travel_id  = #{travelId} AND city_id in
+            <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+
+</mapper>

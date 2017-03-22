@@ -1,0 +1,47 @@
+#set($pageTitle="通知详情")
+#set($layout="/WEB-INF/views/common/layout/layoutweixin.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/weixin/style/weui.css","$!{STATIC_URL}/resources/weixin/style/weixin.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/weixin/js/zepto.min.js","https://res.wx.qq.com/open/js/jweixin-1.0.0.js","$!{STATIC_URL}/resources/weixin/js/weui.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js"])
+
+<article class="headjihe">
+    <div class="headImg"><img src="$!{response.photoUrl}"/>
+        <p class="headName">$!{response.senderName}</p>
+    </div>
+    <section>
+        <p class="jiheTime"><span>$!date.format('MM月dd日 HH:mm',$!{response.sendTime})</span><span>通知</span></p>
+        <div class="containtalk">
+            <div class="jiheText anwarp">
+				$!{response.content}
+            </div>
+            <div class="talktip"></div>
+        </div>
+        <p class="titTopjihe">
+            来自“<span>$!{response.scheduleName}</span>”
+        </p>
+    </section>
+</article>
+			
+
+		#if($response.activeStatus==0)
+
+			<div class="sureBtn">
+				已确认
+			</div>
+		#else
+			<div class="sureBtn">
+				已确认
+			</div>
+		#end
+
+#define($scriptBlock)
+	<script>
+	$(function(){
+		$("body").css({"backgroundColor":"#fff","height":"100%"});
+//        if($(".titTopjihe").find("span").text().length>11){
+//            var text=$(".titTopjihe").find("span").text().substr(0,11)
+//            $(".titTopjihe").find("span").text(text+"...")
+//        }
+	})
+	</script>
+
+#end

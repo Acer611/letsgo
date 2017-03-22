@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.RegionDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.RegionEntity" >
+        <id column="areaid" property="areaid" jdbcType="VARCHAR" />
+        <result column="alias" property="alias" jdbcType="VARCHAR" />
+        <result column="areaengname" property="areaengname" jdbcType="VARCHAR" />
+        <result column="areapinyinname" property="areapinyinname" jdbcType="VARCHAR" />
+        <result column="delta" property="delta" jdbcType="VARCHAR" />
+        <result column="lv" property="lv" jdbcType="INTEGER" />
+        <result column="parentid" property="parentid" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="DOUBLE" />
+        <result column="lng" property="lng" jdbcType="DOUBLE" />
+        <result column="timezone" property="timezone" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="CountryResultMap" type="com.umessage.letsgo.domain.po.system.RegionEntityPo" extends="BaseResultMap">
+        <result column="countryId" property="countryId" jdbcType="VARCHAR"/>
+        <result column="country" property="country" jdbcType="VARCHAR"/>
+        <result column="countryEngName" property="countryEngName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.String" >
+        delete from d_region
+        where areaid = #{areaid,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.RegionEntity" >
+        insert into d_region (areaid, alias, areaengname, 
+            areapinyinname, delta, lv,
+            parentid, lat, lng, timezone
+            )
+        values (#{areaid,jdbcType=VARCHAR}, #{alias,jdbcType=VARCHAR}, #{areaengname,jdbcType=VARCHAR}, 
+            #{areapinyinname,jdbcType=VARCHAR}, #{delta,jdbcType=VARCHAR}, #{lv,jdbcType=INTEGER},
+            #{parentid,jdbcType=VARCHAR}, #{lat,jdbcType=INTEGER}, #{lng,jdbcType=INTEGER}, #{timezone,jdbcType=VARCHAR}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.RegionEntity" >
+        update d_region
+        set alias = #{alias,jdbcType=VARCHAR},
+            areaengname = #{areaengname,jdbcType=VARCHAR},
+            areapinyinname = #{areapinyinname,jdbcType=VARCHAR},
+            delta = #{delta,jdbcType=VARCHAR},
+            lv = #{lv,jdbcType=INTEGER},
+            parentid = #{parentid,jdbcType=VARCHAR},
+            lat = #{lat,jdbcType=DOUBLE},
+            lng = #{lng,jdbcType=DOUBLE},
+            timezone = #{timezone,jdbcType=VARCHAR}
+        where areaid = #{areaid,jdbcType=VARCHAR}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select areaid, alias, areaengname, areapinyinname, delta, lv, parentid, lat, lng, timezone
+        from d_region
+        where areaid = #{areaid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectCountry" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select areaid, alias, areaengname, areapinyinname, delta, lv, parentid, lat, lng, timezone
+        from d_region
+        WHERE lv = 1 AND timezone is null
+    </select>
+    <select id="selectCityAndCountry" resultMap="CountryResultMap" parameterType="java.lang.String" >
+        select d1.areaid, d1.alias, d1.areaengname, d1.areapinyinname,
+        d1.delta, d1.lv, d1.parentid, d1.lat, d1.lng, d1.timezone,
+        d2.areaid as countryId, d2.alias as country, d2.areaengname as countryEngName
+        FROM d_region AS  d1
+        JOIN d_region AS d2 ON d1.parentid = d2.areaid
+        WHERE d1.lv = 2 AND d1.timezone is null
+    </select>
+    <select id="getCountryByDelta" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select areaid, alias, areaengname, areapinyinname, delta, lv, parentid, lat, lng, timezone
+        from d_region
+        where delta = #{delta,jdbcType=VARCHAR} AND lv=1
+    </select>
+    <select id="getCountryByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select areaid, alias, areaengname, areapinyinname, delta, lv, parentid, lat, lng, timezone
+        from d_region
+        WHERE lv =1 AND (alias LIKE #{alias,jdbcType=VARCHAR} OR  areaengname LIKE  #{alias,jdbcType=VARCHAR}) LIMIT 1
+    </select>
+
+    <select id="getRegionByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select areaid, alias, areaengname, areapinyinname, delta, lv, parentid, lat, lng, timezone
+        from d_region
+        WHERE alias LIKE #{alias,jdbcType=VARCHAR} OR  areaengname LIKE  #{alias,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getRegionByNameOne" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select areaid, alias, areaengname, areapinyinname, delta, lv, parentid, lat, lng, timezone
+        from d_region
+        WHERE alias LIKE #{alias,jdbcType=VARCHAR} OR  areaengname LIKE  #{alias,jdbcType=VARCHAR} LIMIT 1
+    </select>
+
+    <select id="getCityAndCountryByName" resultMap="CountryResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.RegionRequest">
+        select d1.areaid, d1.alias, d1.areaengname, d1.areapinyinname,
+        d1.delta, d1.lv, d1.parentid, d1.lat, d1.lng, d1.timezone,
+        d2.alias as country,
+        d2.areaid as countryId
+        FROM d_region AS  d1
+        JOIN d_region AS d2 ON d1.parentid = d2.areaid
+        <where>
+            d1.lv = 2
+            <if test="alias != null">
+              and   d1.alias LIKE CONCAT('%',#{alias},'%')
+            </if>
+            <if test="areapinyinname != null">
+                AND LOWER(d1.areapinyinname) LIKE #{areapinyinname}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectWithDest" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT areaid, alias, areaengname, areapinyinname, delta, lv, parentid, lat, lng, timezone
+        from d_region
+        WHERE alias=#{dest}
+    </select>
+
+    <select id="selectWithMultiDestIds" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT areaid, alias, areaengname, areapinyinname, delta, lv, parentid, lat, lng, timezone
+        from d_region
+        where  1=1
+        <if test="list != null and list.size()>0">
+            and areaid in
+            <foreach collection="list" separator="," index="index" item="item" open="(" close=")" >
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <script src="$!{STATIC_URL}/resources/js/flexible_css.js"></script>
+    <script src="$!{STATIC_URL}/resources/js/flexible.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="x-rim-auto-match" content="none"/>
+    #parse("/WEB-INF/views/common/resources-css.vm")
+    #foreach($styleUrl in $styleUrls)
+		<link rel="stylesheet" href="$styleUrl" type="text/css"/>
+    #end
+	<title>#if($pageTitle)$pageTitle#else跟上#end</title>
+</head>
+<body ontouchstart>
+    $screen_content
+	#parse("/WEB-INF/views/common/resources-js.vm")
+	
+    #foreach($scriptUrl in $scriptUrls)
+    	<script type="text/javascript" src="$scriptUrl"></script>
+    #end
+    $!scriptBlock
+</body>
+</html>

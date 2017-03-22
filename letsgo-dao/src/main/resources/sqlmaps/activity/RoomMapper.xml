@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.activity.RoomDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.activity.RoomEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="t_id" property="tId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="room_num" property="roomNum" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="room_type" property="roomType" jdbcType="INTEGER" />
+        <result column="total_card_count" property="totalCardCount" jdbcType="INTEGER" />
+        <result column="card_count" property="cardCount" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <resultMap id="MultiResultMap" type="com.umessage.letsgo.domain.po.activity.RoomEntity" >
+        <id column="r_id" property="id" jdbcType="BIGINT" />
+        <result column="r_t_id" property="tId" jdbcType="BIGINT" />
+        <result column="r_team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="r_room_num" property="roomNum" jdbcType="VARCHAR" />
+        <result column="r_count" property="count" jdbcType="INTEGER" />
+        <result column="r_room_type" property="roomType" jdbcType="INTEGER" />
+        <result column="r_total_card_count" property="totalCardCount" jdbcType="INTEGER" />
+        <result column="r_card_count" property="cardCount" jdbcType="INTEGER" />
+        <result column="r_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="r_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="r_version" property="version" jdbcType="BIGINT" />
+        <collection property="roomDetailList" ofType="com.umessage.letsgo.domain.po.activity.RoomDetailEntity">
+            <id column="de_id" property="id" jdbcType="BIGINT" />
+            <result column="de_room_id" property="roomId" jdbcType="BIGINT" />
+            <result column="de_group_id" property="groupId" jdbcType="BIGINT" />
+            <result column="de_member_id" property="memberId" jdbcType="BIGINT" />
+            <result column="de_create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="de_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="de_version" property="version" jdbcType="BIGINT" />
+            <association property="memberEntity" column="member_id" javaType="com.umessage.letsgo.domain.po.team.MemberEntity">
+                <id column="id" property="id" jdbcType="BIGINT" />
+                <result column="user_id" property="userId" jdbcType="BIGINT" />
+                <result column="t_id" property="tId" jdbcType="BIGINT" />
+                <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+                <result column="group_id" property="groupId" jdbcType="BIGINT" />
+                <result column="real_name" property="realName" jdbcType="VARCHAR" />
+                <result column="sex" property="sex" jdbcType="INTEGER" />
+                <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+                <result column="phone" property="phone" jdbcType="VARCHAR" />
+                <result column="mark_phone" property="markPhone" jdbcType="VARCHAR" />
+                <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+                <result column="mail" property="mail" jdbcType="VARCHAR" />
+                <result column="address" property="address" jdbcType="VARCHAR" />
+                <result column="city" property="city" jdbcType="VARCHAR" />
+                <result column="province" property="province" jdbcType="VARCHAR" />
+                <result column="country" property="country" jdbcType="VARCHAR" />
+                <result column="role" property="role" jdbcType="INTEGER" />
+                <result column="type" property="type" jdbcType="INTEGER" />
+                <result column="is_leader" property="isLeader" jdbcType="INTEGER" />
+                <result column="is_admin" property="isAdmin" jdbcType="INTEGER" />
+                <result column="join_status" property="joinStatus" jdbcType="INTEGER" />
+                <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+                <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+                <result column="card_time" property="cardTime" jdbcType="VARCHAR" />
+                <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+                <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+                <result column="version" property="version" jdbcType="BIGINT" />
+                <!--加入组名-->
+                <result column="g_name" property="groupName" jdbcType="VARCHAR" />
+
+                <!--<result column="identifier" property="identifier" jdbcType="VARCHAR" />-->
+                <association property="userEntity" column="user_id" javaType="com.umessage.letsgo.domain.po.security.UserEntity">
+                    <id column="u_id" property="id" jdbcType="BIGINT" />
+                    <result column="u_user_name" property="userName" jdbcType="VARCHAR" />
+                    <result column="u_real_name" property="realName" jdbcType="VARCHAR" />
+                    <result column="u_nick_name" property="nickName" jdbcType="VARCHAR" />
+                    <result column="u_password" property="password" jdbcType="VARCHAR" />
+                    <result column="u_sex" property="sex" jdbcType="INTEGER" />
+                    <result column="u_birthday" property="birthday" jdbcType="VARCHAR" />
+                    <result column="u_phone" property="phone" jdbcType="VARCHAR" />
+                    <result column="u_mail" property="mail" jdbcType="VARCHAR" />
+                    <result column="u_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+                    <result column="u_type" property="type" jdbcType="INTEGER" />
+                    <result column="u_userSig" property="usersig" jdbcType="VARCHAR" />
+                    <result column="u_login_total_count" property="loginTotalCount" jdbcType="INTEGER" />
+                    <result column="u_login_count" property="loginCount" jdbcType="INTEGER" />
+                    <result column="u_create_time" property="createTime" jdbcType="TIMESTAMP" />
+                    <result column="u_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+                    <result column="u_version" property="version" jdbcType="BIGINT" />
+                </association>
+            </association>
+        </collection>
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from a_room
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.activity.RoomEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into a_room (t_id, team_id, room_num,
+            count, room_type, total_card_count, 
+            card_count, create_time, update_time, 
+            version)
+        values (#{tId,jdbcType=BIGINT}, #{teamId,jdbcType=VARCHAR}, #{roomNum,jdbcType=VARCHAR},
+            #{count,jdbcType=INTEGER}, #{roomType,jdbcType=INTEGER}, #{totalCardCount,jdbcType=INTEGER}, 
+            #{cardCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+            #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.activity.RoomEntity" >
+        update a_room
+        set t_id = #{tId,jdbcType=BIGINT},
+            team_id = #{teamId,jdbcType=VARCHAR},
+            room_num = #{roomNum,jdbcType=VARCHAR},
+            count = #{count,jdbcType=INTEGER},
+            room_type = #{roomType,jdbcType=INTEGER},
+            total_card_count = #{totalCardCount,jdbcType=INTEGER},
+            card_count = #{cardCount,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, t_id, team_id, room_num, count, room_type, total_card_count, card_count,
+        create_time, update_time, version
+        from a_room
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, t_id, team_id, room_num, count, room_type, total_card_count, card_count,
+        create_time, update_time, version
+        from a_room
+    </select>
+    <select id="selectByMemberId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select r.ID, r.t_id, r.team_id, r.room_num, r.count, r.room_type, r.total_card_count, r.card_count,
+        r.create_time, r.update_time, r.version
+        FROM a_room AS r
+        LEFT JOIN a_room_detail AS de ON r.ID = de.room_id
+        LEFT JOIN t_member AS me ON de.member_id = me.`ID`
+		LEFT JOIN t_group AS g ON de.group_id = g.`ID`
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        WHERE de.`member_id` = #{memberId,jdbcType=BIGINT};
+    </select>
+    <select id="selectRoomById" resultMap="MultiResultMap"  parameterType="java.lang.Long">
+        select r.ID as r_id, r.t_id as r_t_id, r.team_id as r_team_id, r.room_num as r_room_num, r.count as r_count, r.room_type as r_room_type, r.total_card_count as r_total_card_count, r.card_count as r_card_count, r.create_time as r_create_time,r.update_time as r_update_time, r.version as r_version,
+        de.ID as de_id, de.room_id as de_room_id, de.group_id as de_group_id, de.member_id as de_member_id, de.create_time as de_create_time, de.update_time as de_update_time,de.version as de_version
+        from a_room as r
+        left join a_room_detail as de on r.ID = de.room_id
+        LEFT JOIN t_member AS m ON de.member_id = m.`ID`
+        where r.ID = #{id}
+    </select>
+    <select id="selectRoomListByTeamId" resultMap="MultiResultMap"  parameterType="java.lang.String">
+        SELECT
+        r.ID as r_id, r.t_id as r_t_id, r.team_id as r_team_id, r.room_num as r_room_num, r.count as r_count, r.room_type as r_room_type, r.total_card_count as r_total_card_count, r.card_count as r_card_count, r.create_time as r_create_time,r.update_time as r_update_time, r.version as r_version,
+
+        de.ID as de_id, de.room_id as de_room_id, de.group_id as de_group_id, de.member_id as de_member_id, de.create_time as de_create_time, de.update_time as de_update_time,de.version as de_version,
+
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,g.name as g_name,
+
+        u.ID as u_id, u.user_name as u_user_name, u.real_name as u_real_name, u.nick_name as u_nick_name, u.password as u_password, u.sex as u_sex, u.birthday as u_birthday, u.phone as u_phone, u.mail as u_mail, u.type as u_type, u.photo_url as u_photo_url, u.userSig as u_userSig,
+        u.login_total_count as u_login_total_count, u.login_count as u_login_count, u.create_time as u_create_time, u.update_time as u_update_time, u.version as u_version
+
+        from a_room as r
+        LEFT JOIN a_room_detail AS de ON r.ID = de.room_id
+        LEFT JOIN t_member AS me ON de.member_id = me.`ID`
+        LEFT JOIN t_group AS g ON de.group_id = g.`ID`
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        where r.team_id = #{teamId}
+    </select>
+    <select id="selectRoomListByMember" resultMap="MultiResultMap"  parameterType="java.lang.Long">
+        SELECT
+        r.ID as r_id, r.t_id as r_team_id, r.team_id as r_team_id, r.room_num as r_room_num, r.count as r_count, r.room_type as r_room_type, r.total_card_count as r_total_card_count, r.card_count as r_card_count, r.create_time as r_create_time,r.update_time as r_update_time, r.version as r_version,
+
+        de.ID as de_id, de.room_id as de_room_id, de.group_id as de_group_id, de.member_id as de_member_id, de.create_time as de_create_time, de.update_time as de_update_time,de.version as de_version,
+
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+
+        u.ID as u_id, u.user_name as u_user_name, u.real_name as u_real_name, u.nick_name as u_nick_name, u.password as u_password, u.sex as u_sex, u.birthday as u_birthday, u.phone as u_phone, u.mail as u_mail, u.type as u_type, u.photo_url as u_photo_url, u.userSig as u_userSig,
+        u.login_total_count as u_login_total_count, u.login_count as u_login_count, u.create_time as u_create_time, u.update_time as u_update_time, u.version as u_version
+
+        FROM a_room AS r
+        LEFT JOIN a_room_detail AS de ON r.ID = de.room_id
+        LEFT JOIN t_member AS me ON de.member_id = me.`ID`
+        LEFT JOIN t_group AS g ON de.group_id = g.`ID`
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        WHERE r.`ID` = (SELECT room_id FROM a_room_detail WHERE member_id = #{memberId});
+    </select>
+
+    <select id="selectRoomListByGroup" resultMap="MultiResultMap"  parameterType="java.lang.Long">
+        SELECT
+        r.ID as r_id, r.t_id as r_t_id, r.team_id as r_team_id, r.room_num as r_room_num, r.count as r_count, r.room_type as r_room_type, r.total_card_count as r_total_card_count, r.card_count as r_card_count, r.create_time as r_create_time,r.update_time as r_update_time, r.version as r_version,
+
+        de.ID as de_id, de.room_id as de_room_id, de.group_id as de_group_id, de.member_id as de_member_id, de.create_time as de_create_time, de.update_time as de_update_time,de.version as de_version,
+
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+
+        u.ID as u_id, u.user_name as u_user_name, u.real_name as u_real_name, u.nick_name as u_nick_name, u.password as u_password, u.sex as u_sex, u.birthday as u_birthday, u.phone as u_phone, u.mail as u_mail, u.type as u_type, u.photo_url as u_photo_url, u.userSig as u_userSig,
+        u.login_total_count as u_login_total_count, u.login_count as u_login_count, u.create_time as u_create_time, u.update_time as u_update_time, u.version as u_version
+        FROM a_room AS r
+        LEFT JOIN a_room_detail AS de ON r.ID = de.room_id
+        LEFT JOIN t_member AS me ON de.member_id = me.`ID`
+        LEFT JOIN t_group AS g ON de.group_id = g.`ID`
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        WHERE de.group_id = #{groupId};
+    </select>
+</mapper>

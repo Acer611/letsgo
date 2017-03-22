@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.SpotDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.SpotEntity" >
+        <id column="mafeng_id" property="mafengId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="destionation_id" property="destionationId" jdbcType="VARCHAR" />
+        <result column="brief" property="brief" jdbcType="VARCHAR" />
+        <result column="telno" property="telno" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="traffic" property="traffic" jdbcType="LONGVARCHAR" />
+        <result column="ticket" property="ticket" jdbcType="LONGVARCHAR" />
+        <result column="open_time" property="openTime" jdbcType="LONGVARCHAR" />
+        <result column="cost_time" property="costTime" jdbcType="LONGVARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="lng" property="lng" jdbcType="VARCHAR" />
+
+
+        <result column="DB_ID" property="DBID" jdbcType="VARCHAR"/>
+        <result column="en_name" property="enName" jdbcType="VARCHAR"/>
+        <result column="spotpinyinname" property="spotpinyinname" jdbcType="VARCHAR"/>
+        <result column="entrace" property="entrace" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="business_hours" property="businessHours" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMapAndSchedule" type="com.umessage.letsgo.domain.po.system.SpotEntityPo" >
+        <id column="mafeng_id" property="mafengId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="destionation_id" property="destionationId" jdbcType="VARCHAR" />
+        <result column="brief" property="brief" jdbcType="VARCHAR" />
+        <result column="telno" property="telno" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="traffic" property="traffic" jdbcType="LONGVARCHAR" />
+        <result column="ticket" property="ticket" jdbcType="LONGVARCHAR" />
+        <result column="open_time" property="openTime" jdbcType="LONGVARCHAR" />
+        <result column="cost_time" property="costTime" jdbcType="LONGVARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="lng" property="lng" jdbcType="VARCHAR" />
+        <result column="js_start_date" property="js_start_date" jdbcType="TIMESTAMP" />
+        <result column="js_end_date" property="js_end_date" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from d_spot
+        where mafeng_id = #{mafengId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.SpotEntity" >
+        insert into d_spot (mafeng_id, name, destionation_id, 
+            brief, telno, url, 
+            traffic, ticket, open_time, 
+            cost_time, lat, lng
+            )
+        values (#{mafengId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{destionationId,jdbcType=VARCHAR}, 
+            #{brief,jdbcType=VARCHAR}, #{telno,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+            #{traffic,jdbcType=LONGVARCHAR}, #{ticket,jdbcType=LONGVARCHAR}, #{openTime,jdbcType=LONGVARCHAR}, 
+            #{costTime,jdbcType=LONGVARCHAR}, #{lat,jdbcType=VARCHAR}, #{lng,jdbcType=VARCHAR}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.SpotEntity" >
+        update d_spot
+        set name = #{name,jdbcType=VARCHAR},
+            destionation_id = #{destionationId,jdbcType=VARCHAR},
+            brief = #{brief,jdbcType=VARCHAR},
+            telno = #{telno,jdbcType=VARCHAR},
+            url = #{url,jdbcType=VARCHAR},
+            traffic = #{traffic,jdbcType=LONGVARCHAR},
+            ticket = #{ticket,jdbcType=LONGVARCHAR},
+            open_time = #{openTime,jdbcType=LONGVARCHAR},
+            cost_time = #{costTime,jdbcType=LONGVARCHAR},
+            lat = #{lat,jdbcType=VARCHAR},
+            lng = #{lng,jdbcType=VARCHAR}
+        where mafeng_id = #{mafengId,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select mafeng_id, name, destionation_id, brief, telno, url, traffic, ticket, open_time, 
+        cost_time, lat, lng,DB_ID,en_name,spotpinyinname,entrace,address,business_hours,remark
+        from d_spot
+        where mafeng_id = #{mafengId,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select mafeng_id, name, destionation_id, brief, telno, url, traffic, ticket, open_time, 
+        cost_time, lat, lng,DB_ID,en_name,spotpinyinname,entrace,address,business_hours,remark
+        from d_spot
+    </select>
+
+    <select id="selectLike" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.SpotRequest" >
+        select mafeng_id, name, destionation_id, brief, telno, url, traffic, ticket, open_time,
+        cost_time, lat, lng,DB_ID,en_name,spotpinyinname,entrace,address,business_hours,remark
+        from d_spot
+        <where>
+        <if test="query != null">
+            name like CONCAT('%',#{query},'%')
+        </if>
+        <if test="spotpinyinname != null">
+            AND LOWER(spotpinyinname) LIKE #{spotpinyinname}
+        </if>
+         and destionation_id in
+        <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        </where>
+    </select>
+
+    <select id="selectByTeam" resultMap="BaseResultMapAndSchedule" parameterType="com.umessage.letsgo.domain.vo.system.request.SpotRequest" >
+        SELECT ds.mafeng_id, ds.name, ds.destionation_id, ds.brief, ds.telno, ds.url, ds.traffic, ds.ticket, ds.open_time,
+        ds.cost_time, ds.lat, ds.lng
+        ,js.start_date AS js_start_date,js.end_date AS js_end_date
+        from d_spot ds
+        LEFT JOIN j_schedule js ON js.team_id = #{teamId,jdbcType=BIGINT}
+        LEFT JOIN j_schedule_detail jsd ON jsd.jour_id = js.ID
+        LEFT JOIN j_scenic sc ON sc.schedule_detail_id = jsd.ID
+        WHERE ds.mafeng_id = sc.spot_id
+    </select>
+</mapper>

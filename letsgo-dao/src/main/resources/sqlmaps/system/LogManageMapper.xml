@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.LogManageDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.LogManage" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <id column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="account_type" property="accountType" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="operate_type" property="operateType" jdbcType="VARCHAR" />
+        <result column="operate_model" property="operateModel" jdbcType="VARCHAR" />
+        <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.MessageEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into s_log_manage (user_id,account_type, name,
+            operate_type, operate_model, operate_content,
+            operate_time,
+            create_time, version)
+        values (#{userId,jdbcType=INTEGER},#{accountType,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{operateType,jdbcType=VARCHAR},
+            #{operateModel,jdbcType=VARCHAR}, #{operateContent,jdbcType=VARCHAR},#{operateTime,jdbcType=TIMESTAMP},
+            #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT})
+    </insert>
+
+    <select id="getLogList"  resultMap="BaseResultMap"  parameterType="com.umessage.letsgo.domain.vo.system.request.LogManageRequest">
+        SELECT ID ,user_id,account_type, name,
+        operate_type, operate_model, operate_content,
+        operate_time
+        FROM s_log_manage
+        <where>
+            <if test="null != accountType"> AND account_type  = #{accountType} </if>
+            <if test="null != beginTime"> AND create_time  &gt;= DATE_FORMAT(#{beginTime}, '%Y-%m-%d 00:00:00')</if>
+            <if test="null != endTime"> AND  create_time  &lt;= DATE_FORMAT(#{endTime}, '%Y-%m-%d 23:59:59') </if>
+            <if test="null != operateModel"> AND operate_model=#{operateModel}  </if>
+            <if test="userIds != null and userIds.size()>0">
+                AND  user_id IN
+                <foreach collection="userIds" open="(" separator="," close=")" item="item" index="index">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

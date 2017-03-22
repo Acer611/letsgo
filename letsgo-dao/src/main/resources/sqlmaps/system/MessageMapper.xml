@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.MessageDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.MessageEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="param" property="param" jdbcType="VARCHAR" />
+        <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+        <result column="sms_type" property="smsType" jdbcType="INTEGER" />
+        <result column="sms_status" property="smsStatus" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="valid" property="valid" jdbcType="INTEGER" />
+        <result column="mark" property="mark" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_message
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.MessageEntity" useGeneratedKeys="true" keyProperty="id" >
+        insert into s_message (ID, content, param, 
+            send_time, sms_type, sms_status, 
+            phone, valid, mark, 
+            create_time, version)
+        values (#{id,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{param,jdbcType=VARCHAR}, 
+            #{sendTime,jdbcType=TIMESTAMP}, #{smsType,jdbcType=INTEGER}, #{smsStatus,jdbcType=VARCHAR},
+            #{phone,jdbcType=VARCHAR}, #{valid,jdbcType=INTEGER}, #{mark,jdbcType=VARCHAR}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.MessageEntity" >
+        update s_message
+        set content = #{content,jdbcType=VARCHAR},
+            param = #{param,jdbcType=VARCHAR},
+            send_time = #{sendTime,jdbcType=TIMESTAMP},
+            sms_type = #{smsType,jdbcType=INTEGER},
+            sms_status = #{smsStatus,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            valid = #{valid,jdbcType=INTEGER},
+            mark = #{mark,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, content, param, send_time, sms_type, sms_status, phone, valid, mark, create_time, 
+        version
+        from s_message
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, content, param, send_time, sms_type, sms_status, phone, valid, mark, create_time, 
+        version
+        from s_message
+    </select>
+    <update id="updateValidWithPhone" parameterType="java.lang.String" >
+        update s_message
+        set valid = 0
+        where phone = #{phone,jdbcType=VARCHAR}
+    </update>
+    <select id="selectMessageListWithCondition" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.MessageRequest" >
+        select ID, content, param, send_time, sms_type, sms_status, phone, valid, mark, create_time,
+        version
+        from s_message
+        <where>
+            <if test="null != phone"> AND phone = #{phone,jdbcType=VARCHAR}</if>
+            <if test="null != valid"> AND valid = #{valid,jdbcType=INTEGER}</if>
+            <if test="null != mark"> AND mark = #{mark,jdbcType=VARCHAR}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,137 @@
+#set($pageTitle="行程问题反馈")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["http://g.alicdn.com/sj/dpl/1.5.1/css/sui.min.css","$!{STATIC_URL}/resources/dist/css/message.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/pagination.js"])
+
+<div class="wrapper">
+      <!-- Left side column. contains the sidebar -->
+	#parse("/WEB-INF/views/common/leftbar.vm")
+      <!-- =============================================== -->
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+		<div class="headertab">
+          <h1 class="col-md-2">
+            行程问题反馈
+          </h1>
+		  <h6 class="col-md-2">共<a href="#">${result.get("total")}</a>条符合条件的反馈</h6>
+          <ol class="col-md-8 tabcontent">
+			<li class="#if(${result.get("status")}==2)active #end" style="border:none;padding-right:0;"><a href="$!{link.contextPath}/message/getSubjectMessageList?pageStart=1&pageSize=10&status=2">已读且已回复</a></li>
+			<li class="#if(${result.get("status")}==1)active #end"><a href="$!{link.contextPath}/message/getSubjectMessageList?pageStart=1&pageSize=10&status=1">已读但未回复</a></li>
+			<li class="#if(${result.get("status")}==0)active #end"><a href="$!{link.contextPath}/message/getSubjectMessageList?pageStart=1&pageSize=10&status=0">未读</a></li>
+			 <li class="#if(${result.get("status")}==-1)active #end"><a href="$!{link.contextPath}/message/getSubjectMessageList?pageStart=1&pageSize=10&status=-1">全部</a></li>
+          </ol>
+		 </div>
+        </section>
+		
+        <!-- Main content -->
+        <section class="content">
+		<div class="blueLine"></div>
+			<div class="areaList">
+			
+			<ul>
+#if(${result.get("messageList").size()}>0)
+	#foreach( $product in ${result.get("messageList")})
+			<li>
+                <a href="$!{link.contextPath}/message/getReplyMessageList?memberId=$!{product.memberId}&mid=$!{product.ID}" class="#if($!{velocityCount}%2==0)
+                eddbg
+                #else
+                oddbg
+#end">
+			<div class="col-md-2"><img src="$!{product.headUrl}" width="34" height="34"/ >
+			<span class="c3c8dbc">$!{product.userName}</span></div>
+				<div class="col-md-6 color333">反馈关于“$!{product.teamName}（团号：$!{product.teamNum}）“的问题</div>
+				<div class="col-md-2 text-right color666">$!date.format('yyyy-MM-dd HH:mm:ss',$!{product.updateTime})</div>
+				<div class="col-md-2 text-right #if($product.status==0)c3c8dbc#end">
+					#if($product.status==0)
+                    未读
+					#elseif($product.status==1)
+						已读但未回复
+					#elseif($product.status==2)
+						已读且已回复
+					#end
+				</div>
+					</a>
+				</li>
+
+
+		#end
+    #else
+    <li class="text-center nonelist">
+    <p>
+        #if(${result.get("status")}==2)
+        <img src="$!{STATIC_URL}/resources/dist/images/nonebg.png">暂时没有已读且已回复消息
+            #elseif(${result.get("status")}==1)
+                <img src="$!{STATIC_URL}/resources/dist/images/nonebg.png">暂时没有已读但未回复消息
+                #elseif(${result.get("status")}==0)
+            <img src="$!{STATIC_URL}/resources/dist/images/nonebg.png">暂时没有未读消息
+                #elseif(${result.get("status")}==-1)
+            <img src="$!{STATIC_URL}/resources/dist/images/nonebg.png">暂时没有消息
+                #end
+    </p>
+    </li>
+#end
+
+            </ul>
+                <div class="text-center">
+                    <div class="pagination"></div>
+                </div>
+			</div>
+		</section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+	#parse("/WEB-INF/views/common/footer.vm")
+    </div><!-- ./wrapper -->
+
+
+#define($scriptBlock)
+<script>
+    $(function() {
+    #if(${result.get("messageList").size()}>0)
+        $('.pagination').pagination({
+            //pages: ${result.get("pageNumber")},
+            styleClass: ['pagination-large'],
+            currentPage:${result.get("start")},
+            showCtrl: false,
+            itemsCount:${result.get("total")},
+            pageSize: 10,
+            //displayPage: 6,
+            goToPage: 2,
+            onSelect: function (num) {
+                // console.log(num)  //打开控制台观察
+                window.location.href = changeURLArg(window.location.href, 'pageStart', parseInt(num));
+            }
+        })
+        #end
+    })
+    /*
+    * url 目标url
+    * arg 需要替换的参数名称
+    * arg_val 替换后的参数的值
+    * return url 参数替换后的url
+    */
+    function changeURLArg(url,arg,arg_val){
+        var pattern=arg+'=([^&]*)';
+        var replaceText=arg+'='+arg_val;
+        if(url.match(pattern)){
+            var tmp='/('+ arg+'=)([^&]*)/gi';
+            tmp=url.replace(eval(tmp),replaceText);
+            return tmp;
+        }else{
+            if(url.match('[\?]')){
+                return url+'&'+replaceText;
+            }else{
+                return url+'?'+replaceText;
+            }
+        }
+        return url+'\n'+arg+'\n'+arg_val;
+    }
+    function replaceAll(str)
+    {
+        if(str!=null)
+            str = str.replace(/\n|\r/g,"<br/>")
+        return str;
+    }
+</script>
+#end

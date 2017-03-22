@@ -1,0 +1,446 @@
+-- 设备信息表添加字段 是否为华为手机：1是；0否    bypengwen  2016-11-01 isHuaWei
+
+  ALTER  TABLE s_device  ADD  is_HuaWei  varchar(1) COMMENT '是否为华为手机：1是；0否' ;
+
+-- 整理用户角色为游客的增加领队角色    bylizhen
+   增加用户角色表里之前为游客的增加一个领队角色，以便游客和领队都能在一个APP登陆
+
+   INSERT INTO s_user_role(user_id,role_id,create_time,version)
+       SELECT sur.user_id,1,now(),0
+       FROM s_user_role sur WHERE sur.role_id = 3
+
+-- 用户表添加字段
+
+    ALTER  TABLE s_user  ADD  evaluationTags  varchar(255) COMMENT '自我评价标签  如果有多个标签，则需要用英文逗号“,”分隔开' ;
+
+    ALTER  TABLE s_user  ADD  languages  varchar(255) COMMENT '擅长语种' ;
+
+    ALTER  TABLE s_user  ADD  tourRoutes  varchar(255) COMMENT '擅长旅游线路' ;
+
+-- 行程详情表添加字段
+
+      ALTER  TABLE j_schedule_detail ADD countryId1 varchar(100) COMMENT '国家1Id' ;
+
+      ALTER  TABLE j_schedule_detail ADD country1 varchar(100) COMMENT '国家1' ;
+
+      ALTER  TABLE j_schedule_detail ADD countryId2 varchar(100) COMMENT '国家2Id' ;
+
+      ALTER  TABLE j_schedule_detail ADD country2 varchar(100) COMMENT '国家2' ;
+
+      ALTER  TABLE j_schedule_detail ADD countryId3 varchar(100) COMMENT '国家3Id' ;
+
+      ALTER  TABLE j_schedule_detail ADD country3 varchar(100) COMMENT '国家3' ;
+
+      ALTER  TABLE j_schedule_detail ADD countryId4 varchar(100) COMMENT '国家4Id' ;
+
+      ALTER  TABLE j_schedule_detail ADD country4 varchar(100) COMMENT '国家4' ;
+
+
+-- 领队表添加字段
+
+   ALTER  TABLE t_leader ADD country_code varchar(255) COMMENT '国家代号';
+
+-- 成员表添加字段
+
+   ALTER  TABLE t_member ADD country_code varchar(255) COMMENT '国家代号';
+
+   ALTER  TABLE t_member ADD is_new_join int(11) COMMENT '是否为新加入（即为自己通过扫描填写资料加入）【0：否；1：是】';
+
+-- 奖励明细表添加字段
+    ALTER  TABLE s_reward_details ADD team_id bigint(20) COMMENT '团队ID';
+
+-- 以上sql已经更新正式环境
+-----------------------------------------------------------------------------------------------------------
+
+
+---新加微信用户信息表 create by YangGaofei  2016-11-22 ---
+DROP TABLE IF EXISTS `s_wx_info`;
+
+create table s_wx_info
+(
+   ID                   bigint not null  AUTO_INCREMENT comment '系统id',
+   unionid              varchar(256) comment '微信的唯一标识',
+   openid               varchar(256) comment 'app用户登录授权的openid',
+   appId                varchar(256) comment '关注微信公众号的openid',
+   nickname             varchar(128) comment '微信昵称',
+   sex                  varchar(10) comment '性别',
+   province             varchar(64) comment '省份',
+   city                 varchar(64) comment '微信用户注册的城市',
+   country              varchar(128) comment '微信用户注册的国家',
+   headImgUrl           varchar(512) comment '微信头像的url',
+   binding              tinyint comment '微信用户是否绑定 【绑定为 true  】',
+   status               tinyint comment '微信用户是否取消关注公众号【0 没有取消 ， 1 取消关注】',
+   backupField1         varchar(256),
+   backupField2         varchar(256),
+   backupField3         varchar(256),
+   backupField4         varchar(256),
+   backupField5         varchar(256),
+   primary key (ID)
+);
+
+alter table s_wx_info comment '微信信息表';
+
+---新加第三方账号表  create by YangGaofei 2016-11-22---
+DROP TABLE IF EXISTS `s_thirdparty_account`;
+
+create table s_thirdparty_account
+(
+   ID                   bigint not null auto_increment,
+   user_id              bigint comment '用户ID',
+   account_type         int comment '账号类型',
+   create_time          timestamp default CURRENT_TIMESTAMP comment '创建时间',
+   update_time          timestamp comment '更新时间',
+   unionid              varchar(256) comment '微信的唯一标识',
+   backupField1         varchar(256),
+   backupField2         varchar(256),
+   backupField3         varchar(256),
+   backupField4         varchar(256),
+   backupField5         varchar(256),
+   primary key (ID)
+);
+
+alter table s_thirdparty_account comment '第三方账号表（s_social_account）';
+
+----新加微信团关联表 create by YangGaofei 2016-11-22---
+DROP TABLE IF EXISTS `t_wx_team`;
+
+create table t_wx_team
+(
+   ID                   bigint not null  AUTO_INCREMENT comment '系统ID',
+   teamId               bigint(20) comment '团队表的id',
+   unionid              varchar(256) comment '微信的唯一标识',
+   primary key (ID)
+);
+
+alter table t_wx_team comment '微信团队信息关联表';
+
+------团队成员表添加微信唯一标识字段-------
+ALTER  TABLE t_member ADD unionid varchar(256) COMMENT '微信唯一标识';
+
+
+-- 团队表添加字段 微信公众号二维码带团ID参数URL    bypengwen  2016-11-22 qrCode
+
+  ALTER  TABLE t_team  ADD  qr_code  varchar(512) COMMENT '微信公众号二维码带团ID参数URL' ;
+
+-- 登陆类型表oauth_client_details 的authorized_grant_types里添加 social_verification  bypengwen  2016-11-24
+UPDATE oauth_client_details SET  authorized_grant_types='implicit,password,refresh_token,client_credentials,sms_verification,social_verification' WHERE client_id IN('BG9CJ9WRB','C8BC3D6EE','D915BB82B','F8F3BNKNQ','FB40093DP');
+
+insert into `letsgo`.`s_role` ( `roleName`, `descn`, `create_time`, `update_time`, `version`) values ( 'ROLE_WX_USER', '微信粉丝', now() , now() , 0);
+
+-----------------------------------------------------------------------------------------------------------------------------------
+以上sql 于2016-12-05 更新与生产环境
+
+
+
+--行程明细表添加开始地的id 字段 create by gaofei 2016-12-13--
+ALTER TABLE `j_schedule_detail`
+ADD COLUMN `start_place_id`  varchar(64) NULL AFTER `schedule_date`;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+以上sql 于2016-12-15 更新与生产环境
+
+
+
+
+
+ALTER TABLE `n_notice`
+ADD COLUMN `timezone_id`  varchar(64) NULL COMMENT '时区id' AFTER `first_remind`;
+
+ALTER TABLE `j_schedule`
+MODIFY COLUMN `leader_id`  bigint NULL COMMENT '领队id';
+
+update d_region set alias = '皮尔森' where  areaid = 111961001;
+
+
+
+-----------问题反馈表-----------
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for m_message
+-- ----------------------------
+DROP TABLE IF EXISTS `m_message`;
+CREATE TABLE `m_message` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键自增',
+  `travel_id` bigint(20) DEFAULT NULL COMMENT '旅行社的唯一标识',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
+  `member_id` bigint(20) DEFAULT NULL COMMENT '成员的唯一标识',
+  `travel_headUrl` varchar(256) DEFAULT NULL COMMENT '旅行社头像地址',
+  `photo_url` varchar(256) DEFAULT NULL COMMENT '头像的url',
+  `team_id` bigint(20) DEFAULT NULL COMMENT '团的唯一标识',
+  `t_group_id` varchar(256) DEFAULT NULL COMMENT '腾讯组ID',
+  `team_name` varchar(512) DEFAULT NULL COMMENT '团名称',
+  `team_num` varchar(512) DEFAULT NULL COMMENT '团号',
+  `create_time` timestamp NULL DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '修改时间，每有一条回复时，都要更新此字段',
+  `status` tinyint(4) DEFAULT NULL COMMENT '0 为未读 1 为已读为回复 2 为 已读回复',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COMMENT='问题反馈表';
+
+
+
+----------------问题反馈回复表--------------------------------------------
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for m_message_text
+-- ----------------------------
+DROP TABLE IF EXISTS `m_message_text`;
+CREATE TABLE `m_message_text` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键自增',
+  `m_id` bigint(20) DEFAULT NULL COMMENT '反馈表的ID',
+  `sender_id` bigint(20) DEFAULT NULL COMMENT '回复人的ID 旅行社ID 或者memberID',
+  `sender_name` varchar(256) DEFAULT NULL COMMENT '回复人名字',
+  `message` varchar(512) DEFAULT NULL COMMENT '回复的内容',
+  `post_time` timestamp NULL DEFAULT NULL COMMENT '回复时间',
+  `status` tinyint(4) DEFAULT NULL COMMENT '0 成员1 旅行社',
+  `photo_url1` varchar(256) DEFAULT NULL,
+  `photo_url2` varchar(256) DEFAULT NULL,
+  `photo_url3` varchar(256) DEFAULT NULL,
+  `photo_url4` varchar(256) DEFAULT NULL,
+  `photo_url5` varchar(256) DEFAULT NULL,
+  `photo_url6` varchar(256) DEFAULT NULL,
+  `photo_url7` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `photo_url8` varchar(256) DEFAULT NULL,
+  `photo_url9` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COMMENT='问题反馈回复表';
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+    以上SQL 于2017 -01-17 更新到生产环境
+
+
+
+	
+	DROP TABLE IF EXISTS `j_album_schedule`;
+   CREATE TABLE `j_album_schedule` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `schedule_id` bigint(20) DEFAULT NULL COMMENT '行程id',
+  `schedule_detail_id` bigint(20) DEFAULT NULL COMMENT '行程详细id',
+  `object_id` bigint(20) DEFAULT NULL COMMENT '每日行程关联表id',
+  `type` int(11) DEFAULT NULL COMMENT '类型（1：景点，2：酒店，3：自费项目）',
+  `photo_url` varchar(255) DEFAULT NULL COMMENT '图片地址',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+
+-------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `j_hotel_schedule`;
+CREATE TABLE `j_hotel_schedule` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `schedule_detail_id` bigint(20) DEFAULT NULL COMMENT '行程详细id',
+  `hotel_name` varchar(255) DEFAULT NULL COMMENT '酒店名称',
+  `same_level` int(11) DEFAULT NULL COMMENT '是否是同级酒店（1：是，0：否）',
+  `hotel_confirm` int(11) DEFAULT NULL COMMENT '酒店是否确认（0：不确定，1：确定）',
+  `hotel_input` varchar(255) DEFAULT NULL COMMENT '酒店不确定后输入的',
+  `delta` varchar(100) DEFAULT NULL COMMENT '大洲',
+  `country` varchar(100) DEFAULT NULL COMMENT '国家',
+  `city` varchar(100) DEFAULT NULL COMMENT '城市',
+  `star_lv` varchar(100) DEFAULT NULL COMMENT '酒店星级',
+  `briefintroduction` text COMMENT '简介',
+  `lon` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+
+--------------------------------------------------------------------
+DROP TABLE IF EXISTS `j_own_expense_schedule`;
+CREATE TABLE `j_own_expense_schedule` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `schedule_id` bigint(20) DEFAULT NULL COMMENT '行程id',
+  `schedule_detail_id` bigint(20) DEFAULT NULL COMMENT '行程详细id',
+  `item_name` varchar(100) DEFAULT NULL COMMENT '项目名称',
+  `limit_number` varchar(255) DEFAULT NULL COMMENT '人数限制',
+  `service_item` varchar(255) DEFAULT NULL COMMENT '服务项目',
+  `reference_price` varchar(255) DEFAULT NULL COMMENT '参考价格',
+  `briefintroduction` text COMMENT '简介',
+  `item_city` varchar(100) DEFAULT NULL COMMENT '项目城市',
+  `lon` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+------------------------------------------------------------------
+DROP TABLE IF EXISTS `j_scenic_schedule`;
+CREATE TABLE `j_scenic_schedule` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `schedule_detail_id` bigint(20) DEFAULT NULL COMMENT '行程详细id',
+  `scenic_name` varchar(255) DEFAULT NULL COMMENT '景点名称',
+  `scenic_city` varchar(100) DEFAULT NULL COMMENT '景点城市',
+  `briefintroduction` text COMMENT '简介',
+  `lon` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+--------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `j_schedule_desc`;
+CREATE TABLE `j_schedule_desc` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `schedule_id` bigint(20) DEFAULT NULL COMMENT '行程id',
+  `title` varchar(255) DEFAULT NULL COMMENT '标题',
+  `content` text COMMENT '内容',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+----------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS `j_shopping_schedule`;
+CREATE TABLE `j_shopping_schedule` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `schedule_id` bigint(20) DEFAULT NULL COMMENT '行程id',
+  `schedule_detail_id` bigint(20) DEFAULT NULL COMMENT '行程详细id',
+  `shopping_name` varchar(255) DEFAULT NULL COMMENT '场所名称',
+  `shopping_city` varchar(100) DEFAULT NULL COMMENT '城市名称',
+  `sell_products` varchar(255) DEFAULT NULL COMMENT '售卖产品',
+  `residence_time` varchar(255) DEFAULT NULL COMMENT '停留时间',
+  `lon` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+-------------------------------------------------------------------------------
+
+
+
+DROP TABLE IF EXISTS `t_album_agency`;
+CREATE TABLE `t_album_agency` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `travel_id` bigint(20) DEFAULT NULL COMMENT '旅行社id',
+  `object_id` bigint(20) DEFAULT NULL COMMENT '旅行社私有表id',
+  `type` int(11) DEFAULT NULL COMMENT '旅行社私有表类型（1：景点，2：酒店，3：自费项目）',
+  `photo_url` varchar(255) DEFAULT NULL COMMENT '图片地址',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+
+--------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS `t_hotel_agency`;
+CREATE TABLE `t_hotel_agency` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `travel_id` bigint(20) DEFAULT NULL COMMENT '旅行社id',
+  `hotel_name` varchar(255) DEFAULT NULL COMMENT '酒店中文名称',
+  `delta` varchar(100) DEFAULT NULL COMMENT '大洲',
+  `country` varchar(100) DEFAULT NULL COMMENT '国家',
+  `city` varchar(100) DEFAULT NULL COMMENT '城市',
+  `city_id` varchar(255) DEFAULT NULL COMMENT '城市id',
+  `star_lv` varchar(100) DEFAULT NULL COMMENT '酒店星级',
+  `briefintroduction` text COMMENT '简介',
+  `lon` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+
+-------------------------------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `t_own_expense_agency`;
+CREATE TABLE `t_own_expense_agency` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `travel_id` bigint(20) DEFAULT NULL COMMENT '旅行社id',
+  `item_name` varchar(100) DEFAULT NULL COMMENT '自费项目名',
+  `limit_number` varchar(255) DEFAULT NULL COMMENT '人数限制',
+  `service_item` varchar(255) DEFAULT NULL COMMENT '服务项目名',
+  `reference_price` varchar(255) DEFAULT NULL COMMENT '参考价格',
+  `briefintroduction` text COMMENT '简介',
+  `item_city` varchar(100) DEFAULT NULL COMMENT '项目城市',
+  `city_id` varchar(255) DEFAULT NULL COMMENT '城市id',
+  `lon` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+----------------------------------------------------------------------------------------------------------------
+
+
+DROP TABLE IF EXISTS `t_scenic_agency`;
+CREATE TABLE `t_scenic_agency` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `travel_id` bigint(20) DEFAULT NULL COMMENT '旅行社id',
+  `scenic_name` varchar(255) DEFAULT NULL COMMENT '景点名称',
+  `scenic_en_name` varchar(255) DEFAULT NULL COMMENT '景点英文名',
+  `city_id` varchar(255) DEFAULT NULL COMMENT '城市的id',
+  `scenic_city` varchar(100) DEFAULT NULL COMMENT '景点城市',
+  `briefintroduction` text COMMENT '简介',
+  `lon` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `t_shopping_agency`;
+CREATE TABLE `t_shopping_agency` (
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `travel_id` bigint(20) DEFAULT NULL COMMENT '旅行社id',
+  `shopping_name` varchar(255) DEFAULT NULL COMMENT '购物场所名称',
+  `shopping_city` varchar(100) DEFAULT NULL COMMENT '城市名称',
+  `city_id` varchar(255) DEFAULT NULL COMMENT '城市id',
+  `sell_products` varchar(255) DEFAULT NULL COMMENT '售卖产品',
+  `residence_time` varchar(255) DEFAULT NULL COMMENT '停留时间',
+  `lon` varchar(100) DEFAULT NULL COMMENT '经度',
+  `lat` varchar(100) DEFAULT NULL COMMENT '纬度',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+d_hotel 增加 city_name，country_name字段与d_region_old表的昵称相对应
+
+UPDATE d_hotel AS h,(SELECT r.areaid, r.alias FROM d_region_old AS r)ro
+    SET h.city_name = ro.alias
+    WHERE CONCAT(LEFT(h.city,length(h.city)-4),'0000') = ro.areaid
+        AND LENGTH(h.city) = 8
+
+
+
+UPDATE d_hotel AS h,(SELECT r.areaid, r.alias FROM d_region_old AS r)ro
+    SET h.country_name = ro.alias
+    WHERE h.country = ro.areaid
+    AND LENGTH(h.city) = 8
+
+
+UPDATE d_hotel AS h,(SELECT r.areaid, r.alias FROM d_region_old AS r)ro
+    SET h.country_name = ro.alias
+    WHERE h.country = ro.areaid
+    AND LENGTH(h.city) = 18
+
+
+UPDATE d_hotel AS h,(SELECT r.areaid, r.alias FROM d_region_old AS r)ro
+    SET h.city_name = ro.alias
+    WHERE h.city = ro.areaid
+    AND LENGTH(h.city) = 18

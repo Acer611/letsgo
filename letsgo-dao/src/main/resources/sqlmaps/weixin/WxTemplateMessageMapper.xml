@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.WxTemplateMessageDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.WxTemplateMessageEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="openid" property="openid" jdbcType="VARCHAR" />
+        <result column="template_id" property="templateId" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="template_data" property="templateData" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_wx_template_message
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.WxTemplateMessageEntity" >
+        insert into s_wx_template_message (ID, openid, template_id,
+            url, template_data, create_time
+            )
+        values (#{id,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR}, #{templateId,jdbcType=VARCHAR},
+            #{url,jdbcType=VARCHAR}, #{templateData,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.WxTemplateMessageEntity" >
+        update s_wx_template_message
+        set openid = #{openid,jdbcType=VARCHAR},
+            template_id = #{templateId,jdbcType=VARCHAR},
+            url = #{url,jdbcType=VARCHAR},
+            template_data = #{templateData,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, openid, template_id, url, template_data, create_time
+        from s_wx_template_message
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, openid, template_id, url, template_data, create_time
+        from s_wx_template_message
+    </select>
+</mapper>

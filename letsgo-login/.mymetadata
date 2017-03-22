@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="letsgo-login"
+  id="myeclipse.1459153027520"
+  context-root="/login"
+  j2ee-spec="5.0"
+  archive="letsgo-login.war">
+  <attributes>
+    <attribute name="webrootdir" value="/src/main/webapp" />
+  </attributes>
+</project-module>
+

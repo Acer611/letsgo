@@ -1,0 +1,78 @@
+#set($pageTitle="$!{response.scheduleDescEntity.title}")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css?t=1.0"])
+<style>
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-slide {
+        width:auto;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+</style>
+<input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main">
+		<section class="cd-container feiyong scroll" >
+		<div class="desionCon">
+
+			$!{response.scheduleDescEntity.content}
+				</div>
+
+		</section>
+	</div>
+
+#if($!response.scheduleEntity.processStatus==4)
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+#parse("/WEB-INF/views/common/leftbar.vm")
+
+#define($scriptBlock)
+<script type="text/javascript">
+    var teamId="$!{response.scheduleEntity.teamId}";
+    var iswechat="${response.isWeChat}";
+    $(function(){
+        $(".overlay").click(function(){
+            $("#joacims-menu").prop("checked",false)
+        })
+        /*判断是否显示已经到底*/
+        if($(window).height()>$("body").height()){
+            $(".continue_loding").hide();
+        }
+        $(".qitaicon").on("click",function(){
+            if($(".qita").is(":visible")){
+                $(".qita").slideUp();
+                $(this).addClass("qitaicons");
+            }else{
+                $(".qita").slideDown();
+                $(this).removeClass("qitaicons");
+            }
+
+        })
+        $(".desionCon img").css({
+            display: "block",
+            height:"auto",
+            marginLeft:"3%",
+            maxWidth:"90%"
+        });
+        var marr=[];
+        $(".desionCon table").each(function(i){
+            $(this).wrap("<div class='swiper-container'><div class='swiper-wrapper wrappertable"+i+"'><div class='swiper-slide'></div></div></div>");
+            $(".wrappertable"+i).parent().append('<div class="swiper-scrollbar"></div>');
+            marr[i]=new Swiper('.swiper-container', {
+                scrollbar: '.swiper-scrollbar',
+                direction: 'horizontal',
+                slidesPerView: 'auto',
+                mousewheelControl: true,
+                freeMode: true
+            });
+        })
+
+    })
+</script>
+#end

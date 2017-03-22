@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<s_app_ver id="1001" device_type="ios" module="tour_escort" version="1.1.0" content="跟上领队端"  updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" updateforce="1" />
+	<s_app_ver id="1002" device_type="android" module="tour_escort" version="1.1.0" content="跟上领队端"  updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" updateforce="1" />
+	<s_app_ver id="1003" device_type="ios" module="traveller" version="1.1.0" content="跟上游客端"  updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" updateforce="1" />
+	<s_app_ver id="1004" device_type="android" module="traveller" version="1.1.0" content="跟上游客端"  updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" updateforce="1" />
+</dataset>

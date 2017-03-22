@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.WxInfoDao" >
+
+    <resultMap id = "weixinInfo" type = "com.umessage.letsgo.domain.po.security.WxInfoEntity">
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="unionid" property="unionID" jdbcType="VARCHAR" />
+        <result column="openid" property="openid" jdbcType="INTEGER" />
+        <result column="appId" property="appId" jdbcType="VARCHAR" />
+        <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="headImgUrl" property="headImgUrl" jdbcType="VARCHAR" />
+        <result column="binding" property="binding" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+    </resultMap>
+
+   <!-- 根据用户Unionid查找用户-->
+    <select id="selectUserInfoByUnionID" resultMap="weixinInfo" >
+        select ID,unionid,openid,appId,nickname,sex,province,country,headImgUrl,binding,status
+        from s_wx_info
+        WHERE unionid = #{uninid}
+    </select>
+
+   <!-- 根据OpenId 获取微信用户信息-->
+    <select id="selectUserInfoByOpenID" resultMap="weixinInfo" >
+        select ID,unionid,openid,appId,nickname,sex,province,country,headImgUrl,binding,status
+        from s_wx_info
+        WHERE openid = #{openid}
+    </select>
+
+
+    <!--微信信息插入到微信信息表-->
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.WxInfoEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into s_wx_info (unionid, openid,appId,
+        nickname, sex, province, city, country, headImgUrl,
+        binding, status)
+        values ( #{unionID,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR},
+        #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+         #{country,jdbcType=VARCHAR}, #{headImgUrl,jdbcType=VARCHAR},
+        #{binding,jdbcType=INTEGER}, #{status,jdbcType=INTEGER})
+    </insert>
+
+    <!--根据openID修改微信信息-->
+    <insert id="update" parameterType="com.umessage.letsgo.domain.po.security.WxInfoEntity">
+        update s_wx_info SET unionid=#{unionID,jdbcType=VARCHAR},
+        openid = #{openid,jdbcType=VARCHAR},
+        appId= #{appId,jdbcType=VARCHAR},
+        nickname=#{nickname,jdbcType=VARCHAR},
+        sex= #{sex,jdbcType=VARCHAR},
+        province= #{province,jdbcType=VARCHAR},
+        city=#{city,jdbcType=VARCHAR},
+        country=#{country,jdbcType=VARCHAR},
+        headImgUrl=#{headImgUrl,jdbcType=VARCHAR},
+        binding=#{binding,jdbcType=INTEGER},
+        status=#{status,jdbcType=INTEGER}
+        WHERE openid = #{openid,jdbcType=VARCHAR}
+    </insert>
+    <!--根据openID修改微信信息-->
+    <insert id="updateByID" parameterType="com.umessage.letsgo.domain.po.security.WxInfoEntity">
+        update s_wx_info SET unionid=#{unionID,jdbcType=VARCHAR},
+        openid = #{openid,jdbcType=VARCHAR},
+        appId= #{appId,jdbcType=VARCHAR},
+        nickname=#{nickname,jdbcType=VARCHAR},
+        sex= #{sex,jdbcType=VARCHAR},
+        province= #{province,jdbcType=VARCHAR},
+        city=#{city,jdbcType=VARCHAR},
+        country=#{country,jdbcType=VARCHAR},
+        headImgUrl=#{headImgUrl,jdbcType=VARCHAR},
+        binding=#{binding,jdbcType=INTEGER},
+        status=#{status,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </insert>
+
+    <!--取消订阅，把这条记录的status 改为1 同时把unionID改为NULL-->
+    <update id="unSubscribe" parameterType="java.lang.String">
+        UPDATE s_wx_info SET status =1, unionid = NULL WHERE unionid=#{unionid}
+    </update>
+
+    <!--取消订阅，把这条记录的status 改为1 同时把unionID改为NULL-->
+    <update id="unSubscribeByOpenID" parameterType="java.lang.String">
+        UPDATE s_wx_info SET status =1, unionid = NULL WHERE openid=#{openid}
+    </update>
+
+    <!--根据openID 删除微信信息-->
+    <delete id="delete" parameterType="java.lang.String" >
+        delete from s_wx_info
+        where openid = #{openid}
+    </delete>
+
+
+    <!--修改微信信息表中 是否绑定字段的状态为 0-->
+    <update id="updateBindingStatus" parameterType="java.lang.String">
+        UPDATE s_wx_info SET binding =0 WHERE unionid=#{unionid}
+    </update>
+
+
+    <!--根据用户ID查询微信信息-->
+    <select id="selectWxInfoByUserId" resultMap="weixinInfo" parameterType="java.util.Map">
+        SELECT
+        wi.ID, wi.unionid, wi.openid, wi.appId, wi.nickname, wi.sex, wi.province, wi.country, wi.city, wi.headImgUrl, wi.binding, wi.status
+        FROM s_wx_info wi
+        JOIN s_thirdparty_account sa ON sa.unionid = wi.unionid
+        WHERE sa.user_id = #{userId,jdbcType=BIGINT}
+        AND wi.appId = #{appId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 根据用户Unionid和appid查找用户-->
+    <select id="selectUserByUnionIDAndAppID" resultMap="weixinInfo" >
+        select ID,unionid,openid,appId,nickname,sex,province,country,headImgUrl,binding,status
+        from s_wx_info
+        WHERE unionid = #{uninid} AND appId=#{appId}
+    </select>
+
+    <!-- 根据用户Unionid和openid查找用户-->
+    <select id="selectWeixinInfoByOpenIDAndUnionID" resultMap="weixinInfo" >
+        select ID,unionid,openid,appId,nickname,sex,province,country,headImgUrl,binding,status
+        from s_wx_info
+        WHERE unionid = #{unionID} AND openid=#{openid}
+    </select>
+
+</mapper>

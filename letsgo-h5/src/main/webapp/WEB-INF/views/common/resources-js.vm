@@ -1,0 +1,6 @@
+<!-- zepto 2.1.4 -->
+<script src="$!{STATIC_URL}/resources/js/zepto.mint.js"></script>
+<!--<script src="$!{STATIC_URL}/resources/js/ajax.js"></script>-->
+<script src="$!{STATIC_URL}/resources/js/swiper-3.4.2.min.js"></script>
+<!--<script src="$!{STATIC_URL}/resources/js/zTouch.js"></script>
+<script src="$!{STATIC_URL}/resources/js/search.js"></script>-->

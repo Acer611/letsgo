@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.TravelNotesDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.TravelNotesEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_Id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="schedule_imgUrl" property="scheduleImgurl" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_travel_notes
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.TravelNotesEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_travel_notes (schedule_Id, user_id, schedule_imgUrl, 
+            title, create_time, update_time, 
+            version)
+        values (#{scheduleId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{scheduleImgurl,jdbcType=VARCHAR}, 
+            #{title,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+            #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.TravelNotesEntity" >
+        update j_travel_notes
+        set schedule_Id = #{scheduleId,jdbcType=BIGINT},
+            user_id = #{userId,jdbcType=BIGINT},
+            schedule_imgUrl = #{scheduleImgurl,jdbcType=VARCHAR},
+            title = #{title,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, schedule_Id, user_id, schedule_imgUrl, title, create_time, update_time, 
+        version
+        from j_travel_notes
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, schedule_Id, user_id, schedule_imgUrl, title, create_time, update_time, 
+        version
+        from j_travel_notes
+    </select>
+    <select id="selectByUserIdAndTxGroupId" resultMap="BaseResultMap" >
+        select tn.ID, tn.schedule_Id, tn.user_id, tn.schedule_imgUrl, tn.title, tn.create_time, tn.update_time, tn.version
+		  from j_travel_notes tn,t_team t,j_schedule s
+		 where s.team_id = t.ID
+		   and s.ID = tn.schedule_Id
+		   and tn.user_id = #{userId,jdbcType=BIGINT}
+		   and t.tx_groupId = #{txGroupId}
+		   and s.del=0
+
+    </select>    
+    
+    <resultMap id="selectTravelNotesCommentMap" type="com.umessage.letsgo.domain.vo.journey.response.TravelNotesDetailCommentResponse"> 
+		<result property="scheduleImgurl" column="schedule_imgUrl"/> 
+		<result property="title" column="title"/> 
+		<collection property="detailVos" ofType="com.umessage.letsgo.domain.vo.journey.response.vo.TravelNotesDetailVo" >
+			<result column="schedule_date" property="scheduleDate"/>  
+			<result column="day_num" property="dayNum"/>
+			<result column="weather" property="weather"/>  
+			<result column="schedule_detai_imgUrl" property="scheduleDetaiImgurl"/>
+			<collection property="commentEntities" ofType="com.umessage.letsgo.domain.po.journey.TravelNotesDetailCommentEntity" >
+				<result column="type" property="type"/>  
+				<result column="type_imgUrl" property="typeImgurl"/>
+				<result column="type_name" property="typeName"/>
+				<result column="comment" property="comment"/>  
+			</collection> 
+		</collection> 
+	</resultMap>
+    <select id="selectTravelNotesComment" resultMap="selectTravelNotesCommentMap" >
+       SELECT t.schedule_imgUrl,t.title,date_format(sd.schedule_date,'%Y-%m-%d') schedule_date,sd.day_num,s.weather,s.schedule_detai_imgUrl,c.type,c.type_imgUrl,c.type_name,c.comment
+		 FROM (j_travel_notes t,j_schedule_detail sd)
+	LEFT JOIN j_travel_notes_detail s ON t.ID = s.travel_notes_id and s.schedule_detai_iId = sd.ID
+	LEFT JOIN j_travel_notes_detail_comment c ON s.ID = c.travel_notes_detail_id 
+ 		where t.schedule_Id = sd.jour_id
+ 		  and t.id = #{travelNotesId,jdbcType=BIGINT}
+    </select> 
+    
+</mapper>

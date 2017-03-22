@@ -1,0 +1,376 @@
+#set($pageTitle="游客管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/jquery.form.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+
+<style>
+    .fileBoxUl{padding-left:0;}
+    .addHeadImg{position:absolute;left:0px;top:50px;}
+    #destinationArea span{cursor:pointer;display:inline-block;vertical-align;middle;border-radius:5px;margin-right:10px;background-color:#367fa9;color:#fff;padding:6px;line-height:20px;}
+</style>
+    <!-- Site wrapper -->
+    <div class="wrapper">
+      #parse("/WEB-INF/views/common/leftbar.vm")
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            游客管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/main"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">添加游客</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+					  <div class="box box-info">
+						<div class="box-header with-border">
+						  <h3 class="box-title">添加游客</h3>
+						</div><!-- /.box-header -->
+					  <!-- form start -->
+					  <form class="form-horizontal" action="$!{link.contextPath}/member/memberSave" method="get" id="form3">
+                          <div class="box-body">
+
+                              <div class="form-group">
+                                  <label class="col-md-3 control-label" for="realName">姓名</label>
+                                  <div class="col-md-3">
+                                      <input type="name" placeholder="姓名" id="realName" value="$!{member.realName}" name="realName" class="form-control">
+                                  </div>
+
+                              </div>
+                              <div class="form-group">
+
+                                  <label class="col-md-3 control-label">性别</label>
+                                  <div class="col-md-3">
+                                      <select class="form-control" name="sex">
+                                          <option value="1" #if($!{member.sex}==1) selected #end>男</option>
+                                          <option value="2" #if($!{member.sex}==2) selected #end> 女</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-sm-3 control-label" for="birthday">出生日期</label>
+                                  <div class="col-sm-3">
+                                      <div class="input-group" >
+                                          <div class="input-group-addon">
+                                              <i class="fa fa-calendar"></i>
+                                          </div>
+                                          <input type="text" name="birthday" id="birthday" value="$!{member.birthday}" placeholder="yyyy-mm-dd" readonly   class="form-control">
+                                      </div>
+                                  </div>
+                              </div>
+                             <div class="form-group">
+                                  <label class="col-sm-3 control-label" for="phone">手机号</label>
+                                  <div class="col-sm-3">
+                                      <input type="name" placeholder="手机号" id="phone" name="phone" value="$!{member.phone}" class="form-control">
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                   <label class="col-md-3 control-label" for="weixin">微信</label>
+                                   <div class="col-md-3">
+                                       <input type="name" placeholder="微信" id="weixin" name="weixin" value="$!{member.weixin}" class="form-control">
+                                   </div>
+
+
+                               </div>
+                               <div class="form-group">
+                                   <label class="col-md-3 control-label" for="qq">QQ</label>
+                                   <div class="col-md-3">
+                                       <input type="name" placeholder="QQ" id="qq" name="qq"  value="$!{member.qq}" class="form-control">
+                                   </div>
+                               </div>
+
+                              <div class="addHeadImg col-sm-offset-7">
+                                  <input type="hidden" value="" name="photoUrl"/>
+                                      <!--dom结构部分-->
+                                      <div id="memberheadImg">
+
+                                      </div>
+
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-sm-3 control-label" for="inputNamel3">证件类型</label>
+                                  <div class="col-sm-3">
+                                      <select class="form-control" name="cardType">
+                                          <option value="身份证" #if($!{member.cardType}=="身份证") selected #end>身份证</option>
+                                          <option value="护照" #if($!{member.cardType}=="护照") selected #end>护照</option>
+                                          <option value="军人证" #if($!{member.cardType}=="军人证") selected #end>军人证</option>
+                                          <option value="港澳通行证" #if($!{member.cardType}=="港澳通行证") selected #end>港澳通行证</option>
+                                          <option value="导游证" #if($!{member.cardType}=="导游证") selected #end>导游证</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-sm-3 control-label" for="inputNamel3">证件号码</label>
+                                  <div class="col-md-3">
+                                      <input type="name" placeholder="证件号码" id="cardNum" value="$!{member.cardNum}" name="cardNum" class="form-control" >
+
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-sm-3 control-label" for="inputNamel3">有效期</label>
+                                  <div class="col-md-3">
+                                      <div class="input-group">
+                                          <div class="input-group-addon">
+                                              <i class="fa fa-calendar"></i>
+                                          </div>
+                                          <input type="name" id="cardTime" name="cardTime" readonly value="$!{member.cardTime}" placeholder="yyyy-mm-dd" class="form-control">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-sm-3 control-label">照片库</label>
+                                  <div class="col-sm-9">
+                                      <div id="photoLibrary" style="display: none;">
+                                          <input type="hidden" name="photoLibrary1Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary2Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary3Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary4Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary5Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary6Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary7Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary8Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary9Url" autocomplete="off" value=""/>
+                                          <input type="hidden" name="photoLibrary10Url" autocomplete="off" value=""/>
+                                      </div>
+                                      <div id="pictureLoad" >
+
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="input-group-btn">
+                                  <div class="col-md-3"></div>
+                                  <div class="col-md-3">
+                                      <button class="btn btn-primary pull-right btn-block btn-sm scheduleDetailSave" type="submit">提交</button>
+                                  </div>
+                              </div>
+                          </div><!-- /.box-body -->
+						  </form>
+					  </div>
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+		#parse("/WEB-INF/views/common/footer.vm")
+    </div><!-- ./wrapper -->
+#define($scriptBlock)
+	<script>
+	$(function () {
+
+		//iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+          checkboxClass: 'icheckbox_minimal-blue',
+          radioClass: 'iradio_minimal-blue'
+        });
+
+        $('#form3').bootstrapValidator({
+            message: '填写信息格式不正确',
+            feedbackIcons: {
+                valid: '',
+                invalid: '',
+                validating: ''
+            },
+            fields: {
+                realName: {
+                    message: '姓名格式不正确',
+                    validators: {
+                        notEmpty: {
+                            message: '姓名不能为空'
+                        }
+                        /*,
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '团号不能少于6个字符并且超过30个字符'
+                        }
+                        /*remote: {
+                            url: 'remote.php',
+                            message: 'The username is not available'
+                        },*/
+                        /* regexp: {
+                             regexp: /^[a-zA-Z0-9_\.]+$/,
+                             message: 'The username can only consist of alphabetical, number, dot and underscore'
+                         }*/
+                    }
+                },
+                sex: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择性别'
+                        }
+                    }
+                },
+//                photoUrl: {
+//                    validators: {
+//                        notEmpty: {
+//                            message: '请上传头像'
+//                        }
+//                    }
+//                },
+                birthday: {
+                    validators: {
+                        notEmpty: {
+                            message: '出生日期不能为空'
+                        }
+                    }
+                },
+                phone: {
+                    validators: {
+                        notEmpty: {
+                            message: '手机号码不能为空'
+                        },
+                        regexp: {
+                            regexp: /^(\+86)?((1[3,5,8][0-9])|(14[5,7])|(17[0,1,6,7,8]))\d{8}$/,
+                            message: '手机号码格式不正确'
+                        }
+                    }
+                },
+                destinationGroup1: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择擅长线路'
+                        }
+                    }
+                },
+                cardType: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择证件类型'
+                        }
+                    }
+                },
+                cardNum: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入证件号码'
+                        }
+                    }
+                },
+                cardTime: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入证件有效期'
+                        }
+                    }
+                }
+            },
+            submitHandler: function (validator, form, submitButton) {
+
+            }
+        })
+        //$("#example1").DataTable();
+        $('#example2').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": false,
+          "info": false,
+          "autoWidth": false
+        });
+        $('#birthday').datetimepicker({
+            language:  'zh-CN',
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            minView: "month"
+        }).on('changeDate show', function(e) {
+            // Revalidate the date when user change it
+            $('#form3').bootstrapValidator('revalidateField', 'birthday');
+        });
+        $('#cardTime').datetimepicker({
+            language:  'zh-CN',
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            minView: "month"
+        }).on('changeDate show', function(e) {
+            // Revalidate the date when user change it
+            $('#form3').bootstrapValidator('revalidateField', 'cardTime');
+        });
+       /* $('#memberheadImg').diyUploadHead({
+            url: CONTEXTPATH + '/cloudFile/uploadCloudPhotos',
+            success:function( data ) {
+                var data=$(data._raw).find("item").text();
+                if($.trim($("[name=photoUrl]").val())){
+                    $.ajax({
+                         url: "$!{link.contextPath}/cloudFile/deleteCloudPhotos",
+                        data: {url: $("[name=photoUrl]").val()},
+                        type: "GET",
+                        cache: false,
+                        dataType: "json",
+                        success: function (data) {
+                            // if (data.retCode == 0) {
+                            //blockUiOpen(data.retMsg);
+                            // } else {
+                            // blockUiOpen(data.retMsg);
+                            // }
+                        },
+                        error: function () {
+                        }
+                    })
+                }
+                $("[name=photoUrl]").val(data);
+
+            },
+            buttonText :'<img src="'+CONTEXTPATH+'/resources/plugins/zyfile/control/images/memberheader1.png"/>',
+            error:function( err ) {
+                console.info( err );
+            },
+            fileNumLimit:10
+        });*/
+        $('#pictureLoad').diyUpload({
+            url: CONTEXTPATH + '/cloudFile/uploadCloudPhotos',
+            success: function (data) {
+                //console.info( data );
+                //photoLibrary1Url
+                // $("#photoLibrary").find(":hidden").each(function(i){
+                var data = data;//$(data._raw).find("item").text();
+                // var ind=$(".parentFileBox").find("li").size();
+                //  $("#photoLibrary").find(":hidden").eq(ind-1).val(data);
+                $("#photoLibrary").find(":hidden").each(function () {
+                    if (!$.trim($(this).val())) {
+                        $(this).val(data);
+                        return false;
+                    }
+                })
+                //})
+            },
+            buttonText: '<button type="submit" class="btn btn-primary pull-right btn-block btn-sm">上传图片库</button>',
+            error: function (err) {
+                console.info(err);
+            },
+            fileNumLimit: 10
+        });
+      });
+    function removeImages(obj,fun){
+        var that=obj;
+        if(that.attr("srcimg")) {
+            $.ajax({
+                type: "GET",
+                url: CONTEXTPATH+"/cloudFile/deleteCloudPhotos?url=" + that.attr("srcimg"),
+                success: function (data) {
+                    //webUploader.removeFile( "fileBox_WU_FILE_"+(parseInt(ind)+1));
+                    //that.parent("li").remove();
+                    //$("#featurePhoto").show();
+                    if(fun){
+                        fun();
+                    }
+
+                },
+                error:function(){
+                    obj.parents("li").remove();
+                }
+            });
+            $("body").find(":hidden").each(function () {
+                if ($.trim($(this).val()) == that.attr("srcimg")) {
+                    $(this).val("");
+                    return false;
+                }
+            })
+
+        }
+
+    }
+    </script>
+
+#end

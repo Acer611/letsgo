@@ -1,0 +1,581 @@
+#set($pageTitle="领队导游管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/jquery.form.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+
+<style>
+    .fileBoxUl{padding-left:0;}
+    .addHeadImg{position:absolute;left:0px;top:50px;}
+    #destinationArea span{cursor:pointer;display:inline-block;vertical-align;middle;border-radius:5px;margin-right:10px;background-color:#367fa9;color:#fff;padding:6px;line-height:20px;}
+</style>
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+
+      #parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            添加编辑
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">领队编辑</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+          <!-- Default box -->
+          <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">编辑领队</h3>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" action="$!{link.contextPath}/leader/leaderUpdate"  method="get" id="form3">
+                    <div class="box-body">
+<input type="hidden" name="id" value="$!{leaderEntity.id}"/>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="name"><strong>*</strong>姓名</label>
+                            <div class="col-sm-4">
+                                <input type="name" placeholder="姓名" id="name" value="$!{leaderEntity.name}" name="name" class="form-control">
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+
+                            <label class="col-sm-3 control-label"><strong>*</strong>性别</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="sex">
+                                    <option value="1" #if($!{leaderEntity.sex}==1) selected #end>男</option>
+                                    <option value="2" #if($!{leaderEntity.sex}==2) selected #end> 女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><strong>*</strong>类别</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="leaderType">
+                                    <option value="1"  #if($!{leaderEntity.leaderType}==1) selected #end>领队</option>
+                                    <option value="2"  #if($!{leaderEntity.leaderType}==2) selected #end>导游</option>
+                                    <option value="3"  #if($!{leaderEntity.leaderType}==3) selected #end>领队兼导游</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><strong>*</strong>状态</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="leaderStatus">
+                                    <option value="1"  #if($!{leaderEntity.leaderStatus}==1) selected #end>专职</option>
+                                    <option value="2"  #if($!{leaderEntity.leaderStatus}==2) selected #end>兼职</option>
+                                    <option value="3"  #if($!{leaderEntity.leaderStatus}==3) selected #end>离职</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="birthday">出生日期</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="name" id="birthday" name="birthday" autocomplete="off" class="form-control" placeholder="yyyy-mm-dd" readonly value="$!date.format('yyyy-MM-dd',$!{leaderEntity.birthday})">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="leadTime"><strong>*</strong>开始带团时间</label>
+                            <div class="col-sm-4">
+                                <div class="input-group" >
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" name="leadTime" id="leadTime" autocomplete="off" readonly placeholder="yyyy-mm-dd" value="$!date.format('yyyy-MM-dd',$!{leaderEntity.leadTime})"  class="form-control">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+
+
+                            <label class="col-sm-3 control-label" for="phone"><strong>*</strong>手机号</label>
+                            <div class="col-sm-1" style="padding-right:0px;">
+                                <select class="form-control" style="padding-right:0;" name="countryCode" id="areaCode">
+
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" placeholder="手机号" id="phone" value="$!{leaderEntity.phone}" name="phone" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="weixin">微信</label>
+                            <div class="col-sm-4">
+                                <input type="text" placeholder="微信" id="weixin" name="weixin" value="$!{leaderEntity.weixin}"  class="form-control">
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="qq">QQ</label>
+                            <div class="col-sm-4">
+                                <input type="text" placeholder="QQ" id="qq" name="qq" value="$!{leaderEntity.qq}" class="form-control">
+                            </div>
+                        </div>
+
+                        <!--<div class="addHeadImg col-sm-offset-7">
+                            <input type="hidden"  name="photoUrl" value="$!{leaderEntity.photoUrl}"/>
+                            <div id="headImg">
+                                <div id="leaderHeadImg">
+
+                                </div>
+
+                            </div>
+                        </div>-->
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="inputNamel3">证件类型</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="cardType">
+                                    <option value="">无</option>
+                                    <option value="1"  #if($!{leaderEntity.cardType}==1) selected="selected" #end>领队证</option>
+                                    <option value="2"  #if($!{leaderEntity.cardType}==2) selected="selected" #end>导游证</option>
+
+
+                                </select>
+                                <input type="hidden"  name="cardType" value="$!{leaderEntity.cardType}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="inputNamel3"><strong>*</strong>证件号码</label>
+                            <div class="col-sm-4">
+                                <input type="text" placeholder="证件号码" id="cardCode"  value="$!{leaderEntity.cardCode}"  name="cardCode" class="form-control" >
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="inputNamel3"><strong>*</strong>有效期</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" id="validityDate" name="validityDate" readonly class="form-control" placeholder="yyyy-mm-dd" autocomplete="off" value="$!date.format('yyyy-MM-dd',$!{leaderEntity.validityDate})">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="language1">擅长语种</label>
+                            <div class="col-sm-4">
+                                <input type="text" placeholder="擅长语种" id="language1" name="language1" class="form-control" value="$!{leaderEntity.language1}">
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="inputNamel3">擅长线路</label>
+                            <div class="col-sm-3">
+                                <select class="form-control destinationGroup">
+                                    <option value="destinationGroup1">港澳台</option>
+                                    <option value="destinationGroup2">日韩</option>
+                                    <option value="destinationGroup3">东南亚</option>
+                                    <option value="destinationGroup4">欧洲</option>
+                                    <option value="destinationGroup5">美洲</option>
+                                    <option value="destinationGroup6">澳洲</option>
+                                    <option value="destinationGroup7">中东非洲</option>
+                                    <option value="destinationGroup8">其他</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-warning" id="destinationAdd">增加</button>
+                            </div>
+                            <div class="col-sm-5" id="destinationArea">
+#if($!{leaderEntity.destinationGroup1})
+                                <span>港澳台<i class="fa fa-remove"></i><input type="hidden" value="港澳台" name="destinationGroup1"></span>
+    #end
+                                #if($!{leaderEntity.destinationGroup2})
+                                    <span>日韩<i class="fa fa-remove"></i><input type="hidden" value="日韩" name="destinationGroup2"></span>
+                                #end
+                                #if($!{leaderEntity.destinationGroup3})
+                                    <span>东南亚<i class="fa fa-remove"></i><input type="hidden" value="东南亚" name="destinationGroup3"></span>
+                                #end
+                                #if($!{leaderEntity.destinationGroup4})
+                                    <span>欧洲<i class="fa fa-remove"></i><input type="hidden" value="欧洲" name="destinationGroup4"></span>
+                                #end
+                                #if($!{leaderEntity.destinationGroup5})
+                                    <span>美洲<i class="fa fa-remove"></i><input type="hidden" value="美洲" name="destinationGroup5"></span>
+                                #end
+                                #if($!{leaderEntity.destinationGroup6})
+
+                                    <span>澳洲<i class="fa fa-remove"></i><input type="hidden" value="澳洲" name="destinationGroup6"></span>
+                                #end
+                                #if($!{leaderEntity.destinationGroup7})
+                                    <span>中东非洲<i class="fa fa-remove"></i><input type="hidden" value="中东非洲" name="destinationGroup7"></span>
+                                #end
+                                #if($!{leaderEntity.destinationGroup8})
+                                    <span>其他<i class="fa fa-remove"></i><input type="hidden" value="其他" name="destinationGroup7"></span>
+                                #end
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">领队/导游照片</label>
+                            <div class="col-sm-9">
+                                <div id="photoLibrary" style="display: none;">
+                                    <input type="hidden" name="photoLibrary1Url" autocomplete="off" value="$!{leaderEntity.photoLibrary1Url}"/>
+
+                                </div>
+                                <div id="pictureLoad" >
+
+                                </div>
+                                <div class="parentFileBox">
+                                    <ul class="fileBoxUl">
+                                        #if(${leaderEntity.photoLibrary1Url}&&${leaderEntity.photoLibrary1Url}!="")
+                                            <li class="" id="fileBox_WU_FILE_0">
+                                                <div class="viewThumb">
+                                                    <img src="${leaderEntity.photoLibrary1Url}"/>
+                                                </div>
+                                                <div class="diyCancel"></div>
+                                                <div title="删除" class="diySuccess" srcimg="${leaderEntity.photoLibrary1Url}" style="display: block;"></div>
+                                                <div class="diyBar" style="display: none;">
+                                                    <div class="diyProgress" style="width: 100%;"></div>
+                                                    <div class="diyProgressText">上传完成</div>
+                                                </div>
+                                            </li>
+                                        #end
+
+                                    </ul>
+                                </div>
+                                <p class="help-block small">领队/导游可上传1张图片，上传图片格式为png,jpeg,jpg,gif格式，单个图片大小不超过500KB</p>
+
+                            </div>
+                        </div>
+                        <div class="input-group-btn">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3">
+                                <button class="btn btn-primary pull-right btn-block btn-sm scheduleDetailSave" type="submit">提交</button>
+                            </div>
+                        </div>
+
+                    </div><!-- /.box-body -->
+
+                </form>
+              </div><!-- /.box -->
+
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+		#parse("/WEB-INF/views/common/footer.vm")
+
+    </div><!-- ./wrapper -->
+#define($scriptBlock)
+<script>
+
+        #if(${leaderEntity.photoLibrary1Url}&&${leaderEntity.photoLibrary1Url}!="")
+
+$("#pictureLoad").hide();
+        $("#pictureLoad").next().find(".diySuccess").click(function(){
+            removeImages($(this));
+            $(this).parents("li").remove();
+            $("#pictureLoad").css("display","block");
+            $("#pictureLoad").find("label").parent().css({width: $("#pictureLoad").find("button").outerWidth(),height:$("#pictureLoad").find("button").outerHeight()})
+        })
+        #end
+    var retMsg="$!{retMsg}";
+var areaCode="";
+var countryCode="$!{leaderEntity.countryCode}";
+    var countryCodeLeader=$("#areaCode").val()||"+86";
+    var phonesrc=$("#phone").val();
+    if(phonesrc.indexOf("+")<0){
+        phonesrc=countryCodeLeader+phonesrc;
+    }else{
+        phonesrc=phonesrc;
+    }
+    $("#phone").on("input",function(){
+        countryCodeMember=$("#areaCode").val();
+    })
+    $("#areaCode").on("change",function(){
+        countryCodeLeader=$("#areaCode").val();
+        phonesrc=countryCodeLeader+phonesrc;
+        $('#form3').data('bootstrapValidator').validateField("phone");
+    })
+    $(function(){
+        $.ajax({
+            type: "GET",
+            url: "$!{STATIC_URL}/resources/dist/js/country.json",
+            success: function (data) {
+                var data=data.RECORDS;
+                for(var i=0;i<data.length;i++) {
+                    if(countryCode==data[i].countryCode){
+                        areaCode += '<option value="'+data[i].countryCode+'" selected>' + data[i].countryCode + '</option>';
+                    }else {
+                        areaCode += '<option value="' + data[i].countryCode + '">' + data[i].countryCode + '</option>';
+                    }
+                }
+                    $("#areaCode").empty().append(areaCode);
+                countryCodeLeader=$("#areaCode").val()
+            },
+            error:function(){
+
+            }
+        });
+        //证件类型选择
+        if($("#cardType").val()==1||$("#cardType").val()==2){
+            $("[name=cardType]").val($("#cardType").val());
+            $("[name=cardCode]").parents(".form-group").show();
+            $("[name=validityDate]").parents(".form-group").show();
+        }else{
+            $("[name=cardCode]").val("");
+            $("[name=cardCode]").parents(".form-group").hide();
+            $("[name=validityDate]").parents(".form-group").hide();
+        }
+        $("#cardType").on("change",function(){
+            if($(this).val()==1||$(this).val()==2){
+                $("[name=cardType]").val($(this).val());
+                $("[name=cardCode]").parents(".form-group").show();
+                $("[name=validityDate]").parents(".form-group").show();
+            }else{
+                $("[name=cardType]").val("");
+                $("[name=cardCode]").parents(".form-group").hide();
+                $("[name=validityDate]").parents(".form-group").hide();
+            }
+            $('#form3').find("[type=submit]").attr("disabled",false);
+        })
+        $('#form3').bootstrapValidator({
+            message: '填写信息格式不正确',
+            feedbackIcons: {
+                valid: '',
+                invalid: '',
+                validating: ''
+            },
+            fields: {
+                name: {
+                    message: '姓名格式不正确',
+                    validators: {
+                        notEmpty: {
+                            message: '姓名不能为空'
+                        }
+                    }
+                },
+                sex: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择性别'
+                        }
+                    }
+                },
+                leaderType: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择类型'
+                        }
+                    }
+                },
+                leaderStatus: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择状态'
+                        }
+                    }
+                },
+                birthday: {
+                    validators: {
+                        date: {
+                            format: 'YYYY-MM-DD',
+                            message: '日期格式不正确'
+                        }
+                    }
+                },
+                leadTime :{
+                    validators: {
+                        notEmpty: {
+                            message: '请填写开始带团时间'
+                        },
+                        date: {
+                            format: 'YYYY-MM-DD',
+                            message: '日期格式不正确'
+                        }
+                    }
+                },
+                phone: {
+                    validators: {
+                        notEmpty: {
+                            message: '手机号码不能为空'
+                        },
+                        threshold :  11 , //有11字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+                        regexp: {
+                            regexp:  /^[0-9]*$/,
+                            message: '手机号码格式不正确'
+                        },
+                        phoneleaderCheck:{
+                            message: '已存在该手机号的领队或导游'
+                        }
+                    }
+                },
+                cardCode: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入证件号码'
+                        }
+                    }
+                },
+                validityDate: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入证件有效期'
+                        }
+                    }
+                }
+            },
+            submitHandler: function (validator, form, submitButton) {
+
+            }
+        })
+            $("#destinationAdd").on("click",function(){
+                var destinationtext=$(".destinationGroup").find("option:selected").text();
+                var destinationval=$(".destinationGroup").find("option:selected").val();
+                var m=true;
+                $("#destinationArea").find("input").each(function(){
+
+                    if($(this).val()==destinationtext){
+                        m=false;
+                    }
+                })
+                if(!m){
+                    alert("已添加"+destinationtext)
+                    return;
+                }
+                var html='<span>'+destinationtext+'<i class="fa fa-remove"></i><input type="hidden" name="'+destinationval+'" value="'+destinationtext+'"/></span>';
+                $("#destinationArea").append(html);
+            })
+            $("#destinationArea").on("click","i",function(){
+                $(this).parent("span").remove();
+            })
+
+            $('#leadTime').datetimepicker({
+                language:  'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                endDate:new Date(),
+                minView: "month"
+            }).on('changeDate show', function(e) {
+                // Revalidate the date when user change it
+                $('#form3').bootstrapValidator('revalidateField', 'leadTime');
+            });
+            $('#birthday').datetimepicker({
+                language:  'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                endDate:new Date(),
+                minView: "month"
+            }).on('changeDate show', function(e) {
+                // Revalidate the date when user change it
+                $('#form3').bootstrapValidator('revalidateField', 'birthday');
+            });
+            $('#validityDate').datetimepicker({
+                language:  'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                startDate:new Date(),
+                minView: "month"
+            }).on('changeDate show', function(e) {
+                // Revalidate the date when user change it
+                $('#form3').bootstrapValidator('revalidateField', 'validityDate');
+            });
+       /* $('#leaderHeadImg').diyUploadHead({
+            url: CONTEXTPATH + '/cloudFile/uploadCloudPhotos',
+            success:function( data ) {
+                var data=data;//$(data._raw).find("item").text();
+                if($.trim($("[name=photoUrl]").val())){
+                    $.ajax({
+                        url: "$!{link.contextPath}/cloudFile/deleteCloudPhotos",
+                        data: {url: $("[name=photoUrl]").val()},
+                        type: "GET",
+                        cache: false,
+                        dataType: "json",
+                        success: function (data) {
+                            // if (data.retCode == 0) {
+                            //blockUiOpen(data.retMsg);
+                            // } else {
+                            // blockUiOpen(data.retMsg);
+                            // }
+                        },
+                        error: function () {
+                        }
+                    })
+                }
+                $("[name=photoUrl]").val(data);
+            },
+            buttonText :"$!{leaderEntity.photoUrl}"? '<img src="$!{leaderEntity.photoUrl}"/>':'<img src="'+CONTEXTPATH+'/resources/plugins/zyfile/control/images/leaderheader1.png"/>',
+            error:function( err ) {
+                console.info( err );
+            },
+            fileNumLimit:1
+        });*/
+        $('#pictureLoad').diyUpload({
+            url: CONTEXTPATH + '/cloudFile/uploadCloudPhotos',
+            success: function (data) {
+                //console.info( data );
+                //photoLibrary1Url
+                // $("#photoLibrary").find(":hidden").each(function(i){
+                var data = data;//$(data._raw).find("item").text();
+                $("[name=photoLibrary1Url]").val(data);
+                $('#pictureLoad').hide();
+                // var ind=$(".parentFileBox").find("li").size();
+                //  $("#photoLibrary").find(":hidden").eq(ind-1).val(data);
+               /* $("#photoLibrary").find(":hidden").each(function () {
+                    if (!$.trim($(this).val())) {
+                        $(this).val(data);
+                        return false;
+                    }
+                })*/
+                //})
+            },
+            buttonText: '<button type="button" class="btn btn-primary pull-right btn-block btn-sm">上传</button>',
+            error: function (err) {
+                console.info(err);
+            },
+            fileNumLimit: 10
+        });
+        if(retMsg){
+            alert(retMsg);
+        }
+    });
+
+    function removeImages(obj,fun){
+        var that=obj;
+        if(that.attr("srcimg")) {
+            $.ajax({
+                type: "GET",
+                url: CONTEXTPATH+"/cloudFile/deleteCloudPhotos?url=" + that.attr("srcimg"),
+                success: function (data) {
+                    //webUploader.removeFile( "fileBox_WU_FILE_"+(parseInt(ind)+1));
+                    //that.parent("li").remove();
+                    //$("#featurePhoto").show();
+                    if(fun){
+                        fun();
+                    }
+
+                },
+                error:function(){
+                    obj.parents("li").remove();
+                }
+            });
+            $("body").find(":hidden").each(function () {
+                if ($.trim($(this).val()) == that.attr("srcimg")) {
+                    $(this).val("");
+                    return false;
+                }
+            })
+
+        }
+
+    }
+	</script>
+
+#end

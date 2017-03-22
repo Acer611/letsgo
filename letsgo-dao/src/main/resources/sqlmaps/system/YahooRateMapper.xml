@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.YahooRateDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.YahooRate" >
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="rate" property="rate" jdbcType="VARCHAR" />
+        <result column="date" property="date" jdbcType="VARCHAR" />
+        <result column="time" property="time" jdbcType="VARCHAR" />
+        <result column="ask" property="ask" jdbcType="VARCHAR" />
+        <result column="bid" property="bid" jdbcType="VARCHAR" />
+        <result column="lastupdatetime" property="lastupdatetime" jdbcType="TIMESTAMP" />
+        <result column="isdel" property="isdel" jdbcType="INTEGER" />
+        <result column="batch" property="batch" jdbcType="INTEGER" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.String" >
+        delete from s_yahoo_rate
+        where ID = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.YahooRate" >
+        insert into s_yahoo_rate (ID, name, rate, 
+            date, time, ask, 
+            bid, lastupdatetime, isdel, 
+            batch)
+        values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, 
+            #{date,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, #{ask,jdbcType=VARCHAR}, 
+            #{bid,jdbcType=VARCHAR}, #{lastupdatetime,jdbcType=TIMESTAMP}, #{isdel,jdbcType=INTEGER},
+            #{batch,jdbcType=INTEGER})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.YahooRate" >
+        update s_yahoo_rate
+        set name = #{name,jdbcType=VARCHAR},
+            rate = #{rate,jdbcType=VARCHAR},
+            date = #{date,jdbcType=VARCHAR},
+            time = #{time,jdbcType=VARCHAR},
+            ask = #{ask,jdbcType=VARCHAR},
+            bid = #{bid,jdbcType=VARCHAR},
+            lastupdatetime = #{lastupdatetime,jdbcType=TIMESTAMP},
+            isdel = #{isdel,jdbcType=INTEGER},
+            batch = #{batch,jdbcType=INTEGER}
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select ID, name, rate, date, time, ask, bid, lastupdatetime, isdel, batch
+        from s_yahoo_rate
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, name, rate, date, time, ask, bid, lastupdatetime, isdel, batch
+        from s_yahoo_rate
+    </select>
+    <select id="selectWithIDs" resultMap="BaseResultMap" parameterType="java.util.List" >
+        select ID, name, rate, date, time, ask, bid, lastupdatetime, isdel, batch
+        from s_yahoo_rate
+        WHERE ID IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

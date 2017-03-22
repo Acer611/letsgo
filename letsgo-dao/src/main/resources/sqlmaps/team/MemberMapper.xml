@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.MemberDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.MemberEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="t_id" property="tId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="group_id" property="groupId" jdbcType="BIGINT" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="mark_phone" property="markPhone" jdbcType="VARCHAR" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="mail" property="mail" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="role" property="role" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="is_leader" property="isLeader" jdbcType="INTEGER" />
+        <result column="is_admin" property="isAdmin" jdbcType="INTEGER" />
+        <result column="join_status" property="joinStatus" jdbcType="INTEGER" />
+        <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+        <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+        <result column="card_time" property="cardTime" jdbcType="VARCHAR" />
+        <result column="weixin" property="weixin" jdbcType="VARCHAR" />
+        <result column="qq" property="qq" jdbcType="VARCHAR" />
+        <result column="photo_library1_url" property="photoLibrary1Url" jdbcType="VARCHAR" />
+        <result column="photo_library2_url" property="photoLibrary2Url" jdbcType="VARCHAR" />
+        <result column="photo_library3_url" property="photoLibrary3Url" jdbcType="VARCHAR" />
+        <result column="photo_library4_url" property="photoLibrary4Url" jdbcType="VARCHAR" />
+        <result column="photo_library5_url" property="photoLibrary5Url" jdbcType="VARCHAR" />
+        <result column="photo_library6_url" property="photoLibrary6Url" jdbcType="VARCHAR" />
+        <result column="photo_library7_url" property="photoLibrary7Url" jdbcType="VARCHAR" />
+        <result column="photo_library8_url" property="photoLibrary8Url" jdbcType="VARCHAR" />
+        <result column="photo_library9_url" property="photoLibrary9Url" jdbcType="VARCHAR" />
+        <result column="photo_library10_url" property="photoLibrary10Url" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="is_new_join" property="isNewJoin" jdbcType="INTEGER" />
+        <result column="country_code" property="countryCode" jdbcType="VARCHAR"/>
+        <result column="unionid" property="unionid" jdbcType="VARCHAR"/>
+
+        <result column="t_name" property="tName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="MemberAndUserResultMap" type="com.umessage.letsgo.domain.po.team.MemberEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="t_id" property="tId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="group_id" property="groupId" jdbcType="BIGINT" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="mark_phone" property="markPhone" jdbcType="VARCHAR" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="mail" property="mail" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="role" property="role" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="is_leader" property="isLeader" jdbcType="INTEGER" />
+        <result column="is_admin" property="isAdmin" jdbcType="INTEGER" />
+        <result column="join_status" property="joinStatus" jdbcType="INTEGER" />
+        <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+        <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+        <result column="card_time" property="cardTime" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="is_new_join" property="isNewJoin" jdbcType="INTEGER" />
+        <result column="country_code" property="countryCode" jdbcType="VARCHAR"/>
+        <result column="unionid" property="unionid" jdbcType="VARCHAR"/>
+
+        <result column="t_name" property="tName" jdbcType="VARCHAR"/>
+        <result column="weixin" property="weixin" jdbcType="VARCHAR" />
+        <result column="qq" property="qq" jdbcType="VARCHAR" />
+        <result column="photo_library1_url" property="photoLibrary1Url" jdbcType="VARCHAR" />
+        <result column="photo_library2_url" property="photoLibrary2Url" jdbcType="VARCHAR" />
+        <result column="photo_library3_url" property="photoLibrary3Url" jdbcType="VARCHAR" />
+        <result column="photo_library4_url" property="photoLibrary4Url" jdbcType="VARCHAR" />
+        <result column="photo_library5_url" property="photoLibrary5Url" jdbcType="VARCHAR" />
+        <result column="photo_library6_url" property="photoLibrary6Url" jdbcType="VARCHAR" />
+        <result column="photo_library7_url" property="photoLibrary7Url" jdbcType="VARCHAR" />
+        <result column="photo_library8_url" property="photoLibrary8Url" jdbcType="VARCHAR" />
+        <result column="photo_library9_url" property="photoLibrary9Url" jdbcType="VARCHAR" />
+        <result column="photo_library10_url" property="photoLibrary10Url" jdbcType="VARCHAR" />
+        <association property="userEntity" column="user_id" javaType="com.umessage.letsgo.domain.po.security.UserEntity">
+            <id column="u_id" property="id" jdbcType="BIGINT" />
+            <result column="u_user_name" property="userName" jdbcType="VARCHAR" />
+            <result column="u_real_name" property="realName" jdbcType="VARCHAR" />
+            <result column="u_nick_name" property="nickName" jdbcType="VARCHAR" />
+            <result column="u_password" property="password" jdbcType="VARCHAR" />
+            <result column="u_sex" property="sex" jdbcType="INTEGER" />
+            <result column="u_birthday" property="birthday" jdbcType="VARCHAR" />
+            <result column="u_phone" property="phone" jdbcType="VARCHAR" />
+            <result column="u_mail" property="mail" jdbcType="VARCHAR" />
+            <result column="u_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+            <result column="u_type" property="type" jdbcType="INTEGER" />
+            <result column="u_userSig" property="usersig" jdbcType="VARCHAR" />
+            <result column="u_login_total_count" property="loginTotalCount" jdbcType="INTEGER" />
+            <result column="u_login_count" property="loginCount" jdbcType="INTEGER" />
+            <result column="u_create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="u_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="u_version" property="version" jdbcType="BIGINT" />
+            <result column="u_evaluationTags" property="evaluationTags" jdbcType="VARCHAR" />
+            <result column="u_languages" property="languages" jdbcType="VARCHAR" />
+            <result column="u_tourRoutes" property="tourRoutes" jdbcType="VARCHAR" />
+        </association>
+    </resultMap>
+    <resultMap id="TeamIdsResultMap" type="java.lang.String" >
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="UserIdResultMap" type="java.lang.Long">
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_member
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.MemberEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_member (user_id, t_id, team_id,
+            group_id, real_name, sex,
+            birthday, phone, mark_phone,
+            photo_url, mail, address,
+            city, province, country,
+            role, type, is_leader,
+            is_admin, join_status, card_type,
+            card_num, card_time, weixin,
+            qq, photo_library1_url, photo_library2_url,
+            photo_library3_url, photo_library4_url, photo_library5_url,
+            photo_library6_url, photo_library7_url, photo_library8_url,
+            photo_library9_url, photo_library10_url,
+            create_time, update_time, version,is_new_join,unionid
+            )
+        values (#{userId,jdbcType=BIGINT}, #{tId,jdbcType=BIGINT}, #{teamId,jdbcType=VARCHAR},
+            #{groupId,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
+            #{birthday,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{markPhone,jdbcType=VARCHAR},
+            #{photoUrl,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+            #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR},
+            #{role,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{isLeader,jdbcType=INTEGER},
+            #{isAdmin,jdbcType=INTEGER}, #{joinStatus,jdbcType=INTEGER}, #{cardType,jdbcType=VARCHAR},
+            #{cardNum,jdbcType=VARCHAR}, #{cardTime,jdbcType=VARCHAR}, #{weixin,jdbcType=VARCHAR},
+            #{qq,jdbcType=VARCHAR}, #{photoLibrary1Url,jdbcType=VARCHAR}, #{photoLibrary2Url,jdbcType=VARCHAR},
+            #{photoLibrary3Url,jdbcType=VARCHAR}, #{photoLibrary4Url,jdbcType=VARCHAR}, #{photoLibrary5Url,jdbcType=VARCHAR},
+            #{photoLibrary6Url,jdbcType=VARCHAR}, #{photoLibrary7Url,jdbcType=VARCHAR}, #{photoLibrary8Url,jdbcType=VARCHAR},
+            #{photoLibrary9Url,jdbcType=VARCHAR}, #{photoLibrary10Url,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT},#{isNewJoin,jdbcType=INTEGER},
+            #{unionid,jdbcType=VARCHAR}
+            )
+    </insert>
+
+    <insert id="insertMember" parameterType="com.umessage.letsgo.domain.po.team.MemberEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_member (user_id, t_id, team_id,
+        group_id, real_name, sex,
+        birthday, phone, mark_phone,
+        photo_url, mail, address,
+        city, province, country,
+        role, type, is_leader,
+        is_admin, join_status, card_type,
+        card_num, card_time, weixin,
+        qq, photo_library1_url, photo_library2_url,
+        photo_library3_url, photo_library4_url, photo_library5_url,
+        photo_library6_url, photo_library7_url, photo_library8_url,
+        photo_library9_url, photo_library10_url,
+        create_time, update_time, version,
+        country_code,is_new_join,unionid
+        )
+        values (#{userId,jdbcType=BIGINT}, #{tId,jdbcType=BIGINT}, #{teamId,jdbcType=VARCHAR},
+        #{groupId,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
+        #{birthday,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{markPhone,jdbcType=VARCHAR},
+        #{photoUrl,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+        #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR},
+        #{role,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{isLeader,jdbcType=INTEGER},
+        #{isAdmin,jdbcType=INTEGER}, #{joinStatus,jdbcType=INTEGER}, #{cardType,jdbcType=VARCHAR},
+        #{cardNum,jdbcType=VARCHAR}, #{cardTime,jdbcType=VARCHAR}, #{weixin,jdbcType=VARCHAR},
+        #{qq,jdbcType=VARCHAR}, #{photoLibrary1Url,jdbcType=VARCHAR}, #{photoLibrary2Url,jdbcType=VARCHAR},
+        #{photoLibrary3Url,jdbcType=VARCHAR}, #{photoLibrary4Url,jdbcType=VARCHAR}, #{photoLibrary5Url,jdbcType=VARCHAR},
+        #{photoLibrary6Url,jdbcType=VARCHAR}, #{photoLibrary7Url,jdbcType=VARCHAR}, #{photoLibrary8Url,jdbcType=VARCHAR},
+        #{photoLibrary9Url,jdbcType=VARCHAR}, #{photoLibrary10Url,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT},
+        #{countryCode,jdbcType=VARCHAR},#{isNewJoin,jdbcType=INTEGER},
+        #{unionid,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.MemberEntity" >
+        update t_member
+        set user_id = #{userId,jdbcType=BIGINT},
+            t_id = #{tId,jdbcType=BIGINT},
+            team_id = #{teamId,jdbcType=VARCHAR},
+            group_id = #{groupId,jdbcType=BIGINT},
+            real_name = #{realName,jdbcType=VARCHAR},
+            sex = #{sex,jdbcType=INTEGER},
+            birthday = #{birthday,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            mark_phone = #{markPhone,jdbcType=VARCHAR},
+            photo_url = #{photoUrl,jdbcType=VARCHAR},
+            mail = #{mail,jdbcType=VARCHAR},
+            address = #{address,jdbcType=VARCHAR},
+            city = #{city,jdbcType=VARCHAR},
+            province = #{province,jdbcType=VARCHAR},
+            country = #{country,jdbcType=VARCHAR},
+            role = #{role,jdbcType=INTEGER},
+            type = #{type,jdbcType=INTEGER},
+            is_leader = #{isLeader,jdbcType=INTEGER},
+            is_admin = #{isAdmin,jdbcType=INTEGER},
+            join_status = #{joinStatus,jdbcType=INTEGER},
+            card_type = #{cardType,jdbcType=VARCHAR},
+            card_num = #{cardNum,jdbcType=VARCHAR},
+            card_time = #{cardTime,jdbcType=VARCHAR},
+            weixin = #{weixin,jdbcType=VARCHAR},
+            qq = #{qq,jdbcType=VARCHAR},
+            photo_library1_url = #{photoLibrary1Url,jdbcType=VARCHAR},
+            photo_library2_url = #{photoLibrary2Url,jdbcType=VARCHAR},
+            photo_library3_url = #{photoLibrary3Url,jdbcType=VARCHAR},
+            photo_library4_url = #{photoLibrary4Url,jdbcType=VARCHAR},
+            photo_library5_url = #{photoLibrary5Url,jdbcType=VARCHAR},
+            photo_library6_url = #{photoLibrary6Url,jdbcType=VARCHAR},
+            photo_library7_url = #{photoLibrary7Url,jdbcType=VARCHAR},
+            photo_library8_url = #{photoLibrary8Url,jdbcType=VARCHAR},
+            photo_library9_url = #{photoLibrary9Url,jdbcType=VARCHAR},
+            photo_library10_url = #{photoLibrary10Url,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            is_new_join = #{isNewJoin,jdbcType=INTEGER},
+            unionid = #{unionid,jdbcType=VARCHAR},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateMember" parameterType="com.umessage.letsgo.domain.po.team.MemberEntity" >
+        update t_member
+        set user_id = #{userId,jdbcType=BIGINT},
+        t_id = #{tId,jdbcType=BIGINT},
+        team_id = #{teamId,jdbcType=VARCHAR},
+        group_id = #{groupId,jdbcType=BIGINT},
+        real_name = #{realName,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=INTEGER},
+        birthday = #{birthday,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        mark_phone = #{markPhone,jdbcType=VARCHAR},
+        photo_url = #{photoUrl,jdbcType=VARCHAR},
+        mail = #{mail,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
+        city = #{city,jdbcType=VARCHAR},
+        province = #{province,jdbcType=VARCHAR},
+        country = #{country,jdbcType=VARCHAR},
+        role = #{role,jdbcType=INTEGER},
+        type = #{type,jdbcType=INTEGER},
+        is_leader = #{isLeader,jdbcType=INTEGER},
+        is_admin = #{isAdmin,jdbcType=INTEGER},
+        join_status = #{joinStatus,jdbcType=INTEGER},
+        card_type = #{cardType,jdbcType=VARCHAR},
+        card_num = #{cardNum,jdbcType=VARCHAR},
+        card_time = #{cardTime,jdbcType=VARCHAR},
+        weixin = #{weixin,jdbcType=VARCHAR},
+        qq = #{qq,jdbcType=VARCHAR},
+        photo_library1_url = #{photoLibrary1Url,jdbcType=VARCHAR},
+        photo_library2_url = #{photoLibrary2Url,jdbcType=VARCHAR},
+        photo_library3_url = #{photoLibrary3Url,jdbcType=VARCHAR},
+        photo_library4_url = #{photoLibrary4Url,jdbcType=VARCHAR},
+        photo_library5_url = #{photoLibrary5Url,jdbcType=VARCHAR},
+        photo_library6_url = #{photoLibrary6Url,jdbcType=VARCHAR},
+        photo_library7_url = #{photoLibrary7Url,jdbcType=VARCHAR},
+        photo_library8_url = #{photoLibrary8Url,jdbcType=VARCHAR},
+        photo_library9_url = #{photoLibrary9Url,jdbcType=VARCHAR},
+        photo_library10_url = #{photoLibrary10Url,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        is_new_join = #{isNewJoin,jdbcType=INTEGER},
+        unionid = #{unionid,jdbcType=VARCHAR},
+        version = version + 1,
+        country_code =  #{countryCode,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="select" resultMap="MemberAndUserResultMap" parameterType="java.lang.Long" >
+        select
+        me.ID, me.user_id, me.t_Id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version,u.evaluationTags AS u_evaluationTags,u.languages AS u_languages,u.tourRoutes AS u_tourRoutes
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        where me.ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.WebMemberRequest">
+        SELECT
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version
+
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        JOIN t_team AS t ON me.t_id = t.id
+        <where>
+            <if test="null != travelId"> AND t.travel_id = #{travelId}</if>
+            <if test="null != realName"> AND me.real_name LIKE CONCAT('%',#{realName},'%') </if>
+            <if test="null != sex"> AND me.sex = #{sex}</if>
+            <if test="1==1">AND me.role = 3</if>
+        </where>
+       GROUP by  me.phone  ORDER BY me.create_time desc
+    </select>
+    <select id="selectMemberListWithConditons" resultMap="MemberAndUserResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version,
+
+        t.`name` AS t_name
+
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        LEFT JOIN t_team AS t ON t.ID = me.t_id
+        <where>
+            <if test="null != userId"> and me.user_id = #{userId}</if>
+            <if test="null != tId"> and me.t_id = #{tId}</if>
+            <if test="null != teamId"> AND me.team_id = #{teamId}</if>
+            <if test="null != groupId"> AND me.group_id = #{groupId}</if>
+            <if test="null != isAdmin"> AND me.is_admin = #{isAdmin}</if>
+            <if test="null != type"> AND me.type = #{type}</if>
+            <if test="null != joinStatus"> AND me.join_status = #{joinStatus}</if>
+            <if test="'eq3' == role"> AND me.role = 3</if>
+            <if test="'eq1' == role"> AND me.role = 1</if>
+            <if test="'lt3' == role"> AND me.role &lt; 3</if>
+            <if test="'noeq2' == role"> AND me.role != 2</if>
+            <if test="null != phone"> AND me.phone = #{phone}</if>
+            <if test="null != memberIds">
+                AND me.ID IN
+                <foreach item="item" index="index" collection="memberIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by me.role ${sort_role}, me.is_admin ${sort_isAdmin}, me.join_status ${sort_joinStatus}, me.is_leader ${sort_isLeader}, convert(me.real_name USING GBK) ASC, me.create_time DESC
+    </select>
+
+
+    <select id="selectUserIdListWithConditons" resultType="Long" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT
+        me.user_id
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        <where>
+            <if test="null != userId"> and me.user_id = #{userId}</if>
+            <if test="null != tId"> and me.t_id = #{tId}</if>
+            <if test="null != teamId"> AND me.team_id = #{teamId}</if>
+            <if test="null != groupId"> AND me.group_id = #{groupId}</if>
+            <if test="null != isAdmin"> AND me.is_admin = #{isAdmin}</if>
+            <if test="null != type"> AND me.type = #{type}</if>
+            <if test="null != joinStatus"> AND me.join_status = #{joinStatus}</if>
+            <if test="'eq3' == role"> AND me.role = 3</if>
+            <if test="'eq1' == role"> AND me.role = 1</if>
+            <if test="'lt3' == role"> AND me.role &lt; 3</if>
+            <if test="null != phone"> AND me.phone = #{phone}</if>
+            <if test="null != memberIds">
+                AND me.ID IN
+                <foreach item="item" index="index" collection="memberIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by me.role ${sort_role}, me.is_admin ${sort_isAdmin}, me.join_status ${sort_joinStatus}, me.is_leader ${sort_isLeader}, convert(me.real_name USING GBK) ASC, me.create_time DESC
+    </select>
+
+
+    <select id="selectMemberListWithConditonsOne" resultMap="MemberAndUserResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version
+
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        <where>
+            <if test="null != userId"> and me.user_id != #{userId}</if>
+            <if test="null != tId"> and me.t_id = #{tId}</if>
+            <if test="null != teamId"> AND me.team_id = #{teamId}</if>
+            <if test="null != groupId"> AND me.group_id = #{groupId}</if>
+            <if test="null != isAdmin"> AND me.is_admin = #{isAdmin}</if>
+            <if test="null != type"> AND me.type = #{type}</if>
+            <if test="null != joinStatus"> AND me.join_status = #{joinStatus}</if>
+            <if test="null != phone"> AND me.phone = #{phone}</if>
+        </where>
+        order by me.role ${sort_role}, me.is_admin ${sort_isAdmin}, me.join_status ${sort_joinStatus}, me.is_leader ${sort_isLeader}, convert(me.real_name USING GBK) ASC, me.create_time DESC
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" parameterType="java.util.List">
+        SELECT
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version
+
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        <where>
+            <if test="null != list">
+                AND me.ID IN
+                <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMemberWithConditons" resultMap="MemberAndUserResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT
+        me.ID, me.user_id, me.t_Id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version
+
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        <where>
+            <if test="null != id"> and me.ID = #{id}</if>
+            <if test="null != userId"> and me.user_id = #{userId}</if>
+            <if test="null != teamId"> and me.team_id = #{teamId}</if>
+            <if test="null != tId"> and me.t_id = #{tId}</if>
+            <if test="'eq1' == role"> AND me.role = 1</if>
+            <if test="'eq2' == role"> AND me.role = 2</if>
+            <if test="null != phone and phone !=''.toString()"> AND me.phone = #{phone}</if>
+        </where>
+    </select>
+
+    <select id="selectLeaderAndGuideWithConditons" resultMap="MemberAndUserResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT
+        me.ID, me.user_id, me.t_Id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version
+
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        <where>
+            <if test="null != id"> and me.ID = #{id}</if>
+            <if test="null != userId"> and me.user_id = #{userId}</if>
+            <if test="null != teamId"> and me.team_id = #{teamId}</if>
+            <if test="null != tId"> and me.t_id = #{tId}</if>
+            <if test="'eq1' == role"> AND me.role = 1</if>
+            <if test="'eq2' == role"> AND me.role = 2</if>
+            <if test="'eq3' == role"> AND me.role != 3</if>
+            <if test="null != phone"> AND me.phone = #{phone}</if>
+        </where>
+    </select>
+
+    <select id="selectTeamIdsByUserId" resultMap="TeamIdsResultMap" parameterType="java.lang.Long" >
+        select team_id from t_member where user_id = #{userId}
+    </select>
+
+    <select id="selectTeamIdsByUserIdAndAdmin" resultMap="TeamIdsResultMap" parameterType="java.lang.Long" >
+        select team_id from t_member where user_id = #{userId} and is_admin = 1
+    </select>
+
+    <select id="selectMemberWithValidTeam" resultMap="MemberAndUserResultMap" parameterType="java.lang.String">
+        SELECT
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version
+
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        LEFT JOIN t_team AS t ON me.t_id = t.ID
+        <where>
+            NOT ISNULL(t.tx_groupId)
+            AND me.phone = #{phone}
+            AND me.user_id = -1
+        </where>
+        ORDER BY create_time DESC
+    </select>
+    <select id="getLeaderMembersByLeaderId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+		mm.ID, mm.user_id, mm.t_id, mm.team_id, mm.group_id, mm.real_name, mm.sex, mm.birthday, mm.phone, mm.mark_phone,
+        mm.photo_url, mm.mail, mm.address, mm.city, mm.province, mm.country, mm.role, mm.type, mm.is_leader, mm.is_admin,
+        mm.join_status, mm.card_type, mm.card_num, mm.card_time, mm.create_time, mm.update_time, mm.version,
+        mm.weixin,mm.qq,mm.photo_library1_url,mm.photo_library2_url,mm.photo_library3_url,mm.photo_library4_url,mm.photo_library5_url,
+        mm.photo_library6_url,mm.photo_library7_url,mm.photo_library8_url,mm.photo_library9_url,mm.photo_library10_url,mm.country_code,mm.is_new_join,mm.unionid,
+
+		u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version
+        FROM (
+        SELECT
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+        me.weixin,me.qq,me.photo_library1_url,me.photo_library2_url,me.photo_library3_url,me.photo_library4_url,me.photo_library5_url,
+        me.photo_library6_url,me.photo_library7_url,me.photo_library8_url,me.photo_library9_url,me.photo_library10_url,me.country_code,me.is_new_join,me.unionid
+        FROM t_member AS me
+        JOIN j_schedule AS s ON s.team_id = me.t_id
+        WHERE s.leader_id = #{leaderId}
+        AND me.role = 1)AS mm
+        LEFT JOIN s_user AS u ON u.`ID` = mm.`user_id`
+    </select>
+
+    <select id="selectUserIdWithTId" resultMap="UserIdResultMap" parameterType="java.lang.Long" >
+        SELECT user_id FROM t_member WHERE t_id = #{tId} AND user_id != -1
+    </select>
+
+    <select id="selectSomeWithTIds" resultMap="BaseResultMap" parameterType="java.util.List">
+        SELECT sex, birthday, phone FROM t_member WHERE role = 3 AND t_id IN
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getTeamIds" resultType="Long"  parameterType="java.lang.Long" >
+        select t_id
+        from t_member
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    <select id="selectByTeamId" resultMap="BaseResultMap"  parameterType="com.umessage.letsgo.domain.po.team.MemberEntity" >
+        select ID,role
+        from t_member
+        where user_id = #{userId,jdbcType=BIGINT} AND  t_id=#{tId,jdbcType=BIGINT}
+    </select>
+
+
+    <select id="selectMemberByNameSexAndTeamID" resultMap="BaseResultMap"  parameterType="com.umessage.letsgo.domain.po.team.MemberEntity" >
+        select ID,t_id,user_id,team_id,group_id,real_name,sex,birthday,phone,mark_phone,photo_url,mail, address, city,province, country,role,type, is_leader, is_admin,
+    join_status, card_type, card_num, card_time,create_time, update_time, version,
+    weixin,qq,photo_library1_url,photo_library2_url,photo_library3_url,photo_library4_url,photo_library5_url,
+    photo_library6_url,photo_library7_url,photo_library8_url,photo_library9_url,photo_library10_url,country_code,is_new_join,unionid
+        from t_member
+        where real_name = #{realName,jdbcType=VARCHAR} AND  t_id=#{tId,jdbcType=BIGINT} AND  sex = #{sex,jdbcType=INTEGER}
+    </select>
+
+    <select id="getMemberCountByStatus" resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT COUNT(*) FROM t_member AS m
+        LEFT JOIN t_team AS t ON m.t_id = t.ID
+        LEFT JOIN j_schedule AS s ON s.team_id = t.ID
+        <where>
+            t.travel_id = #{travelId}
+            AND !ISNULL(t.tx_groupId)
+            AND role = 3
+            <if test="teamStatus != null">
+                AND t.`status`= #{teamStatus}
+            </if>
+            <if test="startDate != null">
+                AND  (DATE_FORMAT(#{startDate},'%Y-%m-%d') BETWEEN DATE_FORMAT(s.start_date,'%Y-%m-%d') and DATE_FORMAT(s.end_date,'%Y-%m-%d')
+                OR DATE_FORMAT(s.start_date,'%Y-%m-%d') = DATE_FORMAT(#{startDate},'%Y-%m-%d')
+                OR DATE_FORMAT(s.end_date,'%Y-%m-%d') = DATE_FORMAT(#{startDate},'%Y-%m-%d'))
+            </if>
+        </where>
+    </select>
+
+    <select id="getNoPhoneMembers" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.role, me.type, me.is_leader, me.is_admin,me.join_status
+        FROM  t_member AS me
+        WHERE  me.t_id = #{tId} and join_status=0 and (ISNULL(me.phone) OR me.phone='')
+    </select>
+
+    <select id="getByRoomId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.role, me.type, me.is_leader, me.is_admin,me.join_status
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        LEFT JOIN t_team AS t ON me.t_id = t.ID
+        LEFT JOIN a_room_detail AS rd ON rd.member_id = me.ID
+        LEFT JOIN a_room AS r ON r.ID = rd.room_id
+        WHERE r.ID = #{roomId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectMemberByScheduleDate" resultMap="MemberAndUserResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT tm.ID, tm.user_id, tm.t_Id, tm.team_id, tm.group_id, tm.real_name, tm.sex, tm.birthday, tm.phone, tm.mark_phone,
+        tm.photo_url, tm.mail, tm.address, tm.city, tm.province, tm.country, tm.role, tm.type, tm.is_leader, tm.is_admin,
+        tm.join_status, tm.card_type, tm.card_num, tm.card_time, tm.create_time, tm.update_time, tm.version,
+        tm.weixin,tm.qq,tm.photo_library1_url,tm.photo_library2_url,tm.photo_library3_url,tm.photo_library4_url,tm.photo_library5_url,
+        tm.photo_library6_url,tm.photo_library7_url,tm.photo_library8_url,tm.photo_library9_url,tm.photo_library10_url,tm.country_code,tm.is_new_join,tm.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version,u.evaluationTags AS u_evaluationTags,u.languages AS u_languages,u.tourRoutes AS u_tourRoutes,
+
+		t.`name` AS t_name
+		FROM t_member AS tm
+        JOIN s_user AS u ON u.ID = tm.user_id
+		JOIN t_team AS t ON t.ID = tm.t_id
+        JOIN j_schedule AS s ON s.team_id = t.id
+        JOIN j_schedule_detail AS sd ON sd.jour_id = s.ID
+        WHERE t.`status` = 1
+		AND tm.user_id != -1
+        AND tm.role = 3
+        <if test="startDate != null">
+        AND DATE_FORMAT(sd.schedule_date, '%Y-%m-%d') = DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+        </if>
+    </select>
+
+
+    <select id="selectMemberByScheduleEnd" resultMap="MemberAndUserResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT tm.ID, tm.user_id, tm.t_Id, tm.team_id, tm.group_id, tm.real_name, tm.sex, tm.birthday, tm.phone, tm.mark_phone,
+        tm.photo_url, tm.mail, tm.address, tm.city, tm.province, tm.country, tm.role, tm.type, tm.is_leader, tm.is_admin,
+        tm.join_status, tm.card_type, tm.card_num, tm.card_time, tm.create_time, tm.update_time, tm.version,
+        tm.weixin,tm.qq,tm.photo_library1_url,tm.photo_library2_url,tm.photo_library3_url,tm.photo_library4_url,tm.photo_library5_url,
+        tm.photo_library6_url,tm.photo_library7_url,tm.photo_library8_url,tm.photo_library9_url,tm.photo_library10_url,tm.country_code,tm.is_new_join,tm.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version,u.evaluationTags AS u_evaluationTags,u.languages AS u_languages,u.tourRoutes AS u_tourRoutes,
+
+        t.`name` AS t_name
+        FROM t_member AS tm
+        JOIN s_user AS u ON u.ID = tm.user_id
+        JOIN t_team AS t ON t.ID = tm.t_id
+        JOIN j_schedule AS s ON s.team_id = t.id
+        JOIN j_schedule_detail AS sd ON sd.jour_id = s.ID
+        WHERE t.`status` = 3
+        AND tm.user_id != -1
+        AND tm.role = 3
+        <if test="endDate != null">
+            AND DATE_FORMAT(s.end_date, '%Y-%m-%d') = DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+        </if>
+        ORDER BY tm.create_time ASC
+    </select>
+
+
+    <select id="selectMemberByScheduleDetailId" resultMap="MemberAndUserResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT tm.ID, tm.user_id, tm.t_Id, tm.team_id, tm.group_id, tm.real_name, tm.sex, tm.birthday, tm.phone, tm.mark_phone,
+        tm.photo_url, tm.mail, tm.address, tm.city, tm.province, tm.country, tm.role, tm.type, tm.is_leader, tm.is_admin,
+        tm.join_status, tm.card_type, tm.card_num, tm.card_time, tm.create_time, tm.update_time, tm.version,
+        tm.weixin,tm.qq,tm.photo_library1_url,tm.photo_library2_url,tm.photo_library3_url,tm.photo_library4_url,tm.photo_library5_url,
+        tm.photo_library6_url,tm.photo_library7_url,tm.photo_library8_url,tm.photo_library9_url,tm.photo_library10_url,tm.country_code,tm.is_new_join,tm.unionid,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version,u.evaluationTags AS u_evaluationTags,u.languages AS u_languages,u.tourRoutes AS u_tourRoutes,
+
+        t.`name` AS t_name
+        FROM t_member AS tm
+        JOIN s_user AS u ON u.ID = tm.user_id
+        JOIN t_team AS t ON t.ID = tm.t_id
+        JOIN j_schedule AS s ON s.team_id = t.id
+        JOIN j_schedule_detail AS sd ON sd.jour_id = s.ID
+        WHERE t.`status` != 3
+        AND tm.user_id != -1
+        <if test="mRole != null">
+            AND tm.role = #{mRole,jdbcType=INTEGER}
+        </if>
+        <if test="sdId != null">
+            AND sd.ID = #{sdId,jdbcType=BIGINT}
+        </if>
+    </select>
+
+
+    <select id="selectMemberByTidConditons" resultType="String" parameterType="com.umessage.letsgo.domain.vo.team.requset.MemberRequest">
+        SELECT
+        me.phone
+        FROM t_member AS me
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        <where>
+            <if test="null != id"> and me.ID = #{id}</if>
+            <if test="null != userId"> and me.user_id = #{userId}</if>
+            <if test="null != teamId"> and me.team_id = #{teamId}</if>
+            <if test="null != tId"> and me.t_id = #{tId}</if>
+            <if test="'eq1' == role"> AND me.role = 1</if>
+            <if test="'eq2' == role"> AND me.role = 2</if>
+            <if test="'eq3' == role"> AND me.role != 3</if>
+            <if test="'eq4' == role"> AND me.role != 1</if>
+            <if test="null != phone"> AND me.phone = #{phone}</if>
+        </where>
+    </select>
+</mapper>

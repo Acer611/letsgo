@@ -1,0 +1,107 @@
+#set($pageTitle="旅行社信息")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+
+	<input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main">
+		<section class="cd-container feiyong">
+#if( ${response.travelAgencyInfoVo.travelAgencyInfo}&&${response.travelAgencyInfoVo.travelAgencyInfo}!="")
+			<dl>
+				<dt>组团社信息</dt>
+				<dd>
+					<ul>
+						<!--<li>
+							 <div>
+							 New Sun InterntionalTravel Inc
+							</div>
+						</li>
+						<li>
+							 <div>
+							 6055 E Washington Blvd，CA 90040
+							</div>
+						</li>
+						<li>
+							 <div>
+							 323-697-8755
+							</div>
+						</li>-->
+                        <li>
+							<div>
+								$!response.travelAgencyInfoVo.travelAgencyInfo.replaceAll("\n|\r","<br/>")
+							</div>
+                    	</li>
+
+					</ul>
+				</dd>
+			</dl>
+	#end
+#if( ${response.travelAgencyInfoVo.groupClubInfo}&&${response.travelAgencyInfoVo.groupClubInfo}!="")
+            <dl>
+                <dt>接团社信息</dt>
+                <dd>
+                    <ul>
+                        <!--<li>
+                             <div>
+                             New Sun InterntionalTravel Inc
+                            </div>
+                        </li>
+                        <li>
+                             <div>
+                             6055 E Washington Blvd，CA 90040
+                            </div>
+                        </li>
+                        <li>
+                             <div>
+                             323-697-8755
+                            </div>
+                        </li>-->
+                        <li>
+                            <div>
+								$!response.travelAgencyInfoVo.groupClubInfo.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+
+                    </ul>
+                </dd>
+            </dl>
+	#end
+			<div class="continue_loding">
+					<div></div>
+					<span>已经到底,点击左侧查看更多!</span>
+			</div>
+		</section>
+	</div>
+#if($!response.scheduleEntity.processStatus==4)
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+#parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+	<script type="text/javascript">
+        var teamId="$!{response.scheduleEntity.teamId}";
+        var iswechat="${response.isWeChat}";
+		$(function(){
+			$(".overlay").click(function(){
+				$("#joacims-menu").prop("checked",false)
+			})
+		  	/*判断是否显示已经到底*/
+		  	if($(window).height()>$("body").height()){
+		  		$(".continue_loding").hide();
+		  	}
+            $(".qitaicon").on("click",function(){
+                if($(".qita").is(":visible")){
+                    $(".qita").slideUp();
+                    $(this).addClass("qitaicons");
+                }else{
+                    $(".qita").slideDown();
+                    $(this).removeClass("qitaicons");
+                }
+
+            })
+		})
+	</script>
+#end

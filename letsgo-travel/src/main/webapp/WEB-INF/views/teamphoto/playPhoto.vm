@@ -1,0 +1,251 @@
+#set($pageTitle="团队行程管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/plugins/gallery/jquery.ad-gallery.css","$!{STATIC_URL}/resources/dist/css/lunbo.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/plugins/gallery/jquery.ad-gallery.js","$!{STATIC_URL}/resources/dist/js/swiper-3.3.1.jquery.min.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+
+    <style type="text/css">
+    	.item1{
+    		float:left;
+    	}
+        .bodywarp {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            z-index: 9999;
+        }
+        .bodywarp {
+            background: #000;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color:#000;
+            margin: 0;
+            padding: 0;
+        }
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #000;
+
+        }
+        .swiper-slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            -ms-transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
+        .closebtn{color:#fff;position: absolute;right:20px;top:20px;font-size:18px;z-index: 9999;cursor: pointer;}
+    </style>
+
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+      #parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- =============================================== -->
+
+
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            团队相册
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li class="active">相册查看与编辑</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			  <div class="box box-info">
+				<div class="box-header with-border">
+				  <h3 class="box-title">相册查看与编辑</h3>
+				  <!--<div class="box-tools"><a class="btn btn-default btn-sm" href="#">预览</a></div>-->
+                    <div class="box-tools pull-right" style="margin-right:14px;">
+
+                        <a class="btn btn-sm  btn-warning" id="viewSchedule" href="javascript:;">全屏播放</a>
+                    </div>
+				</div><!-- /.box-header -->
+				
+				<div class="box-body">
+					<div class="col-xs-12">
+						<h3 style="text-align: center;color:#000;margin-bottom:20px;">$!{sch.name}</h3>
+						<!--轮播-->
+						<center>
+						<div id="gallery" class="ad-gallery col-md-6 col-md-offset-3">
+					      <div class="ad-image-wrapper">
+					      </div>
+					      <!--<div class="ad-controls">
+					      </div>-->
+					      <div class="ad-nav">
+					        <div class="ad-thumbs">
+					          <ul class="ad-thumb-list">
+
+
+#if($map.size()>0)
+#foreach( $Detail in ${map.keySet()})
+    #foreach( $Detailphoto in ${map.get($Detail)})
+            #if($Detailphoto.type==1)
+                <li>
+                    <a href=" $!{Detailphoto.photoUrl}">
+                        <img src=" $!{Detailphoto.thumbnailUrl}"  class="image$!{Detailphoto.id}" height="66">
+                    </a>
+                </li>
+            #end
+
+        #end
+	#end
+#else
+    <div style='margin-top:40px;'>暂无相册</div>
+#end
+					          </ul>
+					        </div>
+					      </div>
+					    </div>
+						</center>
+					  </div>
+					</div>
+				</div>
+		</section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+
+      #parse("/WEB-INF/views/common/footer.vm")
+   
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+<div id="dialogModal" style="display:none">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">消息</h4>
+            </div>
+            <div class="modal-body" style="text-align:center;font-size:14px;">
+                <p></p>
+            </div>
+            <div class="modal-footer text-center" style="text-align:center;">
+                <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                <button class="btn btn-primary" onclick="blockUIClose()" type="button">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+                <div class="bodywarp" style="visibility: hidden;">
+                    <div class="closebtn">关闭全屏播放</div>
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                        #if($map.size()>0)
+                            #foreach( $Detail in ${map.keySet()})
+                                #foreach( $Detailphoto in ${map.get($Detail)})
+                                    #if($Detailphoto.type==1)
+                                        <div class="swiper-slide">
+                                            <img data-src="$!{Detailphoto.photoUrl}" class="swiper-lazy">
+                                            <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                                        </div>
+                                    #end
+                                #end
+                            #end
+                        #end
+                        </div>
+                    </div>
+                </div>
+
+#define($scriptBlock)
+  	<script>
+        $(function() {
+			#foreach( $Detail in ${map.keySet()})
+				#foreach( $Detailphoto in ${map.get($Detail)})
+                    #if($Detailphoto.type==1)
+                        $('img.image$!{Detailphoto.id}').data('ad-desc', '$!date.format('yyyy-MM-dd',${Detailphoto.photographTime})  $!{Detailphoto.location}      #if($Detailphoto.author&&$Detailphoto.author!="") 源自：${Detailphoto.author} #end');
+                        $("#nonephoto").remove();
+                    #end
+				#end
+			#end
+
+            if($("#gallery").find("ul").find("li").length<=0){
+                $("#gallery").hide();
+                $("center").append("<div id='nonephoto' style='margin-top:40px;'>暂无可见相册</div>")
+            }
+            $("#viewSchedule").on("click",function(){
+                if($(".swiper-wrapper").find(".swiper-slide").length<=0){
+                    $("#dialogModal").find(".modal-body>p").html("没有可见相册，暂时不能全屏播放");
+                    blockUIOpenShare("dialogModal");
+                    return false;
+                }
+                $(".wrapper").hide();
+                $(".bodywarp").css("visibility","visible");
+            })
+            $(".closebtn").on("click",function(){
+                $(".wrapper").show();
+                $(".bodywarp").css("visibility","hidden");
+            })
+            var galleries = $('.ad-gallery').adGallery();
+            $('#switch-effect').change(
+                    function() {
+                        galleries[0].settings.effect = $(this).val();
+                        return false;
+                    }
+            );
+            $('#toggle-slideshow').click(
+                    function() {
+                        galleries[0].slideshow.toggle();
+                        return false;
+                    }
+            );
+            $('#toggle-description').click(
+                    function() {
+                        if(!galleries[0].settings.description_wrapper) {
+                            galleries[0].settings.description_wrapper = $('#descriptions');
+                        } else {
+                            galleries[0].settings.description_wrapper = false;
+                        }
+                        return false;
+                    }
+            );
+            /*总图片宽度*/
+            var ulWidth =0;
+            $(".ad-gallery .ad-thumbs .ad-thumb-list").find("li").each(function(){
+                ulWidth += $(this).width();
+            });
+            var uWidth = ulWidth+$(".ad-gallery .ad-thumbs .ad-thumb-list li").length*7;
+//            $(".ad-gallery .ad-thumbs .ad-thumb-list").removeAttr("style");
+            $(".ad-gallery .ad-thumbs .ad-thumb-list").css("width",uWidth);
+
+
+            var swiper = new Swiper('.swiper-container', {
+//                nextButton: '.swiper-button-next',
+//                prevButton: '.swiper-button-prev',
+//                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                // Disable preloading of all images
+                preloadImages: false,
+                autoplay: 3000,
+                loop : true,
+                // Enable lazy loading
+                lazyLoading: true
+            });
+        });
+
+  	</script>
+
+#end

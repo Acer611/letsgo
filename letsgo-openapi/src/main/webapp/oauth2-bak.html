@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>用户授权介绍</title>
+  <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+  <link href='css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='css/reset.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='css/reset.css' media='print' rel='stylesheet' type='text/css'/>
+  <link href='css/print.css' media='print' rel='stylesheet' type='text/css'/>
+
+  </head>
+  
+<body class="swagger-section">
+<div id='header'>
+  <div class="swagger-ui-wrap">
+    <a id="logo" href="http://12580.10086.cn/">跟上</a>
+  </div>
+</div>
+
+<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+
+
+<div id="swagger-ui-container" class="swagger-ui-wrap"><div class="info">
+  <div class="info_title">用户授权介绍</div>
+    <h2>
+    <div class="toggleEndpointList"><p>登录授权</p></div>
+  </h2>
+  <div class="info_description markdown"><p>为保证用户数据的安全性与隐私性，登录授权采用国际通用的OAuth2.0标准协议作为用户身份验证与授权协议。
+目前跟上API OAuth2.0服务支持采用两种方式获取Access Token（授权令牌），即Username and Password Flow 和 Client-side flow 。</p>
+</div>
+   
+</div>
+<div class="container" id="resources_container">
+  <ul id="resources"><li class="resource active"><div class="heading">
+  <h2>
+    <div class="toggleEndpointList"><p>Client-side flow</p></div>
+  </h2>
+</div>
+<ul class="endpoints">
+<li class="endpoint">
+  <ul class="operations">
+    <li class="post operation">
+      <div class="heading">
+        <h3>
+          <span class="http_method">
+          <a href="/login/oauth/token" class="toggleOperation">post</a>
+          </span>
+          <span class="path">
+          <a href="/login/oauth/token" class="toggleOperation ">/login/oauth/token</a>
+          </span>
+        </h3>
+        <ul class="options">
+          <li>
+          <a href="/login/oauth/token" class="toggleOperation">获取访问令牌（access_token）</a>
+          </li>
+        </ul>
+      </div>
+      <div class="content" style="display: block;">
+        <h4><span data-sw-translate="">说明</span></h4>
+        <div class="markdown"><p>当用户未登录时，可以通过Client-side flow 获取访问令牌（access_token），来调用不涉及用户隐私的API。</p></div>
+
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">参数</h4>
+          <table class="fullwidth">
+          <thead>
+            <tr>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">参数</th>
+            <th style="width: 310px; max-width: 310px" data-sw-translate="">值</th>
+            <th style="width: 200px; max-width: 200px" data-sw-translate="">描述</th>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">参数类型</th>
+            <th style="width: 220px; max-width: 230px" data-sw-translate="">数据类型</th>
+            </tr>
+          </thead>
+          <tbody class="operation-params">
+
+          <tr><td class="code"><label for="mid0.11205948633141816">client_id</label></td>
+						<td>
+						<label class="parameter"  >例如：H50DFEB86</label>
+						</td>
+						<td class="markdown">分配给应用的唯一ID</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="muserId0.06408716994337738">client_secret</label></td>
+						<td>
+						<label class="parameter"  >例如：DDC2B642-A570-11E5-BF7F-FEFF819CDC9F</label>
+						</td>
+						<td class="markdown">分配给应用的密钥</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">grant_type</label></td>
+						<td>
+						<label class="parameter"  >client_credentials</label>
+						</td>
+						<td class="markdown">授权类型</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+					</tr>
+          </tbody>
+          </table>
+
+        
+          <h4><span data-sw-translate="">响应</span> (<span data-sw-translate="">状态</span> 200)</h4>
+            
+          <p><span class="model-signature">
+
+<div class="signature-container">
+  <div class="snippet" style="display: block;">
+    <pre><code class="json">{
+  "<span class="attribute"><span class="attribute">additionalInformation</span></span>": <span class="value"><span class="value">{}</span></span>,
+  "<span class="attribute"><span class="attribute">expiration</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">1453540708586</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">expired</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">false</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">expiresIn</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">2591998</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">refreshToken</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">null</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">scope</span></span>": <span class="value"><span class="value">[
+     "<span class="attribute"><span class="attribute">read</span></span>",
+     "<span class="attribute"><span class="attribute">write</span></span>",
+   ]</span></span>
+  "<span class="attribute"><span class="attribute">tokenType</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"bearer"</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">value</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"d49e4580-9192-464d-8b7c-37d4927ddf6e"</span></span></span></span>,
+}</span></span></code></pre>
+    <small class="notice"></small>
+  </div>
+</div>
+</span></p>
+          
+          <h4><span data-sw-translate="">异常</span> (<span data-sw-translate="">状态</span> 200)</h4>        
+          <p><span class="model-signature">
+
+<div class="signature-container">
+  <div class="snippet" style="display: block;">
+    <pre><code class="json">{
+  "<span class="attribute"><span class="attribute">retCode</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">112</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">retMsg</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"bad_client_credentials：错误的client_id或client_secret"</span></span></span></span>
+}</span></span></code></pre>
+    <small class="notice"></small>
+  </div>
+</div>
+</span></p>
+          <br>          
+</div>		  
+</li>
+</ul>		  
+</li>
+</ul>
+</li>
+</ul>
+
+<ul id="resources"><li class="resource active"><div class="heading">
+  <h2>
+    <div class="toggleEndpointList"><p>Username and Password Flow</p></div>
+  </h2>
+</div>
+<ul class="endpoints" >
+<li class="endpoint">
+  <ul class="operations">
+    <li class="post operation" >
+      <div class="heading">
+        <h3>
+          <span class="http_method">
+          <a href="/login/oauth/token" class="toggleOperation">post</a>
+          </span>
+          <span class="path">
+          <a href="/login/oauth/token" class="toggleOperation ">/login/oauth/token</a>
+          </span>
+        </h3>
+        <ul class="options">
+          <li>
+          <a href="/login/oauth/token" class="toggleOperation">获取访问令牌（access_token）</a>
+          </li>
+        </ul>
+      </div>
+      <div class="content" style="display: block;">
+        <h4><span data-sw-translate="">说明</span></h4>
+        <div class="markdown"><p>当用户使用用户名和密码方式登录时，可以通过Username and Password Flow 获取访问令牌（access_token），来调用所有API（包括涉及用户隐私的API）。</p></div>
+
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">参数</h4>
+          <table class="fullwidth">
+          <thead>
+            <tr>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">参数</th>
+            <th style="width: 310px; max-width: 310px" data-sw-translate="">值</th>
+            <th style="width: 200px; max-width: 200px" data-sw-translate="">描述</th>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">参数类型</th>
+            <th style="width: 220px; max-width: 230px" data-sw-translate="">数据类型</th>
+            </tr>
+          </thead>
+          <tbody class="operation-params">
+
+          <tr><td class="code"><label for="mid0.11205948633141816">client_id</label></td>
+						<td>
+						<label class="parameter"  >例如：H50DFEB86</label>
+						</td>
+						<td class="markdown">分配给应用的唯一ID</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="muserId0.06408716994337738">client_secret</label></td>
+						<td>
+						<label class="parameter"  >例如：DDC2B642-A570-11E5-BF7F-FEFF819CDC9F</label>
+						</td>
+						<td class="markdown">分配给应用的密钥</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">grant_type</label></td>
+						<td>
+						<label class="parameter"  >password</label>
+						</td>
+						<td class="markdown">授权类型</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">username</label></td>
+						<td>
+						<label class="parameter"  >例如：user</label>
+						</td>
+						<td class="markdown">用户名</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">password</label></td>
+						<td>
+						<label class="parameter"  >例如：123456</label>
+						</td>
+						<td class="markdown">密码</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr>
+          </tbody>
+          </table>
+
+        
+          <h4><span data-sw-translate="">响应</span> (<span data-sw-translate="">状态</span> 200)</h4>
+            
+          <p><span class="model-signature">
+
+<div class="signature-container">
+  <div class="snippet" style="display: block;">
+    <pre><code class="json">{
+  "<span class="attribute"><span class="attribute">additionalInformation</span></span>": <span class="value"><span class="value">{}</span></span>,
+  "<span class="attribute"><span class="attribute">expiration</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">1453287194873</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">expired</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">false</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">expiresIn</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">2248954</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">refreshToken</span></span>": <span class="value"><span class="value">{
+    "<span class="attribute"><span class="attribute">expiration</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">1453287194860</span></span></span></span>,
+    "<span class="attribute"><span class="attribute">value</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"458b4723-92f3-41ce-b4f9-0a434ab6f51c"</span></span></span></span>,
+   }</span></span>
+  "<span class="attribute"><span class="attribute">scope</span></span>": <span class="value"><span class="value">[
+     "<span class="attribute"><span class="attribute">read</span></span>",
+     "<span class="attribute"><span class="attribute">write</span></span>",
+   ]</span></span>   
+  "<span class="attribute"><span class="attribute">tokenType</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"bearer"</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">value</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"c45a131e-a62b-4d75-a7e5-5089bb2166b1"</span></span></span></span>,
+}</span></span></code></pre>
+    <small class="notice"></small>
+  </div>
+</div>
+</span></p>
+          <h4><span data-sw-translate="">异常</span> (<span data-sw-translate="">状态</span> 200)</h4>        
+          <p><span class="model-signature">
+
+<div class="signature-container">
+  <div class="snippet" style="display: block;">
+    <pre><code class="json">{
+  "<span class="attribute"><span class="attribute">retCode</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">3</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">retMsg</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"用户名或密码不正确"</span></span></span></span>
+}</span></span></code></pre>
+    <small class="notice"></small>
+  </div>
+</div>
+</span></p>
+          <br>
+</div>		  
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<ul id="resources"><li class="resource active"><div class="heading">
+  <h2>
+    <div class="toggleEndpointList"><p>SMS Verification Flow</p></div>
+  </h2>
+</div>
+<ul class="endpoints" >
+<li class="endpoint">
+  <ul class="operations">
+    <li class="post operation" id="student_updateStudentInfo">
+      <div class="heading">
+        <h3>
+          <span class="http_method">
+          <a href="/login/oauth/token" class="toggleOperation">post</a>
+          </span>
+          <span class="path">
+          <a href="/login/oauth/token" class="toggleOperation ">/login/oauth/token</a>
+          </span>
+        </h3>
+        <ul class="options">
+          <li>
+          <a href="/login/oauth/token" class="toggleOperation">获取访问令牌（access_token）</a>
+          </li>
+        </ul>
+      </div>
+      <div class="content" id="student_updateStudentInfo_content" style="display: block;">
+        <h4><span data-sw-translate="">说明</span></h4>
+        <div class="markdown"><p>当用户使用手机验证码方式登录时，可以通过SMS Verification Flow 获取访问令牌（access_token），来调用所有API（包括涉及用户隐私的API）。</p></div>
+
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">参数</h4>
+          <table class="fullwidth">
+          <thead>
+            <tr>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">参数</th>
+            <th style="width: 310px; max-width: 310px" data-sw-translate="">值</th>
+            <th style="width: 200px; max-width: 200px" data-sw-translate="">描述</th>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">参数类型</th>
+            <th style="width: 220px; max-width: 230px" data-sw-translate="">数据类型</th>
+            </tr>
+          </thead>
+          <tbody class="operation-params">
+
+          <tr><td class="code"><label for="mid0.11205948633141816">client_id</label></td>
+						<td>
+						<label class="parameter"  >例如：H50DFEB86</label>
+						</td>
+						<td class="markdown">分配给应用的唯一ID</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="muserId0.06408716994337738">client_secret</label></td>
+						<td>
+						<label class="parameter"  >例如：DDC2B642-A570-11E5-BF7F-FEFF819CDC9F</label>
+						</td>
+						<td class="markdown">分配给应用的密钥</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">grant_type</label></td>
+						<td>
+						<label class="parameter"  >sms_verification</label>
+						</td>
+						<td class="markdown">授权类型</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">username</label></td>
+						<td>
+						<label class="parameter"  >例如：13800000000</label>
+						</td>
+						<td class="markdown">手机号</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">password</label></td>
+						<td>
+						<label class="parameter"  >例如：123456</label>
+						</td>
+						<td class="markdown">短信验证码</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr>
+          </tbody>
+          </table>
+
+        
+          <h4><span data-sw-translate="">响应</span> (<span data-sw-translate="">状态</span> 200)</h4>
+            
+          <p><span class="model-signature"><div><div>
+<div>
+
+<div class="signature-container">
+  <div class="snippet" style="display: block;">
+    <pre><code class="json">{
+  "<span class="attribute"><span class="attribute">additionalInformation</span></span>": <span class="value"><span class="value">{}</span></span>,
+  "<span class="attribute"><span class="attribute">expiration</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">1453287194873</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">expired</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">false</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">expiresIn</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">2248954</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">refreshToken</span></span>": <span class="value"><span class="value">{
+    "<span class="attribute"><span class="attribute">expiration</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">1453287194860</span></span></span></span>,
+    "<span class="attribute"><span class="attribute">value</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"458b4723-92f3-41ce-b4f9-0a434ab6f51c"</span></span></span></span>,
+   }</span></span>
+  "<span class="attribute"><span class="attribute">scope</span></span>": <span class="value"><span class="value">[
+     "<span class="attribute"><span class="attribute">read</span></span>",
+     "<span class="attribute"><span class="attribute">write</span></span>",
+   ]</span></span>   
+  "<span class="attribute"><span class="attribute">tokenType</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"bearer"</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">value</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"c45a131e-a62b-4d75-a7e5-5089bb2166b1"</span></span></span></span>,
+}</span></span></code></pre>
+    <small class="notice"></small>
+  </div>
+</div>
+
+</div></div></div></span></p>
+
+          <h4><span data-sw-translate="">异常</span> (<span data-sw-translate="">状态</span> 200)</h4>        
+          <p><span class="model-signature">
+
+<div class="signature-container">
+  <div class="snippet" style="display: block;">
+    <pre><code class="json">{
+  "<span class="attribute"><span class="attribute">retCode</span></span>": <span class="value"><span class="number"><span class="value"><span class="number">1001</span></span></span></span>,
+  "<span class="attribute"><span class="attribute">retMsg</span></span>": <span class="value"><span class="string"><span class="value"><span class="string">"短信验证码不正确"</span></span></span></span>
+}</span></span></code></pre>
+    <small class="notice"></small>
+  </div>
+</div>
+</span></p>
+          <br>
+</div>		  
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div class="footer">
+    <h4 style="color: #999">[ <span style="font-variant: small-caps">base url</span>: /openapi
+]
+    </h4>
+    </div>
+</div>
+</div>
+
+</body>
+</html>

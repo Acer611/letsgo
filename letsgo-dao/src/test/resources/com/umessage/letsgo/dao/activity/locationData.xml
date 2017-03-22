@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <a_location id="1" user_id="1" longitude="10.5" latitude="185.6" create_time="2015-06-21 12:30:30"/>
+    <a_location id="2" user_id="1" longitude="18.5" latitude="185.6" create_time="2015-06-21 12:31:30"/>
+    <a_location id="3" user_id="1" longitude="56.5" latitude="185.6" create_time="2015-06-21 12:32:30"/>
+</dataset>

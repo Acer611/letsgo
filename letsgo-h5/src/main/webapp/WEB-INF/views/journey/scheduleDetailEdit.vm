@@ -1,0 +1,1007 @@
+#set($pageTitle="D$!{response.scheduleDetailEntity.dayNum}")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css","$!{STATIC_URL}/resources/js/iCheck/all.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/iCheck/icheck.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js"])
+<style>
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-slide {
+        width:auto;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+</style>
+	<div class="main" style="overflow:hidden;">
+		<section class="cd-container">
+            <div class="day_titnew">
+                <div class="daynumnew">D$!{response.scheduleDetailEntity.dayNum}</div>
+                <div class="dayrightnew">
+                    <div class="tit_time">$!date.format('yyyy-MM-dd',$!{response.scheduleDetailEntity.scheduleDate})</div>
+##                    <div class="tit_name">$!{response.scheduleDetailEntity.destination1}#if( ${response.scheduleDetailEntity.destination2}&&${response.scheduleDetailEntity.destination2}!="" )>$!{response.scheduleDetailEntity.destination2} #end#if( ${response.scheduleDetailEntity.destination3}&&${response.scheduleDetailEntity.destination3}!="" )>$!{response.scheduleDetailEntity.destination3} #end#if(${response.scheduleDetailEntity.destination4}&&${response.scheduleDetailEntity.destination4}!="" )>$!{response.scheduleDetailEntity.destination4} #end</div>
+                    <div class="tit_name">
+                    ##                        #if($!{response.scheduleDetailEntity.startPlace}== $!{response.scheduleDetailEntity.destination1})
+                    ##                        <span class="destion">$!{response.scheduleDetailEntity.startPlace}</span>
+                    ##                            #if( ${response.scheduleDetailEntity.destination2}&&${response.scheduleDetailEntity.destination2}!="" )
+                    ##                                #if( ${response.scheduleDetailEntity.traffic1}&&${response.scheduleDetailEntity.traffic1}==1 )
+                    ##                                    <span class="travelIcon"><img src="resources/images/flybg.png"/></span>
+                    ##                                    #elseif(${response.scheduleDetailEntity.traffic1}&&${response.scheduleDetailEntity.traffic1}==2)
+                    ##                                        <span class="travelIcon"><img src="resources/images/trainbg.png"/></span>
+                    ##                                #elseif(${response.scheduleDetailEntity.traffic1}&&${response.scheduleDetailEntity.traffic1}==3)
+                    ##                                    <span class="travelIcon"><img src="resources/images/busbg.png"/></span>
+                    ##                                #elseif(${response.scheduleDetailEntity.traffic1}&&${response.scheduleDetailEntity.traffic1}==4)
+                    ##                                    <span class="travelIcon"><img src="resources/images/shipbg.png"/></span>
+                    ##                                    #else
+                    ##                                    <span class="travelIcon">></span>
+                    ##                                    #end
+                    ##                                    <span class="destion">$!{response.scheduleDetailEntity.destination2}</span>
+                    ##                            #end
+                    ##                            #if( ${response.scheduleDetailEntity.destination3}&&${response.scheduleDetailEntity.destination3}!="" )><span class="destion">$!{response.scheduleDetailEntity.destination3}</span> #end
+                    ##                            #if(${response.scheduleDetailEntity.destination4}&&${response.scheduleDetailEntity.destination4}!="" )><span class="destion">$!{response.scheduleDetailEntity.destination4}</span> #end
+                    ##
+                    ##                        #else
+                        <div class='swiper-container'>
+                            <div class="swiper-wrapper">
+                                <div class='swiper-slide'>
+                        <span class="destion">$!{response.scheduleDetailEntity.startPlace}</span>
+
+                        #if( ${response.scheduleDetailEntity.destination1}&&${response.scheduleDetailEntity.destination1}!="" )
+                            #if( ${response.scheduleDetailEntity.traffic1}&&${response.scheduleDetailEntity.traffic1}==1 )
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/flybg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic1}&&${response.scheduleDetailEntity.traffic1}==2)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/trainbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic1}&&${response.scheduleDetailEntity.traffic1}==3)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/busbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic1}&&${response.scheduleDetailEntity.traffic1}==4)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/shipbg.png"/></span>
+                            #else
+                                <span class="travelIcon">></span>
+                            #end
+                            <span class="destion">$!{response.scheduleDetailEntity.destination1}</span>
+                        #end
+                        #if( ${response.scheduleDetailEntity.destination2}&&${response.scheduleDetailEntity.destination2}!="" )
+                            #if( ${response.scheduleDetailEntity.traffic2}&&${response.scheduleDetailEntity.traffic2}==1 )
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/flybg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic2}&&${response.scheduleDetailEntity.traffic2}==2)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/trainbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic2}&&${response.scheduleDetailEntity.traffic2}==3)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/busbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic2}&&${response.scheduleDetailEntity.traffic2}==4)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/shipbg.png"/></span>
+                            #else
+                                <span class="travelIcon">></span>
+                            #end
+                            <span class="destion">$!{response.scheduleDetailEntity.destination2}</span>
+                        #end
+                        #if( ${response.scheduleDetailEntity.destination3}&&${response.scheduleDetailEntity.destination3}!="" )
+                            #if( ${response.scheduleDetailEntity.traffic3}&&${response.scheduleDetailEntity.traffic3}==1 )
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/flybg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic3}&&${response.scheduleDetailEntity.traffic3}==2)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/trainbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic3}&&${response.scheduleDetailEntity.traffic3}==3)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/busbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic3}&&${response.scheduleDetailEntity.traffic3}==4)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/shipbg.png"/></span>
+                            #else
+                                <span class="travelIcon">></span>
+                            #end
+                            <span class="destion">$!{response.scheduleDetailEntity.destination3} </span>
+                        #end
+                        #if(${response.scheduleDetailEntity.destination4}&&${response.scheduleDetailEntity.destination4}!="" )
+                            #if( ${response.scheduleDetailEntity.traffic4}&&${response.scheduleDetailEntity.traffic4}==1 )
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/flybg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic4}&&${response.scheduleDetailEntity.traffic4}==2)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/trainbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic4}&&${response.scheduleDetailEntity.traffic4}==3)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/busbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic4}&&${response.scheduleDetailEntity.traffic4}==4)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/shipbg.png"/></span>
+                            #else
+                                <span class="travelIcon">></span>
+                            #end
+                            <span class="destion">$!{response.scheduleDetailEntity.destination4}</span>
+                        #end
+                        #if(${response.scheduleDetailEntity.destination5}&&${response.scheduleDetailEntity.destination5}!="" )
+                            #if( ${response.scheduleDetailEntity.traffic5}&&${response.scheduleDetailEntity.traffic5}==1 )
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/flybg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic5}&&${response.scheduleDetailEntity.traffic5}==2)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/trainbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic5}&&${response.scheduleDetailEntity.traffic5}==3)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/busbg.png"/></span>
+                            #elseif(${response.scheduleDetailEntity.traffic5}&&${response.scheduleDetailEntity.traffic5}==4)
+                                <span class="travelIcon"><img src="$!{STATIC_URL}/resources/images/shipbg.png"/></span>
+                            #else
+                                <span class="travelIcon">></span>
+                            #end
+                            <span class="destion">$!{response.scheduleDetailEntity.destination5}</span>
+                        #end
+
+                    ##                        #end
+                                </div>
+                                </div>
+                                <div class="swiper-scrollbar"></div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+				<ul class="day_con">
+
+					#if(${response.scheduleDetailEntity.weatherDescn}&&${response.scheduleDetailEntity.weatherDescn}!="")
+
+					<li class="day_con_list">
+										<span class="day_weather"></span>
+						<p>当日天气( #if(${response.scheduleDetailEntity.destination5}&&${response.scheduleDetailEntity.destination5}!="")
+                            $!{response.scheduleDetailEntity.destination5}
+                        #elseif(${response.scheduleDetailEntity.destination4}&&${response.scheduleDetailEntity.destination4}!="")
+                            $!{response.scheduleDetailEntity.destination4}
+                        #elseif(${response.scheduleDetailEntity.destination3}&&${response.scheduleDetailEntity.destination3}!="")
+                            $!{response.scheduleDetailEntity.destination3}
+                        #elseif(${response.scheduleDetailEntity.destination2}&&${response.scheduleDetailEntity.destination2}!="")
+                            $!{response.scheduleDetailEntity.destination2}
+                        #elseif(${response.scheduleDetailEntity.destination1}&&${response.scheduleDetailEntity.destination1}!="")
+                            $!{response.scheduleDetailEntity.destination1}
+                        #elseif($!{response.scheduleDetailEntity.startPlace}&&$!{response.scheduleDetailEntity.startPlace}!="")
+                            $!{response.scheduleDetailEntity.startPlace}
+                        #end ) </p>
+										<p>$!{response.scheduleDetailEntity.startPlaceWeatherDescn}</p>
+									</li>
+					#end
+                    #if( ${response.scheduleDetailEntity.flight1}&&${response.scheduleDetailEntity.flight1}!="" )
+                        <li class="day_con_list">
+                            <span class="day_flight"></span>
+                            <p>航班</p>
+                            <p>$!{response.scheduleDetailEntity.flight1} #if( ${response.scheduleDetailEntity.flight2}&&${response.scheduleDetailEntity.flight2}!="" )>$!{response.scheduleDetailEntity.flight2} #end#if( ${response.scheduleDetailEntity.flight3}&&${response.scheduleDetailEntity.flight3}!="" )>$!{response.scheduleDetailEntity.flight3} #end</p>
+                        </li>
+                    #end
+##					#if( ${response.scheduleDetailEntity.schedulePhotosUrl1}&&${response.scheduleDetailEntity.schedulePhotosUrl1}!=""||${response.scheduleDetailEntity.schedulePhotosUrl2}&&${response.scheduleDetailEntity.schedulePhotosUrl2}!=""|| ${response.scheduleDetailEntity.schedulePhotosUrl3}&&${response.scheduleDetailEntity.schedulePhotosUrl3}!="")
+##
+##    <li class="day_con_img swiper-container">
+##						<!--轮播图-->
+##						<div class="swiper-wrapper">
+##							#if( ${response.scheduleDetailEntity.schedulePhotosUrl1}&&${response.scheduleDetailEntity.schedulePhotosUrl1}!="" )
+##
+##                                <div class="swiper-slide">
+##                                    <img src="$!{response.scheduleDetailEntity.schedulePhotosUrl1}"/>
+##                                </div>
+##							#end
+##							#if( ${response.scheduleDetailEntity.schedulePhotosUrl2}&&${response.scheduleDetailEntity.schedulePhotosUrl2}!="" )
+##                                <div class="swiper-slide">
+##                                    <img src="$!{response.scheduleDetailEntity.schedulePhotosUrl2}"/>
+##                                </div>
+##							#end
+##							#if( ${response.scheduleDetailEntity.schedulePhotosUrl3}&&${response.scheduleDetailEntity.schedulePhotosUrl3}!="" )
+##                                <div class="swiper-slide">
+##                                    <img src="$!{response.scheduleDetailEntity.schedulePhotosUrl3}"/>
+##                                </div>
+##							#end
+##						</div>
+##						<div class="swiper-pagination"></div>
+##						<!--轮播图end-->
+##					</li>
+##	#end
+					#if( ${response.scheduleDetailEntity.desc}&&${response.scheduleDetailEntity.desc}!="" )
+
+    <li class="day_con_list">
+						<span class="day_introduce"></span>
+						<p>行程介绍</p> 
+                        <div class="destion">$!response.scheduleDetailEntity.desc</div>
+					</li>
+	#end
+##                    #if($response.scheduleDetailEntity.scenicList.size()>0)
+##                        <li class="day_con_list">
+##                            <span class="day_scenic"></span>
+##                            <p>景点</p>
+##                            <p>#foreach( $Detail in $response.scheduleDetailEntity.scenicList)
+##                                #if($Detail.name&&$Detail.name!="")
+##                                        $Detail.name
+##                                #end
+##
+##                            #end
+##                            </p>
+##                        </li>
+##
+##                    #end
+                    #if($response.scheduleDetailEntity.scheduleDetailScenicEntitys.size()>0)
+                        #set($isce=0)
+                        <li class="day_con_list">
+                            <span class="day_scenic day_scenic$!{response.scheduleDetailEntity.dayNum}"></span>
+                            <p class="scenicTit">景点</p>
+                        ##            <p>#foreach( $Detail in $response.scheduleDetailEntity.ScheduleDetailScenicEntity)
+                        ##            		#if($Detail.scenicName&&$Detail.scenicName!="")
+                        ###if($Detail.id&&$Detail.id!="")
+                        ##    #if($response.isEditable=="edit")
+                        ##	<a href="javascript:;" spotId="$Detail.id">$Detail.scenicName</a>
+                        ##        #else
+                        ##            $Detail.scenicName <br/>
+                        ##        #end
+                        ##	#else
+                        ##		$Detail.scenicName <br/>
+                        ###end
+                        ##							#end
+                        ##
+                        ##					#end
+                        ##            </p>
+                            <div class="sceniclist">
+                                <ul>
+                                    #foreach( $Detail in $response.scheduleDetailEntity.scheduleDetailScenicEntitys)
+                                        #set($iscew=$isce + 1)
+                                        #if($Detail.scenicName&&$Detail.scenicName!="")
+                                        <li>
+                                        ##            #if(${response.isWeChat})
+                                        ##            <a href="$!{link.contextPath}/wechat/getScenicByScenId?flag=scenic&scenId=$!{Detail.id}">
+                                        ##                #else
+                                        ##                    <a href="$!{link.contextPath}/web/schedule/getScenicByScenId?flag=scenic&scenId=$!{Detail.id}&client_id=${response.signMap.get('scenic').client_id}&ver=${response.signMap.get('scenic').ver}&sign=${response.signMap.get('scenic').sign}&timestamp=${response.signMap.get('scenic').timestamp}&access_token=${response.signMap.get('scenic').access_token}">
+                                        <a href="$!{link.contextPath}/h5/survey/getScenicByScenId?scenId=$!{Detail.id}">
+
+                                        #end
+                                        #if($Detail.albumScheduleEntities.size()>0)
+
+                                            #foreach( $Detailalbum in $Detail.albumScheduleEntities)
+                                                <div class="mistionImg">
+                                                    #if($!{velocityCount}==1)
+                                                        <img src="$!{Detailalbum.photoUrl}"/>
+                                                    #end
+                                                </div>
+                                            #end
+                                        #end
+                                        <div class="#if($Detail.albumScheduleEntities.size()>0)mistesion #else mistesionto #end"><span>$!{iscew}.$!{Detail.scenicName}</span></div>
+                                    </a>
+                                    </li>
+                                        #set($isce=$isce+1)
+                                    #end
+                                </ul>
+                            </div>
+                        </li>
+                    #end
+                    #if(${response.scheduleDetailEntity.hotelSchedule.hotelName}&&${response.scheduleDetailEntity.hotelSchedule.hotelName}!=""|| ${response.scheduleDetailEntity.hotelSchedule.hotelInput}&&${response.scheduleDetailEntity.hotelSchedule.hotelInput}!="")
+                        <li class="day_con_list">
+                            <span class="day_hotel"></span>
+                        ##						<p>酒店</p>
+                        ##						<p hotelId="$!{response.scheduleDetailEntity.hotelId}">#if( $response.scheduleDetailEntity.hotelConfirm )
+                        ##								#if( $response.scheduleDetailEntity.hotelConfirm==0 )
+                        ##									#if($!{response.scheduleDetailEntity.hotelId}&&$!{response.scheduleDetailEntity.hotelId}!=""&&$!{response.scheduleDetailEntity.hotelId}!=",")
+                        ##                                       $!{response.scheduleDetailEntity.hotelInput}
+                        ##										#else
+                        ##											$!{response.scheduleDetailEntity.hotelInput}
+                        ##									#end
+                        ##
+                        ##								#elseif( $response.scheduleDetailEntity.hotelConfirm==1)
+                        ##									#if($!{response.scheduleDetailEntity.hotelId}&&$!{response.scheduleDetailEntity.hotelId}!=""&&$!{response.scheduleDetailEntity.hotelId}!=",")
+                        ##                                    <a href="javascript:void(0)">$!{response.scheduleDetailEntity.hotel}</a>
+                        ##									#else
+                        ##										$!{response.scheduleDetailEntity.hotel}
+                        ##									#end
+                        ##
+                        ##								#end
+                        ##						   #end
+                        ##	#if( ${response.scheduleDetailEntity.sameLevel}==0 )
+                        ##
+                        ##						#elseif($response.scheduleDetailEntity.sameLevel==1)
+                        ##							或同级酒店
+                        ##		#end
+                        ##							</p>
+                            <p #if($response.scheduleDetailEntity.hotelSchedule.albumScheduleList.size()>0) class="scenicTit" #else #end>酒店</p>
+                            #if($response.scheduleDetailEntity.hotelSchedule.albumScheduleList.size()>0)
+                                <div class="sceniclist">
+                                    <ul>
+                                        <li>
+                                            #if( $response.scheduleDetailEntity.hotelSchedule.hotelConfirm==1 )
+                                                <a href="$!{link.contextPath}/h5/survey/getHotelByHotelId?hotelId=$!{response.scheduleDetailEntity.hotelSchedule.id}">
+
+                                                    #if($response.scheduleDetailEntity.hotelSchedule.albumScheduleList.size()>0)
+
+                                                        #foreach( $AlbumScheduleList in $response.scheduleDetailEntity.hotelSchedule.albumScheduleList)
+                                                            #if($!{velocityCount}==1)
+                                                                <div class="mistionImg">
+                                                                    <img src="$!{AlbumScheduleList.photoUrl}"/>
+                                                                </div>
+                                                            #end
+                                                        #end
+
+                                                    #end
+
+                                                    <div class="#if($response.scheduleDetailEntity.hotelSchedule.albumScheduleList.size()>0)mistesion #else mistesionto #end"><span>$!{response.scheduleDetailEntity.hotelSchedule.hotelName}#if( ${response.scheduleDetailEntity.hotelSchedule.sameLevel}==1 )(或同级)#end</span></div>
+                                                </a>
+                                            #elseif( $response.scheduleDetailEntity.hotelSchedule.hotelConfirm==0)
+                                                <div class="mistesionto">
+                                                    <span>$!{response.scheduleDetailEntity.hotelSchedule.hotelInput}</span>
+                                                </div>
+                                            #end
+                                        </li>
+                                    </ul>
+                                </div>
+                            #else
+                                #if( $response.scheduleDetailEntity.hotelSchedule.hotelConfirm==1 )
+                                    <p><a href="$!{link.contextPath}/h5/survey/getHotelByHotelId?hotelId=$!{response.scheduleDetailEntity.hotelSchedule.id}">$!{response.scheduleDetailEntity.hotelSchedule.hotelName}#if( ${response.scheduleDetailEntity.hotelSchedule.sameLevel}==1 )(或同级)#end</a></p>
+                                #elseif( $response.scheduleDetailEntity.hotelSchedule.hotelConfirm==0)
+                                    <p> $!{response.scheduleDetailEntity.hotelSchedule.hotelInput}</p>
+                                #end
+                            #end
+##                            <div class="btn_tainer"><a href="javascript:;" class="removehotel">删除</a><a href="javascript:;" class="hotel-modify">修改</a></div>
+
+                        </li>
+                    #end
+					#if( ${response.scheduleDetailEntity.cateringInfo}&&${response.scheduleDetailEntity.cateringInfo}!="" )
+                        <li class="day_con_list">
+                            <span class="day_dinner"></span>
+                            <p>餐饮</p>
+                            <p>$!response.scheduleDetailEntity.cateringInfo.replaceAll("\n|\r","<br/>")</p>
+                        </li>
+					#end
+                    #if($response.scheduleDetailEntity.ownExpenseScheduleList.size()>0)
+                        #set($isce=0)
+                        <li class="day_con_list">
+                            <span class="day_free day_scenic$!{response.scheduleDetailEntity.dayNum}"></span>
+                            <p class="scenicTit">自费项目</p>
+                        ##            <p>#foreach( $Detail in $response.scheduleDetailEntity.ScheduleDetailScenicEntity)
+                        ##            		#if($Detail.scenicName&&$Detail.scenicName!="")
+                        ###if($Detail.id&&$Detail.id!="")
+                        ##    #if($response.isEditable=="edit")
+                        ##	<a href="javascript:;" spotId="$Detail.id">$Detail.scenicName</a>
+                        ##        #else
+                        ##            $Detail.scenicName <br/>
+                        ##        #end
+                        ##	#else
+                        ##		$Detail.scenicName <br/>
+                        ###end
+                        ##							#end
+                        ##
+                        ##					#end
+                        ##            </p>
+                            <div class="sceniclist">
+                                <ul>
+                                    #foreach( $Detail in $response.scheduleDetailEntity.ownExpenseScheduleList)
+                                        #set($iscew=$isce + 1)
+                                        #if($Detail.itemName&&$Detail.itemName!="")
+                                        <li>
+                                        ##            #if(${response.isWeChat})
+                                        ##            <a href="$!{link.contextPath}/wechat/getScenicByScenId?flag=scenic&scenId=$!{Detail.id}">
+                                        ##                #else
+                                        ##                    <a href="$!{link.contextPath}/web/schedule/getScenicByScenId?flag=scenic&scenId=$!{Detail.id}&client_id=${response.signMap.get('scenic').client_id}&ver=${response.signMap.get('scenic').ver}&sign=${response.signMap.get('scenic').sign}&timestamp=${response.signMap.get('scenic').timestamp}&access_token=${response.signMap.get('scenic').access_token}">
+                                        <a href="$!{link.contextPath}/h5/survey/getOwnExpenseByOwnExpenseId?ownExpenseId=$!{Detail.id}">
+
+                                        #end
+                                        #if($Detail.albumScheduleList.size()>0)
+
+                                            #foreach( $Detailalbum in $Detail.albumScheduleList)
+                                                <div class="mistionImg">
+                                                    #if($!{velocityCount}==1)
+                                                        <img src="$!{Detailalbum.photoUrl}"/>
+                                                    #end
+                                                </div>
+                                            #end
+                                        #end
+                                        <div class="#if($Detail.albumScheduleList.size()>0)mistesion #else mistesionto #end"><span>$!{iscew}.$!{Detail.itemName}</span></div>
+                                    </a>
+                                    </li>
+                                        #set($isce=$isce+1)
+                                    #end
+                                </ul>
+                            </div>
+                        </li>
+                    #end
+###if( ${response.scheduleDetailEntity.shoppInfo}&&  ${response.scheduleDetailEntity.shoppInfo}!="")
+##					<li class="day_con_list">
+##					<span class="day_shopping"></span>
+##						<p>购物点</p>
+##						<p>$!response.scheduleDetailEntity.shoppInfo.replaceAll("\n|\r","<br/>")</p>
+##					</li>
+##	#end
+                    #if($response.scheduleDetailEntity.shoppingScheduleList.size()>0)
+                        #set($isce=0)
+                        <li class="day_con_list">
+                            <span class="day_buy"></span>
+                            <p class="scenicTit">购物场所</p>
+                            <div class="sceniclist">
+                                <ul>
+                                    #foreach( $Detail in $response.scheduleDetailEntity.shoppingScheduleList)
+                                        #set($iscew=$isce + 1)
+                                        <li>
+
+                                            <div class="buyarea">
+                                                <div class="buytit">$!iscew.$!{Detail.shoppingName}</div>
+                                                #if($!{Detail.shoppingCity}&&$!{Detail.shoppingCity}!="")
+                                                    <div class="buylist">所属城市：$!{Detail.shoppingCity}</div>
+                                                #end
+                                                #if($!{Detail.sellProducts}&&$!{Detail.sellProducts}!="")
+                                                    <div class="buylist">售卖产品：$!{Detail.sellProducts}</div>
+                                                #end
+                                                #if($!{Detail.residenceTime}&&$!{Detail.residenceTime}!="")
+                                                    <div class="buylist">停留时间：$!{Detail.residenceTime}</div>
+                                                #end
+                                                #if($!{Detail.lon}&&$!{Detail.lon}!="")
+                                                    <div class="buylist positionBuy">位置：<a href="$!{link.contextPath}/h5/survey/getShoppingByShoppingId?shoppingId=$!{Detail.id}"><span id="shoppingLat$!iscew">北京市东城区长安街北侧（天安门广场东...</span><span class="linkinco"></span></a></div>
+                                                #end
+                                            </div>
+                                        </li>
+                                        #set($isce=$isce+1)
+                                    #end
+                                </ul>
+                            </div>
+                        </li>
+                    #end
+###if( ($!{response.scheduleDetailEntity.hotelInput}&&$!{response.scheduleDetailEntity.hotelInput}!="")||($!{response.scheduleDetailEntity.hotel}&&$!{response.scheduleDetailEntity.hotel}!="") )
+##					<li class="day_con_list">
+##						<span class="day_hotel"></span>
+##						<p>酒店</p>
+##						<p id="hotelInput_val">#if( ${response.scheduleDetailEntity.hotelConfirm} )
+##							#if( ${response.scheduleDetailEntity.hotelConfirm}==0 )
+##								$!{response.scheduleDetailEntity.hotelInput}
+##							#elseif( ${response.scheduleDetailEntity.hotelConfirm}==1)
+##								$!{response.scheduleDetailEntity.hotel}
+##							#end
+##						#end
+##							#if( $response.scheduleDetailEntity.sameLevel==0 )
+##
+##							#elseif($response.scheduleDetailEntity.sameLevel==1)
+##                                或同级酒店
+##							#end
+##						</p>
+##						<div class="btn_tainer"><a href="javascript:;" class="removehotel">删除</a><a href="javascript:;" class="hotel-modify">修改</a></div>
+##					</li>
+##	#end
+##					#if( ${response.scheduleDetailEntity.trafficInfo}&&${response.scheduleDetailEntity.trafficInfo}!="" )
+##                        <li class="day_con_list">
+##                            <span class="day_traffic"></span>
+##                            <p>交通信息</p>
+##                            <p  id="trafficInfo_val">$!response.scheduleDetailEntity.trafficInfo.replaceAll("\n|\r","<br/>")</p>
+##                            <div class="btn_tainer"><a href="javascript:;" class="removetrafficInfo">删除</a><a href="javascript:;" class="traffic-modify">修改</a></div>
+##                        </li>
+##					#end
+##					#if( ${response.scheduleDetailEntity.name}&&${response.scheduleDetailEntity.name}!=""||${response.scheduleDetailEntity.phone}&&${response.scheduleDetailEntity.phone}!="" )
+##                        <li class="day_con_list">
+##                            <span class="day_guide"></span>
+##                            <p>导游信息</p>
+##                            <p id="leaderId_val" valueid="$!{response.scheduleDetailEntity.leaderId}">$!{response.scheduleDetailEntity.name} $!{response.scheduleDetailEntity.phone}</p>
+##                          <!--  <div class="btn_tainer"><a href="javascript:;" class="removename">删除</a><a href="javascript:;" class="guide-modify">修改</a></div>-->
+##                        </li>
+##					#end
+					#if( ${response.scheduleDetailEntity.newEntry}&&${response.scheduleDetailEntity.newEntry}!=""||${response.scheduleDetailEntity.newContant}&&${response.scheduleDetailEntity.newContant}!="" )
+                        <li class="day_con_list">
+                            <span class="day_custom"></span>
+                            <p id="newEntry_val">$!{response.scheduleDetailEntity.newEntry}</p>
+                            <p id="newContant_val">$!response.scheduleDetailEntity.newContant.replaceAll("\n|\r","<br/>")</p>
+                            <div class="btn_tainer"><a href="javascript:;" class="removenewEntry">删除</a><a href="javascript:;" class="custom-modify">修改</a></div>
+						</li>
+					#end
+					</ul>
+					<div class="split_tb">点击下方内容可将其添加到行程中</div>
+					<ul class="day_con" id="addEdit">
+##                        #if( (! ${response.scheduleDetailEntity.hotelInput} || ${response.scheduleDetailEntity.hotelInput}=="") && (! ${response.scheduleDetailEntity.hotel} || "" == ${response.scheduleDetailEntity.hotel}) )
+##
+##                            <li class="day_con_list">
+##                                <span class="day_hotel"></span>
+##                                <p>酒店</p>
+##                                <p id="hotelInput_val">输入酒店信息
+##                                </p>
+##                                <div class="btn_tainer"><a href="javascript:;" class="removehotel">删除</a><a href="javascript:;" class="hotel-modify">修改</a></div>
+##                            </li>
+##						#end
+###if(!${response.scheduleDetailEntity.trafficInfo}||${response.scheduleDetailEntity.trafficInfo}=="" )
+##					<li class="day_con_list">
+##						<span class="day_traffic"></span>
+##						<p>交通信息</p>
+##						<p id="trafficInfo_val">输入交通信息</p>
+##						<div class="btn_tainer"><a href="javascript:;" class="removetrafficInfo">删除</a><a href="javascript:;" class="traffic-modify">修改</a></div>
+##					</li>
+##					#end
+##	#if( !${response.scheduleDetailEntity.name}||${response.scheduleDetailEntity.name}==""&&!${response.scheduleDetailEntity.phone}||${response.scheduleDetailEntity.phone}=="" )
+##					<!--<li class="day_con_list">
+##						<span class="day_guide"></span>
+##						<p>导游信息</p>
+##						<p id="leaderId_val" valueid="">选择导游信息 </p>
+##						<div class="btn_tainer"><a href="javascript:;" class="removename">删除</a><a href="javascript:;" class="guide-modify">修改</a></div>
+##					</li>-->
+##	#end
+	#if( !${response.scheduleDetailEntity.newEntry}||${response.scheduleDetailEntity.newEntry}==""&&!${response.scheduleDetailEntity.newContant}||${response.scheduleDetailEntity.newContant}=="" )
+					<li class="day_con_list">
+						<span class="day_custom"></span>
+						<p id="newEntry_val">自定义信息标题</p>
+						<p id="newContant_val">自定义信息内容</p>
+						<div class="btn_tainer"><a href="javascript:;" class="removenewEntry">删除</a><a href="javascript:;" class="custom-modify">修改</a></div>
+					</li>
+	#end
+				</ul>
+				
+		</section>
+	</div>
+	<div class="day_edit" id="saveSubmit">
+		<a href="javascript:;" class="chanel_btn">取消<span class="line-ceuey"></span></a>
+		<a href="javascript:;" class="save_btn">保存</a>
+	</div>
+	<div class="overlay"></div>
+##	<!--修改交通信息弹层-->
+##	<div class="lay_div lay_div_t">
+##		<div class="msg_bus">交通信息</div>
+##		<textarea placeholder="输入交通信息" value="$!{response.scheduleDetailEntity.trafficInfo}" name="trafficInfo"></textarea>
+##		<div class="day_edit">
+##		<a href="javascript:;" class="chanel_btn">取消<span class="line-ceuey"></span></a>
+##		<a href="javascript:;" class="save_btn">保存</a>
+##		</div>
+##	</div>
+	<!--修改自定义信息弹层-->
+	<div class="lay_div lay_div_c">
+		<div class="msg_bus"><input type="text" placeholder="输入自定义信息标题" value=""  name="newEntry" > </div>
+		<textarea placeholder="输入自定义信息" value="" name="newContant"></textarea>
+		<div class="day_edit">
+		<a href="javascript:;" class="chanel_btn">取消<span class="line-ceuey"></span></a>
+		<a href="javascript:;" class="save_btn">保存</a>
+		</div>
+	</div>
+	<!--end-->
+##	<!--酒店信息弹层-->
+##	<div class="lay_div lay_div_h">
+##        <div class="msg_bus">酒店</div>
+##        <input placeholder="输入修改后的酒店名称添加酒店" type="text" id="gover_search_key" name="hotelInput"/>
+##        <!--<div class="search_hotel_list" id="gov_search_suggest">
+##            <ul>
+##                <li>东酒店</li>
+##                <li>东京青年旅行</li>
+##                <li>东京温舍酒店</li>
+##            </ul>
+##        </div>-->
+##		<div class="day_edit">
+##		<a href="javascript:;" class="chanel_btn">取消<span class="line-ceuey"></span></a>
+##		<a href="javascript:;" class="save_btn">保存</a>
+##		</div>
+##	</div>
+##	<!--end-->
+##	<!--导游信息弹层-->
+##	<div class="lay_div lay_div_g">
+##		<div class="msg_bus">导游信息 </div>
+###if( ${response.scheduleDetailEntity.name}&&${response.scheduleDetailEntity.name}!=""||${response.scheduleDetailEntity.phone}&&${response.scheduleDetailEntity.phone}!="" )
+##	<div class="orger_guld">$!{response.scheduleDetailEntity.name} <span> $!{response.scheduleDetailEntity.phone}</div>
+##	#end
+##		<div class="guld_list">
+##			<h2>选择当天导游</h2>
+##			<ul>
+##
+##
+##			</ul>
+##		</div>
+##		<div class="day_edit">
+##		<a href="javascript:;" class="chanel_btn">取消<span class="line-ceuey"></span></a>
+##		<a href="javascript:;" class="save_btn">保存</a>
+##		</div>
+##	</div>
+##	<!--end-->
+	<!--删除确认弹层-->
+	<div class="remove_lay">
+		
+		<div>确定删除</div>
+		<div class="removeCon">确定删除信息？</div>
+		<div class="remove_btn">
+		<a href="javascript:;" class="chanel_btn">取消</a>
+		<a href="javascript:;" class="save_btn">确定</a>
+		</div>
+	</div>
+	<!--end-->
+#define($scriptBlock)
+	<script type="text/javascript">
+		$(function(){
+            var addLen=$("#addEdit").find("li").length;
+            var iswechat="${response.isWeChat}";
+            if(addLen>0){
+                $(".split_tb").show();
+            }else{
+                $(".split_tb").hide();
+            }
+			$(".custom-modify").on("click",function(event){
+				event.preventDefault();
+                event.stopPropagation();
+				$(".lay_div_c").show();
+				$(".overlay").show();
+                return false;
+			});
+
+			/*$(".guide-modify").on("click",function(event){
+				event.preventDefault();
+                event.stopPropagation();
+				$(".lay_div_g").show();
+				$(".overlay").show();
+                return false;
+			})*/
+            $(".hotel-modify").on("click",function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                $(".lay_div_h").show();
+                $(".overlay").show();
+                return false;
+            })
+            $(".traffic-modify").on("click",function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                $(".lay_div_t").show();
+                $(".overlay").show();
+                return false;
+            })
+
+            $("#addEdit").on("click",".day_con_list",function(event){
+                event.preventDefault();
+                event.stopPropagation();
+				if($(this).find(".custom-modify").length>0){
+                    $(".lay_div_c").show();
+                    $(".overlay").show();
+				}
+                if($(this).find(".traffic-modify").length>0){
+                    $(".lay_div_t").show();
+                    $(".overlay").show();
+                }
+                /*if($(this).find(".guide-modify").length>0){
+					$(".lay_div_g").show();
+					$(".overlay").show();
+                }*/
+				if($(this).find(".hotel-modify").length>0){
+					$(".lay_div_h").show();
+					$(".overlay").show();
+				}
+
+                return false;
+            })
+
+//			/*删除酒店*/
+//			var indRemove;
+//			$(".removehotel").on("click",function(event){
+//				event.preventDefault();
+//				event.stopPropagation();
+//				var indRemove=$(this).parents(".day_con_list").index();
+//                $(".remove_lay").find(".removeCon").text("确定删除酒店信息？");
+//                $(".remove_lay").show();
+//                $(".overlay").show();
+//                $(".remove_btn .save_btn").off().on("click",function(event){
+//                    event.preventDefault();
+//                    event.stopPropagation();
+//                    $(".day_con").eq(1).append( $(".day_con:eq(0)").find(".day_con_list").eq(indRemove));
+//                    $(".remove_lay").hide();
+//                    $(".lay_div").hide();
+//                    $(".overlay").hide();
+//                    $("#hotelInput_val").text("输入酒店信息");
+//                    var addLen=$("#addEdit").find("li").length;
+//                    if(addLen>0){
+//                        $(".split_tb").show();
+//                    }else{
+//                        $(".split_tb").hide();
+//                    }
+//                    return false;
+//                });
+//                return false;
+//			});
+//            /*删除交通*/
+//			$(".removetrafficInfo").on("click",function(event){
+//				event.preventDefault();
+//				event.stopPropagation();
+//				var indRemove=$(this).parents(".day_con_list").index();
+//                $(".remove_lay").find(".removeCon").text("确定删除交通信息？");
+//                $(".remove_lay").show();
+//                $(".overlay").show();
+//                $(".remove_btn .save_btn").off().on("click",function(event){
+//                    event.preventDefault();
+//                    event.stopPropagation();
+//                    $(".day_con").eq(1).append($(".day_con:eq(0)").find(".day_con_list").eq(indRemove));
+//                    $(".remove_lay").hide();
+//                    $(".lay_div").hide();
+//                    $(".overlay").hide();
+//                    $("#trafficInfo_val").text("输入交通信息");
+//                    var addLen=$("#addEdit").find("li").length;
+//                    if(addLen>0){
+//                        $(".split_tb").show();
+//                    }else{
+//                        $(".split_tb").hide();
+//                    }
+//                    return false;
+//                });
+//                return false;
+//			});
+            /*删除导游*/
+			/*$(".removename").on("click",function(event){
+				event.preventDefault();
+				event.stopPropagation();
+				var indRemove=$(this).parents(".day_con_list").index();
+                $(".remove_lay").find(".removeCon").text("确定删除导游信息？");
+                $(".remove_lay").show();
+                $(".overlay").show();
+                $(".remove_btn .save_btn").off().on("click",function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                    $(".day_con").eq(1).append($(".day_con:eq(0)").find(".day_con_list").eq(indRemove-1));
+                    $(".remove_lay").hide();
+                    $(".lay_div").hide();
+                    $(".overlay").hide();
+                    $("#leaderId_val").empty().html("选择导游信息");
+                    $("#leaderId_val").attr("valueid","");
+                    var addLen=$("#addEdit").find("li").length;
+                    if(addLen>0){
+                        $(".split_tb").show();
+                    }else{
+                        $(".split_tb").hide();
+                    }
+                    return false;
+                })
+                return false;
+			});*/
+            /*删除自定义*/
+			$(".removenewEntry").on("click",function(event){
+				event.preventDefault();
+				event.stopPropagation();
+				var indRemove=$(this).parents(".day_con_list").index();
+                $(".remove_lay").show();
+                $(".overlay").show();
+                $(".remove_lay").find(".removeCon").text("确定删除自定义信息？");
+                $(".remove_btn .save_btn").off().on("click",function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                    $(".day_con").eq(1).append($(".day_con:eq(0)").find(".day_con_list").eq(indRemove));
+                    $(".remove_lay").hide();
+                    $(".lay_div").hide();
+                    $(".overlay").hide();
+                    $("#newEntry_val").text("自定义信息标题");
+                    $("#newContant_val").text("自定义信息内容");
+                    var addLen=$("#addEdit").find("li").length;
+                    if(addLen>0){
+                        $(".split_tb").show();
+                    }else{
+                        $(".split_tb").hide();
+                    }
+                    return false;
+                })
+                return false;
+			});
+//            /*保存酒店信息*/
+//			$(".lay_div_h .save_btn").click(function(event){
+//                event.preventDefault();
+//                event.stopPropagation();
+//				if($.trim($("input[name=hotelInput]").val())&&$.trim($("input[name=hotelInput]").val())!="") {
+//                    $("#hotelInput_val").text($.trim($("input[name=hotelInput]").val()));
+//                    $(".day_con").eq(0).append($("#hotelInput_val").parents(".day_con_list"));
+//                }else{
+//					alert("请输入酒店名称");
+//					return false;
+//				}
+//                var addLen=$("#addEdit").find("li").length;
+//                if(addLen>0){
+//                    $(".split_tb").show();
+//                }else{
+//                    $(".split_tb").hide();
+//                }
+//                $(".lay_div_h ").hide();
+//                $(".overlay").hide();
+//			})
+//			/*保存交通信息*/
+//            $(".lay_div_t .save_btn").click(function(event){
+//                event.preventDefault();
+//                event.stopPropagation();
+//                if($.trim($("textarea[name=trafficInfo]").val())&&$.trim($("textarea[name=trafficInfo]").val())!="") {
+//                    $("#trafficInfo_val").text($.trim($("textarea[name=trafficInfo]").val()));
+//                    $(".day_con").eq(0).append($("#trafficInfo_val").parents(".day_con_list"));
+//                }else{
+//					alert("请输入交通信息");
+//					return false;
+//				}
+//                var addLen=$("#addEdit").find("li").length;
+//                if(addLen>0){
+//                    $(".split_tb").show();
+//                }else{
+//                    $(".split_tb").hide();
+//                }
+//                $(".lay_div_t ").hide();
+//                $(".overlay").hide();
+//            })
+            /*保存自定义信息*/
+            $(".lay_div_c .save_btn").click(function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                if($.trim($("input[name=newEntry]").val())&&$.trim($("input[name=newEntry]").val())!="") {
+                    $("#newEntry_val").text($.trim($("input[name=newEntry]").val()));
+                }else{
+					alert("请输入自定义标题");
+					return false;
+				}
+                if($.trim($("textarea[name=newContant]").val())&&$.trim($("textarea[name=newContant]").val())!="") {
+                    $("#newContant_val").text($.trim($("textarea[name=newContant]").val()));
+                    $(".day_con").eq(0).append($("#newContant_val").parents(".day_con_list"));
+                }else{
+					alert("请输入自定义内容");
+					return false;
+				}
+                var addLen=$("#addEdit").find("li").length;
+                if(addLen>0){
+                    $(".split_tb").show();
+                }else{
+                    $(".split_tb").hide();
+                }
+                $(".lay_div_c ").hide();
+                $(".overlay").hide();
+            })
+            /*保存导游信息*/
+           /* $(".lay_div_g .save_btn").click(function(event){
+                event.preventDefault();
+                event.stopPropagation();
+				var mcop=false;
+                $("input[name='guld']").each(function(){
+                    if(true == $(this).is(':checked')){
+                        $("#leaderId_val").empty().html($(this).parent().siblings("label").html()).attr("valueid",$(this).attr("id").split("guld")[1]);
+                        $(".day_con").eq(0).append( $("#leaderId_val").parents(".day_con_list"));
+                        mcop=true;
+						return false;
+					}else{
+						alert("请选择导游");
+						mcop=false;
+                        return false;
+					}
+                });
+				if(!mcop){
+					return false;
+				}
+                var addLen=$("#addEdit").find("li").length;
+                if(addLen>0){
+                    $(".split_tb").show();
+                }else{
+                    $(".split_tb").hide();
+				}
+                $(".lay_div_g ").hide();
+                $(".overlay").hide();
+            });*/
+			/*弹出删除确认框*/
+			/*$(".btn_tainer").each(function(){
+				$(this).find("a").eq(0).off().click(function(event){
+					event.preventDefault();
+                    event.stopPropagation();
+
+				});
+			});*/
+			/*取消删除*/
+			$(".chanel_btn").click(function(event){
+				event.preventDefault();
+                event.stopPropagation();
+				$(".remove_lay").hide();
+				$(".lay_div").hide();
+				$(".overlay").hide();
+			})
+##    #if( ${response.scheduleDetailEntity.schedulePhotosUrl1}&&${response.scheduleDetailEntity.schedulePhotosUrl1}!=""||${response.scheduleDetailEntity.schedulePhotosUrl2}&&${response.scheduleDetailEntity.schedulePhotosUrl2}!=""|| ${response.scheduleDetailEntity.schedulePhotosUrl3}&&${response.scheduleDetailEntity.schedulePhotosUrl3}!="")
+##
+##			/*轮播图方法*/
+##        var mySwiper = new Swiper ('.swiper-container', {
+##			    loop: false,
+##			    autoplay: false,
+##			    pagination: '.swiper-pagination',
+##				onSlideChangeStart: function(swiper,even){
+##			    }
+##		  	});
+##        #end
+			/*获取导游列表*/
+           /* $.getJSON('$!{link.contextPath}/web/schedule/getScheduleGuides?teamId=$!{response.teamId}&client_id=$!{response.signMap.get('guidesSign').client_id}&ver=$!{response.signMap.get('guidesSign').ver}&sign=$!{response.signMap.get('guidesSign').sign}&timestamp=$!{response.signMap.get('guidesSign').timestamp}&access_token=$!{response.signMap.get('guidesSign').access_token}', function (data) {
+                var html="";
+				for(var i=0;i<data.length;i++) {
+                    html+= '<li>' +
+                            '<input type="radio" name="guld" sex="'+data[i].sex+'" id="guld'+data[i].id+'">' +
+                            '<label  for="guld'+data[i].id+'">' +
+                            '<span>' +data[i].name + '</span>' +
+                            '<span>' + +data[i].phone + '</span>' +
+                            '</label>' +
+                            '</li>';
+                }
+				$(".guld_list ul").append(html);
+                $("input").iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green'
+               // increaseArea: '20%'
+                });
+                $('input').on('ifChecked', function(event){
+					//$("#leaderId_val").empty().html($(this).parent().siblings("label").html()).attr("valueid",$(this).attr("id").split("guld")[1]);
+                });
+            });*/
+            var dataStr={
+                //"date":  _time,
+                "hotelInput":$("#hotelInput_val").text(),
+                "id": "$!{response.scheduleDetailEntity.id}",
+               // "jourId": "$!{response.scheduleDetailEntity.jourId}",
+                "leaderId":  $("#leaderId_val").attr("valueid"),
+                "newContant": $("#newContant_val").text(),
+                "newEntry": $("#newEntry_val").text(),
+               // "teamId":"$!{response.teamId}",
+                "trafficInfo": $("#trafficInfo_val").text()
+            };
+			/*更新*/
+			$("#saveSubmit>.save_btn").click(function(){
+                layer.open({type: 2,shadeClose:false});
+               /* dataStr.hotelInput=$("#hotelInput_val").text()=="输入酒店信息"||$("#hotelInput_val").text()==""?"":$.trim($("#hotelInput_val").text());
+                dataStr.leaderId=$("#leaderId_val").attr("valueid")==null||$("#leaderId_val").attr("valueid")==""?"":$.trim($("#leaderId_val").attr("valueid"));
+                dataStr.newContant= $("#newContant_val").text()=="自定义信息内容"||$("#newContant_val").text()==""?"":$.trim($("#newContant_val").text());
+				dataStr.newEntry= $("#newEntry_val").text()=="自定义信息标题"||$("#newEntry_val").text()==""?"":$.trim($("#newEntry_val").text());
+                dataStr.trafficInfo=$("#trafficInfo_val").text()=="输入交通信息"||$("#trafficInfo_val").text()==""?"":$.trim($("#trafficInfo_val").text());
+                */
+                dataStr={
+                    "id": "$!{response.scheduleDetailEntity.id}"
+                };
+				var hotelInput= $.trim($("#hotelInput_val").text());
+				var leaderId= $.trim($("#leaderId_val").attr("valueid"));
+				//var phone=
+				var newContant= $.trim($("#newContant_val").text());
+				var newEntry= $.trim($("#newEntry_val").text());
+				var trafficInfo= $.trim($("#trafficInfo_val").text());
+				if(hotelInput!="输入酒店信息"&&hotelInput!=""){
+                    dataStr.hotelInput=hotelInput;
+				}
+				if(leaderId!=null&&leaderId!=""){
+                    dataStr.leaderId=leaderId;
+				}
+				if( newContant!="自定义信息内容"&&newContant!=""){
+                    dataStr.newContant=newContant;
+				}
+				if( newEntry!="自定义信息标题"&&newEntry!=""){
+                    dataStr.newEntry=newEntry;
+				}
+				if(trafficInfo!="输入交通信息"&&trafficInfo!=""){
+                    dataStr.trafficInfo=trafficInfo;
+				}
+                $.ajax({
+                    type: 'POST',
+                    url: "$!{link.contextPath}/web/schedule/scheduleDetailUpdate?client_id=$!{response.signMap.get('updateDetailSign').client_id}&ver=$!{response.signMap.get('updateDetailSign').ver}&sign=$!{response.signMap.get('updateDetailSign').sign}&timestamp=$!{response.signMap.get('updateDetailSign').timestamp}&access_token=$!{response.signMap.get('updateDetailSign').access_token}",
+                    data:JSON.stringify(dataStr),
+                    contentType:'application/json;charset=utf-8',
+                    dataType: 'json',
+                   // timeout: 3000,
+                    context: $('body'),
+                    success: function(data){
+                        // Supposing this JSON payload was received:
+                        //   {"project": {"id": 42, "html": "<div>..." }}
+                        // append the HTML to context object.
+                        //this.append(data.project.html)
+						if(data.retCode==0) {
+                            //layer.closeAll();
+                            window.location.href = '$!{link.contextPath}$!{link.requestPath}?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{response.scheduleDetailEntity.id}&client_id=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").client_id}&ver=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").ver}&sign=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").sign}&timestamp=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").timestamp}&access_token=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").access_token}';
+                        }else{
+							//alert(data.retMsg);
+                            layer.open({
+                                btn: [ '确定'],
+                                content:data.retMsg
+                               // shadeClose:false
+                            })
+						}
+                    },
+                    error: function(xhr, type){
+                        //alert('网络错误')
+                        layer.closeAll();
+                        layer.open({
+                            btn: [ '确定'],
+                            content:"网络错误"
+                        })
+
+                    }
+                })
+			})
+
+            $("#saveSubmit>.chanel_btn").click(function(){
+               window.location.href='$!{link.contextPath}$!{link.requestPath}?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{response.scheduleDetailEntity.id}&client_id=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").client_id}&ver=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").ver}&sign=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").sign}&timestamp=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").timestamp}&access_token=${response.signMap.get("$!{response.scheduleDetailEntity.id}preview").access_token}';
+            })
+            $(".day_con li .destion img").css({
+                display: "block",
+                height:"auto",
+                marginLeft:"3%",
+                maxWidth:"90%"
+            });
+            var scrolldes=new Swiper('.swiper-container', {
+                scrollbar: '.swiper-scrollbar',
+                direction: 'horizontal',
+                slidesPerView: 'auto',
+                mousewheelControl: true,
+                freeMode: true
+            });
+            var marr=[];
+            $(".day_con li .destion table").each(function(i){
+                $(this).wrap("<div class='swiper-container'><div class='swiper-wrapper wrappertable"+i+"'><div class='swiper-slide'></div></div></div>");
+                $(".wrappertable"+i).parent().append('<div class="swiper-scrollbar"></div>');
+                marr[i]=new Swiper('.swiper-container', {
+                    scrollbar: '.swiper-scrollbar',
+                    direction: 'horizontal',
+                    slidesPerView: 'auto',
+                    mousewheelControl: true,
+                    freeMode: true
+                });
+            })
+		})
+
+
+	</script>
+#end

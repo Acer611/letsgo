@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.InvitationLogsDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.InvitationLogsEntity" >
+        <result column="ID" property="id" jdbcType="BIGINT" />
+        <result column="inviter_user_id" property="inviterUserId" jdbcType="BIGINT" />
+        <result column="invitee_user_id" property="inviteeUserId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.InvitationLogsEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into s_invitation_logs (inviter_user_id, invitee_user_id, create_time
+            )
+        values (#{inviterUserId,jdbcType=BIGINT}, #{inviteeUserId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}
+            )
+    </insert>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, inviter_user_id, invitee_user_id, create_time
+        from s_invitation_logs
+    </select>
+</mapper>

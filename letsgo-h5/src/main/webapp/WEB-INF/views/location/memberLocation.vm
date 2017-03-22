@@ -1,0 +1,456 @@
+#set($pageTitle="#if(${response.roleStatus}==3) 领队位置 #else 成员位置#end")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/map.css?t=1.1"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/infobubble.js","http://maps.google.cn/maps/api/js?region=cn&language=zh-CN&key=AIzaSyBJm0v_D7f-Oywc2ZIxRApmC8tAQI1q07k"])
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+</style>
+
+    <div id="gMap"></div>
+#if( $response.locationEntityList)
+    #if(${response.roleStatus}!=3)
+
+        <div class="mapTop swiper-container">
+            <div class="swiper-wrapper">
+        #foreach( $Detail in $response.locationEntityList)
+
+                <dl class="swiper-slide fe" phone="$Detail.memberEntity.phone" username="$Detail.memberEntity.userEntity.userName" sex="$Detail.memberEntity.sex">
+                    <dt><div><img src="$Detail.memberEntity.photoUrl"/></div></dt>
+                    <dd>$!Detail.memberEntity.realName</dd>
+                    <dd class="beforetimetop" style="display:none;">$Detail.beforeTime</dd>
+                    </dl>
+            #end
+            </div>
+        </div>
+        #else
+        <div class="mapTop2 swiper-container" style="display:none;">
+            <div class="swiper-wrapper">
+                #foreach( $Detail in $response.locationEntityList)
+                    #if($Detail.memberEntity.role==2)
+                        #if($Detail.memberEntity.isAdmin==1)
+                            <dl class="swiper-slide fe daoyou" phone="$Detail.memberEntity.phone" username="$Detail.memberEntity.userEntity.userName" sex="$Detail.memberEntity.sex">
+                                <dt><div><img src="$Detail.memberEntity.photoUrl"/></div></dt>
+                                <dd class="signrealname">$!Detail.memberEntity.realName</dd>
+                                <dd class="signrole">$!{Detail.memberEntity.roleDescn}</dd>
+                                <dd class="beforetimetop" style="display:none;"> $Detail.beforeTime</dd>
+                            </dl>
+                        #end
+
+                    #elseif($Detail.memberEntity.role==1)
+                            <dl class="swiper-slide fe" phone="$Detail.memberEntity.phone" username="$Detail.memberEntity.userEntity.userName" sex="$Detail.memberEntity.sex">
+                                <dt><div><img src="$Detail.memberEntity.photoUrl"/></div></dt>
+                                <dd  class="signrealname">$!Detail.memberEntity.realName</dd>
+                                <dd class="signroleyd">$!{Detail.memberEntity.roleDescn}</dd>
+                                <dd class="beforetimetop" style="display:none;"> $Detail.beforeTime</dd>
+                            </dl>
+                    #end
+
+                #end
+            </div>
+        </div>
+    #end
+<div class="mapBottom">
+    <div class="person">
+        <div class="txiconf"><img src=""/></div><div class="beforeTime"></div><div class="beforeTimeinco"></div>
+    </div>
+    <div class="telphone"><a href="tel:">电话</a></div>
+    <div class="message"><a href="sms:">信息</a></div>
+</div>
+<div class="mapbottomlist" style="display:none;"><div class="stepstime"></div></div>
+<div class="laytit">
+    <div class="laytith3">
+        <h3>超过两小时未获取到此成员位置，可能是以下原因：</h3>
+        <ul><li>1.此成员将“跟上-游客”APP从后台彻底退出</li>
+            <li>2.此成员的手机一直未连接到网络</li>
+            <li>3.当前所处位置的当地时间为夜里22:00至次日06:00之间，此时不上传位置</li>
+        </ul>
+    </div>
+</div>
+#end
+#define($scriptBlock)
+<script>
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r!=null) return (r[2]); return null;
+    }
+    var _lngnow=Number(GetQueryString("lng"));
+    var _latnow=Number(GetQueryString("lat"));
+    var markers = [];
+    var map;
+    var marker;
+    var infoBubble2;
+    var defaultZoom = 18;
+    var neighborhood=[];
+    var neighborhood2=[];
+    var beforetime;
+    //location.isCurrentLocation 1为实时；2是历史
+    var imageinco = {
+        url: '$!{STATIC_URL}/resources/images/beachflag.png'
+
+    }
+    var imageinco2 = {
+        url: '$!{STATIC_URL}/resources/images/beachflag2.png'
+
+    }
+
+    function getSoneone(){
+    #foreach( $Detail in $response.locationEntityList)
+        var m=$Detail.isCurrentLocation;
+        #if(${response.roleStatus}==3)
+            //游客端查看领队和导游位置
+            #if($Detail.memberEntity.role==2)
+                //有管理权限的导游
+                    #if($Detail.memberEntity.isAdmin==1)
+                        neighborhood.push({position:{lat:$Detail.latitude,lng:$Detail.longitude},text:"$Detail.memberEntity.photoUrl",role:"$Detail.memberEntity.roleDescn",sex:"$Detail.memberEntity.sex",phone:"$Detail.memberEntity.phone",userName:"$Detail.memberEntity.userEntity.userName",realName:"$Detail.memberEntity.realName",isCurrentLocation:"$Detail.isCurrentLocation",beforeTime: $Detail.beforeTime});
+
+
+                        neighborhood2.push({lat:$Detail.latitude,lng:$Detail.longitude});
+                    #end
+            #elseif($Detail.memberEntity.role==1)
+                neighborhood.push({position:{lat:$Detail.latitude,lng:$Detail.longitude},text:"$Detail.memberEntity.photoUrl",role:"$Detail.memberEntity.roleDescn",sex:"$Detail.memberEntity.sex",phone:"$Detail.memberEntity.phone",userName:"$Detail.memberEntity.userEntity.userName",realName:"$Detail.memberEntity.realName",isCurrentLocation:"$Detail.isCurrentLocation",beforeTime: $Detail.beforeTime});
+
+
+                neighborhood2.push({lat:$Detail.latitude,lng:$Detail.longitude});
+            #end
+        #else
+            /*领队端查看游客成员*/
+                neighborhood.push({position:{lat:$Detail.latitude,lng:$Detail.longitude},text:"$Detail.memberEntity.photoUrl",role:"$Detail.memberEntity.roleDescn",sex:"$Detail.memberEntity.sex",phone:"$Detail.memberEntity.phone",userName:"$Detail.memberEntity.userEntity.userName",realName:"$Detail.memberEntity.realName",isCurrentLocation:"$Detail.isCurrentLocation",beforeTime: $Detail.beforeTime});
+
+
+                neighborhood2.push({lat:$Detail.latitude,lng:$Detail.longitude});
+        #end
+    #end
+                drop();
+                //neighborhood2.push({lat:myLatlng.lat,lng:myLatlng.lng});
+                var centerui=map.getCenter();
+                var len2=neighborhood2.length;
+                var bounds = new google.maps.LatLngBounds();
+                while(len2--){
+                    bounds.extend(new google.maps.LatLng(neighborhood2[len2].lat,neighborhood2[len2].lng));
+                }
+                map.fitBounds(bounds);
+                var displayInfoProcess=google.maps.event.addListener(map, 'bounds_changed', function(){
+                    if(displayInfoProcess) {
+                        google.maps.event.removeListener(displayInfoProcess);
+                    }
+                });
+                //地图缩放时触发，当地图的缩放比例大于默认比例时，恢复为默认比例
+                google.maps.event.addListener(map, 'zoom_changed', function () {
+                    if (map.getZoom() > defaultZoom){
+                        map.setZoom(defaultZoom);
+                    }
+                });
+            }
+
+    var myLatlng = {lat: _latnow, lng:_lngnow};
+    var directionsDisplay,directionsService;
+    function initialize() {
+        map = new google.maps.Map(document.getElementById('gMap'), {
+            zoom: defaultZoom,
+            center: myLatlng,
+            disableDefaultUI: true,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            draggable: true,
+            scrollwheel: true,
+            disableDoubleClickZoom: false,
+           /* maxZoom:18,*/
+            minZoom:4
+        });
+        marker = new google.maps.Marker({
+            position: myLatlng,
+            optimized: false,
+            map: map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                strokeColor: '#fff',
+                strokeWeight: 3,
+                fillColor: '#1484ff',
+                fillOpacity: 1,
+            },
+        });
+        var trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
+
+    #if(${response.roleStatus}==3)
+        infoBubble2 = new InfoBubble({
+            map: map,
+            content: '<div class="signrole"></div>',
+            // position: new google.maps.LatLng(0, 0),
+            shadowStyle: 0,
+            padding: 0,
+            backgroundColor: 'none',
+            borderRadius: 0,
+            arrowSize: '0px',
+            borderWidth: 'none',
+            borderColor: '#2c2c2c',
+            disableAutoPan: true,
+            hideCloseButton: true,
+            arrowPosition: '38%',
+            pixelOffset: [0,0],
+            backgroundClassName: 'transparent',
+            arrowStyle: 0
+        });
+        #else
+            infoBubble2 = new InfoBubble({
+                map: map,
+                content: '<div class="txiconf" style="margin:0;"></div>',
+                // position: new google.maps.LatLng(0, 0),
+                shadowStyle: 0,
+                padding: 0,
+                backgroundColor: 'none',
+                borderRadius: 0,
+                arrowSize: '0px',
+                borderWidth: 'none',
+                borderColor: '#2c2c2c',
+                disableAutoPan: true,
+                pixelOffset: [0,0],
+                hideCloseButton: true,
+                arrowPosition: '55%',
+                backgroundClassName: 'transparent',
+                arrowStyle: 0
+            });
+        #end
+        var myCity = new google.maps.Circle({
+            strokeColor: '#1484ff',
+            strokeOpacity: 0.15,
+            strokeWeight: 0,
+            fillColor: '#1484ff',
+            fillOpacity:0.15,
+            map: map,
+            center: myLatlng,
+            radius: 50
+        });
+        myCity.setMap(map);
+        directionsDisplay = new google.maps.DirectionsRenderer({suppressInfoWindows:true,suppressMarkers:true,suppressPolylines:false,suppressBicyclingLayer:true,preserveViewport:false});
+        directionsService = new google.maps.DirectionsService;
+        directionsDisplay.setMap(map);
+    #if( $response.locationEntityList.size()>0)
+        getSoneone();
+    #end
+        #if( $response.locationEntityList.size()>0)
+        map.panTo(new google.maps.LatLng(neighborhood2[0].lat ,neighborhood2[0].lng));
+        #end
+    }
+    var timer=[];
+    var infoBubble_member=[];
+    function drop() {
+        clearMarkers();
+        for (var i = 0; i < neighborhood.length; i++) {
+            addMarkerWithTimeout(neighborhood[i].position, i * 200,neighborhood[i].isCurrentLocation);
+            (function(m){
+               setTimeout(function(){
+    #if(${response.roleStatus}==3)
+            showNewRect2(m,neighborhood[m].role,neighborhood[m].text,neighborhood[m].realName,neighborhood[m].userName,neighborhood[m].phone,neighborhood[m].beforeTime);
+        #else
+            showNewRect(m,neighborhood[m].text,neighborhood[m].sex,neighborhood[m].beforeTime);
+            #end
+               },300*m)
+            })(i);
+        }
+
+    }
+    function calculateAndDisplayRoute(directionsService, directionsDisplay,position) {
+        var selectedMode ="WALKING";
+        directionsService.route({
+            origin: myLatlng,  // Haight.
+            destination: position,  // Ocean Beach.
+            // Note that Javascript allows us to access the constant
+            // using square brackets and a string value as its
+            // "property."
+            travelMode: google.maps.TravelMode[selectedMode]
+        }, function(response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                //console.log(response.routes[0].legs[0].duration.text);
+                if(response.routes[0].legs[0].duration.text){
+                    $(".mapbottomlist").show();
+                    $(".stepstime").text("步行约"+response.routes[0].legs[0].duration.text);
+                }
+            } else {
+                $(".mapbottomlist").hide();
+                //window.alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+
+    function addMarkerWithTimeout(position, timeout,iscurrent,callback) {
+        window.setTimeout(function() {
+            markers.push(new google.maps.Marker({
+                position: position,
+                map: map,
+                icon:iscurrent==1?imageinco:imageinco2,
+                animation: google.maps.Animation.DROP
+            }));
+           // callback();
+        }, timeout);
+
+    }
+
+    function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+
+    //use
+
+    function showNewRect(i,txt,sex,beforetime){
+            markers[i].addListener ('click', function(event) {
+                map.panTo(markers[i].getPosition());
+                if(sex==1) {
+                    infoBubble2.setContent('<div class="txiconf"><img src="' + txt + '"/></div>');
+                }else{
+                    infoBubble2.setContent('<div class="txiconfe"><img src="' + txt + '"/></div>');
+                }
+                infoBubble2.open(map,  markers[i]);
+                $(".mapTop").find("dl").eq(i).trigger("click");
+
+                return false;
+            })
+
+    }
+    function showNewRect2(i,role,txt,realName,userName,phone,beforetime){
+        markers[i].addListener ('click', function(event) {
+            $(".mapTop2").find("dl").eq(i).addClass("active").siblings().removeClass("active");
+            var beforetimestr=timebefore(beforetime)
+            map.panTo(markers[i].getPosition());
+            calculateAndDisplayRoute(directionsService, directionsDisplay,markers[i].getPosition());
+            infoBubble2.setContent(role=="导游"?'<div class="signrole" style="display:block;">'+role + '</div>': '<div class="signroleyd" style="display:block;">'+role + '</div>' );
+            infoBubble2.open(map,  markers[i]);
+            $(".mapBottom").show();
+            $(".mapBottom").find(".person").find("img").attr("src",txt);
+            $(".beforeTime").text(beforetimestr);
+            $(".message>a").attr("href","sms:"+userName);
+            $(".telphone>a").attr("href","tel:"+phone);
+            return false;
+        })
+
+    }
+    function timebefore(beforetime){
+        var beforetime= $.trim(beforetime);
+        if(beforetime>60){
+            var hours=(beforetime/60>>0);
+            var timemiu=beforetime%60;
+            if(hours==0){
+                var beforetimestr="位置取自"+timemiu+"分钟前";
+            }else{
+                var beforetimestr="位置取自"+hours+"小时"+timemiu+"分钟前";
+            }
+            if(timemiu==0){
+                var beforetimestr="位置取自"+hours+"小时前";
+            }else{
+                var beforetimestr="位置取自"+hours+"小时"+timemiu+"分钟前";
+            }
+            if(beforetime>120){
+                $(".beforeTimeinco").show();
+            }else{
+                $(".beforeTimeinco").hide();
+            }
+
+        }else{
+            var beforetimestr="位置取自"+beforetime+"分前";
+            $(".beforeTimeinco").hide()
+        }
+        return beforetimestr;
+    }
+    function detectBrowser() {
+        var useragent = navigator.userAgent;
+        var mapdiv = document.getElementById("gMap");
+        if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+            mapdiv.style.width = '100%';
+            mapdiv.style.height = '100%';
+        } else {
+            mapdiv.style.width = '600px';
+            mapdiv.style.height = '800px';
+        }
+    }
+    $(function(){
+            $(".beforeTimeinco").on("click",function(){
+                $(".laytit").show();
+            })
+            $(".laytit").on("click",function(){
+                $(this).hide();
+            })
+
+    #if(${response.roleStatus}!=3)
+            $(".mapTop").on("click","dl",function(){
+                $(this).addClass("active").siblings().removeClass("active");
+                var phone=$(this).attr("phone");
+                var timebeforestr = timebefore($(this).find("dd.beforetimetop").text());
+                $(".mapBottom").show();
+                if($(this).attr("sex")!=1){
+                    $(".mapBottom>.txiconf").addClass("txiconfe");
+                }
+                $(".mapBottom").find(".person").find("img").attr("src",$(this).find("dt").find("div").find("img").attr("src"));
+                $(".nametxt").text($(this).find("dd").eq(0).text());
+                $(".beforeTime").text(timebeforestr);
+                $(".message>a").attr("href","sms:"+$(this).attr("username"));
+                $(".telphone>a").attr("href","tel:"+phone);
+                if($(this).attr("sex")==1) {
+                    infoBubble2.setContent('<div class="txiconf"><img src="' + $(this).find("dt").find("div").find("img").attr("src") + '"/></div>');
+                }else{
+                    infoBubble2.setContent('<div class="txiconfe"><img src="' + $(this).find("dt").find("div").find("img").attr("src") + '"/></div>');
+                }
+                infoBubble2.open(map,  markers[$(this).index()]);
+                map.panTo(markers[$(this).index()].getPosition());
+                map.setZoom(26)
+            })
+        #else
+            if( $(".mapTop2").find("dl").length<=1){
+                $(".mapTop2").show();
+                if( $(".mapTop2").find("dl").length<=0){
+                    $(".mapTop2").hide();
+                }
+            }else{
+                $(".mapTop2").show();
+            }
+        $(".mapTop2").on("click","dl",function(){
+            $(this).addClass("active").siblings().removeClass("active");
+            var phone=$(this).attr("phone");
+            var timebeforestr = timebefore($(this).find("dd.beforetimetop").text());
+            $(".mapBottom").show();
+            $(".mapBottom").find(".person").find("img").attr("src",$(this).find("dt").find("div").find("img").attr("src"));
+            $(".beforeTime").text(timebeforestr);
+            $(".message>a").attr("href","sms:"+$(this).attr("username"));
+            $(".telphone>a").attr("href","tel:"+phone);
+            if($(this).find("dd.signrole").length>0) {
+                infoBubble2.setContent('<div class="signrole" style="display:block;">导游</div>');
+            }else{
+               infoBubble2.setContent('<div class="signroleyd" style="display:block;">领队</div>');
+            }
+            infoBubble2.open(map,  markers[$(this).index()]);
+            map.panTo(markers[$(this).index()].getPosition());
+            calculateAndDisplayRoute(directionsService, directionsDisplay,markers[$(this).index()].getPosition())
+        })
+    #end
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 'auto',
+            spaceBetween: 0
+        });
+    })
+    //detectBrowser()
+    // Run the initialize function when the window has finished loading.
+    google.maps.event.addDomListener(window, 'load', initialize);
+/*$(function(){
+    $(".message a").click(function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        goUsername($(this).attr("username"));
+        return false;
+    })
+})
+    function goUsername(username) {
+        javascript:control.goUsername(username);
+    }*/
+</script>
+
+#end
+

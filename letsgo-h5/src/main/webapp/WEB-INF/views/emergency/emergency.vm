@@ -1,0 +1,99 @@
+#set($pageTitle="紧急救援")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/emergency.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/flexible_css.debug.js","$!{STATIC_URL}/resources/js/flexible.debug.js"])
+	<div id="emergency-container">
+		<div class="eme-banner">
+			<img src="$!{STATIC_URL}/resources/images/emer-banner.png" alt="">
+		</div>
+
+		<div class="country">
+			<p class="Thailand">泰国</p>
+			<ul class="telNum">
+				<li>
+					<dl>
+						<dt>警察局电话：</dt>
+						<dd>153767389937392109</dd>
+					</dl>
+					<a href="tel:153767389937392109">
+						<img src="$!{STATIC_URL}/resources/images/emer-tel.png" alt="">
+					</a>
+				</li>
+				<li>
+					<dl>
+						<dt>救护车电话：</dt>
+						<dd>153767389937392109</dd>
+					</dl>
+					<a href="tel:153767389937392109">
+                        <img src="$!{STATIC_URL}/resources/images/emer-tel.png" alt="">
+					</a>
+				</li>
+				<li>
+					<dl>
+						<dt>火警电话：</dt>
+						<dd>153767389937392109</dd>
+					</dl>
+					<a href="tel:153767389937392109">
+                        <img src="$!{STATIC_URL}/resources/images/emer-tel.png" alt="">
+					</a>
+				</li>
+				<li>
+					<dl>
+						<dt>中国驻泰国大使馆电话：</dt>
+						<dd>153767389937392109</dd>
+					</dl>
+					<a href="tel:153767389937392109">
+                        <img src="$!{STATIC_URL}/resources/images/emer-tel.png" alt="">
+					</a>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="country">
+			<p class="Thailand">韩国</p>
+			<ul class="telNum">
+				<li>
+					<dl>
+						<dt>警察局电话：</dt>
+						<dd>153767389937392109</dd>
+					</dl>
+					<a href="tel:153767389937392109">
+                        <img src="$!{STATIC_URL}/resources/images/emer-tel.png" alt="">
+					</a>
+				</li>
+				<li>
+					<dl>
+						<dt>救护车电话：</dt>
+						<dd>153767389937392109</dd>
+					</dl>
+					<a href="tel:153767389937392109">
+                        <img src="$!{STATIC_URL}/resources/images/emer-tel.png" alt="">
+					</a>
+				</li>
+				<li>
+					<dl>
+						<dt>火警电话：</dt>
+						<dd>153767389937392109</dd>
+					</dl>
+					<a href="tel:153767389937392109">
+                        <img src="$!{STATIC_URL}/resources/images/emer-tel.png" alt="">
+					</a>
+				</li>
+				<li>
+					<dl>
+						<dt>中国驻韩国大使馆电话：</dt>
+						<dd>153767389937392109</dd>
+					</dl>
+					<a href="tel:153767389937392109">
+                        <img src="$!{STATIC_URL}/resources/images/emer-tel.png" alt="">
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+#define($scriptBlock)
+<script>
+
+</script>
+#end

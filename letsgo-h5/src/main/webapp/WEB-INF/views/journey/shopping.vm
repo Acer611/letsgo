@@ -1,0 +1,111 @@
+#set($pageTitle="购物场所")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css?t=1.0"])
+<style>
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-slide {
+        width:auto;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+</style>
+<input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main">
+		<section class="cd-container feiyong">
+		<div class="desionCon">
+					<div class="day_con_list">
+					
+						<div class="sceniclist" style="margin-top:0">
+							<ul>
+#if($response.scheduleEntity.shoppingSchedules.size()>0)
+	#set($isce=0)
+#foreach( $Detail in $response.scheduleEntity.shoppingSchedules)
+	#set($iscew=$isce + 1)
+							<li>
+                                <div class="buyarea">
+                                    <div class="buytit">$!iscew.$!{Detail.shoppingName}</div>
+									#if($!{Detail.shoppingCity}&&$!{Detail.shoppingCity}!="")
+                                        <div class="buylist">所属城市：$!{Detail.shoppingCity}</div>
+									#end
+									#if($!{Detail.sellProducts}&&$!{Detail.sellProducts}!="")
+                                        <div class="buylist">售卖产品：$!{Detail.sellProducts}</div>
+									#end
+									#if($!{Detail.residenceTime}&&$!{Detail.residenceTime}!="")
+                                        <div class="buylist">停留时间：$!{Detail.residenceTime}</div>
+									#end
+									#if($!{Detail.lon}&&$!{Detail.lon}!="")
+                                        <div class="buylist positionBuy">位置：<a href="$!{link.contextPath}/h5/survey/getShoppingByShoppingId?shoppingId=$!{Detail.id}"><span id="shoppingLat$!iscew">北京市东城区长安街北侧（天安门广场东...</span><span class="linkinco"></span></a></div>
+									#end
+                                </div>
+							</li>
+	#set($isce=$isce+1)
+#end
+	#end
+							</ul>
+						</div>
+					</div>
+					
+				</div>
+				<div class="buc">
+					<h1>补充说明</h1>
+					<div>$!response.shopPlaceVo.shoppingPlace</div>
+					</div>
+		</section>
+	</div>
+
+#if($!response.scheduleEntity.processStatus==4)
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+#parse("/WEB-INF/views/common/leftbar.vm")
+
+#define($scriptBlock)
+<script type="text/javascript">
+    var teamId="$!{response.scheduleEntity.teamId}";
+    var iswechat="${response.isWeChat}";
+    $(function(){
+        $(".overlay").click(function(){
+            $("#joacims-menu").prop("checked",false)
+        })
+        /*判断是否显示已经到底*/
+        if($(window).height()>$("body").height()){
+            $(".continue_loding").hide();
+        }
+        $(".qitaicon").on("click",function(){
+            if($(".qita").is(":visible")){
+                $(".qita").slideUp();
+                $(this).addClass("qitaicons");
+            }else{
+                $(".qita").slideDown();
+                $(this).removeClass("qitaicons");
+            }
+
+        })
+        $(".buc img").css({
+            display: "block",
+            height:"auto",
+            marginLeft:"3%",
+            maxWidth:"90%"
+        });
+        var marr=[];
+        $(".buc table").each(function(i){
+            $(this).wrap("<div class='swiper-container'><div class='swiper-wrapper wrappertable"+i+"'><div class='swiper-slide'></div></div></div>");
+            $(".wrappertable"+i).parent().append('<div class="swiper-scrollbar"></div>');
+            marr[i]=new Swiper('.swiper-container', {
+                scrollbar: '.swiper-scrollbar',
+                direction: 'horizontal',
+                slidesPerView: 'auto',
+                mousewheelControl: true,
+                freeMode: true
+            });
+        })
+
+    })
+</script>
+#end

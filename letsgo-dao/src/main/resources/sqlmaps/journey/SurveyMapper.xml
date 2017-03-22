@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.SurveyDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.SurveyEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="survey_status" property="surveyStatus" jdbcType="INTEGER" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+    </resultMap>
+
+    <resultMap id="MultiResultMap" type="com.umessage.letsgo.domain.po.journey.SurveyEntity" >
+        <id column="s_id" property="id" jdbcType="BIGINT" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <result column="s_title" property="title" jdbcType="VARCHAR" />
+        <result column="s_teamId" property="teamId" jdbcType="BIGINT" />
+        <result column="s_surveyStatus" property="surveyStatus" jdbcType="INTEGER" />
+        <result column="s_travelId" property="travelId" jdbcType="BIGINT" />
+        <result column="s_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="s_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="s_version" property="version" jdbcType="BIGINT" />
+
+        <collection property="questionEntityList" ofType="com.umessage.letsgo.domain.po.journey.QuestionEntity">
+            <result column="q_id" property="id" jdbcType="BIGINT" />
+            <result column="q_description" property="description" jdbcType="VARCHAR" />
+            <result column="q_title" property="title" jdbcType="VARCHAR" />
+            <result column="q_surveyId" property="surveyId" jdbcType="BIGINT" />
+            <result column="q_questionType" property="questionType" jdbcType="INTEGER" />
+            <result column="q_isRequired" property="isRequired" jdbcType="INTEGER" />
+            <result column="q_create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="q_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="q_version" property="version" jdbcType="BIGINT" />
+
+            <!--答案-->
+            <result column="a_content" property="content" jdbcType="VARCHAR" />
+            <result column="a_moreOption" property="moreOption" jdbcType="VARCHAR" />
+            <result column="a_questionOptionId" property="questionOptionId" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="NewBaseResultMap" type="com.umessage.letsgo.domain.po.journey.SurveyEntity" >
+        <id column="s_ID" property="id" jdbcType="BIGINT" />
+        <result column="s_description" property="description" jdbcType="VARCHAR" />
+        <result column="s_title" property="title" jdbcType="VARCHAR" />
+        <result column="s_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="s_team_id" property="teamId" jdbcType="BIGINT" />
+        <result column="s_survey_status" property="surveyStatus" jdbcType="INTEGER" />
+        <result column="s_travel_id" property="travelId" jdbcType="BIGINT" />
+        <collection property="surveyDetailEntityList" ofType="com.umessage.letsgo.domain.po.journey.SurveyDetailEntity">
+            <id column="ID" property="id" jdbcType="BIGINT" />
+            <result column="confirm_status" property="confirmStatus" jdbcType="INTEGER" />
+            <result column="user_id" property="userId" jdbcType="BIGINT" />
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="survey_id" property="surveyId" jdbcType="BIGINT" />
+            <result column="tx_groupId" property="txgroupId" jdbcType="VARCHAR" />
+            <result column="pdf_url" property="pdfUrl" jdbcType="VARCHAR" />
+            <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
+            <result column="sign_url" property="signUrl" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+
+    <select id="selectByTeamId" resultMap="NewBaseResultMap" parameterType="java.lang.Long">
+        select js.ID AS s_ID,js.create_time AS s_create_time ,js.title AS s_title,js.description AS s_description, js.team_id AS s_team_id,js.survey_status AS s_survey_status,
+         jd.ID,jd.confirm_status,jd.user_id,jd.create_time,jd.survey_id,jd.tx_groupId,jd.pdf_url,jd.submit_time,jd.sign_url
+         FROM j_survey  AS js
+         LEFT JOIN j_survey_detail AS jd ON js.ID = jd.survey_id
+         WHERE js.team_id=#{teamId,jdbcType=BIGINT}
+    </select>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select ID,create_time,title,description, team_id,survey_status FROM j_survey WHERE ID=#{id,jdbcType=BIGINT}
+    </select>
+    <select id="getAllSurvey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select ID,create_time,title,description, team_id,survey_status FROM j_survey WHERE travel_id=#{id,jdbcType=BIGINT} and survey_status=1 ORDER BY create_time DESC
+    </select>
+    <insert id="insert"  parameterType="com.umessage.letsgo.domain.po.journey.SurveyEntity">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO j_survey (team_id,create_time,update_time,title,description,version,survey_status,travel_id) VALUES
+        (#{teamId,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},
+        #{title,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{version,jdbcType=BIGINT},#{surveyStatus,jdbcType=BIGINT},
+        #{travelId,jdbcType=BIGINT})
+
+    </insert>
+    <update id="updateStatus" parameterType="java.lang.Long">
+        UPDATE j_survey set survey_status=1 WHERE  ID=#{id}
+    </update>
+
+    <select id="getSurveyById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select ID,team_id,create_time,update_time,title,description,version FROM j_survey WHERE ID=#{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getSurveyWithAnswerById" resultMap="MultiResultMap" parameterType="java.lang.Long">
+        SELECT s.ID as s_id, s.title as s_title, s.survey_status as s_surveyStatus, s.travel_id AS s_travelId, s.team_id AS s_teamId,
+        s.create_time as s_createTime, s.update_time as s_updateTime, s.version as s_version,
+        q.ID as q_id, q.title AS q_title, q.description as q_description, q.is_required AS q_isRequired, q.survey_id AS q_surveyId,
+        q.question_type AS q_questionType, q.create_time AS q_createTime, q.update_time AS q_updateTime, q.version as q_version,
+        a.content AS a_content, a.more_option AS a_moreOption,a.question_option_id AS a_questionOptionId
+        FROM j_survey as s
+        LEFT JOIN j_question AS q ON s.ID = q.survey_id
+        LEFT JOIN j_answer AS a ON q.ID = a.question_id
+        WHERE s.ID = #{id}
+    </select>
+    <select id="getSurveyByScheduleId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT s.ID, s.create_time, s.title, s.description, s.team_id, s.survey_status
+        FROM j_survey AS s
+        LEFT JOIN j_schedule AS sc ON  s.team_id = sc.team_id
+        WHERE sc.ID = #{scheduleId,jdbcType=BIGINT} and sc.del=0
+    </select>
+
+
+
+</mapper>

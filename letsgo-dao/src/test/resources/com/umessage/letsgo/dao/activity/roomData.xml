@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<a_room id="1001" team_id="1001" room_num="1001" />
+	<a_room_detail id="1001" room_id="1001" group_id="-1" member_id="1002" member_name="郭富城" member_sex="1" />
+	<a_room_detail id="1002" room_id="1001" group_id="1001" member_id="1003" member_name="杨丞琳" member_sex="0" />
+	
+	<t_member id="1" team_id="1001" room_id="1001" group_id="1" real_name="name1" sex="1" />
+
+	<t_group id="1001" name="传奇哥组" />
+</dataset>

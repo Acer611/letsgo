@@ -1,0 +1,123 @@
+#set($pageTitle="集合详情")
+#set($layout="/WEB-INF/views/common/layout/layoutweixin.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/weixin/style/weui.css","$!{STATIC_URL}/resources/weixin/style/weixin.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/weixin/js/zepto.min.js","http://res.wx.qq.com/open/js/jweixin-1.0.0.js","$!{STATIC_URL}/resources/weixin/js/weui.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js"])
+
+	<article class="headjihe">
+		<div class="headImg"><img src="$!{response.photoUrl}"/>
+			<p class="headName">$!{response.senderName}</p>
+		</div>
+		<section>
+
+			<p class="jiheTime"><span>$!date.format('MM月dd日 HH:mm',$!{response.sendTime})</span><span>集合</span></p>
+			<div class="containtalk">
+				<div class="jiheText">#if(${response.content}&&${response.content}!="")
+					$!{response.content}
+				#elseif(${response.videoUrl}&&${response.videoUrl}!="")
+					<!-- <audio src="$!{response.videoUrl}" id="audio" controls="controls" style="display:none;"></audio>-->
+					语音内容，请下载跟上APP查看
+				#end</div>
+				<div class="talktip"></div>
+			</div>
+			<p class="titTopjihe">
+				来自“<span>$!{response.scheduleName}</span>”
+			</p>
+		</section>
+
+	</article>
+
+
+	<div class="contain">
+		<div class="jiheDate">
+			<div class="titleNode">集合时间： </div>
+			<div class="tainer">
+				<p>$!date.format('MM月dd日 HH:mm',$!{response.time})</p>
+				<p>$!{response.timezone}</p>
+			</div>
+		</div>
+	</div>
+
+<div class="contain">
+
+		<div class="jihePosition">
+			<div class="titleNode coll-position">集合位置：</div>
+			<div class="tainer">
+				<p><a href="$!{link.contextPath}/wechat/getGatherLocation?ID=$!{response.id}">$!{response.location}</a></p>
+			</div>
+		</div>
+
+    </div>
+
+#if(${response.traffic}&&${response.traffic}!="")
+<div class="contain">
+	<div class="jiheBus">
+		<div class="titleNode coll-bus">交通信息： </div>
+		<div class="tainer">
+			<p>$!{response.traffic} </p>
+		</div>
+	</div>
+	</div>
+#end
+<div class=" bottom-border"></div>
+			
+
+		#if($resoponse.activeStatus==0)
+
+			<div class="sureBtn">
+				已确认
+			</div>
+		#else
+			<div class="sureBtn">
+				已确认
+			</div>
+		#end
+
+#define($scriptBlock)
+	<script>
+	$(function(){
+		$("body").css({"backgroundColor":"#fff","height":"100%"})
+//        if($(".titTopjihe").find("span").text().length>11){
+//            var text=$(".titTopjihe").find("span").text().substr(0,11)
+//            $(".titTopjihe").find("span").text(text+"...")
+//        }
+//        if($(".tainer").find("a").text().length>10){
+//            var text=$(".tainer").find("a").text().substr(0,10)
+//            $(".tainer").find("a").text(text+"...")
+//        }
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '$!{jsapiSignature.appid}', // 必填，公众号的唯一标识
+            timestamp: '$!{jsapiSignature.timestamp}' , // 必填，生成签名的时间戳
+            nonceStr: '$!{jsapiSignature.noncestr}', // 必填，生成签名的随机串
+            signature: '$!{jsapiSignature.signature}',// 必填，签名，见附录1
+            jsApiList: ['checkJsApi',
+                'chooseImage',
+                'previewImage',
+                'uploadImage',
+                'downloadImage',
+                'getNetworkType',//网络状态接口
+                'openLocation',//使用微信内置地图查看地理位置接口
+                'getLocation' //获取地理位置接口
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.ready(function() {
+            wx.getLocation({
+                type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function (res) {
+                    //alert(JSON.stringify(res));
+                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                    var speed = res.speed; // 速度，以米/每秒计
+                    var accuracy = res.accuracy; // 位置精度
+                    $(".tainer").find("a").attr("href", "$!{link.contextPath}/wechat/getGatherLocation?ID=$!{response.id}&lat=" + latitude + "&lng=" + longitude);
+                },
+                cancel: function (res) {
+                    alert('用户拒绝授权获取地理位置');
+                }
+            });
+
+        });
+
+    })
+	</script>
+#end

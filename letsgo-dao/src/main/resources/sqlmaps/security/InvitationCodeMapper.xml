@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.InvitationCodeDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.InvitationCodeEntity" >
+        <id column="code" property="code" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.String" >
+        delete from s_invitation_code
+        where code = #{code,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.InvitationCodeEntity" >
+        insert into s_invitation_code (code, phone, user_id, 
+            create_time, update_time, version
+            )
+        values (#{code,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.InvitationCodeEntity" >
+        update s_invitation_code
+        set phone = #{phone,jdbcType=VARCHAR},
+            user_id = #{userId,jdbcType=BIGINT},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = 1
+        where code = #{code,jdbcType=VARCHAR} AND version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select code, phone, user_id, create_time, update_time, version
+        from s_invitation_code
+        where code = #{code,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select code, phone, user_id, create_time, update_time, version
+        from s_invitation_code
+    </select>
+
+    <select id="selectLatest" resultMap="BaseResultMap" >
+        select code, phone, user_id, create_time, update_time, version
+        from s_invitation_code WHERE ISNULL(phone)
+    </select>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="code" >
+        insert into s_invitation_code ( code, phone, user_id, create_time, update_time, version )
+        values<foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.code,jdbcType=VARCHAR}, #{item.phone,jdbcType=VARCHAR}, #{item.userId,jdbcType=BIGINT},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.version,jdbcType=BIGINT} )
+        </foreach>
+    </insert>
+</mapper>

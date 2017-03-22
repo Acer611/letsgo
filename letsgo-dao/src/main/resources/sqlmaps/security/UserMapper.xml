@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.UserDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.UserEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="guide_status" property="guideStatus" jdbcType="INTEGER" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="user_status" property="userStatus" jdbcType="INTEGER" />
+        <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="mail" property="mail" jdbcType="VARCHAR" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="userSig" property="usersig" jdbcType="VARCHAR" />
+        <result column="login_total_count" property="loginTotalCount" jdbcType="INTEGER" />
+        <result column="login_count" property="loginCount" jdbcType="INTEGER" />
+        <result column="invite_code" property="inviteCode" jdbcType="VARCHAR" />
+        <result column="invite_count" property="inviteCount" jdbcType="INTEGER" />
+        <result column="total_reward" property="totalReward" jdbcType="DOUBLE" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+		<result column="traveler_Id" property="travelerId" jdbcType="BIGINT" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="role" property="role" jdbcType="INTEGER" />
+        <result column="evaluationTags" property="evaluationTags" jdbcType="VARCHAR" />
+        <result column="languages" property="languages" jdbcType="VARCHAR" />
+        <result column="tourRoutes" property="tourRoutes" jdbcType="VARCHAR" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_user
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.UserEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into s_user (ID, user_name, real_name, 
+            nick_name, password, sex, user_status, birthday, phone,
+            mail, type, photo_url,  userSig,
+            login_total_count, login_count, invite_code, invite_count, total_reward,
+            create_time, update_time, version,guide_status,traveler_Id,remarks,role,evaluationTags,languages,tourRoutes)
+        values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+            #{nickName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{userStatus,jdbcType=INTEGER}, #{birthday,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+            #{mail,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{photoUrl,jdbcType=VARCHAR}, #{usersig,jdbcType=VARCHAR},
+            #{loginTotalCount,jdbcType=INTEGER}, #{loginCount,jdbcType=INTEGER}, #{inviteCode}, #{inviteCount}, #{totalReward},
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT},#{guideStatus,jdbcType=INTEGER},
+            #{travelerId,jdbcType=BIGINT},#{remarks,jdbcType=VARCHAR},#{role,jdbcType=INTEGER},#{evaluationTags,jdbcType=VARCHAR},#{languages,jdbcType=VARCHAR},#{tourRoutes,jdbcType=VARCHAR})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.UserEntity" >
+        update s_user
+        set user_name = #{userName,jdbcType=VARCHAR},
+            real_name = #{realName,jdbcType=VARCHAR},
+            nick_name = #{nickName,jdbcType=VARCHAR},
+            password = #{password,jdbcType=VARCHAR},
+            sex = #{sex,jdbcType=INTEGER},
+            user_status = #{userStatus,jdbcType=INTEGER},
+            birthday = #{birthday,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            mail = #{mail,jdbcType=VARCHAR},
+            type = #{type,jdbcType=INTEGER},
+            photo_url = #{photoUrl,jdbcType=VARCHAR},
+            userSig = #{usersig,jdbcType=VARCHAR},
+            login_total_count = #{loginTotalCount,jdbcType=INTEGER},
+            login_count = #{loginCount,jdbcType=INTEGER},
+            invite_code = #{inviteCode,jdbcType=VARCHAR},
+            invite_count = #{inviteCount,jdbcType=INTEGER},
+            total_reward = #{totalReward,jdbcType=DOUBLE},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            traveler_Id = #{travelerId,jdbcType=BIGINT},
+            remarks = #{remarks,jdbcType=VARCHAR},
+            role = #{role,jdbcType=INTEGER},
+            guide_status = #{guideStatus,jdbcType=INTEGER},
+            evaluationTags = #{evaluationTags,jdbcType=VARCHAR},
+            languages = #{languages,jdbcType=VARCHAR},
+            tourRoutes = #{tourRoutes,jdbcType=VARCHAR},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, guide_status,user_name, real_name, nick_name, password, sex,user_status, birthday, phone, mail, type, photo_url, userSig,
+        login_total_count, login_count, invite_code, invite_count, total_reward, create_time, update_time, version,traveler_Id,remarks,role,
+        evaluationTags,languages,tourRoutes
+        from s_user
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, guide_status,user_name, real_name, nick_name, password, sex,user_status, birthday, phone, mail, type, photo_url, userSig,
+        login_total_count, login_count,invite_code, invite_count, total_reward, create_time, update_time, version,traveler_Id,remarks,role,
+        evaluationTags,languages,tourRoutes
+        from s_user
+    </select>
+    <select id="selectByphone" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select ID, guide_status,user_name, real_name, nick_name, password, sex,user_status, birthday, phone, mail, type, photo_url, userSig,
+        login_total_count, login_count,invite_code, invite_count, total_reward, create_time, update_time, version,traveler_Id,remarks,role,
+        evaluationTags,languages,tourRoutes
+        from s_user WHERE phone=#{phone}
+    </select>
+    <select id="selectWithAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select ID, guide_status, user_name, real_name, nick_name, password, sex, user_status, birthday, phone,
+        mail, type, photo_url, userSig, login_total_count, login_count, invite_code, invite_count, total_reward,
+        create_time, update_time, version, traveler_Id, remarks, role,evaluationTags,languages,tourRoutes
+        from s_user
+        WHERE user_name = #{loginAccount} OR phone = #{loginAccount} OR mail = #{loginAccount}
+    </select>
+
+    <select id="getUsersIsTravel" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        SELECT DISTINCT u.ID, u.user_name, u.real_name, u.nick_name, u.password, u.sex,u.user_status, u.birthday, u.phone, u.mail, u.type, u.photo_url, u.userSig,
+        u.login_total_count, u.login_count,u.invite_code, u.invite_count, u.total_reward, u.create_time, u.update_time, u.version,u.traveler_Id,u.remarks,u.role,
+        u.evaluationTags,u.languages,u.tourRoutes,m.role
+        FROM s_user AS u
+        JOIN t_member AS m ON m.`user_id`=u.`ID`
+        JOIN t_team AS t ON t.`ID` = m.`t_id`
+        WHERE t.`status` = #{status,jdbcType=INTEGER}
+    </select>
+    <update id="updateAccount" parameterType="java.lang.Long">
+        UPDATE s_user SET user_status =2 WHERE ID=#{accountId}
+    </update>
+    <select id="selectWithInvitationCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select ID, user_name,guide_status, real_name, nick_name, password, sex,user_status, birthday, phone, mail, type, photo_url, userSig,
+        login_total_count, login_count,invite_code, invite_count, total_reward, create_time, update_time, version,traveler_Id,remarks,role,
+        evaluationTags,languages,tourRoutes
+        from s_user
+        WHERE invite_code = #{invitationCode}
+    </select>
+    
+    <update id="uploadFacePhoto">
+    	update s_user set photo_url = #{photoUrl} where id = #{userId}
+    </update>
+    
+   <select id="getSonAccountList" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select u.ID, u.user_name,u.real_name, u.password, u.phone, u.mail,u.traveler_Id,u.remarks,r.role_id as role
+        from s_user u ,s_user_role r
+        where u.traveler_Id = #{travelerId} AND u.user_status=1 AND u.id = r.user_id AND r.role_id in (6,7)
+    </select>
+
+    <select id="findUserId" resultType="Long" parameterType="java.lang.String" >
+        select ID
+        from s_user
+        WHERE user_name = #{txId}
+    </select>
+
+    <select id="getUserByInviteCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT ID, guide_status,user_name, real_name, nick_name, password, sex,user_status, birthday, phone, mail, type, photo_url, userSig,
+        login_total_count, login_count,invite_code, invite_count, total_reward, create_time, update_time, version,traveler_Id,remarks,role,
+        evaluationTags,languages,tourRoutes
+        FROM s_user
+        WHERE invite_code = #{code}
+    </select>
+
+    <select id="selectWithAccount1" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select ID,guide_status, user_name, real_name, nick_name, password, sex,user_status, birthday, phone, mail, type, photo_url, userSig,
+        login_total_count, login_count,invite_code, invite_count, total_reward, create_time, update_time, version,traveler_Id,remarks,role,
+        evaluationTags,languages,tourRoutes
+        from s_user
+        WHERE user_name = #{username} limit 1
+    </select>
+
+    <select id="getUserIdsByTravelerId" resultType="Long"  parameterType="com.umessage.letsgo.domain.vo.system.request.LogManageRequest">
+        select u.ID
+        from s_user as  u
+        JOIN s_user_role AS r ON u.ID = r.user_id
+        <where>
+        <if test="null != travelId"> AND u.traveler_Id = #{travelId} </if>
+        <if test="null != accountType "> AND r.role_id = #{accountType} </if>
+        </where>
+    </select>
+
+    <select id="getUserRole" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.LogManageRequest">
+        select u.ID, u.user_name,u.real_name, u.password, u.phone, u.mail,u.traveler_Id,u.remarks,r.role_id as role
+        from s_user u ,s_user_role r
+        where u.id = r.user_id AND  u.id = #{userId} limit 1
+    </select>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.FriendsDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.FriendsEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="tx_user_id" property="txUserId" jdbcType="VARCHAR" />
+        <result column="friend_user_id" property="friendUserId" jdbcType="BIGINT" />
+        <result column="friend_tx_user_id" property="friendTxUserId" jdbcType="VARCHAR" />
+        <result column="friend_type" property="friendType" jdbcType="INTEGER" />
+        <result column="friend_name" property="friendName" jdbcType="VARCHAR" />
+        <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <insert id="saveFriend" parameterType="com.umessage.letsgo.domain.po.security.FriendsEntity">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into s_friends (user_id, friend_user_id,tx_user_id, friend_tx_user_id, friend_type,
+        create_time,  version
+        )
+        values (#{userId,jdbcType=BIGINT},  #{friendUserId,jdbcType=BIGINT},#{txUserId,jdbcType=VARCHAR},  #{friendTxUserId,jdbcType=VARCHAR}, #{friendType,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP},  #{version,jdbcType=BIGINT}
+        )
+    </insert>
+    <select id="getAllFriends" resultMap="BaseResultMap">
+        SELECT f.ID, f.user_id, f.tx_user_id, f.friend_user_id, f.friend_tx_user_id, f.friend_type,
+            u.real_name as friend_name, u.photo_url as head_url
+        FROM  s_friends f,s_user u
+        WHERE f.friend_user_id=u.id AND user_id=#{userId,jdbcType=BIGINT}
+        <if test="null != friendType and 2 !=friendType">
+            AND f.friend_type=#{friendType,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="getFriendByUserId" resultMap="BaseResultMap">
+        SELECT ID, user_id, tx_user_id, friend_user_id, friend_tx_user_id, friend_type FROM s_friends
+        WHERE user_id = #{userId} AND friend_tx_user_id = #{friendTXUserId}
+    </select>
+
+</mapper>

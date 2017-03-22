@@ -1,0 +1,225 @@
+#set($pageTitle="找回密码")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/jquery.form.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+
+		<style type="text/css">
+			body,
+			html {
+				width: 100%;
+				height: 100%;
+				background:  url($!{STATIC_URL}/resources/dist/images/loginbg.jpg) no-repeat !important;
+				background-size: cover !important;
+			}
+			
+			b {
+				color: #fff;
+			}
+            .login-page{background: none;}
+			.container {
+				padding-top: 7%;
+			}
+			
+			.btn-primary {
+				border-color: #1fbad1;
+				background-color: #1fbad1;
+			}
+			
+			.btn-primary:hover,
+			.btn-primary:active {
+				background-color: #0198ae;
+				border-color: #0198ae;
+			}
+            .has-feedback .form-control{
+				padding-right: 0;
+			}
+		</style>
+<div class="hold-transition login-page">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+                    <div class="register-logo">
+                        <a href="#"><b>跟上旅行社</b></a>
+                    </div>
+					<div class="register-box-body">
+						<h3 class="login-box-msg">忘记密码</h3>
+						<form action="$!{link.contextPath}/user/userNewPassword" method="get" role="form" class="form-horizontal" id="form4">
+
+							<!--手机号码-->
+							<div class="form-group has-feedback">
+                                <div class="col-xs-0 col-sm-1"></div>
+								<label for="phoneNum" class="col-xs-4 col-sm-3 control-label text-right"><span  class="text-danger">*</span>手机号码：</label>
+								<div class="col-xs-8 col-sm-6">
+									<input type="text" class="form-control" id="phoneNum" name="phone" placeholder="填写与账号绑定的手机号码">
+								</div>
+							</div>
+							<!--短信验证码-->
+							<div class="form-group has-feedback">
+                                <div class="col-xs-0 col-sm-1"></div>
+								<label for="validationCode" class="col-xs-4 col-sm-3 control-label text-right"><span class="text-red">*</span>动态验证码：</label>
+								<div class="col-xs-8 col-sm-6 row" style="margin-right:0;padding-right:0;">
+									<div class="col-xs-6">
+										<input type="text" class="form-control" id="validationCode" name="validationCode" placeholder="6位验证码" style="padding-right:0;" data-bv-field="validationCode">
+										<small class="help-block" data-bv-validator="notEmpty" data-bv-for="validationCode" data-bv-result="NOT_VALIDATED" style="display: none;">动态验证码不能为空</small></div>
+									<div class="col-xs-6" style="padding:0;margin-right:0;">
+										<button type="button" class="btn btn-primary btn-block get_password_btn" id="verification">获取验证码</button>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group has-feedback">
+								<div class="col-xs-4 col-xs-offset-4">
+									<button type="submit" class="btn btn-primary btn-block btn-flat">确定</button>
+								</div>
+							</div>
+						</form>
+
+						<!-- /.form-box -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.register-box -->
+
+		#define($scriptBlock)
+
+		<script>
+			$(function() {
+				$('input').iCheck({
+					checkboxClass: 'icheckbox_square-blue',
+					radioClass: 'iradio_square-blue',
+					increaseArea: '20%' // optional
+				});
+//				var retCode,retMsg;
+//				$("[name=validationCode]").on("blur",function(){
+//                    $.ajax({
+//                        url: CONTEXTPATH + '/user/validateMobileCode',//验证地址
+//                        data:{phone:$.trim($("[name=phone]").val()),code: $.trim($(this).val())},
+//                        type : "POST",
+//                        cache : false,
+//                        dataType : "json",
+//                        success: function(data){
+//                            if(data.retCode==0){
+////                                blockUiOpen(data.retMsg);
+////                                onTimer(that);
+//
+//                            }else {
+////                                blockUiOpen(data.retMsg);
+//                            }
+//                            retCode=data.retCode;
+//                            retMsg=data.retMsg;
+//
+//                        },
+//                        error:function(){
+//                            blockUiOpen('短信发送失败，请重新获取密码');
+//                        }
+//                    })
+//				})
+				$("[type=submit]").on("click",function(event){
+                    event.preventDefault();
+                    if(!$("[name=phone]").val()){
+                        blockUiOpen("联系电话不能为空");
+                        return false;
+                    }
+                    if(!IsMobileNoAlert($("[name=phone]").val())){
+                        blockUiOpen("联系电话必须为手机号");
+                        return false;
+                    }
+                    if(!$("[name=validationCode]").val()){
+                        blockUiOpen("动态验证码不能为空");
+                        return false;
+                    }
+                    if(!/^[0-9]{6}$/.test($("[name=validationCode]").val())){
+                        blockUiOpen("验证码格式不正确");
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: CONTEXTPATH + '/user/validateMobileCode',//验证地址
+                        data:{phone:$.trim($("[name=phone]").val()),code: $.trim($("[name=validationCode]").val())},
+                        type : "POST",
+                        cache : false,
+                        dataType : "json",
+                        success: function(data){
+                            if(data.retCode!=0){
+
+                                if(data.retMsg){
+                                    blockUiOpen(data.retMsg);
+                                }
+                            }else{
+
+								window.location.href=CONTEXTPATH+"/user/userNewPassword?phone="+ $.trim($("[name=phone]").val())+"&validationCode="+ $.trim($("[name=validators]").val());
+                            }
+                        },
+                        error:function(){
+                            blockUiOpen('短信发送失败，请重新获取密码');
+                        }
+                    })
+
+
+				})
+
+				//注册页短信发送
+				$("#verification").off().click(function() {
+					var phonenum = $.trim($("[name=phone]").val());
+					var that = $(this);
+					if(!IsEmpty(phonenum)) {
+						blockUiOpen('请输入手机号');
+						return false;
+					} else if(!IsMobileNoAlert(phonenum)) {
+						blockUiOpen('请输入正确的手机号码！');
+						return false;
+					}
+					onTimer(that);
+					  $.ajax({
+						  url:CONTEXTPATH+"/sendCodeMessage",
+						  data:{phone:phonenum},
+						  type : "GET",
+						  cache : false,
+						  dataType : "json",
+						  success: function(data){
+							  if(data.retCode==0){
+								  blockUiOpen(data.retMsg);
+								  onTimer(that);
+							  }else {
+								  blockUiOpen(data.retMsg);
+							  }
+						  },
+						  error:function(){
+							  blockUiOpen('短信发送失败，请重新获取密码');
+						  }
+					  })
+				})
+			});
+			//验证码发送成功后倒计时禁用按钮
+			function onTimer(obj) {
+				var i = 60;
+				var timer = setTimeout(function() {
+					obj.text(i-- + "秒后重发").attr("disabled", "disabled").addClass("disbutton");
+					var timerWhile = setTimeout(arguments.callee, 1000);
+					if(i < 0) {
+						obj.text("获取动态验证码").removeAttr("disabled").removeClass("disbutton");
+						clearTimeout(timerWhile)
+					}
+				}, 1000)
+			}
+			//字符串不能为空
+			function IsEmpty(string) {
+				var str = string.replace(/\s+/g, "");
+				if(str == '') {
+					return false;
+				} else {
+					return str;
+				}
+			}
+			//手机号码验证，无alert
+			function IsMobileNoAlert(string) {
+				var mobile = IsEmpty(string);
+				if(mobile == false) return false;
+				if(/^(\+86)?((1[3,5,8][0-9])|(14[5,7])|(17[0,1,6,7,8]))\d{8}$/.test(mobile)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		</script>
+#end

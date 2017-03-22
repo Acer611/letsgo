@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.notice.RemindDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.notice.RemindEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="notice_id" property="noticeId" jdbcType="BIGINT" />
+        <result column="member_id" property="memberId" jdbcType="BIGINT" />
+        <result column="appointed_time" property="appointedTime" jdbcType="TIMESTAMP" />
+        <result column="first_remind" property="firstRemind" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from n_remind
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.notice.RemindEntity" useGeneratedKeys="true" keyProperty="id" >
+        insert into n_remind (ID, notice_id, member_id, 
+            appointed_time, first_remind, create_time, 
+            update_time, version)
+        values (#{id,jdbcType=BIGINT}, #{noticeId,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, 
+            #{appointedTime,jdbcType=TIMESTAMP}, #{firstRemind,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+            #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.notice.RemindEntity" >
+        update n_remind
+        set notice_id = #{noticeId,jdbcType=BIGINT},
+            member_id = #{memberId,jdbcType=BIGINT},
+            appointed_time = #{appointedTime,jdbcType=TIMESTAMP},
+            first_remind = #{firstRemind,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, notice_id, member_id, appointed_time, first_remind, create_time, update_time, 
+        version
+        from n_remind
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, notice_id, member_id, appointed_time, first_remind, create_time, update_time, 
+        version
+        from n_remind
+        WHERE version = 0 and date_format(appointed_time, '%y-%m-%d') = curdate()
+    </select>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.DataItemDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.DataItemEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="item_value" property="itemValue" jdbcType="VARCHAR" />
+        <result column="catalog_code" property="catalogCode" jdbcType="VARCHAR" />
+        <result column="descn" property="descn" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_dataitem
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.DataItemEntity" >
+        insert into s_dataitem (ID, item_code, item_name, 
+            item_value, catalog_code, descn, 
+            create_time)
+        values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+            #{itemValue,jdbcType=VARCHAR}, #{catalogCode,jdbcType=VARCHAR}, #{descn,jdbcType=VARCHAR}, 
+            #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.DataItemEntity" >
+        update s_dataitem
+        set item_code = #{itemCode,jdbcType=VARCHAR},
+            item_name = #{itemName,jdbcType=VARCHAR},
+            item_value = #{itemValue,jdbcType=VARCHAR},
+            catalog_code = #{catalogCode,jdbcType=VARCHAR},
+            descn = #{descn,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, item_code, item_name, item_value, catalog_code, descn, create_time
+        from s_dataitem
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, item_code, item_name, item_value, catalog_code, descn, create_time
+        from s_dataitem
+    </select>
+</mapper>

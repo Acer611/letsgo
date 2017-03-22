@@ -1,0 +1,33 @@
+	#set($pageTitle="行程列表")
+	#set($layout="/WEB-INF/views/common/layout/layoutweixin.vm")
+	#set($styleUrls=["$!{STATIC_URL}/resources/weixin/style/weui.css","$!{STATIC_URL}/resources/weixin/style/schedulelist.css?t=1"])
+	#set($scriptUrls=["$!{STATIC_URL}/resources/weixin/js/zepto.min.js","https://res.wx.qq.com/open/js/jweixin-1.0.0.js","$!{STATIC_URL}/resources/weixin/js/weui.min.js"])
+    #if($response.size()>0)
+    <ul class="scheduleList">
+
+
+	#foreach($list in $response)
+        <li>
+            <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=introduce&teamId=$!{list.txGroupId}">
+                <img src="#if(${list.backgroundPhotoUrl}&&${list.backgroundPhotoUrl}!="")$!{list.backgroundPhotoUrl}#else $!{STATIC_URL}/resources/weixin/images/img2.png #end">
+                <div class="timers">$!date.format('yy/MM/dd',$!{list.startDate})</div>
+                <div class="timere">$!date.format('yy/MM/dd',$!{list.endDate})</div>
+                <div class="#if(${list.status}==1) type1 #elseif(${list.status}==2) type2 #elseif(${list.status}==3) type3 #else type3 #end"></div>
+                <div class="scheduleName">$!{list.name}</div>
+            </a>
+            <div class="tipWarp">
+
+            </div>
+        </li>
+		#end
+
+	</ul>
+    #else
+    <div class="tripList">您暂无参加过的行程</div>
+    #end
+    <div class="downloadTip">更多行程请点击：<a href="http://www.igenshang.com/download.html">http://www.igenshang.com/download.html</a></div>
+	#define($scriptBlock)
+    <script>
+        $("body").css({"backgroundColor":"#f0eff5","height":"100%"});
+    </script>
+	#end

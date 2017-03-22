@@ -1,0 +1,35 @@
+html,body{height:100%;}
+body{background-color: #f0eff5;height: auto;}
+.scheduleList{padding:0.266667rem 0.32rem;background-color: #f0eff5;overflow: hidden;}
+.scheduleList li{width:100%;height:4.693333rem;border-radius:0.133333rem;overflow: hidden;}
+.scheduleList li a{display:block;height:3.733333rem;position: relative;}
+.scheduleList li img{width:100%;height:3.733333rem;flex-grow: 1;  object-fit: cover;border-radius:0.133333rem;}
+.timer{background:url(../images/datebg.png) 0 0 no-repeat;position:absolute;left:0;top:0;background-size:100% auto;color:#fff;width:6.133333rem;height:0.533333rem;text-align:center;line-height:0.533333rem; font-size:12px;border-top-left-radius:0.133333rem;}
+[data-dpr="2"] .timer{font-size:24px;}
+[data-dpr="3"] .timer{font-size:36px;}
+.scheduleName{z-index:9;position:absolute;bottom:0;left:0;height:1.04rem;line-height:1.04rem;width:7.173333rem;background-color: rgba(0,0,0,.6);color:#fff;padding-left:2.186667rem;font-size:16px;border-bottom-right-radius:0.133333rem;
+    border-bottom-left-radius:0.133333rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+[data-dpr="2"] .scheduleName{font-size:32px;}
+[data-dpr="3"] .scheduleName{font-size:48px;}
+.timers,.timere{width:1.4rem;height:0.52rem;line-height:0.52rem;font-size:12px;background-color: #00aa90;position: absolute;left:0;bottom:0.52rem;color:#fff;z-index:11;text-align: center;}
+.timere{background-color: #268785;bottom:0;z-index:10;}
+.timers span,.timere span{margin-right:0.08rem;}
+[data-dpr="2"] .timers,[data-dpr="2"] .timere{font-size:22px;}
+[data-dpr="3"] .timers,[data-dpr="3"] .timere{font-size:34px;}
+.type1,.type2,.type3{background:url(../images/chuxin2.png) 0 0 no-repeat;background-size: 100% auto;width:1.4rem;height:0.4rem;position: absolute;right:0;top:0.16rem;}
+.type2{background:url(../images/jijiang.png) 0 0 no-repeat;background-size: 100% auto;}
+.type3{background:url(../images/jisu4.png) 0 0 no-repeat;background-size: 100% auto;}
+.tipWarp{background:url(../images/titcode.png) center 0 no-repeat;background-size: 9.36rem auto;width: 100%;height:0.493333rem; }
+.downloadTip{background-color: #d9d9d9;border-radius:0.213333rem;color:#999;height:0.506667rem;margin:0.106667rem 0.746667rem 0.693333rem;text-align: center;line-height: 0.506667rem;font-size:10px;overflow: hidden;}
+.downloadTip a{color:#1fbad1;}
+[data-dpr="2"] .downloadTip{font-size:20px;}
+[data-dpr="3"] .downloadTip{font-size:30px;}
+.tripList{padding:0.8rem 0 0.8rem 0;text-align: center;font-size:16px;color:#999;}
+[data-dpr="2"] .tripList{font-size:32px;}
+[data-dpr="3"] .tripList{font-size:48px;}

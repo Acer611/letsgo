@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.LeaderDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.LeaderEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="leader_type" property="leaderType" jdbcType="INTEGER" />
+        <result column="leader_status" property="leaderStatus" jdbcType="INTEGER" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="weixin" property="weixin" jdbcType="VARCHAR" />
+        <result column="qq" property="qq" jdbcType="VARCHAR" />
+        <result column="lead_time" property="leadTime" jdbcType="DATE" />
+        <result column="destination_group1" property="destinationGroup1" jdbcType="VARCHAR" />
+        <result column="destination_group2" property="destinationGroup2" jdbcType="VARCHAR" />
+        <result column="destination_group3" property="destinationGroup3" jdbcType="VARCHAR" />
+        <result column="destination_group4" property="destinationGroup4" jdbcType="VARCHAR" />
+        <result column="destination_group5" property="destinationGroup5" jdbcType="VARCHAR" />
+        <result column="destination_group6" property="destinationGroup6" jdbcType="VARCHAR" />
+        <result column="destination_group7" property="destinationGroup7" jdbcType="VARCHAR" />
+        <result column="destination_group8" property="destinationGroup8" jdbcType="VARCHAR" />
+        <result column="card_type" property="cardType" jdbcType="INTEGER" />
+        <result column="card_code" property="cardCode" jdbcType="VARCHAR" />
+        <result column="validity_date" property="validityDate" jdbcType="DATE" />
+        <result column="language1" property="language1" jdbcType="VARCHAR" />
+        <result column="language1_level" property="language1Level" jdbcType="INTEGER" />
+        <result column="language2" property="language2" jdbcType="VARCHAR" />
+        <result column="language2_level" property="language2Level" jdbcType="INTEGER" />
+        <result column="language3" property="language3" jdbcType="VARCHAR" />
+        <result column="language3_level" property="language3Level" jdbcType="INTEGER" />
+        <result column="photo_library2_url" property="photoLibrary2Url" jdbcType="VARCHAR" />
+        <result column="photo_library3_url" property="photoLibrary3Url" jdbcType="VARCHAR" />
+        <result column="photo_library1_url" property="photoLibrary1Url" jdbcType="VARCHAR" />
+        <result column="photo_library4_url" property="photoLibrary4Url" jdbcType="VARCHAR" />
+        <result column="photo_library5_url" property="photoLibrary5Url" jdbcType="VARCHAR" />
+        <result column="photo_library6_url" property="photoLibrary6Url" jdbcType="VARCHAR" />
+        <result column="photo_library7_url" property="photoLibrary7Url" jdbcType="VARCHAR" />
+        <result column="photo_library8_url" property="photoLibrary8Url" jdbcType="VARCHAR" />
+        <result column="photo_library9_url" property="photoLibrary9Url" jdbcType="VARCHAR" />
+        <result column="photo_library10_url" property="photoLibrary10Url" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="evaluationTag" property="evaluationTag" jdbcType="VARCHAR" />
+        <result column="languages" property="languages" jdbcType="VARCHAR" />
+        <result column="tourRoutes" property="tourRoutes" jdbcType="VARCHAR" />
+
+        <result column="country_code" property="countryCode" jdbcType="VARCHAR" />
+
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_leader
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.LeaderEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_leader (user_id, travel_id, name, 
+            sex, leader_type, leader_status, 
+            photo_url, birthday, phone, 
+            weixin, qq, lead_time, 
+            destination_group1, destination_group2, 
+            destination_group3, destination_group4, 
+            destination_group5, destination_group6, 
+            destination_group7, destination_group8, card_type, card_code,
+            validity_date, language1, language1_level, 
+            language2, language2_level, language3, 
+            language3_level, photo_library2_url, photo_library3_url, 
+            photo_library1_url, photo_library4_url, photo_library5_url, 
+            photo_library6_url, photo_library7_url, photo_library8_url, 
+            photo_library9_url, photo_library10_url, 
+            create_time, update_time, version,evaluationTag,languages,tourRoutes,
+            country_code
+            )
+        values (#{userId,jdbcType=BIGINT}, #{travelId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+            #{sex,jdbcType=INTEGER}, #{leaderType,jdbcType=INTEGER}, #{leaderStatus,jdbcType=INTEGER}, 
+            #{photoUrl,jdbcType=VARCHAR}, #{birthday,jdbcType=TIMESTAMP}, #{phone,jdbcType=VARCHAR}, 
+            #{weixin,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{leadTime,jdbcType=DATE}, 
+            #{destinationGroup1,jdbcType=VARCHAR}, #{destinationGroup2,jdbcType=VARCHAR}, 
+            #{destinationGroup3,jdbcType=VARCHAR}, #{destinationGroup4,jdbcType=VARCHAR}, 
+            #{destinationGroup5,jdbcType=VARCHAR}, #{destinationGroup6,jdbcType=VARCHAR}, 
+            #{destinationGroup7,jdbcType=VARCHAR}, #{destinationGroup8,jdbcType=VARCHAR}, #{cardType,jdbcType=INTEGER}, #{cardCode,jdbcType=VARCHAR},
+            #{validityDate,jdbcType=DATE}, #{language1,jdbcType=VARCHAR}, #{language1Level,jdbcType=INTEGER}, 
+            #{language2,jdbcType=VARCHAR}, #{language2Level,jdbcType=INTEGER}, #{language3,jdbcType=VARCHAR}, 
+            #{language3Level,jdbcType=INTEGER}, #{photoLibrary2Url,jdbcType=VARCHAR}, #{photoLibrary3Url,jdbcType=VARCHAR}, 
+            #{photoLibrary1Url,jdbcType=VARCHAR}, #{photoLibrary4Url,jdbcType=VARCHAR}, #{photoLibrary5Url,jdbcType=VARCHAR}, 
+            #{photoLibrary6Url,jdbcType=VARCHAR}, #{photoLibrary7Url,jdbcType=VARCHAR}, #{photoLibrary8Url,jdbcType=VARCHAR}, 
+            #{photoLibrary9Url,jdbcType=VARCHAR}, #{photoLibrary10Url,jdbcType=VARCHAR}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT},
+            #{evaluationTag,jdbcType=VARCHAR}, #{languages,jdbcType=VARCHAR}, #{tourRoutes,jdbcType=VARCHAR},
+            #{countryCode,jdbcType=VARCHAR}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.LeaderEntity" >
+        update t_leader
+        set user_id = #{userId,jdbcType=BIGINT},
+            travel_id = #{travelId,jdbcType=BIGINT},
+            name = #{name,jdbcType=VARCHAR},
+            sex = #{sex,jdbcType=INTEGER},
+            leader_type = #{leaderType,jdbcType=INTEGER},
+            leader_status = #{leaderStatus,jdbcType=INTEGER},
+            photo_url = #{photoUrl,jdbcType=VARCHAR},
+            birthday = #{birthday,jdbcType=TIMESTAMP},
+            phone = #{phone,jdbcType=VARCHAR},
+            weixin = #{weixin,jdbcType=VARCHAR},
+            qq = #{qq,jdbcType=VARCHAR},
+            lead_time = #{leadTime,jdbcType=DATE},
+            destination_group1 = #{destinationGroup1,jdbcType=VARCHAR},
+            destination_group2 = #{destinationGroup2,jdbcType=VARCHAR},
+            destination_group3 = #{destinationGroup3,jdbcType=VARCHAR},
+            destination_group4 = #{destinationGroup4,jdbcType=VARCHAR},
+            destination_group5 = #{destinationGroup5,jdbcType=VARCHAR},
+            destination_group6 = #{destinationGroup6,jdbcType=VARCHAR},
+            destination_group7 = #{destinationGroup7,jdbcType=VARCHAR},
+            destination_group8 = #{destinationGroup8,jdbcType=VARCHAR},
+            card_type = #{cardType,jdbcType=INTEGER},
+            card_code = #{cardCode,jdbcType=VARCHAR},
+            validity_date = #{validityDate,jdbcType=DATE},
+            language1 = #{language1,jdbcType=VARCHAR},
+            language1_level = #{language1Level,jdbcType=INTEGER},
+            language2 = #{language2,jdbcType=VARCHAR},
+            language2_level = #{language2Level,jdbcType=INTEGER},
+            language3 = #{language3,jdbcType=VARCHAR},
+            language3_level = #{language3Level,jdbcType=INTEGER},
+            photo_library2_url = #{photoLibrary2Url,jdbcType=VARCHAR},
+            photo_library3_url = #{photoLibrary3Url,jdbcType=VARCHAR},
+            photo_library1_url = #{photoLibrary1Url,jdbcType=VARCHAR},
+            photo_library4_url = #{photoLibrary4Url,jdbcType=VARCHAR},
+            photo_library5_url = #{photoLibrary5Url,jdbcType=VARCHAR},
+            photo_library6_url = #{photoLibrary6Url,jdbcType=VARCHAR},
+            photo_library7_url = #{photoLibrary7Url,jdbcType=VARCHAR},
+            photo_library8_url = #{photoLibrary8Url,jdbcType=VARCHAR},
+            photo_library9_url = #{photoLibrary9Url,jdbcType=VARCHAR},
+            photo_library10_url = #{photoLibrary10Url,jdbcType=VARCHAR},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1,
+            evaluationTag = #{evaluationTag,jdbcType=VARCHAR},
+            languages = #{languages,jdbcType=VARCHAR},
+            tourRoutes = #{tourRoutes,jdbcType=VARCHAR},
+            country_code = #{countryCode,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, travel_id, name, sex, leader_type, leader_status, photo_url, 
+        birthday, phone, weixin, qq, lead_time, destination_group1, destination_group2, destination_group3, 
+        destination_group4, destination_group5, destination_group6, destination_group7,destination_group8, card_type,
+        card_code, validity_date, language1, language1_level, language2, language2_level, 
+        language3, language3_level, photo_library2_url, photo_library3_url, photo_library1_url, 
+        photo_library4_url, photo_library5_url, photo_library6_url, photo_library7_url, photo_library8_url, 
+        photo_library9_url, photo_library10_url, create_time, update_time, version,evaluationTag,languages,tourRoutes,
+        country_code
+        from t_leader
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.LeaderRequest">
+        select l.ID, l.user_id, l.travel_id, l.name, l.sex, l.leader_type, l.leader_status, l.photo_url,
+        l.birthday, l.phone, l.weixin, l.qq, l.lead_time, l.destination_group1, l.destination_group2, l.destination_group3,
+        l.destination_group4, l.destination_group5, l.destination_group6, l.destination_group7,l.destination_group8, l.card_type,
+        l.card_code, l.validity_date, l.language1, l.language1_level, l.language2, l.language2_level,
+        l.language3, l.language3_level, l.photo_library2_url, l.photo_library3_url, l.photo_library1_url,
+        l.photo_library4_url, l.photo_library5_url, l.photo_library6_url, l.photo_library7_url, l.photo_library8_url,
+        l.photo_library9_url, l.photo_library10_url, l.create_time, l.update_time, l.version,l.evaluationTag,l.languages,l.tourRoutes,l.country_code
+        from t_leader AS l
+        LEFT JOIN t_waiting AS w ON w.user_id=l.user_id
+        <where>
+            <if test="null != travelId"> AND l.travel_id = #{travelId} </if>
+            <if test="null != name"> AND l.name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="null != sex"> AND l.sex = #{sex} </if>
+            <if test="null != leaderType"> AND (l.leader_type = #{leaderType} or l.leader_type = 3)</if>
+            <if test="null != leaderStatus"> AND l.leader_status = #{leaderStatus} </if>
+            <if test="null != startDate and null != endDate" >AND l.lead_time &gt; #{startDate} AND l.lead_time &lt;= #{endDate}</if>
+            <if test="null != state and state !=''.toString()  and state ==1  "> AND w.leisure_date LIKE CONCAT('%',#{nowDate},'%') </if>
+            <if test="null != state and state !=''.toString()  and state ==2  "> AND w.work_date LIKE  CONCAT('%',#{nowDate},'%') </if>
+            <if test="null != phones and phones.size()>0">
+                AND l.phone NOT IN
+                <foreach item="item" index="index" collection="phones" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY l.create_time DESC
+    </select>
+
+    <select id="selectByPhoneAndTravelId" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.LeaderRequest">
+        select ID, user_id, travel_id, name, sex, leader_type, leader_status, photo_url,
+        birthday, phone, weixin, qq, lead_time, destination_group1, destination_group2, destination_group3,
+        destination_group4, destination_group5, destination_group6, destination_group7, destination_group8,card_type,
+        card_code, validity_date, language1, language1_level, language2, language2_level,
+        language3, language3_level, photo_library2_url, photo_library3_url, photo_library1_url,
+        photo_library4_url, photo_library5_url, photo_library6_url, photo_library7_url, photo_library8_url,
+        photo_library9_url, photo_library10_url, create_time, update_time, version,evaluationTag,languages,tourRoutes,country_code
+        from t_leader
+        <where>
+            <if test="null != phone"> AND phone = #{phone} </if>
+            <if test="null != travelId"> AND travel_id = #{travelId} </if>
+        </where>
+    </select>
+
+    <select id="selectByPhoneAndMemberPhone" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.LeaderRequest">
+        select ID, user_id, travel_id, name, sex, leader_type, leader_status, photo_url,
+        birthday, phone, weixin, qq, lead_time, destination_group1, destination_group2, destination_group3,
+        destination_group4, destination_group5, destination_group6, destination_group7, destination_group8,card_type,
+        card_code, validity_date, language1, language1_level, language2, language2_level,
+        language3, language3_level, photo_library2_url, photo_library3_url, photo_library1_url,
+        photo_library4_url, photo_library5_url, photo_library6_url, photo_library7_url, photo_library8_url,
+        photo_library9_url, photo_library10_url, create_time, update_time, version,evaluationTag,languages,tourRoutes,country_code
+        from t_leader
+        <where>
+            <if test="null != phone"> AND phone = #{phone} </if>
+            <if test="null != travelId"> AND travel_id = #{travelId} </if>
+            <if test="null != phones">
+                AND phone IN
+                <foreach item="item" index="index" collection="phones" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="getLeaderIds" resultType="Long"  parameterType="java.lang.Long" >
+        select user_id
+        from t_leader
+        where travel_id = #{travelId,jdbcType=BIGINT}
+    </select>
+    
+    
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, travel_id, name, sex, leader_type, leader_status, photo_url, 
+        birthday, phone, weixin, qq, lead_time, destination_group1, destination_group2, destination_group3, 
+        destination_group4, destination_group5, destination_group6, destination_group7,destination_group8, card_type,
+        card_code, validity_date, language1, language1_level, language2, language2_level, 
+        language3, language3_level, photo_library2_url, photo_library3_url, photo_library1_url, 
+        photo_library4_url, photo_library5_url, photo_library6_url, photo_library7_url, photo_library8_url, 
+        photo_library9_url, photo_library10_url, create_time, update_time, version,evaluationTag,languages,tourRoutes,country_code
+        from t_leader
+		where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getIdByUserId" resultType="Long"  parameterType="java.lang.Long" >
+        select ID
+        from t_leader
+        where user_id = #{userId,jdbcType=BIGINT}  limit 1
+    </select>
+    
+</mapper>

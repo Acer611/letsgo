@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.ShoppingAgencyDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.ShoppingAgencyEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="shopping_name" property="shoppingName" jdbcType="VARCHAR" />
+        <result column="shopping_city" property="shoppingCity" jdbcType="VARCHAR" />
+        <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+        <result column="sell_products" property="sellProducts" jdbcType="VARCHAR" />
+        <result column="residence_time" property="residenceTime" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_shopping_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.ShoppingAgencyEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_shopping_agency (travel_id, shopping_name, shopping_city, city_id, sell_products, residence_time, lon, lat, create_time, update_time)
+        values (#{travelId,jdbcType=BIGINT}, #{shoppingName,jdbcType=VARCHAR}, #{shoppingCity,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{sellProducts,jdbcType=VARCHAR}, #{residenceTime,jdbcType=VARCHAR},
+            #{lon,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.ShoppingAgencyEntity" >
+        update t_shopping_agency
+        set travel_id = #{travelId,jdbcType=BIGINT},
+            shopping_name = #{shoppingName,jdbcType=VARCHAR},
+            shopping_city = #{shoppingCity,jdbcType=VARCHAR},
+            city_id = #{cityId,jdbcType=VARCHAR},
+            sell_products = #{sellProducts,jdbcType=VARCHAR},
+            residence_time = #{residenceTime,jdbcType=VARCHAR},
+            lon = #{lon,jdbcType=VARCHAR},
+            lat = #{lat,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, travel_id, shopping_name, shopping_city, city_id, sell_products, residence_time, lon, lat, create_time, update_time
+        from t_shopping_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, travel_id, shopping_name, shopping_city, city_id, sell_products, residence_time, lon, lat, create_time, update_time
+        from t_shopping_agency
+    </select>
+    <select id="selectShoppingAgencyByName" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.team.ShoppingAgencyEntity">
+        select ID, travel_id, shopping_name, shopping_city, city_id, sell_products, residence_time, lon, lat, create_time, update_time
+        from t_shopping_agency
+        <where>
+            1=1
+            <if test="null != shoppingName and shoppingName !=''.toString()"> AND shopping_name LIKE CONCAT('%',#{shoppingName},'%') </if>
+            <if test="null != travelId"> AND travel_id = #{travelId}</if>
+            <if test="null != cities and cities.size()>0">
+            AND city_id IN
+            <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="selectShoppingAgencyBySameName" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.team.ShoppingAgencyEntity">
+        select ID, travel_id, shopping_name, shopping_city, city_id, sell_products, residence_time, lon, lat, create_time, update_time
+        from t_shopping_agency
+        <where>
+            1=1
+            <if test="null != shoppingName and shoppingName !=''.toString()"> AND shopping_name = #{shoppingName} </if>
+            <if test="null != shoppingCity and shoppingCity !=''.toString()"> AND shopping_city = #{shoppingCity} </if>
+            <if test="null != travelId"> AND travel_id = #{travelId}</if>
+        </where>
+    </select>
+</mapper>

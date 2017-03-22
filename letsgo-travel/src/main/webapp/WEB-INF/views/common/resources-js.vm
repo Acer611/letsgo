@@ -1,0 +1,41 @@
+<!-- jQuery 2.1.4 -->
+<script src="$!{STATIC_URL}/resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<!-- Bootstrap 3.3.5 -->
+<script src="$!{STATIC_URL}/resources/bootstrap/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="$!{STATIC_URL}/resources/plugins/iCheck/icheck.min.js"></script>
+
+<!-- bootstrapValidator -->
+<script src="$!{STATIC_URL}/resources/plugins/bootstrapValidator/js/bootstrapValidator.js"></script>
+<script src="$!{STATIC_URL}/resources/plugins/bootstrapValidator/js/language/zh_CN.js"></script>
+
+<!-- SlimScroll -->
+<script src="$!{STATIC_URL}/resources/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="$!{STATIC_URL}/resources/plugins/fastclick/fastclick.min.js"></script>
+<!-- fullCalendar 2.2.5 -->
+<script src="$!{STATIC_URL}/resources/plugins/fullcalendar/lib/moment.min.js"></script>
+<script src="$!{STATIC_URL}/resources/plugins/fullcalendar/fullcalendar.js"></script>
+<script src='$!{STATIC_URL}/resources/plugins/fullcalendar/lang/zh-cn.js'></script>
+<!-- AdminLTE App -->
+<script src="$!{STATIC_URL}/resources/dist/js/app.min.js"></script>
+<script src="$!{STATIC_URL}/resources/plugins/zyfile/core/zyFile.js"></script>
+<script src="$!{STATIC_URL}/resources/plugins/zyfile/control/js/zyUpload.js"></script>
+
+<!-- InputMask -->
+<!--
+<script src="$!{STATIC_URL}/resources/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="$!{STATIC_URL}/resources/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="$!{STATIC_URL}/resources/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+-->
+<!-- DataTables -->
+<script src="$!{STATIC_URL}/resources/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="$!{STATIC_URL}/resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- bootstrap pagination -->
+<script src="$!{STATIC_URL}/resources/dist/js/pagination.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<!--<script src="$!{STATIC_URL}/resources/dist/js/demo.js"></script>-->
+<!--<script src="$!{STATIC_URL}/resources/dist/js/uploadImage.js"></script>-->
+
+<script type="text/javascript" src="$!{STATIC_URL}/resources/plugins/datetimepicker/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="$!{STATIC_URL}/resources/plugins/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>

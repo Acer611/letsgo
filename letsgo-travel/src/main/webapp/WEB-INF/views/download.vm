@@ -1,0 +1,104 @@
+#set($pageTitle="满意度调查问卷下载")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+
+<style type="text/css">
+    .download-title{
+        width: 100%;
+        height: 70px;
+        background: #1fbad1;
+        line-height: 70px;
+        vertical-align: middle;
+        color: #fff;
+        font-size: 30px;
+    }
+    .container{
+        margin-top: 55px;
+    }
+    .container div{
+        margin-bottom: 45px;
+    }
+    .container a{
+        display: inline-block;
+        color: #1fbad1;
+        text-decoration: none;
+        width: 54px;
+        height: 24px;
+        border: 1px solid #1fbad1;
+        border-radius: 3px;
+        text-align: center;
+        line-height: 24px;
+        font-size: 16px;
+    }
+    .container p{
+        font-size: 16px;
+        padding: 20px 0;
+        margin: 0;
+    }
+</style>
+
+<div class="download-title text-center">
+    <img src="$!{STATIC_URL}/resources/images/edit.png/dist/images/edit.png"/>
+    <span>满意度调查问卷下载</span>
+</div>
+<div class="container">
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+    <div class="col-md-2 col-sm-3 col-xs-6 text-center">
+        <img src="$!{STATIC_URL}/resources/images/pdfLogo.png/dist/images/pdfLogo.png"/>
+        <p>张三.pdf</p>
+        <a href="javascript:void(0)">下载</a>
+    </div>
+</div>

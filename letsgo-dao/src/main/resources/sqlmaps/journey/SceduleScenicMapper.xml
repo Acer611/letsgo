@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.ScheduleScenicDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDetailScenicEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+        <result column="scenic_name" property="scenicName" jdbcType="VARCHAR" />
+        <result column="scenic_city" property="scenicCity" jdbcType="VARCHAR" />
+        <result column="briefintroduction" property="briefintroduction" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <collection property="albumScheduleEntities" ofType="com.umessage.letsgo.domain.po.journey.AlbumScheduleEntity">
+            <id column="photo_id" property="id" jdbcType="BIGINT" />
+            <result column="photo_schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+            <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+            <result column="object_id" property="objectId" jdbcType="BIGINT" />
+            <result column="type" property="type" jdbcType="VARCHAR" />
+            <result column="photo_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        </collection>
+    </resultMap>
+
+    <delete id="deleteScheduleDetailScenicById" parameterType="java.lang.Long" >
+        delete from j_scenic_schedule
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <!--插入关联关系数据-->
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailScenicEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_scenic_schedule(schedule_detail_id,scenic_name, scenic_city, briefintroduction,lon,lat,create_time,update_time)
+        values (#{scheduleDetailId,jdbcType=BIGINT},#{scenicName,jdbcType=VARCHAR}, #{scenicCity,jdbcType=VARCHAR}, #{briefintroduction,jdbcType=VARCHAR},
+        #{lon,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <!--根据ID 修改关联关系表-->
+    <update id="updateScheduleDetailScenic" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailScenicEntity" >
+        update j_scenic_schedule
+        SET schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT},
+            scenic_name = #{scenicName,jdbcType=VARCHAR},
+            scenic_city = #{scenicCity,jdbcType=VARCHAR},
+            briefintroduction = #{briefintroduction},
+            lon = #{lon,jdbcType=VARCHAR},
+            lat = #{lat,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        WHERE ID = #{id,jdbcType=BIGINT}
+    </update>
+
+     <!--根据id 查找景点行程关联关系表数据信息-->
+     <select id="selectScenicInfoById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+      SELECT jss.ID,jss.schedule_detail_id,jss.scenic_name,jss.scenic_city,jss.briefintroduction,jss.lon,
+	            jss.lat,jss.create_time,jss.update_time,
+                jas.photo_url ,jas.create_time AS photo_create_time,jas.object_id ,
+                jas.schedule_detail_id AS photo_schedule_detail_id,jas.ID AS photo_id,jas.type
+        FROM  j_scenic_schedule AS jss
+        LEFT JOIN j_album_schedule AS jas ON jss.ID= jas.object_id
+        AND jas.type = 1 WHERE jss.ID  =#{scenicId} ORDER BY jss.create_time, jas.create_time
+     </select>
+
+
+    <delete id="deleteSchedule" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailScenicEntity" >
+        delete from j_scenic_schedule
+        WHERE schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT}
+    </delete>
+    <!-- <select id="selectAll" resultMap="BaseResultMap" >
+         select ID, schedule_detail_id,spot_id, name, create_time, version
+         from j_scenic
+     </select>
+     <select id="getByScheduleDetailId" resultMap="BaseResultMap">
+         select s.ID, schedule_detail_id,spot_id, name, s.create_time, s.version
+         from j_scenic s
+         JOIN j_schedule_detail AS sd ON s.schedule_detail_id = sd.id
+         where sd.id = #{scheduleDetailId, jdbcType=BIGINT}
+     </select>-->
+</mapper>

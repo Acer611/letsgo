@@ -1,0 +1,61 @@
+#set($layout="/WEB-INF/views/common/layout/layoutnew.vm")
+
+
+#if($response.scheduleList.size()>0)
+#foreach( $Detail in $response.scheduleList)
+                                  <tr>
+                                      <td  style="text-align: center; vertical-align: middle;">$!Detail.id</td>
+                                      <td  style="text-align: center; vertical-align: middle;width:150px;">$!Detail.name</td>
+                                      <td  style="text-align: center; vertical-align: middle;">$!date.format('yyyy-MM-dd',$!Detail.startDate)</td>
+                                      <td  style="text-align: center; vertical-align: middle;">$!Detail.leadName</td>
+                                      <td  style="text-align: center; vertical-align: middle;">$!Detail.phone</td>
+                                      <td  style="text-align: center; vertical-align: middle;">
+##                                          2016-06-05  10:23:45
+##                                          $Detail.createTime
+                                          $!date.format('yyyy-MM-dd HH:mm:ss',$!Detail.createTime)
+                                      </td>
+                                      <td>
+                                          #foreach( $list in $!Detail.processPhotosUrls)
+                                              <img src="$!list"  width="40">
+                                          #end
+                                      </td>
+                                      <td  style="text-align: center; vertical-align: middle;">
+                                          #if( $Detail.processStatus==2)
+                                              已发布
+                                          #end
+                                          #if( $Detail.processStatus==3)
+                                              未发布
+                                          #end
+                                          #if( $Detail.processStatus==4)
+                                              待确认
+                                          #end
+                                      </td>
+                                      <td  style="text-align: center; vertical-align: middle;">
+    #if( $Detail.processStatus==3)
+                                          <a href="$!{link.contextPath}/schedule/scheduleEdit?id=$!{Detail.id}">新建</a>
+        #elseif( $Detail.processStatus==4)
+            <a href="$!{link.contextPath}/schedule/scheduleEdit?id=$!{Detail.id}">修改</a>
+        #else
+        <a href="$!{link.contextPath}/survey/surveyQueryOrSave?teamId= $!{Detail.teamId}&title=${Detail.name}">满意度调研</a>
+        #end
+                                      </td>
+                                      <td  style="text-align: center; vertical-align: middle;">
+                                          <a href="$!{link.contextPath}/schedule/schedulePreview?id=$!{Detail.id}">查看</a>
+                                      </td>
+                                  </tr>
+    #end
+
+
+#else
+<tr><td colspan="10">没有符合条件的数据</td></tr>
+#end
+
+
+
+
+<script type="text/javascript">
+
+
+    var totalpages="$!{response.totals}";
+
+</script>

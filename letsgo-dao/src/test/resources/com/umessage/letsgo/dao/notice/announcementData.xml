@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<n_announcement id="1001" team_id="1001" title="出游注意事项1" content="公告内容1" author="杨导" />
+	<n_announcement id="1002" team_id="1001" title="出游注意事项2" content="公告内容2" author="杨导" />
+	<n_announcement id="1003" team_id="1001" title="出游注意事项3" content="公告内容3" author="杨导" />
+</dataset>

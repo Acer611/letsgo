@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+       http://www.springframework.org/schema/security/oauth2  http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
+
+    <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <property name="tokenStore" ref="tokenStore"/>
+        <property name="supportRefreshToken" value="true"/>
+        <property name="clientDetailsService" ref="clientDetailsService"/>
+    </bean>
+
+    <bean id="unauthorizedEntryPoint" class="com.umessage.letsgo.core.extensions.springsecurity.UnauthorizedEntryPoint" />
+
+    <bean id="webSignatureProcessingFilter"
+          class="com.umessage.letsgo.core.extensions.springsecurity.CustomerSignatureProcessingFilter">
+        <property name="clientDetailsService" ref="clientDetailsService"/>
+        <property name="authenticationEntryPoint" ref="unauthorizedEntryPoint"/>
+    </bean>
+
+    <oauth2:resource-server id="webResourceServerFilter" resource-id="letsgo-resource" token-services-ref="tokenServices"
+                            entry-point-ref="unauthorizedEntryPoint"/>
+
+    <security:http pattern="/web/**" create-session="never" entry-point-ref="unauthorizedEntryPoint">
+        <security:anonymous enabled = "true" username = "anonymousUser" granted-authority = "ROLE_ANONYMOUS" />
+        <!--
+        <security:intercept-url pattern="/web/register/**" access="ROLE_ADMIN,ROLE_CAPTAIN,ROLE_GUIDE,ROLE_TOURIST,ROLE_ANONYMOUS"/>
+        -->
+        <security:intercept-url pattern="/web/**" access="ROLE_ADMIN,ROLE_CAPTAIN,ROLE_GUIDE,ROLE_TOURIST,ROLE_TRAVEL"/>
+        <security:custom-filter ref="webResourceServerFilter" before="PRE_AUTH_FILTER"/>
+        <security:custom-filter ref="webSignatureProcessingFilter" before="ANONYMOUS_FILTER"/>
+    </security:http>
+
+    <bean id="wxAuthenticationFilter"
+                class="com.umessage.letsgo.h5.common.weixin.WXAuthenticationFilter">
+        <property name="authenticationSuccessHandler" ref="authenticationSuccessHandler"></property>
+        <property name="authenticationFailureHandler" ref="authenticationFailureHandler"/>
+        <property name="authenticationManager" ref="authenticationManager"></property>
+    </bean>
+
+    <bean id="authenticationSuccessHandler"
+          class="com.umessage.letsgo.h5.common.weixin.TargetUrlAuthenticationSuccessHandler">
+        <property name="targetUrlParameter" value="targetUrl"></property>
+    </bean>
+
+    <bean id="authenticationFailureHandler" class="com.umessage.letsgo.h5.common.weixin.ReferUrlAuthenticationFailureHandler">
+        <property name="exceptionMappings">
+            <props>
+                <!-- weixin学生用户登录未找到 -->
+                <prop key="com.umessage.letsgo.core.exception.UserNotFoundAuthenticationException">
+                    /auth_error?error_type\=USER_NOT_FOUND
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="multiAuthenticationPageEntryPoint"
+                class="com.umessage.letsgo.h5.common.weixin.MultiAuthenticationPageEntryPoint">
+        <property name="loginPageDetails">
+            <props>
+                <prop key="/wechat/">/splat.dispatch</prop>
+                <prop key="default">/login</prop>
+            </props>
+        </property>
+    </bean>
+
+    <security:http pattern="/h5/**" security="none"/>
+    <security:http pattern="/weixin/**" security="none"/>
+    <security:http pattern="/resources/**" security="none"/>
+
+    <security:http pattern="/**" entry-point-ref="multiAuthenticationPageEntryPoint">
+        <security:anonymous enabled = "true" username = "anonymousUser" granted-authority = "ROLE_ANONYMOUS" />
+        <security:intercept-url pattern="/wechat/**" access="ROLE_ADMIN,ROLE_CAPTAIN,ROLE_GUIDE,ROLE_TOURIST,ROLE_TRAVEL,ROLE_WX_USER"/>
+        <security:custom-filter ref="wxAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
+        <!-- 表单登录过滤器 -->
+        <!--
+        <security:custom-filter ref="customFormLoginFilter" position="FORM_LOGIN_FILTER" />
+        -->
+    </security:http>
+
+    <!--user-->
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="userAuthenticationProvider">
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <!--user-->
+</beans>

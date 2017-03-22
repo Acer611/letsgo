@@ -1,0 +1,206 @@
+#set($pageTitle="行程问题反馈")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/dist/css/message.css?t=1.0"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/plugins/layer_mobile/layer.js"])
+
+    <div class="wrapper">
+
+
+
+      <!-- =============================================== -->
+
+      #parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- =============================================== -->
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+       
+       
+		
+        <!-- Main content -->
+        <section class="content">
+		
+		<div class="quswarp">
+			<div class="blueLineradius"></div>
+			<div class="scheduleMsg row">
+				<div class="col-md-12">
+					<p class="col-md-3">团号：$!{resultMap.teamEntity.teamNum}  </p>
+					<p class="col-md-3">游客数量：$!{resultMap.teamEntity.totalCount}  </p>
+					<p class="col-md-6">行程名称：$!{resultMap.teamEntity.name}  </p>
+				</div>
+				<div class="col-md-12">
+					<p class="col-md-3">领队姓名：$!{resultMap.ledarMemberEntity.realName}    </p>
+					#if($!{resultMap.ledarMemberEntity.sex}&&$!{resultMap.ledarMemberEntity.sex}!="")
+
+					<p class="col-md-3">领队性别：
+						#if($!{resultMap.ledarMemberEntity.sex}==1)
+							男
+							#elseif($!{resultMap.ledarMemberEntity.sex}==2)
+							女
+						#end   </p>
+					#end
+					<p class="col-md-6">领队手机号：$!{resultMap.ledarMemberEntity.phone} </p>
+				</div>
+			</div>
+			<div class="userMsg row">
+				<div class="col-md-12">
+					<p class="col-md-3">游客姓名：$!{resultMap.memberEntity.realName} </p>
+#if($!{resultMap.memberEntity.sex}&&$!{resultMap.memberEntity.sex}!="")
+					<p class="col-md-3">游客性别：
+						#if($!{resultMap.memberEntity.sex}==1)
+                            男
+						#elseif($!{resultMap.memberEntity.sex}==2)
+                            女
+						#end
+					</p>
+	#end
+					<p class="col-md-6"> 游客手机号：$!{resultMap.memberEntity.phone}</p>
+				</div>
+			</div>
+		</div>
+		<div class="charbox">
+			    <div class="messageArea">
+#foreach( $product in ${resultMap.get("messageEntity").messageTextEntityList})
+					<div class="#if($!{product.status}==0) user_left #else customer_right #end">
+					<div class="row">
+	#if($!{product.status}==0)
+						<div class="col-md-1 charhead"><img src="$!{product.headUrl}"/></div>
+						<div class="col-md-11">
+							<p>$!{product.senderName}</p>
+							<p class="chartime">$!date.format('yyyy-MM-dd HH:mm:ss',$!{product.postTime})</p>
+						</div>
+		#else
+
+            <div class="col-md-11">
+                <p class="charname">$!{product.senderName}</p>
+                <p class="chartime">$!date.format('yyyy-MM-dd HH:mm:ss',$!{product.postTime})</p>
+            </div>
+            <div class="col-md-1 charhead"><img src="$!{product.headUrl}"/></div>
+			#end
+						</div>
+						<div class="charcon col-md-offset-1">
+							<div class="arrow"></div>
+							<p>$!{product.message}</p>
+							
+						</div>
+						<div class="charphotos col-md-offset-1">
+
+
+
+	#foreach( $photo in ${product.photoList})
+    <div class="feedphotos">
+							<img src="$!{photo}"/>
+    </div>
+	#end
+
+
+							</div>
+					</div>
+
+					<!--<div class="customer_right">
+						<div class="row">
+							<div class="col-md-11">
+								<p class="">$!{product.senderName}<p><p class="chartime">$!{product.postTime}</p>
+							</div>
+							<div class="col-md-1 charhead"><img src="$!{resultMap.teamEntity.photoUrl}"/></div>
+						</div>
+						<div class="charcon col-md-offset-1">
+							<div class="arrow"></div>
+							<p>尊敬的贵宾您好，您的反馈我们已经收到，我们会在行程结束后7个工作日内为您处理完毕，请您耐心等待</p>
+						</div>
+					</div>-->
+
+#end
+				</div>
+				<div class="sendcall">
+					<div class="col-md-1 text-cener header_kefu"><img src="$!{STATIC_URL}/resources/dist/images/kefu.png"/></div>
+					<div class="col-md-11 charbg">
+						<textarea type="text" class="col-md-10" placeholder="请在此处输入想要回复游客的内容" id="messageInput"></textarea>
+						<button type="button" id="clickReply" onclick="clickReply()" class="col-md-2">回复</button>
+					</div>
+				</div>
+            <input id="teavelIdhid" type="hidden" value="$!{resultMap.messageEntity.teavelId}">
+			<input id="memberIdhid" type="hidden" value="$!{resultMap.memberEntity.id}">
+			<input id="midhid" type="hidden" value="$!{resultMap.messageEntity.ID}">
+		</div>
+			
+			
+		</section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+      #parse("/WEB-INF/views/common/footer.vm")
+    </div><!-- ./wrapper -->
+
+
+#define($scriptBlock)
+
+<script>
+  	$(document).ready(function(){
+  		$(".messageArea").css({height:$(window).height()-$(".main-header").height()-$(".quswarp").height()-$(".sendcall").height()-$(".main-footer").height()});
+		$(".sendcall").css({width:$(".charbox").width(),right:"15px",bottom:$(".main-footer").outerHeight()+10});
+$(".charphotos").each(function(){
+	if($(this).find(".feedphotos").length<=1){
+		$(this).find(".feedphotos").find("img").css({width:"168px"})
+	}
+})
+        document.onkeydown = function(e) {
+            e = e || window.event;
+            if(e.keyCode == 13) {
+                clickReply();
+                return false;
+            }
+        }
+	});
+
+    function clickReply(){
+		var message=$("#messageInput").val();
+		if(!message){
+            layer.open({
+                btn: [ '确定'],
+                content:"请输入消息再发送"
+            })
+			return false;
+		}
+		var headImg=$(".customer_right").eq(0).find(".charhead").html()?$(".customer_right").eq(0).find(".charhead").html():"$!{STATIC_URL}/resources/dist/images/kefu.png";
+        var headName=$(".customer_right").eq(0).find(".charname").text()?$(".customer_right").eq(0).find(".charname").text():"旅行社";
+		var html='<div class="customer_right">\
+                <div class="row">\
+                <div class="col-md-11">\
+                <p class="">'+headName+'</p><p class="chartime">'+timeDate()+'</p>\
+                </div>\
+                <div class="col-md-1 charhead">'+headImg+'</div>\
+                </div>\
+                <div class="charcon col-md-offset-1">\
+                <div class="arrow"></div>\
+                <p>'+message+'</p>\
+        </div>\
+        </div>';
+		$(".messageArea").append(html);
+        $("#messageInput").val("");
+        $(".messageArea")[0].scrollTop = $(".messageArea")[0].scrollHeight;
+		$.ajax({
+			type: "POST",
+			url: CONTEXTPATH+"/message/ReplyMessage",
+            data:JSON.stringify({memberId: $("#memberIdhid").val(),mid: $("#midhid").val(),message:message,travelId:$("#teavelIdhid").val()}),
+            contentType:'application/json;charset=utf-8',
+			dataType: "json",
+			success: function (data) {
+
+			}
+		})
+    }
+    function timeDate(){
+        var date = new Date();
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = (date.getDate() < 10 ? '0'+(date.getDate()) : date.getDate()) + ' ';
+        h = (date.getHours() < 10 ? '0'+(date.getHours()) : date.getHours())+ ':';
+        m = (date.getMinutes()< 10 ? '0'+(date.getMinutes()) : date.getMinutes()) + ':';
+        s = (date.getSeconds()< 10 ? '0'+(date.getSeconds()) : date.getSeconds());
+        var newDate=Y+M+D+h+m+s;
+        return newDate;
+    }
+  	</script>
+  #end
+

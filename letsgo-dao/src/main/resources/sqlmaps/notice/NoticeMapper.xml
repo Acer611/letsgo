@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.notice.NoticeDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.notice.NoticeEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="t_id" property="tId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="sender_id" property="senderId" jdbcType="BIGINT" />
+        <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+        <result column="video_len" property="videoLen" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="time" property="time" jdbcType="TIMESTAMP" />
+        <result column="first_remind" property="firstRemind" jdbcType="INTEGER" />
+        <result column="timezone" property="timezone" jdbcType="VARCHAR" />
+        <result column="timezone_id" property="timezoneId" jdbcType="VARCHAR" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="traffic" property="traffic" jdbcType="VARCHAR" />
+        <result column="sure_count" property="sureCount" jdbcType="INTEGER" />
+        <result column="notsure_count" property="notsureCount" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="d_active_status" property="activeStatus" jdbcType="INTEGER" />
+        <result column="s_photo_url" property="senderPhotoUrl" jdbcType="VARCHAR" />
+        <result column="j_schedule_name" property="scheduleName" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="MultiResultMap" type="com.umessage.letsgo.domain.po.notice.NoticeEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="t_id" property="tId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="sender_id" property="senderId" jdbcType="BIGINT" />
+        <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+        <result column="video_len" property="videoLen" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="time" property="time" jdbcType="TIMESTAMP" />
+        <result column="first_remind" property="firstRemind" jdbcType="INTEGER" />
+        <result column="timezone" property="timezone" jdbcType="VARCHAR" />
+        <result column="timezone_id" property="timezoneId" jdbcType="VARCHAR" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="traffic" property="traffic" jdbcType="VARCHAR" />
+        <result column="sure_count" property="sureCount" jdbcType="INTEGER" />
+        <result column="notsure_count" property="notsureCount" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="t_name" property="teamName" jdbcType="VARCHAR" />
+        <result column="notice_type" property="noticeType" jdbcType="VARCHAR" />
+        <result column="m_photo_url" property="senderPhotoUrl" jdbcType="VARCHAR" />
+        <result column="sign_count" property="signCount" jdbcType="VARCHAR" />
+
+        <collection property="noticeDetailList" ofType="com.umessage.letsgo.domain.po.notice.NoticeDetailEntity">
+            <id column="d_id" property="id" jdbcType="BIGINT" />
+            <result column="notice_id" property="notifId" jdbcType="BIGINT" />
+            <result column="d_memberId" property="memberId" jdbcType="BIGINT" />
+            <result column="is_active" property="isActive" jdbcType="INTEGER" />
+            <result column="active_status" property="activeStatus" jdbcType="INTEGER" />
+            <result column="active_time" property="activeTime" jdbcType="VARCHAR" />
+            <result column="d_createTime" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="d_updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="d_ver" property="version" jdbcType="BIGINT" />
+            <result column="d_user_id" property="userId" jdbcType="BIGINT" />
+        </collection>
+        <collection property="noticeReplyList" ofType="com.umessage.letsgo.domain.po.notice.NoticeReplyEntity">
+            <id column="r_id" property="id" jdbcType="BIGINT" />
+            <result column="notice_id" property="notifId" jdbcType="BIGINT" />
+            <result column="r_memberId" property="memberId" jdbcType="BIGINT" />
+            <result column="r_user_id" property="userId" jdbcType="BIGINT" />
+            <result column="reply" property="reply" jdbcType="VARCHAR" />
+            <result column="r_createTime" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="r_updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="r_ver" property="version" jdbcType="BIGINT" />
+        </collection>
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from n_notice
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.notice.NoticeEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into n_notice (t_id, team_id, user_id, sender_id,
+            sender_name, content, video_url, 
+            video_len, type, time, 
+            first_remind, timezone,timezone_id, longitude,
+            latitude, location, traffic, 
+            sure_count, notsure_count, create_time, 
+            update_time, version,notic_type)
+        values (#{tId,jdbcType=BIGINT}, #{teamId,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT},  #{senderId,jdbcType=BIGINT},
+            #{senderName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{videoUrl,jdbcType=VARCHAR}, 
+            #{videoLen,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP}, 
+            #{firstRemind,jdbcType=INTEGER}, #{timezone,jdbcType=VARCHAR},#{timezoneId,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE},
+            #{latitude,jdbcType=DOUBLE}, #{location,jdbcType=VARCHAR}, #{traffic,jdbcType=VARCHAR}, 
+            #{sureCount,jdbcType=INTEGER}, #{notsureCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+            #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}, #{noticeType,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.notice.NoticeEntity" >
+        update n_notice
+        set t_id = #{tId,jdbcType=BIGINT},
+            team_id = #{teamId,jdbcType=VARCHAR},
+            user_id = #{userId,jdbcType=BIGINT},
+            sender_id = #{senderId,jdbcType=BIGINT},
+            sender_name = #{senderName,jdbcType=VARCHAR},
+            content = #{content,jdbcType=VARCHAR},
+            video_url = #{videoUrl,jdbcType=VARCHAR},
+            video_len = #{videoLen,jdbcType=VARCHAR},
+            type = #{type,jdbcType=INTEGER},
+            time = #{time,jdbcType=TIMESTAMP},
+            first_remind = #{firstRemind,jdbcType=INTEGER},
+            timezone = #{timezone,jdbcType=VARCHAR},
+            longitude = #{longitude,jdbcType=DOUBLE},
+            latitude = #{latitude,jdbcType=DOUBLE},
+            location = #{location,jdbcType=VARCHAR},
+            traffic = #{traffic,jdbcType=VARCHAR},
+            sure_count = #{sureCount,jdbcType=INTEGER},
+            notsure_count = #{notsureCount,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="MultiResultMap" parameterType="java.lang.Long" >
+        select n.ID, n.t_id, n.team_id, n.user_id, n.sender_id, n.sender_name, n.content, n.video_url, n.video_len, n.type,
+        n.time, n.first_remind, n.timezone,n.timezone_id, n.longitude, n.latitude, n.location, n.traffic, n.sure_count,
+        n.notsure_count, n.create_time, n.update_time, n.version,
+        d.ID as d_id, d.notice_id as d_nid, d.member_id as d_memberId, d.is_active, d.active_status, d.active_time,
+        d.create_time as d_createTime, d.update_time as d_updateTime, d.version as d_ver,
+        r.ID as r_id, r.notice_id as r_nid, r.member_id as r_memberId, r.user_id as r_user_id, r.reply,
+        r.create_time as r_createTime, r.update_time as r_updateTime, r.version as r_ver
+        from n_notice as n
+        left join n_notice_detail as d on n.ID = d.notice_id
+        left join n_notice_reply as r on n.ID = r.notice_id
+        where n.ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="MultiResultMap" >
+        select n.ID, n.t_id, n.team_id, n.user_id, n.sender_id, n.sender_name, n.content, n.video_url, n.video_len, n.type,
+        n.time, n.first_remind, n.timezone, n.timezone_id,n.longitude, n.latitude, n.location, n.traffic, n.sure_count,
+        n.notsure_count, n.create_time, n.update_time, n.version,
+        d.ID as d_id, d.notice_id as d_nid, d.member_id as d_memberId, d.is_active, d.active_status, d.active_time,
+        d.create_time as d_createTime, d.update_time as d_updateTime, d.version as d_ver,
+        r.ID as r_id, r.notice_id as r_nid, r.member_id as r_memberId, r.user_id as r_user_id, r.reply,
+        r.create_time as r_createTime, r.update_time as r_updateTime, r.version as r_ver
+        from n_notice as n
+        left join n_notice_detail as d on n.ID = d.notice_id
+        left join n_notice_reply as r on n.ID = r.notice_id
+    </select>
+    <select id="selectNoticeListWithConditions" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.NoticeParamRequest" >
+        select n.ID, n.t_id, n.team_id, n.user_id, n.sender_id, n.sender_name, n.content, n.video_url, n.video_len, n.type,
+        n.time, n.first_remind, n.timezone,n.timezone_id, n.longitude, n.latitude, n.location, n.traffic, n.sure_count,
+        n.notsure_count, n.create_time, n.update_time, n.version,
+        d.ID as d_id, d.notice_id as d_nid, d.member_id as d_memberId, d.is_active, d.active_status, d.active_time,
+        d.create_time as d_createTime, d.update_time as d_updateTime, d.version as d_ver,
+        r.ID as r_id, r.notice_id as r_nid, r.member_id as r_memberId, r.user_id as r_user_id, r.reply,
+        r.create_time as r_createTime, r.update_time as r_updateTime, r.version as r_ver,
+        t.`name` as t_name,
+        u.photo_url as m_photo_url
+        from n_notice as n
+        left join n_notice_detail as d on n.ID = d.notice_id
+        left join n_notice_reply as r on n.ID = r.notice_id
+        JOIN t_team AS t ON t.tx_groupId = n.team_id
+        JOIN t_member AS m ON m.ID = n.sender_id
+        JOIN s_user AS u ON u.ID = m.user_id
+        <where>
+            <if test="null != type"> and n.type = #{type,jdbcType=INTEGER} </if>
+            <if test="1 == type"> and n.time &gt; DATE_SUB(now(), INTERVAL 1 day) </if><!--如果是集合，只获取24小时以内的-->
+            <if test="null != teamId"> and n.team_id = #{teamId,jdbcType=BIGINT} </if>
+            <if test="null != memberId"> and ( n.sender_id = #{memberId} OR d.member_id = #{memberId} )</if>
+            <if test="null != memberIds"> and ( n.sender_id in
+                <foreach item="item" index="index" collection="memberIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                OR d.member_id in
+                <foreach item="item" index="index" collection="memberIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach> )
+            </if>
+            <if test="null != teamIds"> and n.team_id in
+                <foreach item="item" index="index" collection="teamIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="null != receiverIds"> and d.member_id in
+                <foreach item="item" index="index" collection="receiverIds" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="null != lastId"> and n.ID &gt; #{lastId} </if>
+            <if test="null != isActive"> and d.is_active = #{isActive} </if>
+            <if test="null != activeStatus"> and d.active_status = #{activeStatus} </if>
+        </where>
+        <choose>
+            <when test="type == 1"><!--集合排序方式-->
+                ORDER BY n.time DESC
+            </when>
+            <otherwise><!--通知排序方式-->
+                ORDER BY n.create_time DESC, d.active_status ASC, r.create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="getLastMessage" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.NoticeRequest" >
+        select n.ID, n.t_id, n.team_id,n.content, n.video_url,n.video_len,n.type,
+        n.time,n.timezone,n.timezone_id,n.location,d.active_status AS d_active_status,
+        n.create_time
+        from n_notice as n
+        left join n_notice_detail as d on n.ID = d.notice_id AND d.user_id=n.user_id
+        <where>
+            <if test="null != type"> and n.type = #{type} </if>
+            <if test="null != teamId"> and n.team_id = #{teamId} </if>
+            <if test="null != userId"> and (n.user_id = #{userId} or d.user_id = #{userId})  </if>
+       </where>
+        ORDER BY n.create_time DESC LIMIT 1
+    </select>
+
+    <select id="getLastMessageToTourist" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.NoticeRequest" >
+        select n.ID, n.t_id, n.team_id,n.content, n.video_url,n.video_len,n.type,
+        n.time,n.timezone,n.timezone_id,n.timezone_id,n.location,d.active_status AS d_active_status,
+        n.create_time
+        from n_notice as n
+        left join n_notice_detail as d on n.ID = d.notice_id
+        <where>
+            <if test="null != type"> and n.type = #{type} </if>
+            <if test="null != teamId"> and n.team_id = #{teamId} </if>
+            <if test="null != userId"> and d.user_id = #{userId} </if>
+        </where>
+        ORDER BY n.create_time DESC LIMIT 1
+    </select>
+
+    <select id="getWxGatherById" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.notice.NoticeEntity">
+        select n.ID, n.t_id, n.team_id,n.content, n.video_url,n.video_len,n.type,
+        n.time,n.timezone,n.timezone_id,n.location,n.longitude,n.latitude,d.active_status AS d_active_status,
+        n.create_time,n.traffic,n.sender_name,s.photo_url AS s_photo_url,j.name AS j_schedule_name
+        from n_notice as n
+        LEFT JOIN n_notice_detail AS d on n.ID = d.notice_id
+        LEFT JOIN s_user AS s on s.ID = n.user_id
+        LEFT JOIN t_team AS t on t.tx_groupId = n.team_id
+        LEFT JOIN j_schedule AS j on t.ID = j.team_id
+        WHERE n.ID = #{id,jdbcType=BIGINT} AND  d.user_id=#{userId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getWxGatherByIdOne" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select n.ID, n.t_id, n.team_id,n.content, n.video_url,n.video_len,n.type,
+        n.time,n.timezone,n.timezone_id,n.location,n.longitude,n.latitude,n.create_time,n.traffic,n.sender_name
+        from n_notice as n
+        WHERE n.ID = #{id,jdbcType=BIGINT} AND n.type =1
+    </select>
+
+
+    <select id="getNoticeMessages" resultMap="MultiResultMap" parameterType="com.umessage.letsgo.domain.vo.notice.request.NoticeParamRequest">
+      SELECT
+	      n.ID,n.t_id,n.team_id,n.user_id,n.sender_id,n.sender_name,
+	      n.content,n.video_url,n.video_len,n.type,n.time,
+	      n.first_remind,n.timezone,n.timezone_id,n.longitude,n.latitude,
+	      n.location,n.traffic,n.sure_count,n.notsure_count,
+	      n.create_time,n.update_time,n.version,n.notice_type,n.sign_count,
+
+          d.ID AS d_id,d.notice_id AS d_nid,d.member_id AS d_memberId,d.is_active,d.active_status,d.active_time,
+          d.create_time AS d_createTime,d.update_time AS d_updateTime,d.version AS d_ver,d.user_id AS d_user_id,
+
+          r.ID AS r_id,r.notice_id AS r_nid,r.member_id AS r_memberId,r.user_id AS r_user_id,
+	      r.reply,r.create_time AS r_createTime,r.update_time AS r_updateTime,r.version AS r_ver,
+	      u.photo_url as m_photo_url
+          FROM
+	      n_notice AS n
+          LEFT JOIN n_notice_detail AS d ON n.ID = d.notice_id
+          LEFT JOIN n_notice_reply as r on n.ID = r.notice_id
+          LEFT JOIN s_user AS u on u.ID = n.user_id
+          WHERE d.team_id = #{teamId,jdbcType=BIGINT} AND n.type = #{type,jdbcType=INTEGER}
+          ORDER BY n.create_time DESC, d.active_status ASC, r.create_time DESC
+    </select>
+
+    <update id="updateNoticeSignCount" parameterType="com.umessage.letsgo.domain.po.notice.NoticeEntity" >
+        update n_notice
+        set sign_count = sign_count + #{signCount,jdbcType=INTEGER},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        version = version + 1
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

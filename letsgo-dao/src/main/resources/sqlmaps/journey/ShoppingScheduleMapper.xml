@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.ShoppingScheduleDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.ShoppingScheduleEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+        <result column="shopping_name" property="shoppingName" jdbcType="VARCHAR" />
+        <result column="shopping_city" property="shoppingCity" jdbcType="VARCHAR" />
+        <result column="sell_products" property="sellProducts" jdbcType="VARCHAR" />
+        <result column="residence_time" property="residenceTime" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_shopping_schedule
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.ShoppingAgencyEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_shopping_schedule (schedule_id, schedule_detail_id, shopping_name, shopping_city, sell_products, residence_time, lon, lat, create_time, update_time)
+        values (#{scheduleId,jdbcType=BIGINT}, #{scheduleDetailId,jdbcType=BIGINT}, #{shoppingName,jdbcType=VARCHAR}, #{shoppingCity,jdbcType=VARCHAR}, #{sellProducts,jdbcType=VARCHAR}, #{residenceTime,jdbcType=VARCHAR},
+            #{lon,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.ShoppingAgencyEntity" >
+        update j_shopping_schedule
+        set schedule_id = #{scheduleId,jdbcType=BIGINT},
+            schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT},
+            shopping_name = #{shoppingName,jdbcType=VARCHAR},
+            shopping_city = #{shoppingCity,jdbcType=VARCHAR},
+            sell_products = #{sellProducts,jdbcType=VARCHAR},
+            residence_time = #{residenceTime,jdbcType=VARCHAR},
+            lon = #{lon,jdbcType=VARCHAR},
+            lat = #{lat,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, schedule_id, schedule_detail_id, shopping_name, shopping_city, sell_products, residence_time, lon, lat, create_time, update_time
+        from j_shopping_schedule
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, schedule_id, schedule_detail_id, shopping_name, shopping_city, sell_products, residence_time, lon, lat, create_time, update_time
+        from j_shopping_schedule
+    </select>
+    <select id="selectShoppingByScheduleDetailId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, schedule_id, schedule_detail_id, shopping_name, shopping_city, sell_products, residence_time, lon, lat, create_time, update_time
+        from j_shopping_schedule
+        where schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT}
+    </select>
+    <select id="selectShoppingByScheduleId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, schedule_id, schedule_detail_id, shopping_name, shopping_city, sell_products, residence_time, lon, lat, create_time, update_time
+        from j_shopping_schedule
+        where schedule_id = #{scheduleId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteShoppingByScheduleDetailId" parameterType="java.lang.Long" >
+        delete from j_shopping_schedule
+        where schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteShoppingByScheduleId" parameterType="java.lang.Long" >
+        delete from j_shopping_schedule
+        where schedule_id = #{scheduleId,jdbcType=BIGINT}
+    </delete>
+</mapper>

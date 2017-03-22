@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.PromptInfoDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.PromptInfoEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="weather_situation" property="weatherSituation" jdbcType="LONGVARCHAR" />
+        <result column="dress_code" property="dressCode" jdbcType="LONGVARCHAR" />
+        <result column="time_info" property="timeInfo" jdbcType="LONGVARCHAR" />
+        <result column="languages" property="languages" jdbcType="LONGVARCHAR" />
+        <result column="voltage" property="voltage" jdbcType="LONGVARCHAR" />
+        <result column="foods" property="foods" jdbcType="LONGVARCHAR" />
+        <result column="essential_item" property="essentialItem" jdbcType="LONGVARCHAR" />
+        <result column="currency" property="currency" jdbcType="LONGVARCHAR" />
+        <result column="telephone_communication" property="telephoneCommunication" jdbcType="LONGVARCHAR" />
+        <result column="hotel" property="hotel" jdbcType="LONGVARCHAR" />
+        <result column="customs_forbid" property="customsForbid" jdbcType="LONGVARCHAR" />
+        <result column="water_activities_note" property="waterActivitiesNote" jdbcType="LONGVARCHAR" />
+        <result column="tip_case" property="tipCase" jdbcType="LONGVARCHAR" />
+        <result column="customs" property="customs" jdbcType="LONGVARCHAR" />
+        <result column="china_notic" property="chinaNotic" jdbcType="LONGVARCHAR" />
+        <result column="new_title" property="newTitle" jdbcType="VARCHAR" />
+        <result column="new_contant" property="newContant" jdbcType="LONGVARCHAR" />
+        <result column="security" property="security" jdbcType="LONGVARCHAR" />
+        <result column="special_attention" property="specialAttention" jdbcType="LONGVARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="cost_include" property="costInclude" jdbcType="LONGVARCHAR" />
+        <result column="cost_not_include" property="costNotInclude" jdbcType="LONGVARCHAR" />
+        <result column="own_expence_info" property="ownExpenceInfo" jdbcType="LONGVARCHAR" />
+        <result column="shopping_place" property="shoppingPlace" jdbcType="LONGVARCHAR" />
+        <result column="travel_agency_info" property="travelAgencyInfo" jdbcType="LONGVARCHAR" />
+        <result column="group_club_info" property="groupClubInfo" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_prompt_info
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.PromptInfoEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_prompt_info (schedule_id, weather_situation, 
+            dress_code, time_info, languages, 
+            voltage, foods, essential_item, 
+            currency, telephone_communication, 
+            hotel, customs_forbid, water_activities_note, 
+            tip_case, customs, china_notic, 
+            new_title, new_contant, security, 
+            special_attention, create_time, update_time, 
+            version, cost_include, cost_not_include, 
+            own_expence_info, shopping_place, 
+            travel_agency_info, group_club_info
+            )
+        values (#{scheduleId,jdbcType=BIGINT}, #{weatherSituation,jdbcType=LONGVARCHAR}, 
+            #{dressCode,jdbcType=LONGVARCHAR}, #{timeInfo,jdbcType=LONGVARCHAR}, #{languages,jdbcType=LONGVARCHAR}, 
+            #{voltage,jdbcType=LONGVARCHAR}, #{foods,jdbcType=LONGVARCHAR}, #{essentialItem,jdbcType=LONGVARCHAR}, 
+            #{currency,jdbcType=LONGVARCHAR}, #{telephoneCommunication,jdbcType=LONGVARCHAR}, 
+            #{hotel,jdbcType=LONGVARCHAR}, #{customsForbid,jdbcType=LONGVARCHAR}, #{waterActivitiesNote,jdbcType=LONGVARCHAR}, 
+            #{tipCase,jdbcType=LONGVARCHAR}, #{customs,jdbcType=LONGVARCHAR}, #{chinaNotic,jdbcType=LONGVARCHAR}, 
+            #{newTitle,jdbcType=VARCHAR}, #{newContant,jdbcType=LONGVARCHAR}, #{security,jdbcType=LONGVARCHAR}, 
+            #{specialAttention,jdbcType=LONGVARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+            #{version,jdbcType=BIGINT}, #{costInclude,jdbcType=LONGVARCHAR}, #{costNotInclude,jdbcType=LONGVARCHAR}, 
+            #{ownExpenceInfo,jdbcType=LONGVARCHAR}, #{shoppingPlace,jdbcType=LONGVARCHAR}, 
+            #{travelAgencyInfo,jdbcType=LONGVARCHAR}, #{groupClubInfo,jdbcType=LONGVARCHAR}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.PromptInfoEntity" >
+        update j_prompt_info
+        set schedule_id = #{scheduleId,jdbcType=BIGINT},
+            weather_situation = #{weatherSituation,jdbcType=LONGVARCHAR},
+            dress_code = #{dressCode,jdbcType=LONGVARCHAR},
+            time_info = #{timeInfo,jdbcType=LONGVARCHAR},
+            languages = #{languages,jdbcType=LONGVARCHAR},
+            voltage = #{voltage,jdbcType=LONGVARCHAR},
+            foods = #{foods,jdbcType=LONGVARCHAR},
+            essential_item = #{essentialItem,jdbcType=LONGVARCHAR},
+            currency = #{currency,jdbcType=LONGVARCHAR},
+            telephone_communication = #{telephoneCommunication,jdbcType=LONGVARCHAR},
+            hotel = #{hotel,jdbcType=LONGVARCHAR},
+            customs_forbid = #{customsForbid,jdbcType=LONGVARCHAR},
+            water_activities_note = #{waterActivitiesNote,jdbcType=LONGVARCHAR},
+            tip_case = #{tipCase,jdbcType=LONGVARCHAR},
+            customs = #{customs,jdbcType=LONGVARCHAR},
+            china_notic = #{chinaNotic,jdbcType=LONGVARCHAR},
+            new_title = #{newTitle,jdbcType=VARCHAR},
+            new_contant = #{newContant,jdbcType=LONGVARCHAR},
+            security = #{security,jdbcType=LONGVARCHAR},
+            special_attention = #{specialAttention,jdbcType=LONGVARCHAR},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            cost_include = #{costInclude,jdbcType=LONGVARCHAR},
+            cost_not_include = #{costNotInclude,jdbcType=LONGVARCHAR},
+            own_expence_info = #{ownExpenceInfo,jdbcType=LONGVARCHAR},
+            shopping_place = #{shoppingPlace,jdbcType=LONGVARCHAR},
+            travel_agency_info = #{travelAgencyInfo,jdbcType=LONGVARCHAR},
+            group_club_info = #{groupClubInfo,jdbcType=LONGVARCHAR},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, schedule_id, weather_situation, dress_code, time_info, languages, voltage, 
+        foods, essential_item, currency, telephone_communication, hotel, customs_forbid, 
+        water_activities_note, tip_case, customs, china_notic, new_title, new_contant, security, 
+        special_attention, create_time, update_time, version, cost_include, cost_not_include, 
+        own_expence_info, shopping_place, travel_agency_info, group_club_info
+        from j_prompt_info
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectByScheduleId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT
+        <include refid="promptShowField"/>
+        from j_prompt_info
+        where schedule_id = #{scheduleId,jdbcType=BIGINT}
+    </select>
+    <sql id="promptShowField">
+        ID, schedule_id, weather_situation, dress_code, time_info, languages, voltage,
+        foods, essential_item, currency, telephone_communication, hotel, customs_forbid,
+        water_activities_note, tip_case, customs, china_notic, new_title, new_contant, security,
+        special_attention, create_time, update_time, version, cost_include, cost_not_include,
+        own_expence_info, shopping_place, travel_agency_info, group_club_info
+    </sql>
+
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, schedule_id, weather_situation, dress_code, time_info, languages, voltage, 
+        foods, essential_item, currency, telephone_communication, hotel, customs_forbid, 
+        water_activities_note, tip_case, customs, china_notic, new_title, new_contant, security, 
+        special_attention, create_time, update_time, version, cost_include, cost_not_include, 
+        own_expence_info, shopping_place, travel_agency_info, group_club_info
+        from j_prompt_info
+    </select>
+</mapper>

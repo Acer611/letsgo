@@ -1,0 +1,158 @@
+<div class="overlay"></div>
+<div class="cd-time-lay">
+    #if($response.teamId&&$response.teamId!="")
+    <ul>
+        <li class="cd-time_list">
+        #if(${response.isWeChat})
+            <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=introduce&teamId=$!{response.teamId}"><span class="inco-js"></span>行程介绍</a>
+        #else
+            <a href="$!{link.contextPath}$!{link.requestPath}?flag=introduce&teamId=$!{response.teamId}&client_id=${response.signMap.get('introduce').client_id}&ver=${response.signMap.get('introduce').ver}&sign=${response.signMap.get('introduce').sign}&timestamp=${response.signMap.get('introduce').timestamp}&access_token=${response.signMap.get('introduce').access_token}"><span class="inco-js"></span>行程介绍</a>
+
+        #end
+        </li>
+        <li class="cd-child_list">
+            <div>
+                <ul>
+                    #foreach( $Detail in $response.scheduleEntity.scheduleDetailList)
+                    <li>
+                        #if(${response.isWeChat}=="Wechat")
+                        <a href='$!{link.contextPath}/wechat/getScheduleShow?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}'><span class="inco_child"></span><span class="cd-child-day">D$Detail.dayNum</span>
+                            #if($!{Detail.startPlace}==  $!Detail.destination1)
+                                $!{Detail.startPlace}#if( $Detail.destination2 )>$Detail.destination2#end#if( $Detail.destination3 )>$Detail.destination3 #end#if( $Detail.destination4 )>$Detail.destination4 #end
+
+                            #else
+                                $!{Detail.startPlace}>$!Detail.destination1#if( $Detail.destination2 )>$Detail.destination2#end#if( $Detail.destination3 )>$Detail.destination3 #end#if( $Detail.destination4 )>$Detail.destination4 #end
+
+                            #end
+
+                        </a>
+                      #else
+                       <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'><span class="inco_child"></span><span class="cd-child-day">D$Detail.dayNum</span>
+                          #if($!{Detail.startPlace}==  $!Detail.destination1)
+                              $!{Detail.startPlace}#if( $Detail.destination2 )>$Detail.destination2#end#if( $Detail.destination3 )>$Detail.destination3 #end#if( $Detail.destination4 )>$Detail.destination4 #end
+                          #else
+                              $!{Detail.startPlace}>$!Detail.destination1#if( $Detail.destination2 )>$Detail.destination2#end#if( $Detail.destination3 )>$Detail.destination3 #end#if( $Detail.destination4 )>$Detail.destination4 #end
+
+                          #end
+
+                       </a>
+                        #end
+                    </li>
+                        #end
+                </ul>
+            </div>
+        </li>
+        #if( ${response.scheduleEntity}&&${response.scheduleEntity}!="")
+            <li class="cd-time_list">
+                #if(${response.isWeChat}=="Wechat")
+                    <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=overView&teamId=$!{response.teamId}"><span class="inco-gs"></span>行程概述</a>
+                #else
+                    <a href="$!{link.contextPath}$!{link.requestPath}?flag=overView&teamId=$!{response.teamId}&client_id=${response.signMap.get('overView').client_id}&ver=${response.signMap.get('overView').ver}&sign=${response.signMap.get('overView').sign}&timestamp=${response.signMap.get('overView').timestamp}&access_token=${response.signMap.get('overView').access_token}"><span class="inco-gs"></span>行程概述</a>
+                #end
+            </li>
+        #end
+        #if($!response.costInfoVo.ownExpenceInfo&&$!response.costInfoVo.ownExpenceInfo!=""||$response.scheduleEntity.ownExpenseSchedules.size()>0)
+            <li class="cd-time_list">
+            #if(${response.isWeChat}=="Wechat")
+                <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=cost&teamId=$!{response.teamId}"><span class="inco-fy"></span>自费项目</a>
+            #else
+                   <a href="$!{link.contextPath}$!{link.requestPath}?flag=cost&teamId=$!{response.teamId}&client_id=${response.signMap.get('cost').client_id}&ver=${response.signMap.get('cost').ver}&sign=${response.signMap.get('cost').sign}&timestamp=${response.signMap.get('cost').timestamp}&access_token=${response.signMap.get('cost').access_token}"><span class="inco-fy"></span>自费项目</a>
+            #end
+            </li>
+        #end
+        #if( $!response.shopPlaceVo.shoppingPlace&&$!response.shopPlaceVo.shoppingPlace!=""||$response.scheduleEntity.shoppingSchedules.size()>0)
+
+            <li class="cd-time_list">
+            #if(${response.isWeChat}=="Wechat")
+                <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=shop&teamId=$!{response.teamId}"><span class="inco-gw"></span>购物场所</a>
+            #else
+                <a href="$!{link.contextPath}$!{link.requestPath}?flag=shop&teamId=$!{response.teamId}&client_id=${response.signMap.get('shop').client_id}&ver=${response.signMap.get('shop').ver}&sign=${response.signMap.get('shop').sign}&timestamp=${response.signMap.get('shop').timestamp}&access_token=${response.signMap.get('shop').access_token}"><span class="inco-gw"></span>购物场所</a>
+            #end
+            </li>
+        #end
+##        #if(${response.safeInfoVo.security}&&${response.safeInfoVo.security}!=""||${response.safeInfoVo.specialAttention}&&${response.safeInfoVo.specialAttention}!=""||${response.importantInfoVo.chinaNotic}&&${response.importantInfoVo.chinaNotic}!=""||${response.importantInfoVo.customs}&&${response.importantInfoVo.customs}!=""||${response.importantInfoVo.tipCase}&&${response.importantInfoVo.tipCase}!=""||${response.importantInfoVo.waterActivitiesNote}&&${response.importantInfoVo.waterActivitiesNote}!=""||${response.importantInfoVo.customsForbid}&&${response.importantInfoVo.customsForbid}!=""||${response.importantInfoVo.hotel}&&${response.importantInfoVo.hotel}!=""||${response.importantInfoVo.telephoneCommunication}&&${response.importantInfoVo.telephoneCommunication}!=""||${response.importantInfoVo.currency}&&${response.importantInfoVo.currency}!=""||${response.importantInfoVo.essentialItem}&&${response.importantInfoVo.essentialItem}!=""||${response.importantInfoVo.foods}&&${response.importantInfoVo.foods}!=""||${response.importantInfoVo.voltage}&&${response.importantInfoVo.voltage}!=""||${response.importantInfoVo.languages}&&${response.importantInfoVo.languages}!=""||${response.importantInfoVo.timeInfo}&&${response.importantInfoVo.timeInfo}!=""||${response.importantInfoVo.dressCode}&&${response.importantInfoVo.dressCode}!=""||${response.importantInfoVo.weatherSituation}&&${response.importantInfoVo.weatherSituation}!="")
+##            <li class="cd-time_list">
+##            #if(${response.isWeChat}=="Wechat")
+##                <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=prompt&teamId=$!{response.teamId}"><span class="inco-yq"></span>友情提示</a>
+##            #else
+##                <a href="$!{link.contextPath}$!{link.requestPath}?flag=prompt&teamId=$!{response.teamId}&client_id=${response.signMap.get('prompt').client_id}&ver=${response.signMap.get('prompt').ver}&sign=${response.signMap.get('prompt').sign}&timestamp=${response.signMap.get('prompt').timestamp}&access_token=${response.signMap.get('prompt').access_token}"><span class="inco-yq"></span>友情提示</a>
+##            #end
+##            </li>
+##        #end
+        #if( ${response.travelAgencyInfoVo.travelAgencyInfo}&&${response.travelAgencyInfoVo.travelAgencyInfo}!=""||${response.travelAgencyInfoVo.groupClubInfo}&&${response.travelAgencyInfoVo.groupClubInfo}!="")
+            <li class="cd-time_list">
+            #if(${response.isWeChat}=="Wechat")
+                <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=travelAgency&teamId=$!{response.teamId}"><span class="inco-dj"></span>旅行社信息</a>
+            #else
+                <a href="$!{link.contextPath}$!{link.requestPath}?flag=travelAgency&teamId=$!{response.teamId}&client_id=${response.signMap.get('travelAgency').client_id}&ver=${response.signMap.get('travelAgency').ver}&sign=${response.signMap.get('travelAgency').sign}&timestamp=${response.signMap.get('travelAgency').timestamp}&access_token=${response.signMap.get('travelAgency').access_token}"><span class="inco-dj"></span>旅行社信息</a>
+            #end
+            </li>
+        #end
+        #if($response.scheduleEntity.scheduleDescEntities.size()>0)
+
+            <li class="cd-time_list">
+                <a href="javascript:;" class="qitaicon qitaicons"><span class="inco-qita"></span>其他说明</a>
+                <div class="qita" style="display:none;">
+            #foreach( $Detail in $response.scheduleEntity.scheduleDescEntities)
+                #if(${response.isWeChat}=="Wechat")
+                <div> <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=scheduleDesc&teamId=$!{response.teamId}&descId=$!{Detail.id}">$!{Detail.title}</a></div>
+                #else
+                <div><a href="$!{link.contextPath}$!{link.requestPath}?flag=scheduleDesc&teamId=$!{response.teamId}&descId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}scheduleDesc").client_id}&ver=${response.signMap.get("$!{Detail.id}scheduleDesc").ver}&sign=${response.signMap.get("$!{Detail.id}scheduleDesc").sign}&timestamp=${response.signMap.get("$!{Detail.id}scheduleDesc").timestamp}&access_token=${response.signMap.get("$!{Detail.id}scheduleDesc").access_token}">$!{Detail.title}</a></div>
+                #end
+                #end
+                    </div>
+            </li>
+        #end
+    </ul>
+        #else
+            <ul>
+                <li class="cd-time_list"><a href="$!{link.contextPath}$!{link.requestPath}?flag=introduce&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get('introduce').client_id}&ver=${response.signMap.get('introduce').ver}&sign=${response.signMap.get('introduce').sign}&timestamp=${response.signMap.get('introduce').timestamp}&access_token=${response.signMap.get('introduce').access_token}"><span class="inco-js"></span>行程介绍</a></li>
+                <li class="cd-child_list">
+                    <div>
+                        <ul>
+                            #foreach( $Detail in $response.scheduleEntity.scheduleDetailList)
+                                <li><a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'><span class="inco_child"></span><span class="cd-child-day">D$Detail.dayNum</span>$!Detail.destination1#if( $Detail.destination2 )>$Detail.destination2#end#if( $Detail.destination3 )>$Detail.destination3 #end#if( $Detail.destination4 )>$Detail.destination4 #end</a></li>
+                            #end
+                        </ul>
+                    </div>
+                </li>
+                #if( ${response.scheduleEntity}&&${response.scheduleEntity}!="")
+                    <li class="cd-time_list"><a href="$!{link.contextPath}$!{link.requestPath}?flag=overView&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get('overView').client_id}&ver=${response.signMap.get('overView').ver}&sign=${response.signMap.get('overView').sign}&timestamp=${response.signMap.get('overView').timestamp}&access_token=${response.signMap.get('overView').access_token}"><span class="inco-gs"></span>行程概述</a></li>
+                #end
+                #if($!response.costInfoVo.ownExpenceInfo&&$!response.costInfoVo.ownExpenceInfo!=""||$response.scheduleEntity.ownExpenseSchedules.size()>0)
+                    <li class="cd-time_list"><a href="$!{link.contextPath}$!{link.requestPath}?flag=cost&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get('cost').client_id}&ver=${response.signMap.get('cost').ver}&sign=${response.signMap.get('cost').sign}&timestamp=${response.signMap.get('cost').timestamp}&access_token=${response.signMap.get('cost').access_token}"><span class="inco-fy"></span>自费项目</a></li>
+                #end
+                #if( $!response.shopPlaceVo.shoppingPlace&&$!response.shopPlaceVo.shoppingPlace!=""||$response.scheduleEntity.shoppingSchedules.size()>0)
+                    <li class="cd-time_list"><a href="$!{link.contextPath}$!{link.requestPath}?flag=shop&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get('shop').client_id}&ver=${response.signMap.get('shop').ver}&sign=${response.signMap.get('shop').sign}&timestamp=${response.signMap.get('shop').timestamp}&access_token=${response.signMap.get('shop').access_token}"><span class="inco-gw"></span>购物场所</a></li>
+                #end
+##                #if(${response.safeInfoVo.security}&&${response.safeInfoVo.security}!=""||${response.safeInfoVo.specialAttention}&&${response.safeInfoVo.specialAttention}!=""||${response.importantInfoVo.chinaNotic}&&${response.importantInfoVo.chinaNotic}!=""||${response.importantInfoVo.customs}&&${response.importantInfoVo.customs}!=""||${response.importantInfoVo.tipCase}&&${response.importantInfoVo.tipCase}!=""||${response.importantInfoVo.waterActivitiesNote}&&${response.importantInfoVo.waterActivitiesNote}!=""||${response.importantInfoVo.customsForbid}&&${response.importantInfoVo.customsForbid}!=""||${response.importantInfoVo.hotel}&&${response.importantInfoVo.hotel}!=""||${response.importantInfoVo.telephoneCommunication}&&${response.importantInfoVo.telephoneCommunication}!=""||${response.importantInfoVo.currency}&&${response.importantInfoVo.currency}!=""||${response.importantInfoVo.essentialItem}&&${response.importantInfoVo.essentialItem}!=""||${response.importantInfoVo.foods}&&${response.importantInfoVo.foods}!=""||${response.importantInfoVo.voltage}&&${response.importantInfoVo.voltage}!=""||${response.importantInfoVo.languages}&&${response.importantInfoVo.languages}!=""||${response.importantInfoVo.timeInfo}&&${response.importantInfoVo.timeInfo}!=""||${response.importantInfoVo.dressCode}&&${response.importantInfoVo.dressCode}!=""||${response.importantInfoVo.weatherSituation}&&${response.importantInfoVo.weatherSituation}!="")
+##                    <li class="cd-time_list"><a href="$!{link.contextPath}$!{link.requestPath}?flag=prompt&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get('prompt').client_id}&ver=${response.signMap.get('prompt').ver}&sign=${response.signMap.get('prompt').sign}&timestamp=${response.signMap.get('prompt').timestamp}&access_token=${response.signMap.get('prompt').access_token}"><span class="inco-yq"></span>友情提示</a></li>
+##                #end
+                #if( ${response.travelAgencyInfoVo.travelAgencyInfo}&&${response.travelAgencyInfoVo.travelAgencyInfo}!=""||${response.travelAgencyInfoVo.groupClubInfo}&&${response.travelAgencyInfoVo.groupClubInfo}!="")
+                    <li class="cd-time_list"><a href="$!{link.contextPath}$!{link.requestPath}?flag=travelAgency&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get('travelAgency').client_id}&ver=${response.signMap.get('travelAgency').ver}&sign=${response.signMap.get('travelAgency').sign}&timestamp=${response.signMap.get('travelAgency').timestamp}&access_token=${response.signMap.get('travelAgency').access_token}"><span class="inco-dj"></span>旅行社信息</a></li>
+                #end
+
+            #if( ${response.touristList}&&$response.touristList.size()!=0)
+                <li class="cd-time_list"><a href="$!{link.contextPath}$!{link.requestPath}?flag=tourist&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get('tourist').client_id}&ver=${response.signMap.get('tourist').ver}&sign=${response.signMap.get('tourist').sign}&timestamp=${response.signMap.get('tourist').timestamp}&access_token=${response.signMap.get('tourist').access_token}"><span class="inco-dj"></span>游客列表</a></li>
+            #end
+                #if($!response.scheduleEntity.processStatus==4)
+
+                    #if( $response.surveyEntity.questionEntityList&&$response.surveyEntity.questionEntityList!="")
+                        <li class="cd-time_list"><a href="$!{link.contextPath}$!{link.requestPath}?flag=survey&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get('survey').client_id}&ver=${response.signMap.get('survey').ver}&sign=${response.signMap.get('survey').sign}&timestamp=${response.signMap.get('survey').timestamp}&access_token=${response.signMap.get('survey').access_token}"><span class="inco-dj"></span>满意度调查问卷</a></li>
+                    #end
+                #end
+                #if($response.scheduleEntity.scheduleDescEntities.size()>0)
+
+                    <li class="cd-time_list">
+                        <a href="javascript:;" class="qitaicon qitaicons"><span class="inco-qita"></span>其他说明</a>
+                        <div class="qita" style="display:none;">
+                            #foreach( $Detail in $response.scheduleEntity.scheduleDescEntities)
+
+                                <div><a href="$!{link.contextPath}$!{link.requestPath}?flag=scheduleDesc&descId=$!{Detail.id}&scheduleId=$!{response.scheduleEntity.id}&client_id=${response.signMap.get("$!{Detail.id}scheduleDesc").client_id}&ver=${response.signMap.get("$!{Detail.id}scheduleDesc").ver}&sign=${response.signMap.get("$!{Detail.id}scheduleDesc").sign}&timestamp=${response.signMap.get("$!{Detail.id}scheduleDesc").timestamp}&access_token=${response.signMap.get("$!{Detail.id}scheduleDesc").access_token}">$!{Detail.title}</a></div>
+                            #end
+                        </div>
+                    </li>
+                #end
+            </ul>
+        #end
+</div>

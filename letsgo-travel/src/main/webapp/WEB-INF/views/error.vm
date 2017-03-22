@@ -1,0 +1,38 @@
+#set($pageTitle="error")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+    <div class="wrapper">
+
+
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                </h1>
+
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <div class="error-page">
+                    <h2 class="headline text-red">error</h2>
+                    <div class="error-content">
+                        <h3><i class="fa fa-warning text-red"></i>#if($!message)$!message #else 服务器出错了，无法处理您的请求。 #end</h3>
+                    </div>
+                </div><!-- /.error-page -->
+
+            </section><!-- /.content -->
+        </div><!-- /.content-wrapper -->
+        #parse("/WEB-INF/views/common/footer.vm")
+    </div><!-- ./wrapper -->
+
+#define($scriptBlock)
+<script>
+    $(function(){
+        $("body").css({height:$(window).outerHeight()})
+        $(".main-footer").css({position:"fixed",bottom:0,margin:0,width:"100%"})
+    })
+</script>
+#end

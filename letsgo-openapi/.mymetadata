@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="letsgo-openapi"
+  id="myeclipse.1459152911242"
+  context-root="/openapi"
+  j2ee-spec="5.0"
+  archive="letsgo-openapi.war">
+  <attributes>
+    <attribute name="webrootdir" value="/src/main/webapp" />
+  </attributes>
+</project-module>
+

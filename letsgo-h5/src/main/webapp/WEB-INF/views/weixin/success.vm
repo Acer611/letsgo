@@ -1,0 +1,38 @@
+#set($pageTitle="开通成功")
+#set($layout="/WEB-INF/views/common/layout/layoutnewweixin2.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/weixin/style/weui.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/weixin/js/zepto.min.js","https://res.wx.qq.com/open/js/jweixin-1.0.0.js","$!{STATIC_URL}/resources/weixin/js/weui.min.js"])
+
+<style type="text/css">
+	.weui-icon-success{color:#1fbad1;text-align:center;}
+		.page.icons .icon-box i {
+		margin-right:0px;
+		}
+	.page.icons .icon-box{
+		-moz-box-align: center;
+		align-items: center;
+		margin-top:100px;
+		margin-bottom: 25px;
+		text-align:center;
+	}
+	.page.icons .icon-box__ctn{flex-shrink:100}
+	.icon-box__desc{color:#999;padding-top:8px;}
+	</style>
+
+  
+
+    <div class="container" id="container">
+		<div class="page icons js_show">
+			<div class="page__bd page__bd_spacing">
+				<div class="icon-box">
+					<i class="weui-icon-success weui-icon_msg"></i>
+					<div class="icon-box__ctn">
+						
+						<p class="icon-box__desc">您已经开通成功</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+

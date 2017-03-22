@@ -1,0 +1,213 @@
+html,body{background:#fffeec!important;}
+/*!
+ * WeUI v1.1.0 (https://github.com/weui/weui)
+ * Copyright 2016 Tencent, Inc.
+ * Licensed under the MIT license
+ */
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  background-color:#fffeec;
+}
+body {
+  line-height: 1.6;
+  font-family: -apple-system-font, "Helvetica Neue", sans-serif;
+  background-color:#fffeec;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+a img {
+  border: 0;
+}
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+body{-webkit-text-size-adjust:none}
+li{list-style-type:none;}
+.warp{background-color:#fffeec;}
+.main {background-color:#fffeec;width:100%;margin-bottom:1.4rem; }
+html{font-size:10px}
+a{color:#fff;}
+.daytree{width:1.44rem;margin:0 auto;}
+.startIcon{width:1.226667rem;height:1.226667rem;color:#fff;background:#95af62;text-align:center;line-height:1.213333rem;border-radius:100%;font-size:16px;
+  position: absolute;
+  left:0.08rem;
+  top:0.08rem;
+  border:0.08rem solid #fffeec;
+  z-index: 100;
+}
+.start{position: relative;width:1.546667rem;height:1.546667rem;margin-top:0.36rem;}
+[data-dpr="2"] .startIcon{font-size:32px}
+[data-dpr="3"] .startIcon{font-size:48px}
+.rightcrlstart{
+  z-index:99;
+  width:1.386667rem;
+  height:1.386667rem;
+  clip: rect(0.72rem,0.68rem,auto,0);
+  border-radius:100%;
+  border:0.08rem solid #95af62 ;
+  background-color: #fffeec;
+  position: absolute;
+  left:0;
+  top:0;
+}
+
+.daycon{position:relative;background:#fffeec;width:1.533333rem; height:2.506667rem;}
+.daycon:first-child{margin-top:0;}
+.daynum1{color:#fff;text-align:center;width:1.44rem;height:1.44rem;line-height:1.44rem;font-size:16px;position: relative;top:1.066667rem;}
+.leftcrl1{z-index:98;width:1.28rem;height:1.28rem;clip: rect(0,auto,0.72rem,0.68rem);border-radius:100%;border:0.08rem solid #95af62;background-color: #fffeec;position: absolute;left:0; top:0;}
+.rightcrl1{z-index:99;width:1.28rem;height:1.28rem;clip: rect(0.72rem,0.68rem,auto,0);border-radius:100%;border:0.08rem solid #f27078;background-color: #fffeec;position: absolute;left:0; top:0;}
+.necrl1{width:1.28rem; height:1.28rem;overflow:hidden;background-color: #fffeec;border-radius:100%;position: absolute;z-index:99;left:0.08rem;top:0.08rem;}
+.wgcrl1{z-index:999;height:0.96rem; line-height:0.96rem ; width:0.96rem;overflow:hidden;background-color: #95af62; border-radius: 100%;position: absolute;left:0.24rem;top:0.24rem;}
+.dropwrep1{width:0.266667rem; height: 0.266667rem; background-color: #fff; border-radius: 100%;position: absolute;left:0;margin-left:-0.08rem;top:50%; margin-top:-0.213333rem;z-index:100;}
+.pointd1{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #f27078;border-radius: 100% }
+
+.daynum2{color:#fff;text-align:center;width:1.44rem;height:1.44rem;line-height:1.44rem;font-size:16px;position: relative;top:1.066667rem;}
+.leftcrl2{width:1.28rem;height:1.28rem;clip: rect(0,0.68rem,0.72rem,0);border-radius:100%;border:0.08rem solid #f27078;background-color: #fffeec;position: absolute;left:0; top:0;}
+.rightcrl2{width:1.28rem;height:1.28rem;clip: rect(0.72rem,auto,auto,0.68rem);border-radius:100%;border:0.08rem solid #b88456;background-color: #fffeec;position: absolute;left:0; top:0;}
+.necrl2{width:1.28rem; height:1.28rem;overflow:hidden;background-color: #fffeec;border-radius:100%;position: absolute;z-index:99;left:0.08rem;top:0.08rem;}
+.wgcrl2{z-index:999;height:0.96rem; line-height:0.96rem ; width:0.96rem;overflow:hidden;background-color: #f27078; border-radius: 100%;position: absolute;left:0.24rem;top:0.24rem;}
+.dropwrep2{width:0.266667rem; height: 0.266667rem; background-color: #fff; border-radius: 100%;position: absolute;right:0;margin-right:-0.08rem;top:50%; margin-top:-0.213333rem;z-index:100;}
+.pointd2{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #b88456;border-radius: 100% }
+
+
+.daynum3{color:#fff;text-align:center;width:1.44rem;height:1.44rem;line-height:1.44rem;font-size:16px;position: relative;top:1.066667rem;}
+.leftcrl3{width:1.28rem;height:1.28rem;clip: rect(0,auto,0.72rem,0.68rem);border-radius:100%;border:0.08rem solid #b88456;background-color: #fffeec;position: absolute;left:0; top:0;}
+.rightcrl3{width:1.28rem;height:1.28rem;clip: rect(0.72rem,0.68rem,auto,0);border-radius:100%;border:0.08rem solid #618dce;background-color: #fffeec;position: absolute;left:0; top:0;}
+.necrl3{width:1.28rem; height:1.28rem;overflow:hidden;background-color: #fffeec;border-radius:100%;position: absolute;z-index:99;left:0.08rem;top:0.08rem;}
+.wgcrl3{z-index:999;height:0.96rem; line-height:0.96rem ; width:0.96rem;overflow:hidden;background-color: #b88456; border-radius: 100%;position: absolute;left:0.24rem;top:0.24rem;}
+.dropwrep3{width:0.266667rem; height: 0.266667rem; background-color: #fff; border-radius: 100%;position: absolute;left:0;margin-left:-0.08rem;top:50%; margin-top:-0.213333rem;z-index:100;}
+.pointd3{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #618dce;border-radius: 100% }
+
+
+.daynum4{color:#fff;text-align:center;width:1.44rem;height:1.44rem;line-height:1.44rem;font-size:16px;position: relative;top:1.066667rem;}
+.leftcrl4{width:1.28rem;height:1.28rem;clip: rect(0,0.68rem,0.72rem,0);border-radius:100%;border:0.08rem solid #618dce;background-color: #fffeec;position: absolute;left:0; top:0;}
+.rightcrl4{width:1.28rem;height:1.28rem;clip: rect(0.72rem,auto,auto,0.68rem);border-radius:100%;border:0.08rem solid #97789c;background-color: #fffeec;position: absolute;left:0; top:0;}
+.necrl4{width:1.28rem; height:1.28rem;overflow:hidden;background-color: #fffeec;border-radius:100%;position: absolute;z-index:99;left:0.08rem;top:0.08rem;}
+.wgcrl4{z-index:999;height:0.96rem; line-height:0.96rem ; width:0.96rem;overflow:hidden;background-color: #618dce; border-radius: 100%;position: absolute;left:0.24rem;top:0.24rem;}
+.dropwrep4{width:0.266667rem; height: 0.266667rem; background-color: #fff; border-radius: 100%;position: absolute;right:0;margin-right:-0.08rem;top:50%; margin-top:-0.213333rem;z-index:100;}
+.pointd4{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #97789c;border-radius: 100% }
+
+
+.daynum5{color:#fff;text-align:center;width:1.44rem;height:1.44rem;line-height:1.44rem;font-size:16px;position: relative;top:1.066667rem;}
+.leftcrl5{width:1.28rem;height:1.28rem;clip: rect(0,auto,0.72rem,0.68rem);border-radius:100%;border:0.08rem solid #97789c;background-color: #fffeec;position: absolute;left:0; top:0;}
+.rightcrl5{width:1.28rem;height:1.28rem;clip: rect(0.72rem,0.68rem,auto,0);border-radius:100%;border:0.08rem solid #55a0ad;background-color: #fffeec;position: absolute;left:0; top:0;}
+.necrl5{width:1.28rem; height:1.28rem;overflow:hidden;background-color: #fffeec;border-radius:100%;position: absolute;z-index:99;left:0.08rem;top:0.08rem;}
+.wgcrl5{z-index:999;height:0.96rem; line-height:0.96rem ; width:0.96rem;overflow:hidden;background-color: #97789c; border-radius: 100%;position: absolute;left:0.24rem;top:0.24rem;}
+.dropwrep5{width:0.266667rem; height: 0.266667rem; background-color: #fff; border-radius: 100%;position: absolute;left:0;margin-left:-0.08rem;top:50%; margin-top:-0.213333rem;z-index:100;}
+.pointd5{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #55a0ad;border-radius: 100% }
+
+.daynum0{color:#fff;text-align:center;width:1.44rem;height:1.44rem;line-height:1.44rem;font-size:16px; position: relative;top:1.066667rem;}
+.leftcrl0{width:1.28rem;height:1.28rem;clip: rect(0,0.68rem,0.72rem,0);border-radius:100%;border:0.08rem solid #55a0ad;background-color: #fffeec;position: absolute;left:0; top:0;}
+.rightcrl0{width:1.28rem;height:1.28rem;clip: rect(0.72rem,auto,auto,0.68rem);border-radius:100%;border:0.08rem solid #95af62;background-color: #fffeec;position: absolute;left:0; top:0;}
+.necrl0{width:1.28rem; height:1.28rem;overflow:hidden;background-color: #fffeec;border-radius:100%;position: absolute;z-index:99;left:0.08rem;top:0.08rem;}
+.wgcrl0{z-index:999;height:0.96rem; line-height:0.96rem ; width:0.96rem;overflow:hidden;background-color: #55a0ad; border-radius: 100%;position: absolute;left:0.24rem;top:0.24rem;}
+.dropwrep0{width:0.266667rem; height: 0.266667rem; background-color: #fff; border-radius: 100%;position: absolute;right:0;margin-right:-0.08rem;top:50%; margin-top:-0.213333rem;z-index:100;}
+.pointd0{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #95af62;border-radius: 100% }
+
+
+[data-dpr="2"] .daynum1{font-size:28px}
+[data-dpr="3"] .daynum1{font-size:42px}
+[data-dpr="2"] .daynum2{font-size:28px}
+[data-dpr="3"] .daynum2{font-size:42px}
+[data-dpr="2"] .daynum3{font-size:28px}
+[data-dpr="3"] .daynum3{font-size:42px}
+[data-dpr="2"] .daynum4{font-size:28px}
+[data-dpr="3"] .daynum4{font-size:42px}
+[data-dpr="2"] .daynum5{font-size:28px}
+[data-dpr="3"] .daynum5{font-size:42px}
+[data-dpr="2"] .daynum0{font-size:28px}
+[data-dpr="3"] .daynum0{font-size:42px}
+
+.line1{width:0.08rem;background:#95af62;height:1.226667rem;border:none;margin-left:0.68rem;position: absolute;top:-0.12rem;}
+.line2{width:0.08rem;background:#f27078;border:none;height:1.226667rem;margin-left:0.68rem;position: absolute;top:-0.12rem;}
+.line3{width:0.08rem;background:#b88456;border:none;height:1.226667rem;margin-left:0.68rem;position: absolute;top:-0.12rem;}
+.line4{width:0.08rem;background:#618dce;border:none;height:1.226667rem;margin-left:0.68rem;position: absolute;top:-0.12rem;}
+.line5{width:0.08rem;background:#97789c;border:none;height:1.226667rem;margin-left:0.68rem;position: absolute;top:-0.12rem;}
+.line0{width:0.08rem;background:#55a0ad;border:none;height:1.226667rem;margin-left:0.68rem;position: absolute;top:-0.12rem;}
+
+[data-dpr="2"] .line1{top:-0.08rem}
+[data-dpr="3"] .line1{top:-0.08rem}
+[data-dpr="2"] .line2{top:-0.08rem}
+[data-dpr="3"] .line2{top:-0.08rem}
+[data-dpr="2"] .line3{top:-0.08rem}
+[data-dpr="3"] .line3{top:-0.08rem}
+[data-dpr="2"] .line4{top:-0.08rem}
+[data-dpr="3"] .line4{top:-0.08rem}
+[data-dpr="2"] .line5{top:-0.08rem}
+[data-dpr="3"] .line5{top:-0.08rem}
+[data-dpr="2"] .line0{top:-0.08rem}
+[data-dpr="3"] .line0{top:-0.08rem}
+.pytreestart{position: absolute;left:-3.4rem;top:1.546667rem;text-align: center;}
+.pytree1{position: absolute;left:1.36rem;top:1.546667rem;text-align: center;}
+.pytree2{position: absolute;left:-3.4rem;top:1.546667rem;text-align: center;}
+.pytree3{position: absolute;left:1.36rem;top:1.546667rem;text-align: center;}
+.pytree4{position: absolute;left:-3.4rem;top:1.546667rem;text-align: center;}
+.pytree5{position: absolute;left:1.36rem;top:1.546667rem;text-align: center;}
+.pytree0{position: absolute;left:-3.4rem;top:1.546667rem;text-align: center;}
+
+[data-dpr="2"] .pytreestart{left:-3.36rem;}
+[data-dpr="3"] .pytreestart{left:-3.36rem;}
+[data-dpr="2"] .pytree2{left:-3.36rem;}
+[data-dpr="3"] .pytree2{left:-3.36rem;}
+[data-dpr="2"] .pytree4{left:-3.36rem;}
+[data-dpr="3"] .pytree4{left:-3.36rem;}
+[data-dpr="2"] .pytree0{left:-3.36rem;}
+[data-dpr="3"] .pytree0{left:-3.36rem;}
+
+.daycon:first-child .line1{top:0;}
+.place a{color:#333;}
+.place{width:3.453333rem;font-size:16px;color:#333333;}
+[data-dpr="2"] .place{font-size:28px}
+[data-dpr="3"] .place{font-size:42px}
+.timer{font-size:12px;color:#b88456;}
+.pytree1 .timer{color:#95af62;}
+.pytree2 .timer{color:#f27078;}
+.pytree3 .timer{color:#b88456;}
+.pytree4 .timer{color:#618dce;}
+.pytree5 .timer{color:#97789c;}
+.pytree0 .timer{color:#55a0ad;}
+[data-dpr="2"] .timer{font-size:24px}
+[data-dpr="3"] .timer{font-size:36px}
+.linco1{background:url(../images/treegreen.png) 0 0 no-repeat;width:3.066667rem;height:0.8rem;position: absolute;left:1.586667rem;top:-0.266667rem;background-size:100% 100%;}
+.linco2{background:url(../images/daytree2.png) 0 0 no-repeat;width:3.066667rem;height:0.8rem;position: absolute;left:-3.24rem;top:-0.266667rem;background-size:100% 100%;}
+.linco3{background:url(../images/daytree3.png) 0 0 no-repeat;width:3.066667rem;height:0.8rem;position: absolute;left:1.586667rem;top:-0.266667rem;background-size:100% 100%;}
+.linco4{background:url(../images/daytree4.png) 0 0 no-repeat;width:3.066667rem;height:0.8rem;position: absolute;left:-3.24rem;top:-0.266667rem;background-size:100% 100%;}
+.linco5{background:url(../images/treezi.png) 0 0 no-repeat;width:3.066667rem;height:0.8rem;position: absolute;left:1.586667rem;top:-0.266667rem;background-size:100% 100%;}
+.linco0{background:url(../images/bluetree.png) 0 0 no-repeat;width:3.066667rem;height:0.8rem;position: absolute;left:-3.24rem;top:-0.266667rem;background-size:100% 100%;}
+.linkicon a{display:block;height:0.8rem;}
+
+
+.pytreestart .hline{height:0.08rem;background-color: #95af62 ;width:3.44rem;position: relative;}
+.pytreestart .drop{width:0.266667rem; height:0.266667rem;background-color:#fff; border-radius: 50%;position: absolute;left:-0.266667rem;top:-0.1rem;}
+.pytreestart .drop .dropt{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #95af62 ;border-radius: 100%}
+
+
+.pytree1 .hline{height:0.08rem;background:#95af62;width:3.44rem;position: relative;}
+.pytree1 .drop{width:0.266667rem; height:0.266667rem; background-color:#fff; border-radius: 100%;position: absolute;left:3.466667rem;top:-0.1rem;}
+.pytree1 .drop .dropt{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #95af62;border-radius: 100%}
+
+.pytree2 .hline{height:0.08rem;background-color: #f27078;width:3.44rem;position: relative;}
+.pytree2 .drop{width:0.266667rem; height:0.266667rem;background-color:#fff; border-radius: 50%;position: absolute;left:-0.266667rem;top:-0.1rem;}
+.pytree2 .drop .dropt{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #f27078;border-radius: 100%}
+
+.pytree3 .hline{height:0.08rem;background-color: #b88456;width:3.44rem;position: relative;}
+.pytree3 .drop{width:0.266667rem; height:0.266667rem;background-color:#fff; border-radius: 100%;position: absolute;left:3.493333rem;top:-0.1rem;}
+.pytree3 .drop .dropt{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #b88456;border-radius: 100%}
+
+
+.pytree4 .hline{height:0.08rem;background-color: #618dce;width:3.44rem;position: relative;}
+.pytree4 .drop{width:0.266667rem; height:0.266667rem; background-color:#fff; border-radius: 50%;position: absolute;left:-0.266667rem;top:-0.1rem;}
+.pytree4 .drop .dropt{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #618dce;border-radius: 100%}
+
+.pytree5 .hline{height:0.08rem;background-color: #97789c;width:3.44rem;position: relative;}
+.pytree5 .drop{width:0.266667rem; height:0.266667rem; background-color:#fff; border-radius: 50%;position: absolute;left:3.493333rem;top:-0.1rem;}
+.pytree5 .drop .dropt{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #97789c;border-radius: 100%}
+
+.pytree0 .hline{height:0.08rem;background-color: #55a0ad;width:3.44rem;position: relative;}
+.pytree0 .drop{width:0.266667rem; height:0.266667rem;background-color:#fff; border-radius: 50%;position: absolute;left:-0.266667rem;top:-0.1rem;}
+.pytree0 .drop .dropt{width:0.213333rem;height:0.213333rem; margin-top:0.026667rem; margin-left:0.026667rem;background-color: #55a0ad;border-radius: 100%}
+

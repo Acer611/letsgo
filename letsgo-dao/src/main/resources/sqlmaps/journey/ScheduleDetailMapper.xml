@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.ScheduleDetailDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="jour_id" property="jourId" jdbcType="BIGINT" />
+        <result column="day_num" property="dayNum" jdbcType="INTEGER" />
+        <result column="schedule_date" property="scheduleDate" jdbcType="TIMESTAMP" />
+        <result column="start_place" property="startPlace" jdbcType="VARCHAR" />
+        <result column="start_place_id" property="startPlaceId" jdbcType="VARCHAR" />
+        <result column="destination1" property="destination1" jdbcType="VARCHAR" />
+        <result column="destination2" property="destination2" jdbcType="VARCHAR" />
+        <result column="destination3" property="destination3" jdbcType="VARCHAR" />
+        <result column="destination4" property="destination4" jdbcType="VARCHAR" />
+        <result column="destination_id1" property="destinationId1" jdbcType="VARCHAR" />
+        <result column="destination_id2" property="destinationId2" jdbcType="VARCHAR" />
+        <result column="destination_id3" property="destinationId3" jdbcType="VARCHAR" />
+        <result column="destination_id4" property="destinationId4" jdbcType="VARCHAR" />
+        <result column="schedule_photos_url1" property="schedulePhotosUrl1" jdbcType="VARCHAR" />
+        <result column="schedule_photos_url2" property="schedulePhotosUrl2" jdbcType="VARCHAR" />
+        <result column="schedule_photos_url3" property="schedulePhotosUrl3" jdbcType="VARCHAR" />
+        <result column="`desc`" property="desc" jdbcType="VARCHAR" />
+        <result column="hotel_confirm" property="hotelConfirm" jdbcType="INTEGER" />
+        <result column="hotel" property="hotel" jdbcType="VARCHAR" />
+        <result column="hotel_id" property="hotelId" jdbcType="VARCHAR" />
+        <result column="hotel_input" property="hotelInput" jdbcType="VARCHAR" />
+        <result column="same_level" property="sameLevel" jdbcType="INTEGER" />
+        <result column="flight1" property="flight1" jdbcType="VARCHAR" />
+        <result column="flight2" property="flight2" jdbcType="VARCHAR" />
+        <result column="traffic_info" property="trafficInfo" jdbcType="VARCHAR" />
+        <result column="shopp_info" property="shoppInfo" jdbcType="VARCHAR" />
+        <result column="catering_info" property="cateringInfo" jdbcType="VARCHAR" />
+        <result column="leader_id" property="leaderId" jdbcType="BIGINT" />
+        <result column="new_entry" property="newEntry" jdbcType="VARCHAR" />
+        <result column="new_contant" property="newContant" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+
+        <result column="country1" property="country1" jdbcType="VARCHAR"/>
+        <result column="country2" property="country2" jdbcType="VARCHAR"/>
+        <result column="country3" property="country3" jdbcType="VARCHAR"/>
+        <result column="country4" property="country4" jdbcType="VARCHAR"/>
+        <result column="country5" property="country5" jdbcType="VARCHAR"/>
+
+        <result column="countryId1" property="countryId1" jdbcType="VARCHAR"/>
+        <result column="countryId2" property="countryId2" jdbcType="VARCHAR"/>
+        <result column="countryId3" property="countryId3" jdbcType="VARCHAR"/>
+        <result column="countryId4" property="countryId4" jdbcType="VARCHAR"/>
+        <result column="countryId5" property="countryId5" jdbcType="VARCHAR"/>
+
+        <result column="traffic1" property="traffic1" jdbcType="INTEGER" />
+        <result column="traffic2" property="traffic2" jdbcType="INTEGER" />
+        <result column="traffic3" property="traffic3" jdbcType="INTEGER" />
+        <result column="traffic4" property="traffic4" jdbcType="INTEGER" />
+        <result column="traffic5" property="traffic5" jdbcType="INTEGER" />
+
+
+    </resultMap>
+
+    <resultMap id="scheduleDetailVoMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntityVo" extends="BaseResultMap">
+        <result column="lat" property="lat" jdbcType="DOUBLE" />
+        <result column="lng" property="lng" jdbcType="DOUBLE" />
+    </resultMap>
+    <resultMap id="UserIdBaseResultMap" type="com.umessage.letsgo.domain.po.journey.ScheduleDetailIdUserIdEntity" >
+        <id column="ID" property="scheduleDetailId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_schedule_detail
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_schedule_detail (jour_id, day_num, schedule_date, 
+            start_place, destination1, destination2, 
+            destination3, destination4,destination_id1, destination_id2,
+        destination_id3, destination_id4, schedule_photos_url1,
+            schedule_photos_url2, schedule_photos_url3, 
+            `desc`, hotel_confirm, hotel, hotel_id,
+            hotel_input, same_level, flight1, 
+            flight2, traffic_info, shopp_info, 
+            catering_info, leader_id, new_entry, 
+            new_contant, create_time, update_time,
+            version,
+            countryId1,country1,countryId2,country2,countryId3,country3,countryId4,country4,start_place_id,
+            traffic1,traffic2,traffic3,traffic4,traffic5,destination_id5,destination5,countryId5,country5)
+
+        values (#{jourId,jdbcType=BIGINT}, #{dayNum,jdbcType=INTEGER}, #{scheduleDate,jdbcType=TIMESTAMP}, 
+            #{startPlace,jdbcType=VARCHAR}, #{destination1,jdbcType=VARCHAR}, #{destination2,jdbcType=VARCHAR}, 
+            #{destination3,jdbcType=VARCHAR}, #{destination4,jdbcType=VARCHAR},#{destinationId1,jdbcType=VARCHAR}, #{destinationId2,jdbcType=VARCHAR},
+            #{destinationId3,jdbcType=VARCHAR}, #{destinationId4,jdbcType=VARCHAR}, #{schedulePhotosUrl1,jdbcType=VARCHAR},
+            #{schedulePhotosUrl2,jdbcType=VARCHAR}, #{schedulePhotosUrl3,jdbcType=VARCHAR}, 
+            #{desc,jdbcType=VARCHAR}, #{hotelConfirm,jdbcType=INTEGER}, #{hotel,jdbcType=VARCHAR},#{hotelId,jdbcType=VARCHAR},
+            #{hotelInput,jdbcType=VARCHAR}, #{sameLevel,jdbcType=INTEGER}, #{flight1,jdbcType=VARCHAR}, 
+            #{flight2,jdbcType=VARCHAR}, #{trafficInfo,jdbcType=VARCHAR}, #{shoppInfo,jdbcType=VARCHAR}, 
+            #{cateringInfo,jdbcType=VARCHAR}, #{leaderId,jdbcType=BIGINT}, #{newEntry,jdbcType=VARCHAR}, 
+            #{newContant,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+            #{version,jdbcType=BIGINT}, #{countryId1,jdbcType=VARCHAR},#{country1,jdbcType=VARCHAR}, #{countryId2,jdbcType=VARCHAR},
+            #{country2,jdbcType=VARCHAR}, #{countryId3,jdbcType=VARCHAR}, #{country3,jdbcType=VARCHAR}, #{countryId4,jdbcType=VARCHAR},
+            #{country4,jdbcType=VARCHAR},#{startPlaceId,jdbcType=VARCHAR},
+            #{traffic1,jdbcType=INTEGER}, #{traffic2,jdbcType=INTEGER}, #{traffic3,jdbcType=INTEGER}, #{traffic4,jdbcType=INTEGER},#{traffic5,jdbcType=INTEGER},
+            #{destinationId5,jdbcType=VARCHAR}, #{destination5,jdbcType=VARCHAR}, #{countryId5,jdbcType=VARCHAR}, #{country5,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntity" >
+        update j_schedule_detail
+        set jour_id = #{jourId,jdbcType=BIGINT},
+            day_num = #{dayNum,jdbcType=INTEGER},
+            schedule_date = #{scheduleDate,jdbcType=TIMESTAMP},
+            start_place = #{startPlace,jdbcType=VARCHAR},
+            destination1 = #{destination1,jdbcType=VARCHAR},
+            destination2 = #{destination2,jdbcType=VARCHAR},
+            destination3 = #{destination3,jdbcType=VARCHAR},
+            destination4 = #{destination4,jdbcType=VARCHAR},
+            destination_id1= #{destinationId1,jdbcType=VARCHAR},
+            destination_id2= #{destinationId2,jdbcType=VARCHAR},
+            destination_id3= #{destinationId3,jdbcType=VARCHAR},
+            destination_id4= #{destinationId4,jdbcType=VARCHAR},
+            schedule_photos_url1 = #{schedulePhotosUrl1,jdbcType=VARCHAR},
+            schedule_photos_url2 = #{schedulePhotosUrl2,jdbcType=VARCHAR},
+            schedule_photos_url3 = #{schedulePhotosUrl3,jdbcType=VARCHAR},
+            `desc` = #{desc,jdbcType=VARCHAR},
+            hotel_confirm = #{hotelConfirm,jdbcType=INTEGER},
+            hotel = #{hotel,jdbcType=VARCHAR},
+            hotel_input = #{hotelInput,jdbcType=VARCHAR},
+            hotel_id = #{hotelId,jdbcType=VARCHAR},
+            same_level = #{sameLevel,jdbcType=INTEGER},
+            flight1 = #{flight1,jdbcType=VARCHAR},
+            flight2 = #{flight2,jdbcType=VARCHAR},
+            traffic_info = #{trafficInfo,jdbcType=VARCHAR},
+            shopp_info = #{shoppInfo,jdbcType=VARCHAR},
+            catering_info = #{cateringInfo,jdbcType=VARCHAR},
+            leader_id = #{leaderId,jdbcType=BIGINT},
+            new_entry = #{newEntry,jdbcType=VARCHAR},
+            new_contant = #{newContant,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1,
+            countryId1 = #{countryId1,jdbcType=VARCHAR},
+            country1 = #{country1,jdbcType=VARCHAR},
+            countryId2 = #{countryId2,jdbcType=VARCHAR},
+            country2 = #{country2,jdbcType=VARCHAR},
+            countryId3 = #{countryId3,jdbcType=VARCHAR},
+            country3 = #{country3,jdbcType=VARCHAR},
+            countryId4 = #{countryId4,jdbcType=VARCHAR},
+            country4 = #{country4,jdbcType=VARCHAR},
+            start_place_id = #{startPlaceId,jdbcType=VARCHAR},
+
+            traffic1 = #{traffic1,jdbcType=INTEGER},
+            traffic2 = #{traffic2,jdbcType=INTEGER},
+            traffic3 = #{traffic3,jdbcType=INTEGER},
+            traffic4 = #{traffic4,jdbcType=INTEGER},
+            traffic5 = #{traffic5,jdbcType=INTEGER},
+            destination_id5 = #{destinationId5,jdbcType=VARCHAR},
+            destination5 = #{destination5,jdbcType=VARCHAR},
+            countryId5 = #{countryId5,jdbcType=VARCHAR},
+            country5 = #{country5,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, jour_id, day_num, schedule_date, start_place, destination1, destination2, 
+        destination3, destination4, destination_id1, destination_id2,
+        destination_id3, destination_id4, schedule_photos_url1, schedule_photos_url2, schedule_photos_url3,
+        `desc`, hotel_confirm, hotel, hotel_input,hotel_id, same_level, flight1, flight2, traffic_info,
+        shopp_info, catering_info, leader_id, new_entry, new_contant, create_time, update_time, countryId1,country1,countryId2,country2,countryId3,country3,countryId4,country4,start_place_id,
+        traffic1,traffic2,traffic3,traffic4,traffic5,destination_id5,destination5,countryId5,country5,
+        version
+        from j_schedule_detail
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, jour_id, day_num, schedule_date, start_place, destination1, destination2, 
+        destination3, destination4, destination_id1, destination_id2,
+        destination_id3, destination_id4,schedule_photos_url1, schedule_photos_url2, schedule_photos_url3,
+        `desc`, hotel_confirm, hotel, hotel_city, star_lv, hotel_briefintroduction, hotel_lon, hotel_lat, hotel_input,hotel_id, same_level, flight1, flight2, traffic_info,
+        shopp_info, catering_info, leader_id, new_entry, new_contant, create_time, update_time,countryId1,country1,countryId2,country2,countryId3,country3,countryId4,country4,start_place_id,
+        traffic1,traffic2,traffic3,traffic4,traffic5,destination_id5,destination5,countryId5,country5,
+        version
+        from j_schedule_detail
+    </select>
+    <select id="selectByTeamId" resultMap="BaseResultMap" >
+        SELECT sd.ID, sd.jour_id, sd.day_num, sd.schedule_date, sd.start_place,sd.start_place_id, sd.destination1, sd.destination2,
+        sd.destination3, sd.destination4,sd.destination_id1, sd.destination_id2,
+        sd.destination_id3, sd.destination_id4, sd.schedule_photos_url1, sd.schedule_photos_url2, sd.schedule_photos_url3,
+        sd.`desc`, sd.hotel_confirm, sd.hotel, sd.hotel_input,sd.hotel_id, sd.same_level, sd.flight1, sd.flight2, sd.traffic_info,
+        sd.shopp_info, sd.catering_info, sd.leader_id, sd.new_entry, sd.new_contant, sd.create_time, sd.update_time,sd.countryId1,sd.country1,sd.countryId2,sd.country2,sd.countryId3,sd.country3,sd.countryId4,sd.country4,sd.start_place_id,
+        sd.traffic1,sd.traffic2,sd.traffic3,sd.traffic4,sd.traffic5,sd.destination_id5,sd.destination5,sd.countryId5,sd.country5,
+        sd.version
+        FROM j_schedule AS s
+        LEFT JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        LEFT JOIN t_team AS t ON s.team_id = t.id
+        <where>
+             s.del=0
+            <if test="null != teamId"> and s.team_id = #{teamId,jdbcType=BIGINT}</if>
+            <if test="null != txGroupId"> and t.tx_groupId = #{txGroupId}</if>
+            <if test="null != date"> and DATE_FORMAT(sd.schedule_date, '%Y-%m-%d') = #{date}</if>
+        </where>
+    </select>
+    <select id="selectScheduleDetailByScheId" resultMap="BaseResultMap">
+    	select ID, jour_id, day_num, schedule_date, start_place, destination1, destination2, 
+        destination3, destination4, schedule_photos_url1, schedule_photos_url2, schedule_photos_url3, 
+        `desc`, hotel_confirm, hotel, hotel_city, star_lv, hotel_briefintroduction, hotel_lon, hotel_lat, hotel_input, same_level, flight1, flight2, traffic_info,
+        shopp_info, catering_info, leader_id, new_entry, new_contant, create_time, update_time,countryId1,country1,countryId2,country2,countryId3,country3,countryId4,country4,start_place_id,
+        traffic1,traffic2,traffic3,traffic4,traffic5,destination_id5,destination5,countryId5,country5,
+        version
+        from j_schedule_detail
+        where jour_id = #{scheduleId,jdbcType=BIGINT} and DATE_FORMAT(schedule_date, '%Y-%m-%d')  = #{date}
+    </select>
+
+    <select id="selectScheduleDetailByScheduleId" resultMap="BaseResultMap">
+    	select ID, jour_id, day_num, schedule_date, start_place, destination1, destination2,
+        destination3, destination4, schedule_photos_url1, schedule_photos_url2, schedule_photos_url3,
+        `desc`, hotel_confirm, hotel, hotel_input, same_level, flight1, flight2, traffic_info,
+        shopp_info, catering_info, leader_id, new_entry, new_contant, create_time, update_time,countryId1,country1,countryId2,country2,countryId3,country3,countryId4,country4,start_place_id,
+        traffic1,traffic2,traffic3,traffic4,traffic5,destination_id5,destination5,countryId5,country5,
+        version
+        from j_schedule_detail
+        where jour_id = #{scheduleId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectScheduleDetailByScheduleDate" resultMap="UserIdBaseResultMap" parameterType="java.util.Date">
+    	SELECT sd.ID, sd.jour_id, sd.day_num, sd.schedule_date, sd.start_place, sd.destination1, sd.destination2,
+        sd.destination3, sd.destination4,sd.destination_id1, sd.destination_id2,
+        sd.destination_id3, sd.destination_id4, sd.schedule_photos_url1, sd.schedule_photos_url2, sd.schedule_photos_url3,
+        sd.`desc`, sd.hotel_confirm, sd.hotel, sd.hotel_input,sd.hotel_id, sd.same_level, sd.flight1, sd.flight2, sd.traffic_info,
+        sd.shopp_info, sd.catering_info, sd.leader_id, sd.new_entry, sd.new_contant, sd.create_time, sd.update_time,sd.countryId1,sd.country1,sd.countryId2,sd.country2,sd.countryId3,sd.country3,sd.countryId4,sd.country4,
+        sd.version,sd.start_place_id, tm.user_id
+        sd.traffic1,sd.traffic2,sd.traffic3,sd.traffic4,sd.traffic5,sd.destination_id5,sd.destination5,sd.countryId5,sd.country5,
+        FROM j_schedule AS s
+        JOIN j_schedule_detail AS sd ON s.ID = sd.jour_id
+        JOIN t_team AS t ON s.team_id = t.id
+        JOIN t_member AS tm ON tm.t_id = t.ID
+        WHERE t.`status` IN(1,3)
+        AND DATE_FORMAT(sd.schedule_date, '%Y-%m-%d') = DATE_FORMAT(#{scheduleDate}, '%Y-%m-%d')
+        AND tm.user_id != -1
+    </select>
+
+
+
+    <select id="selectCountry" resultMap="scheduleDetailVoMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleDetailRequest" >
+        SELECT
+        DISTINCT(sd.countryId1) as  countryId1
+        FROM j_schedule_detail AS sd
+        LEFT JOIN j_schedule AS s ON sd.jour_id  = s.ID
+        LEFT JOIN t_team AS t ON t.`ID` = s.`team_id`
+        <where>
+            t.travel_id = #{travelId}
+            and s.del= 0
+            AND !ISNULL(t.tx_groupId)
+            <if test="status != null and status !=''.toString() ">
+                AND t.`status`= #{status}
+            </if>
+            AND DATE_FORMAT(sd.schedule_date,'%Y-%m-%d') = DATE_FORMAT(#{scheduleDate},'%Y-%m-%d')
+        </where>
+        GROUP BY sd.countryId1
+    </select>
+
+    <select id="selectCountryCount"  resultType="java.lang.Integer" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleDetailRequest">
+        SELECT
+        COUNT(*)
+        FROM j_schedule_detail AS sd
+        LEFT JOIN j_schedule AS s ON sd.jour_id  = s.ID
+        LEFT JOIN t_team AS t ON t.`ID` = s.`team_id`
+        <where>
+            t.travel_id = #{travelId}
+            and s.del= 0
+            AND !ISNULL(t.tx_groupId)
+            <if test="status != null and status !=''.toString() ">
+                AND t.`status`= #{status}
+            </if>
+            <if test="countryId1 != null and countryId1 !=''.toString() ">
+                AND sd.countryId1=#{countryId1}
+            </if>
+            AND DATE_FORMAT(sd.schedule_date,'%Y-%m-%d') = DATE_FORMAT(#{scheduleDate},'%Y-%m-%d')
+        </where>
+    </select>
+
+    <select id="selectdayNum"   resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleDetailRequest">
+        SELECT sd.*
+        from j_schedule_detail AS sd
+        <where>
+            <if test="countryId1 != null and countryId1 !=''.toString() ">
+                AND sd.countryId1=#{countryId1}
+            </if>
+            <if test="jourId != null">
+                AND sd.jour_id=#{jourId}
+            </if>
+            AND DATE_FORMAT(sd.schedule_date,'%Y-%m-%d') = DATE_FORMAT(#{scheduleDate},'%Y-%m-%d')
+        </where>
+    </select>
+
+
+    <update id="updateDestinationId" parameterType="com.umessage.letsgo.domain.po.journey.ScheduleDetailEntity" >
+        update j_schedule_detail
+        set
+        <if test="startPlaceId != null and countryId1 !=''.toString() ">
+            start_place_id = #{startPlaceId,jdbcType=VARCHAR}
+        </if>
+        <if test="destinationId1 != null and destinationId1 !=''.toString() ">
+            ,destination_id1= #{destinationId1,jdbcType=VARCHAR}
+        </if>
+        <if test="destinationId2 != null and destinationId2 !=''.toString() ">
+            ,destination_id2= #{destinationId2,jdbcType=VARCHAR}
+        </if>
+        <if test="destinationId3 != null and destinationId3 !=''.toString() ">
+            ,destination_id3= #{destinationId3,jdbcType=VARCHAR}
+        </if>
+        <if test="destinationId4 != null and destinationId4 !=''.toString() ">
+            , destination_id4= #{destinationId4,jdbcType=VARCHAR}
+        </if>
+        <if test="destinationId5 != null and destinationId5 !=''.toString() ">
+            , destination_id5 = #{destinationId5,jdbcType=VARCHAR}
+        </if>
+        ,update_time = #{updateTime,jdbcType=TIMESTAMP},
+        version = version + 1
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

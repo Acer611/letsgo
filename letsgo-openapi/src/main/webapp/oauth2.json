@@ -1,0 +1,386 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "<p>为保证用户数据的安全性与隐私性，登录授权采用国际通用的OAuth2.0标准协议作为用户身份验证与授权协议。目前跟上API OAuth2.0服务支持</p><p>采用三种方式获取Access Token（授权令牌），即Client-side flow、Username and Password Flow和SMS Verification Flow和WX Verification Flow。</p>",
+    "version": "1.0",
+    "title": "用户授权接口",
+    "termsOfService": "My Apps API terms of service",
+    "contact": {},
+    "license": {}
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Client Side Flow",
+      "description": "客户端凭证模式"
+    },
+    {
+      "name": "Username and Password Flow",
+      "description": "用户名密码登录模式"
+    },
+    {
+      "name": "SMS Verification Flow",
+      "description": "短信验证码登录模式"
+    },
+    {
+      "name": "WX Verification Flow",
+      "description":"微信授权登录模式"
+    }
+  ],
+  "paths": {
+    "/login/oauth/{token}": {
+      "post": {
+        "tags": [
+          "Client Side Flow"
+        ],
+        "summary": "获取访问令牌（access_token）",
+        "description": "当用户未登录时，可以通过Client-side flow 获取访问令牌（access_token），来调用不涉及用户隐私的API。",
+        "operationId": "getClientTokenUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "为了避免接口地址重复而设置的路径变量，替换后地址为/login/oauth/token",
+            "required": true,
+            "type": "string",
+            "default": "token"
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "description": "分配给应用的唯一ID",
+            "required": true,
+            "type": "string",
+            "default": "C8BC3D6EE"
+          },
+          {
+            "name": "client_secret",
+            "in": "query",
+            "description": "分配给应用的密钥",
+            "required": true,
+            "type": "string",
+            "default": "ABD76132-141E-4651-BF63-17A71C555988"
+          },
+          {
+            "name": "grant_type",
+            "in": "query",
+            "description": "授权类型",
+            "required": true,
+            "type": "string",
+            "default": "client_credentials"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ClientTokenResponse"
+            }
+          }
+        },
+        "security": [
+        ]
+      }
+    },
+    "/login/{oauth}/token": {
+      "post": {
+        "tags": [
+          "Username and Password Flow"
+        ],
+        "summary": "获取访问令牌（access_token）",
+        "description": "当用户使用用户名和密码方式登录时，可以通过Username and Password Flow 获取访问令牌（access_token），来调用所有API（包括涉及用户隐私的API）。",
+        "operationId": "getUsernamePasswordTokenUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "oauth",
+            "in": "path",
+            "description": "为了避免接口地址重复而设置的路径变量，替换后地址为/login/oauth/token",
+            "required": true,
+            "type": "string",
+            "default": "oauth"
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "description": "分配给应用的唯一ID",
+            "required": true,
+            "type": "string",
+            "default": "C8BC3D6EE"
+          },
+          {
+            "name": "client_secret",
+            "in": "query",
+            "description": "分配给应用的密钥",
+            "required": true,
+            "type": "string",
+            "default": "ABD76132-141E-4651-BF63-17A71C555988"
+          },
+          {
+            "name": "grant_type",
+            "in": "query",
+            "description": "授权类型",
+            "required": true,
+            "type": "string",
+            "default": "password"
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "用户名",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "密码",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserTokenResponse"
+            }
+          }
+        },
+        "security": [
+        ]
+      }
+    },
+    "/{login}/oauth/token": {
+      "post": {
+        "tags": [
+          "SMS Verification Flow"
+        ],
+        "summary": "获取访问令牌（access_token）",
+        "description": "当用户使用手机验证码方式登录时，可以通过SMS Verification Flow 获取访问令牌（access_token），来调用所有API（包括涉及用户隐私的API）。",
+        "operationId": "getSMSVerificationTokenUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "为了避免接口地址重复而设置的路径变量，替换后地址为/login/oauth/token",
+            "required": true,
+            "type": "string",
+            "default": "login"
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "description": "分配给应用的唯一ID",
+            "required": true,
+            "type": "string",
+            "default": "C8BC3D6EE"
+          },
+          {
+            "name": "client_secret",
+            "in": "query",
+            "description": "分配给应用的密钥",
+            "required": true,
+            "type": "string",
+            "default": "ABD76132-141E-4651-BF63-17A71C555988"
+          },
+          {
+            "name": "grant_type",
+            "in": "query",
+            "description": "授权类型",
+            "required": true,
+            "type": "string",
+            "default": "sms_verification"
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "description": "用户名",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "密码",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserTokenResponse"
+            }
+          }
+        },
+        "security": [
+        ]
+      }
+    },
+    "/{login}/{oauth}/token": {
+      "post": {
+        "tags": [
+          "WX Verification Flow"
+        ],
+        "summary": "获取访问令牌（access_token）",
+        "description": "当用户使用微信授权方式登录时，可以通过WX Verification Flow获取访问令牌（access_token），来调用所有API（包括涉及用户隐私的API）。",
+        "operationId": "getWXVerificationTokenUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "为了避免接口地址重复而设置的路径变量，替换后地址为/login/oauth/token",
+            "required": true,
+            "type": "string",
+            "default": "login"
+          },
+          {
+            "name": "oauth",
+            "in": "path",
+            "description": "为了避免接口地址重复而设置的路径变量，替换后地址为/login/oauth/token",
+            "required": true,
+            "type": "string",
+            "default": "oauth"
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "description": "分配给应用的唯一ID",
+            "required": true,
+            "type": "string",
+            "default": "C8BC3D6EE"
+          },
+          {
+            "name": "client_secret",
+            "in": "query",
+            "description": "分配给应用的密钥",
+            "required": true,
+            "type": "string",
+            "default": "ABD76132-141E-4651-BF63-17A71C555988"
+          },
+          {
+            "name": "grant_type",
+            "in": "query",
+            "description": "授权类型",
+            "required": true,
+            "type": "string",
+            "default": "social_verification"
+          },
+          {
+            "name": "openId",
+            "in": "query",
+            "description": "用户openId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "utoken",
+            "in": "query",
+            "description": "用户utoken",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "第三方类型：0微信",
+            "required": true,
+            "type": "Integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserTokenResponse"
+            }
+          }
+        },
+        "security": [
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "ClientTokenResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "获取的Access Token，是调用API必需的参数"
+        },
+        "token_type": {
+          "type": "string",
+          "description": "oken类型，默认返回bearer"
+        },
+        "expires_in": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Token的有效期，单位为秒，从调用该接口开始计数"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Token的访问范围，即用户实际授予的权限列表"
+        }
+      }
+    },
+    "UserTokenResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "description": "获取的Access Token，是调用API必需的参数"
+        },
+        "token_type": {
+          "type": "string",
+          "description": "Token类型，默认返回bearer"
+        },
+        "refresh_token": {
+          "type": "string",
+          "description": "当Token过期后，可以用Refresh Token对其进行刷新"
+        },
+        "expires_in": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Token的有效期，单位为秒，从调用该接口开始计数"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Token的访问范围，即用户实际授予的权限列表"
+        }
+      }
+    }
+  }
+}

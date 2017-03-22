@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<!--
+	<s_basedata_ver id="1" device_type="ios" module="tour_escort" version="1.0.0"  updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" checkcode="abc" />
+    <s_basedata_ver id="2" device_type="android" module="tour_escort" version="1.0.0"  updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" checkcode="abc" />
+    <s_basedata_ver id="3" device_type="ios" module="traveller" version="1.0.0" updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" checkcode="abc" />
+    <s_basedata_ver id="4" device_type="android" module="traveller" version="1.0.0" updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" checkcode="abc" />
+    -->
+
+    <s_basedata_ver id="1001" device_type="ios" module="tour_escort" version="1.1.0"  updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" checkcode="abc" />
+    <s_basedata_ver id="1002" device_type="android" module="tour_escort" version="1.1.0"  updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" checkcode="abc" />
+    <s_basedata_ver id="1003" device_type="ios" module="traveller" version="1.1.0" updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" checkcode="abc" />
+    <s_basedata_ver id="1004" device_type="android" module="traveller" version="1.1.0" updateurl="https://itunes.apple.com/cn/app/12580lu-xing/id510301805?mt=8" checkcode="abc" />
+</dataset>

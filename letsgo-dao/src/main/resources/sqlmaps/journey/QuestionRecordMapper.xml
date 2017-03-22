@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.QuestionRecordDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.QuestionRecordEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="schedule_name" property="scheduleName" jdbcType="VARCHAR" />
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="mould_question1" property="mouldQuestion1" jdbcType="VARCHAR" />
+        <result column="mould_question2" property="mouldQuestion2" jdbcType="VARCHAR" />
+        <result column="mould_question3" property="mouldQuestion3" jdbcType="VARCHAR" />
+        <result column="mould_question4" property="mouldQuestion4" jdbcType="VARCHAR" />
+        <result column="mould_question5" property="mouldQuestion5" jdbcType="VARCHAR" />
+        <result column="mould_question6" property="mouldQuestion6" jdbcType="VARCHAR" />
+        <result column="custom_question1" property="customQuestion1" jdbcType="VARCHAR" />
+        <result column="custom_question2" property="customQuestion2" jdbcType="VARCHAR" />
+        <result column="custom_question3" property="customQuestion3" jdbcType="VARCHAR" />
+        <result column="custom_question4" property="customQuestion4" jdbcType="VARCHAR" />
+        <result column="custom_question5" property="customQuestion5" jdbcType="VARCHAR" />
+        <result column="custom_question6" property="customQuestion6" jdbcType="VARCHAR" />
+        <result column="custom_question7" property="customQuestion7" jdbcType="VARCHAR" />
+        <result column="custom_question8" property="customQuestion8" jdbcType="VARCHAR" />
+        <result column="custom_question9" property="customQuestion9" jdbcType="VARCHAR" />
+        <result column="custom_question10" property="customQuestion10" jdbcType="VARCHAR" />
+        <result column="custom_question11" property="customQuestion11" jdbcType="VARCHAR" />
+        <result column="custom_question12" property="customQuestion12" jdbcType="VARCHAR" />
+        <result column="custom_question13" property="customQuestion13" jdbcType="VARCHAR" />
+        <result column="custom_question14" property="customQuestion14" jdbcType="VARCHAR" />
+        <result column="custom_question15" property="customQuestion15" jdbcType="VARCHAR" />
+        <result column="custom_question16" property="customQuestion16" jdbcType="VARCHAR" />
+        <result column="custom_question17" property="customQuestion17" jdbcType="VARCHAR" />
+        <result column="custom_question18" property="customQuestion18" jdbcType="VARCHAR" />
+        <result column="custom_question19" property="customQuestion19" jdbcType="VARCHAR" />
+        <result column="custom_question20" property="customQuestion20" jdbcType="VARCHAR" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_question_record
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.QuestionRecordEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_question_record (team_num, schedule_name, start_date, end_date,
+        real_name, sex, phone, create_time, mould_question1, mould_question2,mould_question3,mould_question4,
+        mould_question5,mould_question6,custom_question1,custom_question2,custom_question3,
+        custom_question4,custom_question5,custom_question6,custom_question7,custom_question8,
+        custom_question9,custom_question10,custom_question11,custom_question12,custom_question13,
+        custom_question14,custom_question15,custom_question16,custom_question17,custom_question18,custom_question19,custom_question20)
+        values (#{teamNum,jdbcType=VARCHAR}, #{scheduleName,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP},#{endDate,jdbcType=TIMESTAMP},
+            #{realName,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{mouldQuestion1,jdbcType=VARCHAR}, #{mouldQuestion2,jdbcType=VARCHAR},
+            #{mouldQuestion3,jdbcType=VARCHAR},#{mouldQuestion4,jdbcType=VARCHAR},#{mouldQuestion5,jdbcType=VARCHAR},#{mouldQuestion6,jdbcType=VARCHAR},
+            #{customQuestion1,jdbcType=VARCHAR},#{customQuestion2,jdbcType=VARCHAR},#{customQuestion3,jdbcType=VARCHAR},#{customQuestion4,jdbcType=VARCHAR},
+            #{customQuestion5,jdbcType=VARCHAR},#{customQuestion6,jdbcType=VARCHAR},#{customQuestion7,jdbcType=VARCHAR},#{customQuestion8,jdbcType=VARCHAR},
+            #{customQuestion9,jdbcType=VARCHAR},#{customQuestion10,jdbcType=VARCHAR},#{customQuestion11,jdbcType=VARCHAR},#{customQuestion12,jdbcType=VARCHAR},
+            #{customQuestion13,jdbcType=VARCHAR},#{customQuestion14,jdbcType=VARCHAR},#{customQuestion15,jdbcType=VARCHAR},#{customQuestion16,jdbcType=VARCHAR},
+            #{customQuestion17,jdbcType=VARCHAR},#{customQuestion18,jdbcType=VARCHAR},#{customQuestion19,jdbcType=VARCHAR},#{customQuestion20,jdbcType=VARCHAR})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.QuestionRecordEntity" >
+        update j_question_record
+        set team_num = #{teamNum,jdbcType=VARCHAR},
+            schedule_name = #{scheduleName,jdbcType=VARCHAR},
+            start_date = #{startDate,jdbcType=TIMESTAMP},
+            end_date = #{endDate,jdbcType=TIMESTAMP},
+            real_name = #{realName,jdbcType=VARCHAR},
+            sex = #{sex,jdbcType=INTEGER},
+            phone = #{phone,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            mould_question1 = #{mouldQuestion1,jdbcType=VARCHAR},
+            mould_question2 = #{mouldQuestion2,jdbcType=VARCHAR},
+            mould_question3 = #{mouldQuestion3,jdbcType=VARCHAR},
+            mould_question4 = #{mouldQuestion4,jdbcType=VARCHAR},
+            mould_question5 = #{mouldQuestion5,jdbcType=VARCHAR},
+            mould_question6 = #{mouldQuestion6,jdbcType=VARCHAR},
+            custom_question1 = #{customQuestion1,jdbcType=VARCHAR},
+            custom_question2 = #{customQuestion2,jdbcType=VARCHAR},
+            custom_question3 = #{customQuestion3,jdbcType=VARCHAR},
+            custom_question4 = #{customQuestion4,jdbcType=VARCHAR},
+            custom_question5 = #{customQuestion5,jdbcType=VARCHAR},
+            custom_question6 = #{customQuestion6,jdbcType=VARCHAR},
+            custom_question7 = #{customQuestion7,jdbcType=VARCHAR},
+            custom_question8 = #{customQuestion8,jdbcType=VARCHAR},
+            custom_question9 = #{customQuestion9,jdbcType=VARCHAR},
+            custom_question10 = #{customQuestion10,jdbcType=VARCHAR},
+            custom_question11 = #{customQuestion11,jdbcType=VARCHAR},
+            custom_question12 = #{customQuestion12,jdbcType=VARCHAR},
+            custom_question13 = #{customQuestion13,jdbcType=VARCHAR},
+            custom_question14 = #{customQuestion14,jdbcType=VARCHAR},
+            custom_question15 = #{customQuestion15,jdbcType=VARCHAR},
+            custom_question16 = #{customQuestion16,jdbcType=VARCHAR},
+            custom_question17 = #{customQuestion17,jdbcType=VARCHAR},
+            custom_question18 = #{customQuestion18,jdbcType=VARCHAR},
+            custom_question19 = #{customQuestion19,jdbcType=VARCHAR},
+            custom_question20 = #{customQuestion20,jdbcType=VARCHAR}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, team_num, schedule_name, start_date, end_date,
+        real_name, sex, phone, create_time, mould_question1, mould_question2,mould_question3,mould_question4,
+        mould_question5,mould_question6,custom_question1,custom_question2,custom_question3,
+        custom_question4,custom_question5,custom_question6,custom_question7,custom_question8,
+        custom_question9,custom_question10,custom_question11,custom_question12,custom_question13,
+        custom_question14,custom_question15,custom_question16,custom_question17,custom_question18,custom_question19,custom_question20
+        from j_question_record
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, team_num, schedule_name, start_date, end_date,
+        real_name, sex, phone, create_time, mould_question1, mould_question2,mould_question3,mould_question4,
+        mould_question5,mould_question6,custom_question1,custom_question2,custom_question3,
+        custom_question4,custom_question5,custom_question6,custom_question7,custom_question8,
+        custom_question9,custom_question10,custom_question11,custom_question12,custom_question13,
+        custom_question14,custom_question15,custom_question16,custom_question17,custom_question18,custom_question19,custom_question20
+        from j_question_record
+    </select>
+</mapper>

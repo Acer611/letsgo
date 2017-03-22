@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.GroupDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.GroupEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="t_id" property="tId" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+
+    <resultMap id="MultiResultMap" type="com.umessage.letsgo.domain.po.team.GroupEntity">
+        <id column="g_id" property="id" jdbcType="BIGINT" />
+        <result column="g_t_id" property="tId" jdbcType="BIGINT" />
+        <result column="g_team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="g_name" property="name" jdbcType="VARCHAR" />
+        <result column="g_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="g_total_count" property="totalCount" jdbcType="INTEGER" />
+        <result column="g_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="g_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="g_version" property="version" jdbcType="BIGINT" />
+        <collection property="memberList" ofType="com.umessage.letsgo.domain.po.team.MemberEntity">
+            <id column="id" property="id" jdbcType="BIGINT" />
+            <result column="user_id" property="userId" jdbcType="BIGINT" />
+            <result column="t_id" property="tId" jdbcType="BIGINT" />
+            <result column="group_id" property="groupId" jdbcType="BIGINT" />
+            <result column="real_name" property="realName" jdbcType="VARCHAR" />
+            <result column="sex" property="sex" jdbcType="INTEGER" />
+            <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+            <result column="phone" property="phone" jdbcType="VARCHAR" />
+            <result column="mark_phone" property="markPhone" jdbcType="VARCHAR" />
+            <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+            <result column="mail" property="mail" jdbcType="VARCHAR" />
+            <result column="address" property="address" jdbcType="VARCHAR" />
+            <result column="city" property="city" jdbcType="VARCHAR" />
+            <result column="province" property="province" jdbcType="VARCHAR" />
+            <result column="country" property="country" jdbcType="VARCHAR" />
+            <result column="role" property="role" jdbcType="INTEGER" />
+            <result column="type" property="type" jdbcType="INTEGER" />
+            <result column="is_leader" property="isLeader" jdbcType="INTEGER" />
+            <result column="is_admin" property="isAdmin" jdbcType="INTEGER" />
+            <result column="join_status" property="joinStatus" jdbcType="INTEGER" />
+            <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+            <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+            <result column="card_time" property="cardTime" jdbcType="VARCHAR" />
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="version" property="version" jdbcType="BIGINT" />
+            <result column="is_new_join" property="isNewJoin" jdbcType="INTEGER" />
+            <association property="userEntity" column="user_id" javaType="com.umessage.letsgo.domain.po.security.UserEntity">
+                <id column="u_id" property="id" jdbcType="BIGINT" />
+                <result column="u_user_name" property="userName" jdbcType="VARCHAR" />
+                <result column="u_real_name" property="realName" jdbcType="VARCHAR" />
+                <result column="u_nick_name" property="nickName" jdbcType="VARCHAR" />
+                <result column="u_password" property="password" jdbcType="VARCHAR" />
+                <result column="u_sex" property="sex" jdbcType="INTEGER" />
+                <result column="u_birthday" property="birthday" jdbcType="VARCHAR" />
+                <result column="u_phone" property="phone" jdbcType="VARCHAR" />
+                <result column="u_mail" property="mail" jdbcType="VARCHAR" />
+                <result column="u_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+                <result column="u_type" property="type" jdbcType="INTEGER" />
+                <result column="u_userSig" property="usersig" jdbcType="VARCHAR" />
+                <result column="u_login_total_count" property="loginTotalCount" jdbcType="INTEGER" />
+                <result column="u_login_count" property="loginCount" jdbcType="INTEGER" />
+                <result column="u_create_time" property="createTime" jdbcType="TIMESTAMP" />
+                <result column="u_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+                <result column="u_version" property="version" jdbcType="BIGINT" />
+            </association>
+        </collection>
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_group
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.GroupEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_group (t_id, team_id, name,
+            photo_url, total_count, create_time,
+            update_time, version)
+        values (#{tId,jdbcType=BIGINT}, #{teamId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+            #{photoUrl,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+            #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.GroupEntity" >
+        update t_group
+        set t_id = #{tId,jdbcType=BIGINT},
+            team_id = #{teamId,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            photo_url = #{photoUrl,jdbcType=VARCHAR},
+            total_count = #{totalCount,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, t_id, team_id, name, photo_url, total_count, create_time, update_time,
+        version
+        from t_group
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, t_id, team_id, name, photo_url, total_count, create_time, update_time,
+        version
+        from t_group
+    </select>
+    <select id="selectGroupListWithTeamId" resultMap="MultiResultMap" parameterType="java.lang.Long">
+        SELECT
+        g.ID AS g_id, g.t_id AS g_t_id, g.team_id AS g_team_id, g.name AS g_name, g.photo_url AS g_photo_url, g.total_count AS g_total_count, g.create_time AS g_create_time, g.update_time AS g_update_time, g.version AS g_version,
+
+        me.ID, me.user_id, me.t_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,me.is_new_join,
+
+        u.ID AS u_id, u.user_name AS u_user_name, u.real_name AS u_real_name, u.nick_name AS u_nick_name, u.password AS u_password, u.sex AS u_sex, u.birthday AS u_birthday, u.phone AS u_phone, u.mail AS u_mail, u.type AS u_type, u.photo_url AS u_photo_url, u.userSig AS u_userSig,
+        u.login_total_count AS u_login_total_count, u.login_count AS u_login_count, u.create_time AS u_create_time, u.update_time AS u_update_time, u.version AS u_version
+
+        FROM t_group AS g
+--         JOIN t_team AS t ON g.team_id = t.`ID`
+        JOIN t_member AS me ON g.`ID` = me.group_id
+        LEFT JOIN s_user AS u ON u.`ID` = me.`user_id`
+        where me.t_id = #{teamId,jdbcType=BIGINT}
+        ORDER BY me.is_leader DESC, me.join_status DESC, convert(me.real_name USING GBK) ASC
+    </select>
+</mapper>

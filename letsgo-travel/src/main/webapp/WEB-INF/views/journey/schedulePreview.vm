@@ -1,0 +1,593 @@
+#set($pageTitle="团队行程管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/dist/css/style.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/flexible_css.debug.js","$!{STATIC_URL}/resources/dist/js/flexible.debug.js","$!{STATIC_URL}/resources/dist/js/jquery.form.js","$!{STATIC_URL}/resources/dist/js/swiper-3.3.1.jquery.min.js"])
+<style>
+	body{position:relative;}
+
+    @media (max-width:992px) {
+       #myNav{
+           position:fixed;
+		   right:15px;
+		   top:200px;
+		   background:rgba(155,155,155,0.5);
+		   z-index:9999;
+           min-height: 10px;
+		   max-height:250px;
+		   overflow:auto;
+		}
+    }
+    @media (min-width:992px) {
+        #myNav{
+            min-height: 10px;
+            max-height:600px;
+            overflow-y:auto;
+        }
+    }
+</style>
+
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+
+		#parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper" style="margin-top:-50px;padding-top:100px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            团队行程管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">查看行程详情</li>
+          </ol>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+			  <div class="box box-success">
+				<div class="box-header with-border">
+				  <h3 class="box-title">查看行程详情</h3>
+				  <!--<div class="box-tools"><a class="btn btn-default btn-sm" href="#">预览</a></div>-->
+                    <div class="box-tools col-md-3">
+#if(${scheduleEntity.status}==2)
+    <a class="btn btn-warning btn-sm col-md-5 pull-left" style="margin-right:10px;" href="$!{link.contextPath}/schedule/scheduleEdit?id=$!{scheduleEntity.id}">修改行程</a>
+
+#end
+                        <a class="btn btn-warning btn-sm col-md-6 pull-right" href="$!{link.contextPath}/member/teamMembersView?tId=$!{scheduleEntity.teamId}">查看游客名单</a>
+
+					</div>
+				</div><!-- /.box-header -->
+				
+				<div class="box-body">
+					<div class="col-md-3" id="myScrollspy">
+									<ul class="nav nav-tabsfix nav-stacked" id="myNav">
+										<li class="active"><a href="#section-1">行程概述</a></li>
+#foreach( $Detail in $scheduleEntity.scheduleDetailList)
+										<li><a href="#section-2$!{Detail.dayNum}">行程单：D$!{Detail.dayNum}</a></li>
+
+	#end
+#if($promptEntity.costInclude&&$promptEntity.costInclude!=""||$promptEntity.costNotInclude&&$promptEntity.costNotInclude!=""||$promptEntity.ownExpenceInfo&&$promptEntity.ownExpenceInfo!="")
+										<li><a href="#section-3">费用信息</a></li>
+	#end
+#if( $promptEntity.shoppingPlace&&$promptEntity.shoppingPlace!="")
+										<li><a href="#section-4">购物场所</a></li>
+	#end
+#if($promptEntity.weatherSituation&&$promptEntity.weatherSituation!=""||$promptEntity.dressCode&&$promptEntity.dressCode!=""||$promptEntity.timeInfo&&$promptEntity.timeInfo!=""||$promptEntity.languages&&$promptEntity.languages!=""||$promptEntity.voltage&&$promptEntity.voltage!=""||$promptEntity.foods&&$promptEntity.foods!=""||$promptEntity.essentialItem&&$promptEntity.essentialItem!=""||$promptEntity.currency&&$promptEntity.currency!=""||$promptEntity.telephoneCommunication&&$promptEntity.telephoneCommunication!=""||$promptEntity.hotel&&$promptEntity.hotel!=""||$promptEntity.customsForbid&&$promptEntity.customsForbid!=""||$promptEntity.waterActivitiesNote&&$promptEntity.waterActivitiesNote!=""||$promptEntity.tipCase&&$promptEntity.tipCase!=""||$promptEntity.customs&&$promptEntity.customs!=""||$promptEntity.chinaNotic&&$promptEntity.chinaNotic!=""||$promptEntity.security||$promptEntity.specialAttention)
+
+    <li><a href="#section-5">友情提示</a></li>
+	#end
+#if($promptEntity.travelAgencyInfo&&$promptEntity.travelAgencyInfo!=""||$promptEntity.travelAgencyInfo&&$promptEntity.travelAgencyInfo!="")
+										<li><a href="#section-6">旅行社信息</a></li>
+	#end
+									</ul>
+					</div>
+	
+					<!-- Default box -->
+					<div class="col-md-6">
+						<div class="main">
+						<!--预览开始-->
+						<div class="box box-success"  id="section-1">
+							<div class="box-header with-border"><h3 class="box-title">行程概述</h3></div>
+							<div class="box-body ">
+								<section class="cd-container gaishu">
+									#if(${scheduleEntity.featurePhoto}&&${scheduleEntity.featurePhoto}!="")
+
+									<div class="lunbo">
+
+												<img src="$!scheduleEntity.featurePhoto">
+
+									</div>
+									#end
+									<div class="cd-type">
+										<dl><dt>名称:</dt><dd>$!{scheduleEntity.name}</dd></dl>
+										<dl><dt>团号:</dt><dd>$!{scheduleEntity.teamNum}</dd></dl>
+										<dl><dt>出发地:</dt><dd>$!{scheduleEntity.startPlace}</dd></dl>
+									</div>
+									<div class="cd-type">
+										#if($!{scheduleEntity.collectionTime}&&$!{scheduleEntity.collectionTime}!="")
+
+										<dl><dt>集合时间:</dt><dd>$!date.format('yyyy-MM-dd HH:mm:ss',$!{scheduleEntity.collectionTime})</dd></dl>
+										#end
+										#if($!{scheduleEntity.collectionPlace}&&$!{scheduleEntity.collectionPlace}!="")
+											<dl><dt>集合地点:</dt><dd>$!{scheduleEntity.collectionPlace}</dd></dl>
+										#end
+									</div>
+#if($!{scheduleEntity.feature}&&$!{scheduleEntity.feature}!="")
+									<div class="cd-type-msg">
+										<dl>
+										<dt>行程特色:</dt>
+										<dd>
+										<p>
+                                            $!scheduleEntity.feature.replaceAll("\n|\r","<br/>")
+										</p>
+										</dd>
+										</dl>
+										</div>
+										#end
+									</section>
+								</div>
+							</div>
+#foreach( $Detail in $scheduleEntity.scheduleDetailList)
+							<div class="box box-success" id="section-2$!Detail.dayNum">
+								<div class="box-header with-border"><h1 class="box-title" style="color:#f39c12;font-size:20px;">D$!Detail.dayNum</h1></div>
+								<div class="box-body">
+									<section class="cd-container">
+										<ul class="day_con">
+											<li class="day_tit">
+												<span class="tit_time">$!date.format('yyyy-MM-dd',$!Detail.scheduleDate)</span>
+												<span class="tit_name">#if($Detail.destination1)$Detail.destination1#end #if($Detail.destination2)>$Detail.destination2#end#if($Detail.destination3)>$Detail.destination3#end#if($Detail.destination4)>$Detail.destination4#end</span>
+											</li>
+											<li class="day_con_list">
+												<span class="day_weather"></span>
+												<p>当日天气(
+	#if(${Detail.destination4}&&${Detail.destination4}!="")
+		$!{response.scheduleDetailEntity.destination4}
+	#elseif(${Detail.destination3}&&${Detail.destination3}!="")
+		$!{Detail.destination3}
+	#elseif(${Detail.destination2}&&${Detail.destination2}!="")
+		$!{Detail.destination2}
+	#elseif(${Detail.destination1}&&${Detail.destination1}!="")
+		$!{Detail.destination1}
+		#end) </p>
+												<p>$!{Detail.weatherDescn}</p>
+											</li>
+											#if( ${Detail.schedulePhotosUrl1}&&${Detail.schedulePhotosUrl1}!=""||${Detail.schedulePhotosUrl2}&&${Detail.schedulePhotosUrl2}!=""|| ${Detail.schedulePhotosUrl3}&&${Detail.schedulePhotosUrl3}!="")
+                                                <li class="day_con_img swiper-container">
+                                                    <!--轮播图-->
+                                                    <div class="swiper-wrapper">
+												#if( ${Detail.schedulePhotosUrl1}&&${Detail.schedulePhotosUrl1}!="" )
+                                                        <div class="swiper-slide">
+                                                            <img src="$!{Detail.schedulePhotosUrl1}"/>
+                                                        </div>
+													#end
+														#if( ${Detail.schedulePhotosUrl2}&&${Detail.schedulePhotosUrl2}!="" )
+                                                            <div class="swiper-slide">
+                                                                <img src="$!{Detail.schedulePhotosUrl2}"/>
+                                                            </div>
+														#end
+														#if( ${Detail.schedulePhotosUrl3}&&${Detail.schedulePhotosUrl3}!="" )
+                                                            <div class="swiper-slide">
+                                                                <img src="$!{Detail.schedulePhotosUrl3}"/>
+                                                            </div>
+														#end
+                                                    </div>
+                                                    <div class="swiper-pagination"></div>
+                                                    <!--轮播图end-->
+                                                </li>
+											#end
+											#if($Detail.desc&&$Detail.desc!="")
+
+											<li class="day_con_list">
+												<span class="day_introduce"></span>
+												<p>行程介绍</p> 
+												<p>$!Detail.desc.replaceAll("\n|\r","<br/>")</p>
+											</li>
+											#end
+											#if($!Detail.scenicList.size()>0)
+
+											<li class="day_con_list" style="display:none;">
+											<span class="day_scenic day_scenic$!{Detail.dayNum}"></span>
+												<p>景点</p>
+												<p>#foreach( $Detailscenic in $!Detail.scenicList)
+													#if($Detailscenic.name&&$Detailscenic.name!="")
+
+												$!Detailscenic.name <br/>
+                                                        <script type="text/javascript">
+window.onload=function(){
+    $(".day_scenic$!{Detail.dayNum}").parent().show();
+}
+
+
+
+                                                        </script>
+													#end
+												#end</p>
+											</li>
+											#end
+	#if($Detail.flight1&&$Detail.flight1!=""||$Detail.flight2&&$Detail.flight2!="")
+											<li class="day_con_list">
+												<span class="day_flight"></span>
+												<p>航班</p> 
+												<p>#if($Detail.flight1)$!Detail.flight1#end #if($Detail.flight2&&$Detail.flight2!="")$!Detail.flight2#end</p>
+											</li>
+		#end
+											#if($Detail.cateringInfo&&$Detail.cateringInfo!="")
+
+											<li class="day_con_list">
+											<span class="day_dinner"></span>
+												<p>餐饮</p> 
+												<p>$!Detail.cateringInfo.replaceAll("\n|\r","<br/>")</p>
+											</li>
+											#end
+											#if($!{Detail.hotelInput}&&$!{Detail.hotelInput}!=""||$!{Detail.hotel}&&$!{Detail.hotel}!="")
+											<li class="day_con_list">
+												<span class="day_hotel"></span>
+												<p>酒店</p>
+												<p>#if( $Detail.hotelConfirm )
+													#if(  $Detail.hotelConfirm==0 )
+														$!{Detail.hotelInput}
+													#elseif($Detail.hotelConfirm==1)
+														$!{Detail.hotel}
+													#end
+												#end
+													#if( ${Detail.sameLevel}==0 )
+
+													#elseif($Detail.sameLevel==1)
+                                                        或同级酒店
+													#end</p>
+											</li>
+											#end
+
+											#if(${Detail.trafficInfo}&&${Detail.trafficInfo}!="")
+											<li class="day_con_list">
+												<span class="day_traffic"></span>
+												<p>交通信息</p> 
+												<p>$!{Detail.trafficInfo}</p>
+											</li>
+											#end
+	#if(${Detail.shoppInfo}&&${Detail.shoppInfo}!="")
+                                            <li class="day_con_list">
+											<span class="day_shopping"></span>
+												<p>购物点</p> 
+												<p>$!Detail.shoppInfo.replaceAll("\n|\r","<br/>")</p>
+											</li>
+		#end
+											#if(${Detail.name}&&${Detail.name}!=""&&${Detail.phone}&&${Detail.phone}!="")
+
+											<li class="day_con_list">
+												<span class="day_guide"></span>
+												<p>导游信息</p> 
+												<p>$!{Detail.name} $!{Detail.phone}</p>
+											</li>
+											#end
+											#if(${Detail.newEntry}&&${Detail.newEntry}!=""||${Detail.newContant}&&${Detail.newContant}!="")
+
+											<li class="day_con_list">
+												<span class="day_custom"></span>
+												<p>$!{Detail.newEntry}</p>
+												<p>$!{Detail.newContant}</p>
+											</li>
+											#end
+										</ul>
+										
+									</section>
+								</div>
+						</div>
+	#end
+							#if($promptEntity.costInclude&&$promptEntity.costInclude!=""||$promptEntity.costNotInclude&&$promptEntity.costNotInclude!=""||$promptEntity.ownExpenceInfo&&$promptEntity.ownExpenceInfo!="")
+
+						<div class="box box-success" id="section-3">
+								<div class="box-header with-border"><h3 class="box-title">费用信息</h3></div>
+								<div class="box-body">
+									<section class="cd-container feiyong">
+			#if($promptEntity.costInclude&&$promptEntity.costInclude!="")
+
+										<dl>
+											<dt>费用包含:</dt>
+											<dd>
+											<ul>
+											<li>
+
+											 $!promptEntity.costInclude.replaceAll("\n|\r","<br/>")
+											</li>
+
+											</ul>
+											</dd>
+										</dl>
+										#end
+#if($promptEntity.costNotInclude&&$promptEntity.costNotInclude!="")
+										<dl>
+											<dt>费用不含:</dt>
+											<dd>
+                                                <ul>
+                                                    <li>
+                                                        <div>
+##													$!promptEntity.costNotInclude.replaceAll(" ","&nbsp;").replaceAll("\r","<br/>")
+												$!promptEntity.costNotInclude.replaceAll("\n|\r","<br/>")
+	</div>
+														</li>
+													</ul>
+                                            </span>
+										</dd>
+										</dl>
+
+	#end
+#if($promptEntity.ownExpenceInfo&&$promptEntity.ownExpenceInfo!="")
+
+										<dl>
+											<dt>自费项目:</dt>
+											<dd>
+												<ul>
+													<li>
+														<div>$!promptEntity.ownExpenceInfo.replaceAll("\n|\r","<br/>")</div>
+													</li>
+
+												</ul>
+											</dd>
+										</dl>
+										#end
+									</section>
+									</div>
+							</div>
+							#end
+							#if( $promptEntity.shoppingPlace&&$promptEntity.shoppingPlace!="")
+
+							<div class="box box-success"  id="section-4">
+									<div class="box-header with-border"><h3 class="box-title">购物场所</h3></div>
+									<div class="box-body">
+									<section class="cd-container feiyong">
+										<dl>
+											<dd>
+												<ul>
+													<li>
+														 <div>
+															 $!promptEntity.shoppingPlace.replaceAll("\n|\r","<br/>")
+														</div>
+													</li>
+
+												</ul>
+											</dd>
+										</dl>
+										
+									</section>
+								</div>
+							</div>
+							#end
+#if($promptEntity.weatherSituation&&$promptEntity.weatherSituation!=""||$promptEntity.dressCode&&$promptEntity.dressCode!=""||$promptEntity.timeInfo&&$promptEntity.timeInfo!=""||$promptEntity.languages&&$promptEntity.languages!=""||$promptEntity.voltage&&$promptEntity.voltage!=""||$promptEntity.foods&&$promptEntity.foods!=""||$promptEntity.essentialItem&&$promptEntity.essentialItem!=""||$promptEntity.currency&&$promptEntity.currency!=""||$promptEntity.telephoneCommunication&&$promptEntity.telephoneCommunication!=""||$promptEntity.hotel&&$promptEntity.hotel!=""||$promptEntity.customsForbid&&$promptEntity.customsForbid!=""||$promptEntity.waterActivitiesNote&&$promptEntity.waterActivitiesNote!=""||$promptEntity.tipCase&&$promptEntity.tipCase!=""||$promptEntity.customs&&$promptEntity.customs!=""||$promptEntity.chinaNotic&&$promptEntity.chinaNotic!=""||$promptEntity.security||$promptEntity.specialAttention)
+							<div class="box box-success"  id="section-5">
+								<div class="box-header with-border"><h3 class="box-title">友情提示</h3></div>
+								<div class="box-body">
+									<section class="cd-container feiyong">
+										<dl>
+											<dt>重要提示:</dt>
+											<dd>
+												<ul>
+													#if($promptEntity.weatherSituation&&$promptEntity.weatherSituation!="")
+
+													<li>
+														 <div>天气概况：
+														 <br>
+                                                            $!promptEntity.weatherSituation.replaceAll("\n|\r","<br/>")
+														</div>
+													</li>
+													#end
+#if($promptEntity.dressCode&&$promptEntity.dressCode!="")
+                                                    <li>
+                                                        <div>着装要求：
+                                                            <br>
+															$!promptEntity.dressCode.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+	#end
+#if($promptEntity.timeInfo&&$promptEntity.timeInfo!="")
+                                                    <li>
+                                                        <div>时区：
+                                                            <br>
+															$!promptEntity.timeInfo.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+	#end
+#if($promptEntity.languages&&$promptEntity.languages!="")
+                                                    <li>
+                                                        <div>语言：
+                                                            <br>
+															$!promptEntity.languages.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+	#end
+#if($promptEntity.voltage&&$promptEntity.voltage!="")
+                                                    <li>
+                                                        <div>电压：
+                                                            <br>
+															$!promptEntity.voltage.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+	#end
+#if($promptEntity.foods&&$promptEntity.foods!="")
+                                                    <li>
+                                                        <div>饮食：
+                                                            <br>
+															$!promptEntity.foods.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+	#end
+#if($promptEntity.essentialItem&&$promptEntity.essentialItem!="")
+                                                    <li>
+                                                        <div>必备物品：
+                                                            <br>
+															$!promptEntity.essentialItem.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+	#end
+#if($promptEntity.currency&&$promptEntity.currency!="")
+                                                    <li>
+                                                        <div>货币：
+                                                            <br>
+															$!promptEntity.currency.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+#end
+#if($promptEntity.telephoneCommunication&&$promptEntity.telephoneCommunication!="")
+                                                    <li>
+                                                        <div>电话通信：
+                                                            <br>
+															$!promptEntity.telephoneCommunication.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+#end
+#if($promptEntity.hotel&&$promptEntity.hotel!="")
+                                                    <li>
+                                                        <div>酒店住宿：
+                                                            <br>
+															$!promptEntity.hotel.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+#end
+#if($promptEntity.customsForbid&&$promptEntity.customsForbid!="")
+                                                    <li>
+                                                        <div>风俗禁忌：
+                                                            <br>
+															$!promptEntity.customsForbid.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+#end
+#if($promptEntity.waterActivitiesNote&&$promptEntity.waterActivitiesNote!="")
+                                                    <li>
+                                                        <div>水上活动的注意事项：
+                                                            <br>
+															$!promptEntity.waterActivitiesNote.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+#end
+#if($promptEntity.tipCase&&$promptEntity.tipCase!="")
+                                                    <li>
+                                                        <div>小费情况：
+                                                            <br>
+															$!promptEntity.tipCase.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+#end
+#if($promptEntity.customs&&$promptEntity.customs!="")
+                                                    <li>
+                                                        <div>海关：
+                                                            <br>
+															$!promptEntity.customs.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+#end
+#if($promptEntity.chinaNotic&&$promptEntity.chinaNotic!="")
+													<li>
+														 <div>中华人民共和国海关总署公告：
+														 <br>
+															 $!promptEntity.chinaNotic.replaceAll("\n|\r","<br/>")
+														</div>
+													</li>
+#end
+												</ul>
+											</dd>
+										</dl>
+#if($promptEntity.security&&$promptEntity.security!=""||$promptEntity.specialAttention&&$promptEntity.specialAttention!="")
+										<dl>
+											<dt>风险须知及安全提示:</dt>
+											<dd>
+												<ul>
+													#if($promptEntity.security)
+
+													<li>
+														<div>$!promptEntity.security.replaceAll("\n|\r","<br/>")
+														</div>
+													</li>
+													#end
+#if($promptEntity.specialAttention&&$promptEntity.specialAttention!="")
+													<li>
+														<div>$!promptEntity.specialAttention.replaceAll("\n|\r","<br/>")
+														</div>
+													</li>
+	#end
+												</ul>
+											</dd>
+										</dl>
+	#end
+									</section>
+							</div>
+						</div>
+							#end
+#if($promptEntity.travelAgencyInfo&&$promptEntity.travelAgencyInfo!=""||$promptEntity.travelAgencyInfo&&$promptEntity.travelAgencyInfo!="")
+						<div class="box box-success"  id="section-6">
+								<div class="box-header with-border"><h3 class="box-title">旅行社信息</h3></div>
+								<div class="box-body">
+									<section class="cd-container feiyong">
+#if($promptEntity.travelAgencyInfo&&$promptEntity.travelAgencyInfo!="")
+										<dl>
+                                            <dt>组团社信息</dt>
+											<dd>
+												<ul>
+													<li>
+														 <div>
+															 $!promptEntity.travelAgencyInfo.replaceAll("\n|\r","<br/>")
+														</div>
+													</li>
+
+												</ul>
+											</dd>
+										</dl>
+	#end
+#if($!promptEntity.groupClubInfo&&$!promptEntity.groupClubInfo!="")
+                                        <dl>
+                                            <dt>接团社信息</dt>
+                                            <dd>
+                                                <ul>
+                                                    <li>
+                                                        <div>
+															$!promptEntity.groupClubInfo.replaceAll("\n|\r","<br/>")
+                                                        </div>
+                                                    </li>
+
+                                                </ul>
+                                            </dd>
+                                        </dl>
+	#end
+									</section>
+								</div>
+							</div>
+#end
+						</div>
+						<!--预览结束-->
+					  </div>
+					</div>
+				</div>
+		</section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+		#parse("/WEB-INF/views/common/footer.vm")
+
+    </div><!-- ./wrapper -->
+
+#define($scriptBlock)
+  	<script>
+  	$(document).ready(function(){
+  		$("#myNav").affix({
+  			offset: { 
+  				top: 125
+				/*top: function () {
+				console.log((parseInt($(".main-header").outerHeight(true))+parseInt($(".content-header").outerHeight(true))+15+$(".content>.row>.box>.box-header").outerHeight(true)))
+				 return this.top =(parseInt($(".main-header").outerHeight(true))+parseInt($(".content-header").outerHeight(true))+15+$(".content>.row>.box>.box-header").outerHeight(true));
+				 }*/
+  			}
+  		});
+//		$(".swiper-container").each(function(i){
+			var mySwiper = new Swiper ('.swiper-container', {
+			    loop: false,
+			    autoplay: false,
+			    pagination: '.swiper-pagination',
+                paginationClickable :true
+		  	});
+//		})
+		
+  	});
+
+  	</script>
+
+#end

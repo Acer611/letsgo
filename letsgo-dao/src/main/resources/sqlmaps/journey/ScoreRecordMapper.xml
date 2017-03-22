@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.ScoreRecordDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.ScoreRecordEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="schedule_date" property="scheduleDate" jdbcType="TIMESTAMP" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="satisfied_status" property="satisfiedStatus" jdbcType="INTEGER" />
+        <result column="evaluate_option" property="evaluateOption" jdbcType="INTEGER" />
+        <result column="evaluate_id" property="evaluateId" jdbcType="VARCHAR" />
+        <result column="score_option" property="scoreOption" jdbcType="VARCHAR" />
+        <result column="score" property="score" jdbcType="INTEGER" />
+        <result column="evaluate_sub_info" property="evaluateSubInfo" jdbcType="VARCHAR" />
+        <result column="evaluate_proposal" property="evaluateProposal" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_score_record
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.ScoreRecordEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_score_record (team_num, name, schedule_date,
+        real_name, sex, phone, satisfied_status, evaluate_option,evaluate_id,score_option,
+        score,evaluate_sub_info,evaluate_proposal,create_time)
+        values (#{teamNum,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{scheduleDate,jdbcType=TIMESTAMP},
+            #{realName,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{satisfiedStatus,jdbcType=INTEGER}, #{evaluateOption,jdbcType=INTEGER},
+            #{evaluateId,jdbcType=VARCHAR},#{scoreOption,jdbcType=VARCHAR},#{score,jdbcType=INTEGER},#{evaluateSubInfo,jdbcType=VARCHAR},#{evaluateProposal,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.ScoreRecordEntity" >
+        update j_score_record
+        set team_num = #{teamNum,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            schedule_date = #{scheduleDate,jdbcType=TIMESTAMP},
+            real_name = #{realName,jdbcType=VARCHAR},
+            sex = #{sex,jdbcType=INTEGER},
+            phone = #{phone,jdbcType=VARCHAR},
+            satisfied_status = #{satisfiedStatus,jdbcType=INTEGER},
+            evaluate_option = #{evaluateOption,jdbcType=INTEGER},
+            evaluate_id = #{evaluateId,jdbcType=VARCHAR},
+            score_option = #{scoreOption,jdbcType=VARCHAR},
+            score = #{score,jdbcType=INTEGER},
+            evaluate_sub_info = #{evaluateSubInfo,jdbcType=VARCHAR},
+            evaluate_proposal = #{evaluateProposal,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, team_num, name, schedule_date,
+        real_name, sex, phone, satisfied_status, evaluate_option,evaluate_id,score_option,
+        score,evaluate_sub_info,evaluate_proposal,create_time
+        from j_score_record
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, team_num, name, schedule_date,
+        real_name, sex, phone, satisfied_status, evaluate_option,evaluate_id,score_option,
+        score,evaluate_sub_info,evaluate_proposal,create_time
+        from j_score_record
+    </select>
+</mapper>

@@ -1,0 +1,394 @@
+#set($pageTitle="领队导游管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+<style>
+    .padding10{
+        margin-bottom: 10px;
+    }
+</style>
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+		#parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            领队导游管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">领队导游检索</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+          <!-- Default box -->
+          <div class="box box-info">
+              <form  id="form3" method="get"  class="form-horizontal">
+
+              <div class="box-header with-border">
+                  <h3 class="box-title">领队导游检索</h3>
+				  <div class="box-tools  col-md-5 col-xs-8">
+						<div class="input-group col-xs-8 pull-left">
+						  <input type="text" placeholder="请输入领队导游姓名" class="form-control input-sm pull-right" name="name">
+						  <div class="input-group-btn">
+							<button class="btn btn-sm btn-primary" id="send" type="button"><i class="fa fa-search"></i></button>
+						  </div>
+						</div>
+						<a class="btn btn-warning btn-sm col-xs-3 pull-right" href="$!{link.contextPath}/leader/leaderInit">添加</a>
+                  </div>
+				
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                  <div class="box-body content">
+							<div class="form-group">
+								  <label class="col-md-3 control-label" for="inputNamel3">类别：</label>
+								  <div class="col-md-9">
+									  <label class="checkbox-inline">
+										  <input type="radio" name="leaderType"  value="1" class="minimal">
+										  领队
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="leaderType"  value="2" class="minimal">
+										  导游
+										</label>
+                                      <label class="checkbox-inline">
+                                          <input type="radio" name="leaderType"  value="3" class="minimal">
+                                          领队兼导游
+                                      </label>
+								  </div>
+							</div>
+							<div class="form-group">
+								  <label class="col-md-3 control-label" for="inputNamel3">状态：</label>
+								  <div class="col-md-9">
+									   <label class="checkbox-inline">
+										  <input type="radio" name="leaderStatus"  value="1" class="minimal">
+										  专职
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="leaderStatus"  value="2" class="minimal">
+										  兼职
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="leaderStatus"  value="3" class="minimal">
+										  离职
+										</label>
+								  </div>
+							</div>
+							<div class="form-group">
+								  <label class="col-md-3 control-label" for="inputNamel3">性别：</label>
+								  <div class="col-md-9">
+									    <label class="checkbox-inline">
+										  <input type="radio" name="sex" value="1" class="minimal">
+										  男
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="sex"  value="2" class="minimal">
+										  女
+										</label>
+										
+								  </div>
+							</div>
+							<!--<div class="form-group">
+								  <label class="col-md-2 control-label" for="inputNamel3">擅长线路：</label>
+								  <div class="col-md-10">
+
+										 <label class="checkbox-inline">
+										  <input type="checkbox" name="destinationGroup1" value="港澳台" class="minimal">
+										  港澳台
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="checkbox" name="destinationGroup2" value="日韩" class="minimal">
+										  日韩
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="checkbox" name="destinationGroup3" value="东南亚" class="minimal">
+										  东南亚
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="checkbox" name="destinationGroup4" value="欧洲" class="minimal">
+										  欧洲
+										</label>
+											 <label class="checkbox-inline">
+										  <input type="checkbox" name="destinationGroup5" value="美洲" class="minimal">
+										  美洲
+										</label>
+										<label class="checkbox-inline">
+										  <input type="checkbox" name="destinationGroup6" value="澳洲"  class="minimal">
+										  澳洲
+										</label>
+										<label class="checkbox-inline">
+										  <input type="checkbox" name="destinationGroup7"  value="中东非洲" class="minimal">
+										  中东非洲
+										</label>
+
+								  </div>
+							</div>-->
+							<div class="form-group">
+								  <label class="col-md-3 control-label" for="inputNamel3">带团时间：</label>
+								  <div class="col-md-9">
+									   <label class="checkbox-inline">
+										  <input type="radio" name="interval" value="0-1" class="minimal">
+										  一年以内
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="interval" value="1-3" class="minimal">
+										  1-3年
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="interval" value="3-5" class="minimal">
+										  3-5年
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="interval" value="5-10" class="minimal">
+										  5-10年
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="interval" value="10-100" class="minimal">
+										  10年以上
+										</label>
+										
+								  </div>
+							</div>
+                      <div class="form-group">
+                          <label class="col-md-3 control-label" for="inputNamel3">当前工作状态：</label>
+                          <div class="col-md-9">
+                              <label class="checkbox-inline">
+                                  <input type="radio" name="state"  value="0" class="minimal">
+                                  所有
+                              </label>
+                              <label class="checkbox-inline">
+                                  <input type="radio" name="state" value="1" class="minimal">
+                                  空闲
+                              </label>
+                              <label class="checkbox-inline">
+                                  <input type="radio" name="state"  value="2" class="minimal">
+                                  忙碌
+                              </label>
+
+                          </div>
+                      </div>
+							<div class="form-group">
+
+                                <div class="col-md-2 col-md-offset-3 padding10" style="padding-left:35px;">
+                                    <button class="btn btn-primary btn-block btn-sm" type="button" id="serchLeader">搜索</button>
+
+                                    </div>
+                                <div style="padding-left:35px;" class="col-md-2">
+                                    <button id="sercrLeaderset" type="button" class="btn btn-warning btn-block btn-sm">清空</button>
+                                </div>
+							</div>
+                  </div><!-- /.box-body -->
+              </form>
+              </div><!-- /.box -->
+			   <div class="box box-success">
+			    <div class="box-header with-border">
+                  <h3 class="box-title">找到3个结果</h3>
+                </div><!-- /.box-header -->
+			    <div class="box-body content  table-responsive">
+			  		 <table class="table table-hover" id="leaderTable">
+							 <thead>
+							<tr>
+							  <th width="20%">类别</th>
+							  <th width="20%">姓名</th>
+							  <th width="10%">性别</th>
+                              <th width="10%">状态</th>
+							  <th width="20%">带团时间</th>
+							<!--  <th>已带团数</th>-->
+							<!--  <th>所属公司</th>-->
+							 <!--  <th>擅长线路</th>-->
+							  <th width="20%">操作</th>
+							</tr>
+							</thead>
+							<tbody>
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="overlays">
+                                            <i class="fa fa-refresh fa-spin"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+						  </tbody>
+						  </table>
+							<div id="pagination" class="paginationjs paginationjs-small">
+
+							</div>
+					  </div><!-- /.box-body -->
+				</div><!-- /.box -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+		#parse("/WEB-INF/views/common/footer.vm")
+
+    </div><!-- ./wrapper -->
+<div id="dialogModal" style="display:none">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">消息</h4>
+            </div>
+            <div class="modal-body" style="text-align:center;font-size:14px;">
+                <p></p>
+            </div>
+            <div class="modal-footer text-center" style="text-align:center;">
+                <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                <button class="btn btn-primary" onclick="blockUIClose()" type="button">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+#define($scriptBlock)
+	<script>
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        var dataSource={
+            	//interval:$("input[name=interval]:checked").val(),
+				//leaderType:$("input[name=leaderType]:checked").val(),
+				//leaderStatus:$("input[name=leaderStatus]:checked").val(),
+				//sex: $.trim($("input[name=sex]:checked").val())
+			/*,
+				destinationGroup1:$.trim($("input[name=destinationGroup1]:checked").val()),
+				destinationGroup2:$.trim($("input[name=destinationGroup2]:checked").val()),
+				destinationGroup3:$.trim($("input[name=destinationGroup3]:checked").val()),
+				destinationGroup4:$.trim($("input[name=destinationGroup4]:checked").val()),
+				destinationGroup5:$.trim($("input[name=destinationGroup5]:checked").val()),
+				destinationGroup6:$.trim($("input[name=destinationGroup6]:checked").val()),
+				destinationGroup7:$.trim($("input[name=destinationGroup7]:checked").val())*/
+		}
+		var interval=$("input[name=interval]:checked").val();
+		var leaderType=$("input[name=leaderType]:checked").val();
+		var leaderStatus=$("input[name=leaderStatus]:checked").val();
+		var sex=$.trim($("input[name=sex]:checked").val());
+        var name = $.trim($("input[name=name]").val());
+        var state = $.trim($("input[name=state]:checked").val());
+	$(function () {
+            $('#serchLeader').click(function(){
+                dataSource={
+
+                };
+				interval=$("input[name=interval]:checked").val();
+                leaderType=$("input[name=leaderType]:checked").val();
+                leaderStatus=$("input[name=leaderStatus]:checked").val();
+                sex=$.trim($("input[name=sex]:checked").val());
+                state = $.trim($("input[name=state]:checked").val());
+				if(interval){
+                    dataSource.interval=interval;
+                }
+                if(leaderType){
+                    dataSource.leaderType=leaderType;
+                }
+                if(leaderStatus){
+                    dataSource.leaderStatus=leaderStatus;
+                }
+                if(sex){
+                    dataSource.sex=sex;
+                }
+                if(state){
+                    dataSource.state=state;
+                }
+                loadLeaderList();
+            });
+            $('#send').click(function(){
+                name = $.trim($("input[name=name]").val());
+                dataSource={
+
+                }
+                if(name){
+                    dataSource.name=name;
+                    loadLeaderList();
+                }else{
+					//alert("请输入姓名搜索")
+                    $("#dialogModal").find(".modal-body>p").html("请输入姓名搜索");
+                    blockUIOpenShare("dialogModal");
+				}
+
+            });
+        $("#sercrLeaderset").on("click",function(event){
+            $(this).parents(".form-horizontal").find("input").each(function(){
+                $(this).iCheck('uncheck');
+                if($(this).attr("type")=="text"){
+                    $(this).val("")
+                }
+            });
+        });
+      });
+    function loadLeaderList() {
+        $("#leaderTable").find("tbody").empty().html('<td  colspan="6">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parents(".box:eq(0)").show();
+        $("#pagination").hide();
+        var html = "";
+        $.ajax({
+            type: "GET",
+            url: "$!{link.contextPath}/leader/searchAjax",
+            data: dataSource,
+            dataType: "json",
+            success: function (data) {
+				if(data.totals&&data.totals!="0") {
+                    $('#pagination').pagination({
+                        dataSource: '$!{link.contextPath}/leader/searchAjax',
+                        locator: function () {
+                            // find data and return
+                            return "data.list"
+                        },
+                        totalNumber: data.totals,
+                        pageSize: 10,
+                        pageRange:1,
+                        alias: {
+                            pageNumber: 'pageNum',
+                            pageSize: 'pageSize'
+                        },
+                        ajax: {
+                            data: dataSource,
+                            beforeSend: function () {
+                               // $("#leaderTable").find("tbody").empty().html('<td  colspan="6">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parents(".box:eq(0)").show();
+                            }
+                        },
+                        callback: function (data, pagination) {
+                            $("#leaderTable").parent().siblings().find(".box-title").text("找到" + data.length + "个结果");
+                            html = "";
+                            if (data.length > 0) {
+                                for (var i = 0; i < data.length; i++) {
+                                    html += '<tr>' +
+                                            '<td>' + ((data[i].leaderType == 1) ? "领队" : data[i].leaderType == 2 ? "导游" : "领队兼导游") + '</td>' +
+
+                                            '<td><a href="$!{link.contextPath}/leader/leaderPreview?id=' + data[i].id + '">' + data[i].name + '</a></td>' +
+                                            '<td>' + ((data[i].sex == "1") ? '男' : '女') + '</td>' +
+                                            '<td>' + ((data[i].leaderStatus == 1) ? "专职" : (data[i].leaderStatus == 2) ? "兼职" : "离职") + '</td>' +
+                                            '<td>' + (data[i].leadYears ? data[i].leadYears+"年" : "1年以内") + '</td>' +
+                                                // '<td>' + (data[i].destinationGroup1 ? data[i].destinationGroup1 : "") + (data[i].destinationGroup2 ? data[i].destinationGroup2 : "") + (data[i].destinationGroup3 ? data[i].destinationGroup3 : "") + (data[i].destinationGroup4 ? data[i].destinationGroup4 : "") + (data[i].destinationGroup5 ? data[i].destinationGroup5 : "") + (data[i].destinationGroup6 ? data[i].destinationGroup6 : "") + (data[i].destinationGroup7 ? data[i].destinationGroup7 : "") + '</td>' +
+
+                                            '<td><a href="$!{link.contextPath}/leader/leaderEdit?id=' + data[i].id + '">修改</a></td>' +
+                                            '</tr>';
+
+                                }
+                                $("#leaderTable").find("tbody").empty().append(html).end().parents(".box:eq(0)").show();
+                                $("#pagination").show();
+                            } else {
+                                $("#pagination").hide();
+                                $("#leaderTable").find("tbody").empty().html("<td  colspan='6'>没有结果</td>").end().parents(".box:eq(0)").show();
+                            }
+                        }
+                    })
+                }else{
+                    $("#pagination").hide();
+                    $("#leaderTable").find("tbody").empty().html("<td  colspan='6'>没有结果</td>").end().parents(".box:eq(0)").show();
+
+				}
+            }
+        })
+    }
+	loadLeaderList();
+    </script>
+
+#end

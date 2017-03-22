@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.OwnExpenseAgencyDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.OwnExpenseAgencyEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="limit_number" property="limitNumber" jdbcType="VARCHAR" />
+        <result column="service_item" property="serviceItem" jdbcType="VARCHAR" />
+        <result column="reference_price" property="referencePrice" jdbcType="VARCHAR" />
+        <result column="briefintroduction" property="briefintroduction" jdbcType="VARCHAR" />
+        <result column="item_city" property="itemCity" jdbcType="VARCHAR" />
+        <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="CustomResultMap" type="com.umessage.letsgo.domain.po.team.OwnExpenseAgencyEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+        <result column="limit_number" property="limitNumber" jdbcType="VARCHAR" />
+        <result column="service_item" property="serviceItem" jdbcType="VARCHAR" />
+        <result column="reference_price" property="referencePrice" jdbcType="VARCHAR" />
+        <result column="briefintroduction" property="briefintroduction" jdbcType="VARCHAR" />
+        <result column="item_city" property="itemCity" jdbcType="VARCHAR" />
+        <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+        <result column="lon" property="lon" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+
+        <collection property="albumAgencyList" ofType="com.umessage.letsgo.domain.po.team.AlbumAgencyEntity" >
+            <id column="al_id" property="id" jdbcType="BIGINT" />
+            <result column="al_travel_id" property="travelId" jdbcType="BIGINT" />
+            <result column="al_object_id" property="objectId" jdbcType="BIGINT" />
+            <result column="al_type" property="type" jdbcType="INTEGER" />
+            <result column="al_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+            <result column="al_create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="al_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        </collection>
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_own_expense_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.OwnExpenseAgencyEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_own_expense_agency (travel_id, item_name, limit_number, service_item, reference_price, briefintroduction, item_city, city_id, lon, lat, create_time, update_time)
+        values (#{travelId,jdbcType=BIGINT}, #{itemName,jdbcType=VARCHAR}, #{limitNumber,jdbcType=VARCHAR}, #{serviceItem,jdbcType=VARCHAR},
+        #{referencePrice,jdbcType=VARCHAR}, #{briefintroduction,jdbcType=VARCHAR}, #{itemCity,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{lon,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.OwnExpenseAgencyEntity" >
+        update t_own_expense_agency
+        set travel_id = #{travelId,jdbcType=BIGINT},
+            item_name = #{itemName,jdbcType=VARCHAR},
+            limit_number = #{limitNumber,jdbcType=VARCHAR},
+            service_item = #{serviceItem,jdbcType=VARCHAR},
+            reference_price = #{referencePrice,jdbcType=VARCHAR},
+            briefintroduction = #{briefintroduction,jdbcType=VARCHAR},
+            item_city = #{itemCity,jdbcType=VARCHAR},
+            city_id = #{cityId,jdbcType=VARCHAR},
+            lon = #{lon,jdbcType=VARCHAR},
+            lat = #{lat,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, travel_id, item_name, limit_number, service_item, reference_price, briefintroduction, item_city, city_id, lon, lat, create_time, update_time
+        from t_own_expense_agency
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, travel_id, item_name, limit_number, service_item, reference_price, briefintroduction, item_city, city_id, lon, lat, create_time, update_time
+        from t_own_expense_agency
+    </select>
+    <select id="selectOwnExpenseAndAlbum" resultMap="CustomResultMap" parameterType="java.lang.Long" >
+        select oe.ID, oe.travel_id, oe.item_name, oe.limit_number, oe.service_item, oe.reference_price, oe.briefintroduction, oe.item_city, oe.city_id, oe.lon, oe.lat, oe.create_time, oe.update_time,
+		al.ID AS al_id, al.travel_id AS al_travel_id, al.object_id AS al_object_id, al.type AS al_type, al.photo_url AS al_photo_url , al.create_time AS al_create_time, al.update_time AS al_update_time
+        FROM t_own_expense_agency AS oe
+		LEFT JOIN t_album_agency AS al
+		ON al.object_id = oe.ID AND al.travel_id = oe.travel_id AND al.type = 3
+        WHERE oe.ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectOwnExpenseByName" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.team.OwnExpenseAgencyEntity" >
+        select ID, travel_id, item_name, limit_number, service_item, reference_price, briefintroduction, item_city, city_id, lon, lat, create_time, update_time
+        from t_own_expense_agency
+        <where>
+            1=1
+            <if test="null != itemName and itemName !=''.toString()"> AND item_name LIKE CONCAT('%',#{itemName},'%') </if>
+            <if test="null != travelId"> AND travel_id = #{travelId}</if>
+            <if test="null != cities and cities.size()>0">
+            AND city_id IN
+            <foreach item="item" index="index" collection="cities" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="selectOwnExpenseBySameName" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.team.OwnExpenseAgencyEntity" >
+        select ID, travel_id, item_name, limit_number, service_item, reference_price, briefintroduction, item_city, city_id, lon, lat, create_time, update_time
+        from t_own_expense_agency
+        <where>
+            1=1
+            <if test="null != itemName and itemName !=''.toString()"> AND item_name = #{itemName} </if>
+            <if test="null != itemCity and itemCity !=''.toString()"> AND item_city = #{itemCity} </if>
+            <if test="null != travelId"> AND travel_id = #{travelId}</if>
+        </where>
+    </select>
+</mapper>

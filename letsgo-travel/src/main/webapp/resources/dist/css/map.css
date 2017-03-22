@@ -1,0 +1,117 @@
+@charset "utf-8";
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+#map_canvas{width:80%;float:left;}
+#positionList {float:left;width:20%;height:700px;overflow-y:auto;}
+#positionList ul{border-left:1px solid #cdcbca;}
+#positionList ul li {
+    border-bottom: 1px solid #eeeeee;
+    min-height: 23px;
+    padding: 10px 0 10px 25px;
+    position: relative;
+}
+#positionList ul li span{padding-left:10px;color:#2d80ca;}
+#positionList ul li:hover, #positionList ul li.on{background: none repeat scroll 0 0 #f0f0f0;}
+
+
+#map {
+    height: 500px;
+}
+.warpcont{position:absolute;width:auto;}
+.pin{color:#fff;text-align:center;background:url(../images/poi-marker_05.png) center bottom no-repeat;background-size:100% auto;width:29px;height:36px;padding-top:6px;margin:0 auto;position:relative;font-size:14px;}
+.pin button{
+    position: absolute;
+    left:-10px;
+    top:-3px;
+    color:#000;
+    font-size:12px;text-align: center;
+    cursor: pointer;
+    background:#fff;
+    border:1px solid #ef4747;
+    text-align:center;
+    border-radius:5px;
+    width: 80px;
+}
+#table-page{
+    margin-bottom:10px;
+}
+#pagination2 .paginationjs{
+    margin:0 auto;
+}
+.warpcont .table-detail{
+    list-style:none;
+    background:rgba(255,255,255,1);
+    padding-left:0;
+    width:300px;
+    max-height:250px;
+    overflow:auto;
+    position: absolute;
+    left: 70px;
+    top:-50px;
+    color:#000;
+    font-size:12px;
+    cursor: pointer;
+    display: none;
+    padding:5px;
+    border-radius:5px;
+    z-index:9999;
+}
+.pinhover{background:url(../images/poi-marker_03.png) center bottom no-repeat;background-size:100% auto;}
+.name{font-size:14px;color:#2b94ec;text-align:center;line-height:1.5;margin:5px auto 0;background-color:#fff;display:inline-block;width:100%;}
+.time3{background:rgba(0,0,0,1);min-width:160px;height:20px;line-height:20px;text-align:center;color:#fff;font-size:18px;}
+.span-color span{
+    color:red;
+}
+.span-color .p-line{
+    margin-bottom:0;
+    line-height:1.3;
+    margin-top:5px;
+}
+.span-color{
+    margin-bottom: 10px;
+}
+#map{
+    margin-bottom:10px;
+}

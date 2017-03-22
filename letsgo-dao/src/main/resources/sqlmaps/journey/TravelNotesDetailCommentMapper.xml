@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.TravelNotesDetailCommentDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.TravelNotesDetailCommentEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="travel_notes_detail_id" property="travelNotesDetailId" jdbcType="BIGINT" />
+        <result column="type" property="type" jdbcType="BIGINT" />
+        <result column="type_id" property="typeId" jdbcType="VARCHAR" />
+        <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+        <result column="comment" property="comment" jdbcType="VARCHAR" />
+        <result column="type_imgUrl" property="typeImgurl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_travel_notes_detail_comment
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.TravelNotesDetailCommentEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_travel_notes_detail_comment (travel_notes_detail_id, type, type_id, 
+            type_name, comment, type_imgUrl, 
+            create_time, update_time, version
+            )
+        values (#{travelNotesDetailId,jdbcType=BIGINT}, #{type,jdbcType=BIGINT}, #{typeId,jdbcType=VARCHAR}, 
+            #{typeName,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, #{typeImgurl,jdbcType=VARCHAR}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.TravelNotesDetailCommentEntity" >
+        update j_travel_notes_detail_comment
+        set travel_notes_detail_id = #{travelNotesDetailId,jdbcType=BIGINT},
+            type = #{type,jdbcType=BIGINT},
+            type_id = #{typeId,jdbcType=VARCHAR},
+            type_name = #{typeName,jdbcType=VARCHAR},
+            comment = #{comment,jdbcType=VARCHAR},
+            type_imgUrl = #{typeImgurl,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, travel_notes_detail_id, type, type_id, type_name, comment, type_imgUrl, 
+        create_time, update_time, version
+        from j_travel_notes_detail_comment
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, travel_notes_detail_id, type, type_id, type_name, comment, type_imgUrl, 
+        create_time, update_time, version
+        from j_travel_notes_detail_comment
+    </select>
+</mapper>

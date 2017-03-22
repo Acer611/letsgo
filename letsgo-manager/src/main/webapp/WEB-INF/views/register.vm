@@ -1,0 +1,159 @@
+#set($pageTitle="注册")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/jquery.form.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js","$!{STATIC_URL}/resources/dist/js/register.js"])
+
+<style>
+    .login-box, .register-box{margin:0 auto;padding:7% 0;}
+    .login-box-body .form-control-feedback, .register-box-body .form-control-feedback{color:#1fbad1;}
+    .form-control:focus{border-color:#1fbad1;}
+    body{background: url($!{STATIC_URL}/resources/dist/images/loginbg.jpg) 0 0 no-repeat fixed;width:100%;height:100%;background-size:100% 100%;}
+    .login-page,.register-page{background: none;}
+    .btn-primary{border-color:#1fbad1;background-color: #1fbad1;}
+    .btn-primary:hover,.btn-primary:active{background-color: #0198ae;border-color:#0198ae;}
+    .form-group{margin-bottom:30px;}
+    a{color:#1fbad1}
+    a:hover,a.hover,a.active{color:#1fbad1}
+    .login-logo a, .register-logo a{color:#fff;}
+    .login-logo a:hover, .register-logo a:hover{color:#fff;}
+    .form-control-feedback{left:0;}
+    .login-logo, .register-logo{margin-top:20px;margin-bottom:10px;}
+    .has-feedback .form-control{}
+    .registerlink{margin:10px 0;}
+    .icheckbox_square-blue, .iradio_square-blue{background: url("$!{STATIC_URL}/resources/dist/images/blue11.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0)}
+    .btn-primary.disabled, .btn-primary.disabled.active, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled:focus, .btn-primary.disabled:hover, .btn-primary[disabled], .btn-primary.active[disabled], .btn-primary.focus[disabled], .btn-primary[disabled]:active, .btn-primary[disabled]:focus, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary.active, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:hover{background-color:#40d6ec;border-color: #40d6ec;}
+.control-label{padding-right:5px;}
+    .help-block{margin-bottom: 0px;}
+	.fileBoxUl{padding-left:0;}
+</style>
+  <div class="hold-transition register-page">
+    <div class="container">
+		<div class="row register-page">
+			<div class="col-sm-6 col-sm-offset-3">
+			  <div class="register-logo">
+				<a href="#"><b>跟上旅行社</b></a>
+			  </div>
+				<div class="register-box-body">
+					<h3 class="login-box-msg">账号注册</h3>
+					<form action="$!{link.contextPath}/registerAdd" method="post" role="form" class="form-horizontal" id="registerForm">
+					 
+					  <div class="form-group has-feedback">
+						<div class="col-xs-1"></div>
+						<label for="userName" class="col-xs-3 control-label"><span  class="text-red">*</span>设置用户名：</label>
+						<div class="col-xs-6">
+							<input type="text" class="form-control" id="userName" name="userName"  autocomplete="off" placeholder="请输入用户名">
+							<span class="help-block small">字母开头5-16字节，允许字母数字下划线</span>
+						</div>
+					  </div>
+					  <div class="form-group has-feedback">
+						<div class="col-xs-1"></div>
+						<label for="password" class="col-xs-3 control-label"><span  class="text-red">*</span>密码：</label>
+						<div class="col-xs-6">
+							<input type="password" class="form-control" id="password" name="password" autocomplete="off" placeholder="请输入密码">
+							<span class="help-block small">密码必须包含数字、大小写字母、长度不低于6位。</span>
+						</div>
+					  </div>
+
+					  <div class="form-group has-feedback">
+					  	<div class="col-xs-1"></div>
+						<label for="repassword" class="col-xs-3 control-label"><span  class="text-red">*</span>确认密码：</label>
+						<div class="col-xs-6">
+							<input type="password" class="form-control" id="repassword" name="repassword" placeholder="请确认密码">
+						</div>
+					  </div>
+					  <div class="form-group has-feedback">
+					  	<div class="col-xs-1"></div>
+						<label for="name" class="col-xs-3 control-label"><span  class="text-red">*</span>旅游社名称：</label>
+						<div class="col-xs-6">
+							<input type="text" class="form-control" id="name" name="name" placeholder="请输入旅行社名称">
+						</div>
+					  </div>
+					  <!-- <div class="form-group has-feedback">
+					   	<div class="col-xs-1"></div>
+						<label for="contactPerson" class="col-xs-3 control-label"><span  class="text-red">*</span>联系人姓名：</label>
+						<div class="col-xs-6">
+							<input type="text" class="form-control" id="contactPerson" name="contactPerson" placeholder="请输入联系人">
+						</div>
+					  </div>-->
+						<div class="form-group has-feedback">
+					   	<div class="col-xs-1"></div>
+						<label for="contactPhone" class="col-xs-3 control-label"><span  class="text-red">*</span>联系人手机：</label>
+						<div class="col-xs-6">
+							<input type="text" class="form-control" id="contactPhone" name="contactPhone" placeholder="请输入手机号">
+                            <!--<span class="help-block small">手机号前面请加入国家代码：如大陆地区为+86</span>-->
+						</div>
+					  </div>
+                        <div class="form-group has-feedback">
+                            <div class="col-xs-1"></div>
+                            <label for="validationCode" class="col-xs-3 control-label"><span  class="text-red">*</span>动态验证码：</label>
+                            <div class="col-xs-6 row" style="margin-right:0;padding-right:0;">
+								<div class="col-xs-6">
+                                	<input type="text" class="form-control" id="validationCode" name="validationCode" placeholder="请输入动态验证码" style="padding-right:0;">
+                                </div>
+                                <div class="col-xs-6" style="padding:0;margin-right:0;">
+                                    <button type="button" class="btn btn-primary btn-block get_password_btn">获取动态验证码</button>
+                                </div>
+                            </div>
+                        </div>
+					  <!-- <div class="form-group has-feedback">
+					   <div class="col-xs-1"></div>
+						<label for="email" class="col-xs-3 control-label">Email：</label>
+						<div class="col-xs-6">
+							<input type="email" class="form-control" id="email" name="email" placeholder="请输入您的电子邮箱">
+						</div>
+					  </div>
+						<div class="form-group has-feedback">
+						<div class="col-xs-1"></div>
+						<label for="address" class="col-xs-3 control-label"><span  class="text-red">*</span>旅行社地址：</label>
+						<div class="col-xs-6">
+							<input type="text" class="form-control" id="address" name="address" placeholder="请输入您的公司地址">
+						</div>
+					  </div>
+					  <div class="form-group has-feedback" style="margin-bottom: 10px;">
+					    <div class="col-xs-1"></div>
+						<label for="desc" class="col-xs-3 control-label"><span  class="text-red">*</span>旅行社简介：</label>
+						<div class="col-xs-6">
+							 <textarea class="form-control" rows="3" id="desc" name="desc" placeholder="请输入您的公司简介"></textarea>
+						</div>
+					  </div>
+                        <div class="form-group has-feedback" style="margin-bottom: 10px;">
+                            <div class="col-xs-1"></div>
+                            <label for="lastname" class="col-xs-3 control-label"><span  class="text-red">*</span>营业执照照片：</label>
+                            <input type="hidden"  name="licenseUrl" value=""/>
+                            <div class="col-xs-6">
+								<div class="registhead">
+									<div id="userHeadImg" >
+
+									</div>
+                                </div>
+                            </div>
+						</div>-->
+					  <div class="form-group has-feedback">
+						<div class="col-xs-6 col-xs-offset-4">
+						  <div class="checkbox icheck small">
+							<label>
+							  <input type="checkbox" checked name="small" value="1"> 已阅读并同意遵守  <a href="#">《跟上服务协议》</a>
+							</label>
+						  </div>
+						</div><!-- /.col -->
+					  </div>
+					  <div class="form-group has-feedback" style="margin-bottom: 10px;">
+						<div class="col-xs-6 col-sm-offset-4">
+						  <button type="submit" class="btn btn-primary btn-block btn-flat">提交申请</button>
+						</div><!-- /.col -->
+					  </div>
+					  <div class="form-group has-feedback text-right">
+						<div class="col-xs-3 col-sm-offset-7">
+							<a href="$!{link.contextPath}/login" class="text-center">返回登录</a>
+						</div>
+					  </div>
+				</form>
+					
+			 <!-- /.form-box -->
+			  </div>
+		  </div>
+	  </div>
+    </div><!-- /.register-box -->
+  </div>
+
+
+

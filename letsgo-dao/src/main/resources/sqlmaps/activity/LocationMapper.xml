@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.activity.LocationDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.activity.LocationEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="finish_time" property="finishTime" jdbcType="TIMESTAMP" />
+        <result column="ip" property="ip" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <resultMap id="memberLocationMap" type="com.umessage.letsgo.domain.po.activity.LocationEntity" >
+        <id column="l_id" property="id" jdbcType="BIGINT" />
+        <result column="l_user_id" property="userId" jdbcType="BIGINT" />
+        <result column="l_longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="l_latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="l_location" property="location" jdbcType="VARCHAR" />
+        <result column="l_finish_time" property="finishTime" jdbcType="TIMESTAMP" />
+        <result column="l_ip" property="ip" jdbcType="VARCHAR" />
+        <result column="l_create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="l_version" property="version" jdbcType="BIGINT" />
+        <association property="memberEntity" column="member_id" javaType="com.umessage.letsgo.domain.po.team.MemberEntity">
+            <id column="id" property="id" jdbcType="BIGINT" />
+            <result column="user_id" property="userId" jdbcType="BIGINT" />
+            <result column="t_id" property="tId" jdbcType="BIGINT" />
+            <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+            <result column="group_id" property="groupId" jdbcType="BIGINT" />
+            <result column="real_name" property="realName" jdbcType="VARCHAR" />
+            <result column="sex" property="sex" jdbcType="INTEGER" />
+            <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+            <result column="phone" property="phone" jdbcType="VARCHAR" />
+            <result column="mark_phone" property="markPhone" jdbcType="VARCHAR" />
+            <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+            <result column="mail" property="mail" jdbcType="VARCHAR" />
+            <result column="address" property="address" jdbcType="VARCHAR" />
+            <result column="city" property="city" jdbcType="VARCHAR" />
+            <result column="province" property="province" jdbcType="VARCHAR" />
+            <result column="country" property="country" jdbcType="VARCHAR" />
+            <result column="role" property="role" jdbcType="INTEGER" />
+            <result column="type" property="type" jdbcType="INTEGER" />
+            <result column="is_leader" property="isLeader" jdbcType="INTEGER" />
+            <result column="is_admin" property="isAdmin" jdbcType="INTEGER" />
+            <result column="join_status" property="joinStatus" jdbcType="INTEGER" />
+            <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+            <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+            <result column="card_time" property="cardTime" jdbcType="VARCHAR" />
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+            <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+            <result column="version" property="version" jdbcType="BIGINT" />
+            <association property="userEntity" column="user_id" javaType="com.umessage.letsgo.domain.po.security.UserEntity">
+                <id column="u_id" property="id" jdbcType="BIGINT" />
+                <result column="u_user_name" property="userName" jdbcType="VARCHAR" />
+                <result column="u_real_name" property="realName" jdbcType="VARCHAR" />
+                <result column="u_nick_name" property="nickName" jdbcType="VARCHAR" />
+                <result column="u_password" property="password" jdbcType="VARCHAR" />
+                <result column="u_sex" property="sex" jdbcType="INTEGER" />
+                <result column="u_birthday" property="birthday" jdbcType="VARCHAR" />
+                <result column="u_phone" property="phone" jdbcType="VARCHAR" />
+                <result column="u_mail" property="mail" jdbcType="VARCHAR" />
+                <result column="u_photo_url" property="photoUrl" jdbcType="VARCHAR" />
+                <result column="u_type" property="type" jdbcType="INTEGER" />
+                <result column="u_userSig" property="usersig" jdbcType="VARCHAR" />
+                <result column="u_login_total_count" property="loginTotalCount" jdbcType="INTEGER" />
+                <result column="u_login_count" property="loginCount" jdbcType="INTEGER" />
+                <result column="u_create_time" property="createTime" jdbcType="TIMESTAMP" />
+                <result column="u_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+                <result column="u_version" property="version" jdbcType="BIGINT" />
+            </association>
+        </association>
+
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from a_location
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByUserId" parameterType="java.lang.Long" >
+        delete from a_location
+        where user_id = #{userId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.activity.LocationEntity" useGeneratedKeys="true" keyProperty="id" >
+        insert into a_location (ID, user_id, longitude, 
+            latitude, location, finish_time, 
+            ip, create_time, version
+            )
+        values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{longitude,jdbcType=DOUBLE}, 
+            #{latitude,jdbcType=DOUBLE}, #{location,jdbcType=VARCHAR}, #{finishTime,jdbcType=TIMESTAMP}, 
+            #{ip,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.activity.LocationEntity" >
+        update a_location
+        set user_id = #{userId,jdbcType=BIGINT},
+            longitude = #{longitude,jdbcType=DOUBLE},
+            latitude = #{latitude,jdbcType=DOUBLE},
+            location = #{location,jdbcType=VARCHAR},
+            finish_time = #{finishTime,jdbcType=TIMESTAMP},
+            ip = #{ip,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, longitude, latitude, location, finish_time, ip, create_time, 
+        version
+        from a_location
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, user_id, longitude, latitude, location, finish_time, ip, create_time, 
+        version
+        from a_location
+    </select>
+    <select id="selectLocationWithUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, longitude, latitude, location, finish_time, create_time, version
+        from a_location as l
+        where l.user_id = #{userId,jdbcType=BIGINT}
+        and l.ID = (select max(ID) from a_location where user_id = l.user_id)
+    </select>
+    <select id="selectLocationListWithUserIds" resultMap="BaseResultMap" parameterType="java.util.List" >
+        SELECT ID, user_id, longitude, latitude, location, finish_time, create_time, version
+        FROM a_location
+        WHERE user_id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectLocationsByTeamId" resultMap="memberLocationMap" parameterType="com.umessage.letsgo.domain.vo.activity.request.LocationRequest" >
+        SELECT
+        l.ID as l_id, l.user_id as l_user_id, l.longitude as l_longitude, l.latitude as l_latitude, l.location as l_location, l.finish_time as l_finish_time, l.ip as l_ip, l.create_time as l_create_time,l.version as l_version,
+
+        me.ID, me.user_id, me.t_id, me.team_id, me.group_id, me.real_name, me.sex, me.birthday, me.phone, me.mark_phone,
+        me.photo_url, me.mail, me.address, me.city, me.province, me.country, me.role, me.type, me.is_leader, me.is_admin,
+        me.join_status, me.card_type, me.card_num, me.card_time, me.create_time, me.update_time, me.version,
+
+        u.ID as u_id, u.user_name as u_user_name, u.real_name as u_real_name, u.nick_name as u_nick_name, u.password as u_password, u.sex as u_sex, u.birthday as u_birthday, u.phone as u_phone, u.mail as u_mail, u.type as u_type, u.photo_url as u_photo_url, u.userSig as u_userSig,
+        u.login_total_count as u_login_total_count, u.login_count as u_login_count, u.create_time as u_create_time, u.update_time as u_update_time, u.version as u_version
+        FROM a_location AS l
+        JOIN s_user AS u ON u.`ID` = l.`user_id`
+        JOIN t_member AS me ON me.`user_id` = u.`ID`
+        <where>
+            <if test="null != teamId"> AND me.team_id = #{teamId}</if>
+            <if test="null != isAdmin"> AND me.is_admin = #{isAdmin}</if>
+            <if test="'eq3' == role"> AND me.role = 3</if>
+            <if test="'lt3' == role"> AND me.role &lt; 3</if>
+            and l.create_time = (SELECT MAX(create_time) FROM a_location WHERE user_id = l.user_id)
+        </where>
+        order by role ${sort_role}
+    </select>
+</mapper>

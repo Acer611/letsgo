@@ -1,0 +1,190 @@
+#set($pageTitle="团队行程管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+      #parse("/WEB-INF/views/common/leftbar.vm")
+
+
+      <!-- =============================================== -->
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            行程团队管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/main"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li class="active">行程单接收站</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+          <section class="content">
+              <div>
+                  <div class="box box-info">
+                      <div class="box-header with-border">
+                          <h3 class="box-title">行程单接收站</h3>
+                          <!--<div class="box-tools"><a class="btn btn-default btn-sm" href="#">预览</a></div>-->
+                      </div><!-- /.box-header -->
+
+                      <div class="box-body">
+                          <form class="form-horizontal" role="form"  action="$!{link.contextPath}/schedule/search" method="post" id="form4">
+                              <div class="form-group col-md-4">
+                                  <label for="processStatus" class="control-label" style="float:left;line-height:2;margin-right:10px;">发布状态：</label>
+                                  <select class="form-control select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true" name="processStatus" id="processStatus" style="width:60%;">
+                                      <option value="1">全部</option>
+                                      <option value="2">已发布</option>
+                                      <option value="3">未发布</option>
+                                      <option value="4">待确认</option>
+                                  </select>
+                              </div>
+                              <div class="form-group col-md-4">
+                                  <label for="startDate" class="control-label" style="float:left;line-height:2;margin-right:10px;">出团日期：</label>
+                                  <input class="form-control" type="text" id="startDate" name="startDate"  placeholder="请输入带团日期" style="width:60%;">
+                              </div>
+                              <div class="form-group col-md-4">
+                                  <label for="leadName" class="control-label" style="float:left;line-height:2;margin-right:10px;">领队姓名：</label>
+                                  <input class="form-control" type="text" name="leadName" id="leadName" placeholder="请输入领队姓名" style="width:60%;">
+                              </div>
+
+                              <button type="button" id="btns" class="btn btn-block btn-primary" style="width:20%;margin-left:35%;">查询</button>
+
+                          </form>
+                          <br />
+                          <div class="col-xs-12 table-responsive"   style="margin-top: 10px;">
+                              <table class="table table-bordered" id="table3">
+                                  <thead><tr>
+                                      <th>序号</th>
+                                      <th>行程名称</th>
+                                      <th>出团日期</th>
+                                      <th>领队姓名</th>
+                                      <th>联系电话</th>
+                                      <th>上传日期</th>
+                                      <th>行程资料</th>
+                                      <th>状态</th>
+                                      <th>操作</th>
+                                      <th>预览</th>
+                                  </tr></thead>
+                                  <tbody>
+#*
+#if($response.scheduleList.size()>0)
+#foreach( $Detail in $response.scheduleList)
+                                  <tr>
+                                      <td  style="text-align: center; vertical-align: middle;">1</td>
+                                      <td  style="text-align: center; vertical-align: middle;width:150px;">$Detail.name</td>
+                                      <td  style="text-align: center; vertical-align: middle;">$!date.format('yyyy-MM-dd',$!Detail.startDate)</td>
+                                      <td  style="text-align: center; vertical-align: middle;">$Detail.leadName</td>
+                                      <td  style="text-align: center; vertical-align: middle;">$Detail.phone</td>
+                                      <td  style="text-align: center; vertical-align: middle;">
+##                                          2016-06-05  10:23:45
+                                          $Detail.createTime
+                                      </td>
+                                      <td>
+                                          #foreach( $list in $Detail.processPhotosUrls)
+                                              <img src="$!list">
+                                          #end
+                                      </td>
+                                      <td  style="text-align: center; vertical-align: middle;">
+                                          <a href="#">未发布</a>
+##                                          <a href="$!{link.contextPath}/member/teamMembersView?tId=$!{scheduleEntity.teamId}">未发布</a>
+                                      </td>
+                                      <td  style="text-align: center; vertical-align: middle;">
+                                          <a href="#">新建</a>
+                                      </td>
+                                      <td  style="text-align: center; vertical-align: middle;">
+                                          <a href="#">查看</a>
+                                      </td>
+                                  </tr>
+    #end
+    #end
+*#
+
+
+                                  </tbody></table>
+
+                          </div>
+                          <div id="pagination" class="paginationjs paginationjs-small">
+
+                          </div>
+                      </div>
+
+                  </div>
+          </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+
+      #parse("/WEB-INF/views/common/footer.vm")
+
+   
+      <!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+
+
+#define($scriptBlock)
+  	<script>
+        /*$('#startDate').datetimepicker({
+            language:  'zh-CN',
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            endDate:new Date(),
+            minView: "month"
+        }).on('changeDate show', function(e) {
+            // Revalidate the date when user change it
+            $('#form4').bootstrapValidator('revalidateField', '#startDate');
+        });*/
+        $('#startDate').datetimepicker({
+            language:  'zh-CN',
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            minView: "month"
+        }).on("click",function(ev){
+            //$("#startDate").bootstrapValidator('revalidateField', 'startDate');
+        });
+
+    $("#btns").on("click",function(){
+        $.ajax({
+            type: "GET",
+            url:  CONTEXTPATH + "/schedule/search",
+            data: {processStatus:$("[name=processStatus]").val(),startDate:$("[name=startDate]").val(),leadName:$("[name=leadName]").val()},
+            dataType: "HTML",
+            success: function (data) {
+                $("#table3").find("tbody").empty().html(data)
+                $("#pagination").show();
+                $('#pagination').pagination({
+                    dataSource: CONTEXTPATH + "/schedule/search",
+                    locator: 'data',
+                    totalNumber: totalpages,
+                    pageSize: 10,
+                    alias: {
+                        pageNumber: 'pageNum',
+                        pageSize: 'pageSize'
+                    },
+                    ajax: {
+                        //url:delQueStr(delQueStr(window.location.href, "pageNum"), "pageSize"),
+                        type: "POST",
+                        data: {processStatus:$("[name=processStatus]").val(),startDate:$("[name=startDate]").val(),leadName:$("[name=leadName]").val()},
+                        dataType: 'html',
+                        beforeSend: function () {
+                            //$("#table2").empty().html('<td  colspan="7">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parent().show();
+                        }
+                    },
+                    //            formatAjaxError:function(jqXHR, textStatus, errorThrown){
+                    //                //$("#table2").find("tbody").empty().html($(jqXHR.responseText).find("tbody").html())
+                    //                //console.log(jqXHR)
+                    //            },
+                    callback: function (data, pagination) {
+                        $("#table3").find("tbody").empty().html(data);
+                    }
+                })
+            }
+        });
+    })
+    $("#btns").click();
+  	</script>
+#end

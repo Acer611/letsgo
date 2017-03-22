@@ -1,0 +1,376 @@
+#set($pageTitle="领队导游管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+
+    <!-- Site wrapper -->
+    <div class="wrapper">
+      #parse("/WEB-INF/views/common/leftbar.vm")
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            领队导游管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">查看领队信息</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+          <!-- Default box -->
+          <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">查看领队信息</h3>
+				   <div class="box-tools col-md-5">
+					
+						<a class="btn btn-warning btn-sm col-md-3 pull-right" href="$!{link.contextPath}/leader/leaderEdit?id=$!{leaderEntity.id}">修改</a>
+                  </div>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <div class="form-horizontal">
+                  <div class="box-body content">
+					<div class="row">
+						<div class="col-md-9">
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">姓名</label>
+								  <div class="col-xs-6">
+									 <p class="form-control-static">$!{leaderEntity.name}</p>
+								  </div>
+								</div>
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">性别</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">#if($!{leaderEntity.sex}==1)
+    男
+										#else
+										女
+									#end</p>
+								  </div>
+								</div>
+							<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">类别</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">#if($!{leaderEntity.leaderType}==1)
+                                        领队
+										#elseif($!{leaderEntity.leaderType}==2)
+                                            导游
+										#else
+                                        导游兼领队
+									#end</p>
+								  </div>
+								</div>
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">状态</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">#if($!{leaderEntity.leaderStatus}==1)
+                                        专职
+									#elseif($!{leaderEntity.leaderStatus}==2)
+                                        兼职
+									#else
+                                        离职
+									#end</p>
+								  </div>
+								</div>
+#if($!{leaderEntity.birthday})
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">出生日期</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">$!date.format('yyyy-MM-dd',$leaderEntity.birthday)</p>
+								  </div>
+								</div>
+	#end
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">手机号</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">$!{leaderEntity.countryCode}$!{leaderEntity.phone}</p>
+								  </div>
+								</div>
+#if($!{leaderEntity.leadTime}&&$!{leaderEntity.leadTime}!="")
+                            <div class="form-group col-md-6">
+                                <label class="col-xs-6 control-label" for="inputNamel3">开始带团时间</label>
+                                <div class="col-xs-6">
+                                    <p class="form-control-static">$!date.format('yyyy-MM-dd',$!{leaderEntity.leadTime})</p>
+                                </div>
+                            </div>
+	#end
+							#if($!{leaderEntity.weixin}&&${leaderEntity.weixin}!="")
+                                <div class="form-group col-md-6">
+                                    <label class="col-xs-6 control-label" for="inputNamel3">微信</label>
+                                    <div class="col-xs-6">
+                                        <p class="form-control-static">$!{leaderEntity.weixin}</p>
+                                    </div>
+                                </div>
+							#end
+#if(${leaderEntity.qq}&&${leaderEntity.qq}!="")
+								<div class="form-group col-md-6">
+								  <label class="col-xs-6 control-label" for="inputNamel3">QQ</label>
+								  <div class="col-xs-6">
+									<p class="form-control-static">$!{leaderEntity.qq}</p>
+								  </div>
+								</div>
+	#end
+
+							</div>
+						#if($!{leaderEntity.photoUrl}!="")
+							<div class="col-md-2">
+								
+								<div class="demo">
+									<img src="$!{leaderEntity.photoUrl}" class="profile-user-img img-responsive img-circle"/>
+									<h3 class="profile-username text-center">$!{leaderEntity.name}</h3>
+								</div>
+							</div>
+						#end
+
+					</div>
+						<div class="row">
+								#if($leaderEntity.language1&&$leaderEntity.language1!="")
+                                    <div class="form-group col-sm-12">
+                                        <label class="col-sm-2 control-label" for="inputNamel3">擅长语种</label>
+                                        <div class="col-sm-8">
+
+
+
+                                                    <p class="form-control-static">
+                                                       $!{leaderEntity.language1}
+
+                                                 </p>
+
+
+
+
+                                        </div>
+                                    </div>
+								#end
+#if($leaderEntity.cardType)
+								<div class="form-group col-sm-12  table-responsive">
+								  <label class="col-sm-2 control-label">证件类型</label>
+								  <div class="col-sm-10">
+										
+										<table class="table table-bordered">
+											<tbody>
+											
+											<tr>
+											  <td>#if($!{leaderEntity.cardType}==1)
+                                                  领队证
+#elseif($!{leaderEntity.cardType}==2)
+    导游证
+												  #else
+
+											  #end
+											  </td>
+											  <td>$!{leaderEntity.cardCode}</td>
+											  <td>
+												有效期
+											  </td>
+											  <td>$!date.format('yyyy-MM-dd',$!{leaderEntity.validityDate})</td>
+											</tr>
+
+										  </tbody>
+										 </table>
+									
+								  </div>
+									
+								</div>
+	#end
+
+#if($leaderEntity.destinationGroup1||$leaderEntity.destinationGroup2||$leaderEntity.destinationGroup3||$leaderEntity.destinationGroup4||$leaderEntity.destinationGroup5||$leaderEntity.destinationGroup6||$leaderEntity.destinationGroup7)
+
+    <div class="form-group col-sm-12">
+								  <label class="col-sm-2 control-label" for="inputNamel3">擅长线路</label>
+								  <div class="col-sm-8">
+                                      <p class="form-control-static">
+											  #if(${leaderEntity.destinationGroup1})
+												${leaderEntity.destinationGroup1}
+											  #end
+											  #if(${leaderEntity.destinationGroup2})
+												  ${leaderEntity.destinationGroup2}
+											  #end
+												  #if(${leaderEntity.destinationGroup3})
+												  ${leaderEntity.destinationGroup3}
+											  #end
+												  #if(${leaderEntity.destinationGroup4})
+												  ${leaderEntity.destinationGroup4}
+											  #end
+												  #if(${leaderEntity.destinationGroup5})
+												  ${leaderEntity.destinationGroup5}
+											  #end
+												  #if(${leaderEntity.destinationGroup6})
+												  ${leaderEntity.destinationGroup6}
+											  #end
+												  #if(${leaderEntity.destinationGroup7})
+												  ${leaderEntity.destinationGroup7}
+											  #end
+										</p>
+
+								  </div>
+								</div>
+#end
+#if($leaderEntity.photoLibrary1Url&&${leaderEntity.photoLibrary1Url}!="")
+
+								<div class="form-group col-sm-12">
+									<label class="col-sm-2 control-label">领队/导游照片</label>
+
+									<div class="row">
+									   <div class="col-sm-6 col-md-2">
+										  <a href="javascript:;" class="thumbnail">
+											 <img src="${leaderEntity.photoLibrary1Url}"
+											 alt="">
+										  </a>
+									   </div>
+									</div>
+								</div>
+#end
+						</div>
+						
+                  </div><!-- /.box-body -->
+                </div>
+              </div><!-- /.box -->
+		#if(  $null.isNull($traveledList))
+			 <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">带过的线路</h3>
+                </div>
+                <div class="box-body">
+                <table class="table table-hover">
+                    <tbody>
+                    <tr>
+                        <th>线路名称</th>
+                        <th>日期</th>
+                        <th>目的地</th>
+                    </tr>
+#foreach( $Detail in $traveledList)
+
+                    <tr>
+                      <td>$Detail.name</td>
+                      <td>$!date.format('yyyy-MM-dd',$Detail.startDate)~$!date.format('yyyy-MM-dd',$Detail.endDate)</td>
+                      <td>
+	#foreach( $Detaili in $Detail.scheduleDetailList)
+						  $Detaili.destination1、$Detaili.destination2、$Detaili.destination3、$Detaili.destination4<br>
+					  #end
+					  </td>
+                      
+                    </tr>
+
+	#end
+                  </tbody>
+				  </table>
+                </div><!-- /.box-body -->
+              </div>
+		#end
+#if(  $null.isNull($prepareTravelList))
+            <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">即将出发的线路</h3>
+                </div>
+                <div class="box-body">
+                <table class="table table-hover">
+                    <tbody>
+					<tr>
+                      <th>线路名称</th>
+                      <th>日期</th>
+                      <th>目的地</th>
+                    </tr>
+						#foreach( $Detail in $prepareTravelList)
+
+                        <tr>
+                            <td>$Detail.name</td>
+                            <td>$!date.format('yyyy-MM-dd',$Detail.startDate)~$!date.format('yyyy-MM-dd',$Detail.endDate)</td>
+                            <td>
+								#foreach( $Detaili in $Detail.scheduleDetailList)
+									$Detaili.destination1、$Detaili.destination2、$Detaili.destination3、$Detaili.destination4<br>
+								#end
+                            </td>
+
+                        </tr>
+
+						#end
+
+                  </tbody>
+				  </table>
+                </div><!-- /.box-body -->
+              </div>
+#end
+#if(  $null.isNull($travelingList))
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">正在进行中的线路</h3>
+                </div>
+                <div class="box-body">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>线路名称</th>
+                            <th>日期</th>
+                            <th>目的地</th>
+                        </tr>
+							#foreach( $Detail in $travelingList)
+
+                            <tr>
+                                <td>$Detail.name</td>
+                                <td>$!date.format('yyyy-MM-dd',$Detail.startDate)~$!date.format('yyyy-MM-dd',$Detail.endDate)</td>
+                                <td>
+									#foreach( $Detaili in $Detail.scheduleDetailList)
+										$Detaili.destination1、$Detaili.destination2、$Detaili.destination3、$Detaili.destination4<br>
+									#end
+                                </td>
+
+                            </tr>
+
+							#end
+
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+            </div>
+#end
+#if($prepareTravelList.size()>0)
+			   <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">排期</h3>
+                </div>
+                <div class="box-body">
+					<div id='calendar'></div>
+                </div><!-- /.box-body -->
+              </div>
+#end
+		</section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+		#parse("/WEB-INF/views/common/footer.vm")
+    </div><!-- ./wrapper -->
+
+  #define($scriptBlock)
+    <script>
+
+
+		#if($prepareTravelList.size()>0)
+    $('#calendar').fullCalendar({
+    		defaultDate:  #foreach( $Detail in $prepareTravelList) #if($velocityCount<=1)'$!date.format('yyyy-MM-dd',$Detail.startDate)'#end #end,
+    		//editable: true,
+    		eventLimit: true, // allow "more" link when too many events
+    		events: [
+	  #foreach( $Detail in $prepareTravelList)
+    			{
+    				title: '$Detail.name',
+    				start: '$!date.format('yyyy-MM-dd',$Detail.startDate)',
+                    end:' $!date.format('yyyy-MM-dd',${Detail.endDate})'
+    			},
+
+		  #end
+				#foreach( $Detail in $workList)
+
+                    {
+                        title: '忙碌',
+                        start: '$Detail',
+                        end:' $Detail'
+                    },
+				#end
+    		]
+    	});
+			#end
+    </script>
+  #end
+
+

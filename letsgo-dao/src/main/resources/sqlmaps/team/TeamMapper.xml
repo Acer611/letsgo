@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.TeamDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.TeamEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="tx_groupId" property="txGroupid" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="intro" property="intro" jdbcType="VARCHAR" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+        <result column="header_name" property="headerName" jdbcType="VARCHAR" />
+        <result column="header_phone" property="headerPhone" jdbcType="VARCHAR" />
+        <result column="domestic_contact" property="domesticContact" jdbcType="VARCHAR" />
+        <result column="domestic_phone" property="domesticPhone" jdbcType="VARCHAR" />
+        <result column="foreign_contact" property="foreignContact" jdbcType="VARCHAR" />
+        <result column="foreign_phone" property="foreignPhone" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+
+        <result column="ta_name" property="travelName" jdbcType="VARCHAR" />
+        <result column="ta_desc" property="desc" jdbcType="LONGVARCHAR" />
+
+        <result column="schName" property="schName" jdbcType="VARCHAR" />
+        <result column="day_num" property="dimDD" jdbcType="INTEGER" />
+
+        <result column="jour_id" property="jourId" jdbcType="BIGINT" />
+
+        <result column="qr_code" property="qrCode" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <resultMap id="UnfinishedTeamResultMap" type="com.umessage.letsgo.domain.po.team.TeamEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="travel_id" property="travelId" jdbcType="BIGINT" />
+        <result column="team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="tx_groupId" property="txGroupid" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="intro" property="intro" jdbcType="VARCHAR" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+        <result column="header_name" property="headerName" jdbcType="VARCHAR" />
+        <result column="header_phone" property="headerPhone" jdbcType="VARCHAR" />
+        <result column="domestic_contact" property="domesticContact" jdbcType="VARCHAR" />
+        <result column="domestic_phone" property="domesticPhone" jdbcType="VARCHAR" />
+        <result column="foreign_contact" property="foreignContact" jdbcType="VARCHAR" />
+        <result column="foreign_phone" property="foreignPhone" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+    <resultMap id="AnalyticalDataMap" type="com.umessage.letsgo.domain.po.team.AnalyticalData" >
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="pro_code" property="proCode" jdbcType="INTEGER" />
+        <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from t_team
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.team.TeamEntity" useGeneratedKeys="true" keyProperty="id" >
+        insert into t_team (ID, travel_id, team_num, 
+            tx_groupId, name, intro, 
+            photo_url, status, total_count, 
+            header_name, header_phone, domestic_contact, 
+            domestic_phone, foreign_contact, foreign_phone, 
+            create_time, update_time,start_date,end_date, version,qr_code
+            )
+        values (#{id,jdbcType=BIGINT}, #{travelId,jdbcType=BIGINT}, #{teamNum,jdbcType=VARCHAR}, 
+            #{txGroupid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{intro,jdbcType=VARCHAR}, 
+            #{photoUrl,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{totalCount,jdbcType=INTEGER}, 
+            #{headerName,jdbcType=VARCHAR}, #{headerPhone,jdbcType=VARCHAR}, #{domesticContact,jdbcType=VARCHAR}, 
+            #{domesticPhone,jdbcType=VARCHAR}, #{foreignContact,jdbcType=VARCHAR}, #{foreignPhone,jdbcType=VARCHAR}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},#{startDate,jdbcType=TIMESTAMP},#{endDate,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}, #{qrCode,jdbcType=VARCHAR}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.team.TeamEntity" >
+        update t_team
+        set travel_id = #{travelId,jdbcType=BIGINT},
+            team_num = #{teamNum,jdbcType=VARCHAR},
+            tx_groupId = #{txGroupid,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            intro = #{intro,jdbcType=VARCHAR},
+            photo_url = #{photoUrl,jdbcType=VARCHAR},
+            status = #{status,jdbcType=INTEGER},
+            total_count = #{totalCount,jdbcType=INTEGER},
+            header_name = #{headerName,jdbcType=VARCHAR},
+            header_phone = #{headerPhone,jdbcType=VARCHAR},
+            domestic_contact = #{domesticContact,jdbcType=VARCHAR},
+            domestic_phone = #{domesticPhone,jdbcType=VARCHAR},
+            foreign_contact = #{foreignContact,jdbcType=VARCHAR},
+            foreign_phone = #{foreignPhone,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+                qr_code = #{qrCode,jdbcType=VARCHAR},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version,
+        ta.name as ta_name
+        from t_team AS t
+        LEFT join t_travel_agency as ta on t.travel_id = ta.ID
+        where t.ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectByScheduleId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        SELECT t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version
+        FROM t_team AS t
+        JOIN j_schedule AS s ON s.team_id = t.ID
+        where s.ID = #{id,jdbcType=BIGINT} and s.del=0
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, travel_id, team_num, tx_groupId, name, intro, photo_url, status, total_count, 
+        header_name, header_phone, domestic_contact, domestic_phone, foreign_contact, foreign_phone, 
+        create_time, update_time, version
+        from t_team
+    </select>
+    <select id="selectTeamListWithIDs" resultMap="BaseResultMap" >
+        select t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version,
+        ta.name as ta_name
+        from t_team AS t
+        LEFT join t_travel_agency as ta on t.travel_id = ta.ID
+        where 1=1
+        <if test="list != null and list.size()>0">
+         and t.tx_groupId in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        </if>
+        and NOT ISNULL(t.tx_groupId)
+        order by t.status asc
+    </select>
+    <select id="selectUnfinishedTeamListWithIDs" resultMap="BaseResultMap" >
+        select t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version,
+        ta.name as ta_name,ta.`desc` as ta_desc
+        from t_team AS t
+        LEFT join t_travel_agency as ta on t.travel_id = ta.ID
+        where 1=1
+        <if test="list != null and list.size()>0">
+        t.tx_groupId in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        </if>
+        and NOT ISNULL(t.tx_groupId)
+        and t.status &lt; 3
+        order by t.status asc, t.create_time desc
+    </select>
+    <select id="selectTeamWithTXGroupId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version,t.qr_code,
+        ta.name as ta_name,ta.`desc` as ta_desc
+        from t_team AS t
+        LEFT join t_travel_agency as ta on t.travel_id = ta.ID
+        where t.tx_groupId = #{TXGroupId}
+    </select>
+
+    <select id="selectUnfinishedTeam" resultMap="UnfinishedTeamResultMap" >
+        SELECT t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version,
+        s.start_date, s.end_date
+        FROM t_team AS t
+        JOIN j_schedule AS s ON t.ID = s.team_id
+        WHERE STATUS != 3
+        AND NOT ISNULL(tx_groupId)
+        AND  s.process_status=2
+        AND  s.del=0
+        AND ( DATE_FORMAT(s.start_date,'%Y-%m-%d') &lt;= CURDATE()
+        OR DATE_FORMAT(s.end_date,'%Y-%m-%d') &lt; CURDATE() )
+    </select>
+
+    <select id="selectFinishedTeam" resultMap="UnfinishedTeamResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        SELECT t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version,
+        s.start_date, s.end_date
+        FROM t_team AS t
+        JOIN j_schedule AS s ON t.ID = s.team_id
+        WHERE STATUS = 3
+        AND NOT ISNULL(tx_groupId)
+        AND  s.process_status=2
+        AND  s.del=0
+        <if test="null != activityDate">AND DATE_FORMAT(s.end_date,'%Y-%m-%d') &lt;= DATE_FORMAT(#{activityDate}, '%Y-%m-%d')</if>
+        <if test="null != yesterday">AND DATE_FORMAT(s.end_date,'%Y-%m-%d') = DATE_FORMAT(#{yesterday}, '%Y-%m-%d')</if>
+    </select>
+
+    <select id="selectSendMsgTeam" resultMap="UnfinishedTeamResultMap" >
+        select t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version,
+        s.start_date, s.end_date
+        from t_team as t
+        join j_schedule as s on t.ID = s.team_id
+        where status &lt; 3
+        and NOT ISNULL(tx_groupId)
+        and DATE_FORMAT(NOW(), '%Y-%m-%d') &lt;= DATE_FORMAT(DATE_SUB(s.end_date,INTERVAL 1 DAY), '%Y-%m-%d')
+        AND DATE_FORMAT(NOW(), '%Y-%m-%d') &gt;= DATE_FORMAT(DATE_SUB(s.start_date,INTERVAL 1 DAY), '%Y-%m-%d')
+    </select>
+
+    <select id="selectSendCommnetTeam" resultMap="UnfinishedTeamResultMap" >
+        select t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version,
+        s.start_date, s.end_date
+        from t_team as t
+        join j_schedule as s on t.ID = s.team_id
+        JOIN j_schedule_detail AS sd ON sd.jour_id = s.ID
+        WHERE t.`status` = 1
+        <if test="startDate != null">
+            AND DATE_FORMAT(sd.schedule_date, '%Y-%m-%d') = DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+        </if>
+    </select>
+
+    <select id="selectByTeamNumAndTravelId" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.journey.request.ScheduleRequest">
+        select ID, travel_id, team_num, tx_groupId, name, intro, photo_url, status, total_count,
+        header_name, header_phone, domestic_contact, domestic_phone, foreign_contact, foreign_phone,
+        create_time, update_time, version
+        from t_team
+        <where>
+            <if test="null != teamNum"> AND team_num = #{teamNum}</if>
+            <if test="null != travelId"> AND travel_id = #{travelId}</if>
+        </where>
+    </select>
+    
+    <select id="queryAnalyticalDataList" resultMap="AnalyticalDataMap">
+    	select user_id,real_name,sex,birthday,phone,pro_code,pro_name,province from t_member where team_id = #{teamId}
+    </select>
+    
+    <update id="saveProfession">
+    	update t_member set pro_code = #{proCode},pro_name = #{proName} where user_id = #{userId} and team_id = #{teamId}
+    </update>
+
+    <select id="getTeamListBetweenTwoUserId" resultType="java.lang.String" parameterType="com.umessage.letsgo.domain.vo.team.requset.TeamRequest">
+        SELECT t.`name` FROM t_team AS t LEFT JOIN t_member AS m1 ON t.ID = m1.t_id
+        LEFT JOIN t_member AS m2 ON t.ID = m2.t_id
+        WHERE m1.user_id = #{firstUserId} AND m2.user_id = #{secondUserId}
+    </select>
+    <select id="hasTeamNum" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(ID)
+        from t_team
+        where
+        team_num = #{teamNum}
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select t.ID, t.travel_id, t.team_num, t.tx_groupId, t.name, t.intro, t.photo_url, t.status, t.total_count,
+        t.header_name, t.header_phone, t.domestic_contact, t.domestic_phone, t.foreign_contact, t.foreign_phone,
+        t.create_time, t.update_time, t.version
+        from t_team AS t
+        where t.ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectTeamListByCountryN" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.TeamRequest">
+         select
+         s.name as schName,
+         sd.day_num,
+         sd.jour_id
+         from t_team AS t
+         JOIN  j_schedule AS s ON t.ID = s.team_id
+         JOIN  j_schedule_detail AS sd ON s.ID = sd.jour_id
+         JOIN  t_leader AS l ON l.ID = s.leader_id
+         <where>
+         t.travel_id = #{travelId}
+         and s.del= 0
+         AND !ISNULL(t.tx_groupId)
+         <if test="status != null and status !=''.toString()">
+             AND t.`status`= #{status}
+         </if>
+         <if test="countryId1 != null and countryId1 !=''.toString() ">
+            AND sd.countryId1=#{countryId1}
+         </if>
+          AND DATE_FORMAT(sd.schedule_date,'%Y-%m-%d') = DATE_FORMAT(#{todayDay},'%Y-%m-%d')
+         </where>
+    </select>
+</mapper>

@@ -1,0 +1,249 @@
+#set($pageTitle="领队导游管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+      #parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            领队导游管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li class="active">指派领队</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+          <!-- Default box -->
+          <div class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">指派领队</h3>
+				  <div class="box-tools">
+						<div class="input-group pull-left">
+						  <input type="text" placeholder="请输入领队姓名" class="form-control input-sm pull-right" name="table_search">
+						  <div class="input-group-btn">
+							<button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+						  </div>
+						</div>
+                  </div>
+				
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <div class="form-horizontal">
+                  <div class="box-body content">
+					<div class="">
+							<div class="form-group">
+								  <label class="col-sm-2 control-label" for="inputNamel3">状态：</label>
+								  <div class="col-sm-10">
+									   <label class="checkbox-inline">
+										  <input type="radio" name="r2" class="minimal">
+										  专职
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r2" class="minimal">
+										  兼职
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r2" class="minimal">
+										  离职
+										</label>
+								  </div>
+							</div>
+							<div class="form-group">
+								  <label class="col-md-2 control-label" for="inputNamel3">性别：</label>
+								  <div class="col-md-10">
+									    <label class="checkbox-inline">
+										  <input type="radio" name="r3" class="minimal">
+										  男
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r3" class="minimal">
+										  女
+										</label>
+										
+								  </div>
+							</div>
+							<div class="form-group">
+								  <label class="col-md-2 control-label" for="inputNamel3">擅长线路：</label>
+								  <div class="col-md-10">
+									 <label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  国内
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  港澳台
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  日韩
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  东南亚
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  欧洲
+										</label>
+											 <label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  美洲
+										</label>
+										<label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  澳洲
+										</label>
+										<label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  中东非洲
+										</label>
+										<label class="checkbox-inline">
+										  <input type="radio" name="r4" class="minimal">
+										  其他
+										</label>
+								  </div>
+							</div>
+							<div class="form-group">
+								  <label class="col-md-2 control-label" for="inputNamel3">带团时间：</label>
+								  <div class="col-md-10">
+									   <label class="checkbox-inline">
+										  <input type="radio" name="r5" class="minimal">
+										  一年以内
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r5" class="minimal">
+										  1-3年
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r5" class="minimal">
+										  3-5年
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r5" class="minimal">
+										  5-10年
+										</label>
+										 <label class="checkbox-inline">
+										  <input type="radio" name="r5" class="minimal">
+										  10年以上
+										</label>
+										
+								  </div>
+							</div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="inputNamel3">当前工作状态：</label>
+                            <div class="col-md-10">
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="state"  value="0" class="minimal">
+                                    所有
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="state" value="1" class="minimal">
+                                    空闲
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="radio" name="state"  value="2" class="minimal">
+                                    忙碌
+                                </label>
+
+                            </div>
+                        </div>
+					</div>
+					
+						
+                  </div><!-- /.box-body -->
+                </div>
+              </div><!-- /.box -->
+			   <div class="box box-success">
+			    <div class="box-header with-border">
+                  <h3 class="box-title">找到3个结果</h3>
+                </div><!-- /.box-header -->
+			    <div class="box-body content">
+			  		 <table class="table table-hover" id="example2">
+							 <thead>
+							<tr>
+							  <th>姓名</th>
+							  <th>性别</th>
+							  <th>状态</th>
+							  <th>带团时间</th>
+							  <th>已带团数</th>
+							  <th>擅长线路</th>
+							  <th>操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+							  <td>郭德纲</td>
+							  <td>男</td>
+							  <td>专职</td>
+							  <td>8年</td>
+							  <td>200+</td>
+							  <td>美洲/美国</td>
+							  <td><a href="#">查询详情</a></td>
+							</tr>
+							<tr>
+							  <td>郭德纲</td>
+							  <td>男</td>
+							  <td>专职</td>
+							  <td>8年</td>
+							  <td>200+</td>
+							  <td>美洲/美国</td>
+							  <td><a href="#">查询详情</a></td>
+							</tr>
+							<tr>
+							  <td>郭德纲</td>
+							  <td>男</td>
+							  <td>专职</td>
+							  <td>8年</td>
+							  <td>200+</td>
+							  <td>美洲/美国</td>
+							  <td><a href="#">查询详情</a></td>
+							</tr>
+							<tr>
+							  <td>郭德纲</td>
+							  <td>男</td>
+							  <td>专职</td>
+							  <td>8年</td>
+							  <td>200+</td>
+							  <td>美洲/美国</td>
+							  <td><a href="#">查询详情</a></td>
+							</tr>
+						  </tbody>
+						  </table>
+						  </div><!-- /.box-body -->
+				</div><!-- /.box -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+		#parse("/WEB-INF/views/common/footer.vm")
+    </div><!-- ./wrapper -->
+
+#define($scriptBlock)
+	<script>
+	$(function () {
+
+		//iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+          checkboxClass: 'icheckbox_minimal-blue',
+          radioClass: 'iradio_minimal-blue'
+        });
+      
+        //$("#example1").DataTable();
+        $('#example2').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": false,
+          "info": false,
+          "autoWidth": false
+        });
+      });
+    </script>
+#end

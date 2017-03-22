@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+       http://www.springframework.org/schema/security/oauth2  http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
+
+    <!-- 配置国际化资源文件路径 -->
+    <!-- 基于Cookie的本地化解析器 -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="cookieMaxAge" value="604800"/>
+        <property name="defaultLocale" value="zh_CN"/>
+        <property name="cookieName" value="Language"/>
+    </bean>
+
+    <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <property name="tokenStore" ref="tokenStore"/>
+        <property name="supportRefreshToken" value="true"/>
+        <property name="clientDetailsService" ref="clientDetailsService"/>
+    </bean>
+
+    <bean id="handlerOAuth2ExceptionRenderer"
+          class="com.umessage.letsgo.core.errorhandler.HandlerOAuth2ExceptionRenderer">
+        <property name="messageConverters">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                        <property name="serializationInclusion" value="NON_NULL"/>
+                        <property name="featuresToDisable">
+                            <array>
+                                <util:constant
+                                        static-field="com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS"/>
+                            </array>
+                        </property>
+                    </bean>
+                </property>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>application/*+json;charset=UTF-8</value>
+                        <value>text/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    <bean id="clinetAuthenticationEntryPoint"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <property name="exceptionRenderer" ref="handlerOAuth2ExceptionRenderer"/>
+    </bean>
+    <bean id="accessDeniedHandler"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler">
+        <property name="exceptionRenderer" ref="handlerOAuth2ExceptionRenderer"/>
+    </bean>
+    <bean id="userApprovalHandler"
+          class="org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler">
+        <property name="tokenStore" ref="tokenStore"/>
+        <property name="clientDetailsService" ref="clientDetailsService"/>
+        <property name="requestFactory" ref="requestFactory"/>
+    </bean>
+
+    <bean id="requestFactory"
+          class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
+        <constructor-arg name="clientDetailsService" ref="clientDetailsService"/>
+    </bean>
+
+    <bean id="smsVerificationTokenGranter"
+          class="com.umessage.letsgo.core.extensions.springsecurity.sms.SMSVerificationTokenGranter">
+        <constructor-arg name="authenticationManager" ref="authenticationManager"/>
+        <constructor-arg name="tokenServices" ref="tokenServices"/>
+        <constructor-arg name="clientDetailsService" ref="clientDetailsService"/>
+        <constructor-arg name="requestFactory" ref="requestFactory"/>
+    </bean>
+
+    <bean id="wxVerificationTokenGranter"
+          class="com.umessage.letsgo.core.extensions.springsecurity.social.SocialVerificationTokenGranter">
+        <constructor-arg name="authenticationManager" ref="authenticationManager"/>
+        <constructor-arg name="tokenServices" ref="tokenServices"/>
+        <constructor-arg name="clientDetailsService" ref="clientDetailsService"/>
+        <constructor-arg name="requestFactory" ref="requestFactory"/>
+    </bean>
+    <!--client-->
+    <bean id="clientDetailsUserDetailsService"
+          class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+        <constructor-arg ref="clientDetailsService"/>
+    </bean>
+    <bean id="clientCredentialsTokenEndpointFilter"
+          class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
+        <property name="authenticationManager" ref="clientAuthenticationManager"/>
+        <property name="authenticationEntryPoint" ref="clinetAuthenticationEntryPoint"/>
+    </bean>
+
+    <security:authentication-manager id="clientAuthenticationManager">
+        <security:authentication-provider user-service-ref="clientDetailsUserDetailsService"/>
+    </security:authentication-manager>
+
+    <oauth2:authorization-server client-details-service-ref="clientDetailsService" token-services-ref="tokenServices"
+                                 authorization-request-manager-ref="requestFactory" user-approval-handler-ref="userApprovalHandler">
+        <oauth2:authorization-code/>
+        <oauth2:implicit/>
+        <oauth2:refresh-token/>
+        <oauth2:client-credentials/>
+        <oauth2:password/>
+        <oauth2:custom-grant token-granter-ref="smsVerificationTokenGranter"/>
+        <oauth2:custom-grant token-granter-ref="wxVerificationTokenGranter"/>
+    </oauth2:authorization-server>
+
+    <security:http pattern="/oauth/token" create-session="stateless" entry-point-ref="clinetAuthenticationEntryPoint"
+                   authentication-manager-ref="clientAuthenticationManager">
+        <security:anonymous enabled="false"/>
+        <security:http-basic entry-point-ref="clinetAuthenticationEntryPoint"/>
+        <security:custom-filter ref="clientCredentialsTokenEndpointFilter" before="BASIC_AUTH_FILTER"/>
+        <security:access-denied-handler ref="accessDeniedHandler"/>
+    </security:http>
+    <!--client-->
+
+
+    <security:http access-denied-page="/login.jsp?error=true"
+                   authentication-manager-ref="authenticationManager">
+        <security:intercept-url pattern="/oauth/authorize" access="ROLE_ADMIN,ROLE_CAPTAIN,ROLE_GUIDE,ROLE_TOURIST"/>
+        <security:intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:form-login login-page="/login.jsp"
+                             authentication-failure-url="/login.jsp?error=true"
+                             default-target-url="/index.jsp"/>
+        <security:anonymous/>
+    </security:http>
+
+    <!--user-->
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="userAuthenticationProvider">
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <!--user-->
+
+</beans>

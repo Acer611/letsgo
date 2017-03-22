@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.UserTagDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.UserTagEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="labelling_user_id" property="labellingUserId" jdbcType="BIGINT" />
+        <result column="tag_id" property="tagId" jdbcType="BIGINT" />
+        <result column="labeled_user_id" property="labeledUserId" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+
+    <resultMap id="TagResultMap" type="com.umessage.letsgo.domain.po.security.TagsResultEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="tagName" property="name" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <collection property="users" ofType="com.umessage.letsgo.domain.po.security.UserEntity" column="u_id">
+            <id column="u_id" property="id" jdbcType="BIGINT" />
+            <result column="user_name" property="userName" jdbcType="VARCHAR" />
+            <result column="real_name" property="realName" jdbcType="VARCHAR" />
+            <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+            <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        </collection>
+    </resultMap>
+   
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_user_tag
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.UserTagEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into s_user_tag (labelling_user_id, tag_id, labeled_user_id, 
+            create_time, version)
+        values (#{labellingUserId,jdbcType=BIGINT}, #{tagId,jdbcType=BIGINT}, #{labeledUserId,jdbcType=BIGINT}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.UserTagEntity" >
+        update s_user_tag
+        set labelling_user_id = #{labellingUserId,jdbcType=BIGINT},
+            tag_id = #{tagId,jdbcType=BIGINT},
+            labeled_user_id = #{labeledUserId,jdbcType=BIGINT},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, labelling_user_id, tag_id, labeled_user_id, create_time, version
+        from s_user_tag
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, labelling_user_id, tag_id, labeled_user_id, create_time, version
+        from s_user_tag
+    </select>
+    
+    <select id="getTagListByUserId" resultMap="TagResultMap">
+   		select t.id, t.name as tagName, t.create_time, t.version,
+   		    s.id as u_id, s.user_name,s.real_name,s.nick_name,s.photo_url
+    	from s_tags t left join s_user_tag us on us.tag_id = t.id
+        left join s_user s  on us.labeled_user_id = s.id
+        WHERE t.user_id =  #{userId} AND us.labelling_user_id = #{userId}
+    </select>
+
+    <delete id="deleteUserTagByLabeledUserIdAndUserId"  parameterType="com.umessage.letsgo.domain.vo.security.request.TagsRequest" >
+      delete from s_user_tag
+        where   labelling_user_id = #{userId,jdbcType=BIGINT} and  labeled_user_id = #{labeledUserId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteUserTagByTagId"  parameterType="com.umessage.letsgo.domain.vo.security.request.TagsRequest" >
+        delete from s_user_tag
+        where   tag_id = #{tagId,jdbcType=BIGINT}
+    </delete>
+
+</mapper>

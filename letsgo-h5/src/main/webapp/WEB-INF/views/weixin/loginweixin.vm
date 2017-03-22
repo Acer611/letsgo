@@ -1,0 +1,234 @@
+#set($pageTitle="跟上登陆")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/weixin/style/weui.css","$!{STATIC_URL}/resources/weixin/style/weixin.css?t=1"])
+#set($scriptUrls=["https://res.wx.qq.com/open/js/jweixin-1.0.0.js","$!{STATIC_URL}/resources/weixin/js/weui.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js"])
+
+<div class="logo"></div>
+<form action="$!{link.contextPath}/wechat/login" method="post" id="wechatLogin">
+<div class="weui-cellsnew">
+            <div class="dian">
+                <div class="dian_code">
+                    <!--<select class="weui-select" name="select2" id="areaCode">
+                        <option value="+86">+86</option>
+
+                    </select>-->
+                    <label class="weui-labels">+86</label>
+                    <input value="+86" id="areaCode" type="hidden">
+                    <input value="$!response.get('url')" name="url" type="hidden">
+                    <input value="" name="username" type="hidden">
+                </div>
+                <div class="text_code">
+                    <input class="weui-inputs"  placeholder="请输入手机号" name="usernames" type="text">
+                </div>
+            </div>
+##			<div class="diantextcontainer">
+##				<div class="diantext">
+##					<div class="dian_text">
+##						<label class="weui-label-code">验证码</label>
+##					</div>
+##					<div class="text__codew">
+##						<input class="weui-input" placeholder="请输入验证码"  name="code" id="captcha" type="text">
+##					</div>
+##
+##				</div>
+##				  <div class="weui-cell__vcode">
+##						<button class="weui-vcode-btn verification" id="verification">获取验证码</button>
+##					</div>
+##			</div>
+            <div class="dian">
+                <div class="dian_code">
+                    <!--<select class="weui-select" name="select2" id="areaCode">
+                        <option value="+86">+86</option>
+
+                    </select>-->
+                    <label class="weui-labels">密码</label>
+                </div>
+                <div class="text_code">
+                    <input class="weui-inputs"  placeholder="请输入密码" name="password" type="password">
+                </div>
+            </div>
+	</div>
+	<div class="page__bd page__bd_spacing">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" id="login">登录</a>
+    </div>
+</form>
+#define($scriptBlock)
+<script>
+    var flag=GetRequest(window.location.href);
+    var submitSurvey_url=CONTEXTPATH+"/wechat/redirectsToBindingPang";
+    var unionid="$!{response.unionid}";
+    var areaCode="";
+    $(function(){
+        $("#verification").attr("disabled", false);
+        //		验证手机号
+        $("#verification").click(function(){
+            var that=$(this);
+            $(this).attr("disabled", true);
+            var phone = /^[0-9]*$/;
+            if( !$.trim($("input[name='phone']").val())){
+                layer.open({
+                    btn: [ '确定'],
+                    content:"手机号码不能为空"
+                })
+                that.attr("disabled", false);
+            }else if(!phone.test($.trim($("#phone").val()))){
+                layer.open({
+                    btn: [ '确定'],
+                    content:"手机号码格式不正确"
+                })
+                that.attr("disabled", false);
+                return false;
+            }else{
+                $.ajax({
+                    url:CONTEXTPATH+"/h5/register/sendPhoneValidCode",
+                    data:{scope:4,phone:$("#areaCode").val()+$.trim($("[name=phone]").val())},
+                    type : "post",
+                    cache : false,
+                    dataType : "json",
+                    success: function(data){
+                        if(data.retCode==0){
+                            clearTimeout(timer)
+                            time(that[0]);
+                            // startQuestionnaireActivity();
+                            layer.open({
+                                btn: [ '确定'],
+                                content:data.retMsg
+                            })
+                        }else{
+                            layer.open({
+                                btn: [ '确定'],
+                                content:data.retMsg
+                            })
+                            that.attr("disabled", false);
+                        }
+                    },
+                    error:function(){
+                        layer.open({
+                            btn: [ '确定'],
+                            content:"系统服务错误，请稍后重试！"
+                        })
+                        that.attr("disabled", false);
+                    }
+                })
+            }
+        });
+        //		验证注册信息
+        $("#login").click(function(){
+            var phone = /^[0-9]*$/;
+            var verification = /^[0-9]{6}$/;
+            $("input[name='username']").val($("#areaCode").val()+$("input[name='usernames']").val())
+            if( !$.trim($("input[name='usernames']").val())){
+                layer.open({
+                    btn: [ '确定'],
+                    content:"手机号码不能为空"
+                })
+            }else{
+                if(!$.trim($("input[name='password']").val())){
+                    layer.open({
+                        btn: [ '确定'],
+                        content:"密码不能为空"
+                    })
+                }else{
+##                    $.ajax({
+##                        type:"POST",
+##                        url: CONTEXTPATH + "/weixin/login",
+##                        data:{username:$("#areaCode").val()+$.trim($("input[name='username']").val()),password:$.trim($("input[name='password']").val()),url:"$!response.get('url')"},
+##                        dataType:"html",
+##                        success:function(data){
+##                            alert(data)
+##                        },
+##                        error:function(){
+##                            layer.open({
+##                                btn: [ '确定'],
+##                                content:"服务繁忙，请稍后再试"
+##                            })
+##                        }
+##                    });
+                   $("#wechatLogin").submit()
+                }
+            }
+
+        });
+    })
+
+    //验证码倒计时
+    var wait=60,timer;
+    function time(o) {
+        if (wait == 0) {
+            o.removeAttribute("disabled");
+            $(o).text("获取验证码");
+            wait = 60;
+        } else {
+            o.setAttribute("disabled", true);
+            $(o).text("重新发送(" + wait + ")");
+            wait--;
+            timer=setTimeout(function() {
+                time(o)
+            },1000)
+        }
+    }
+
+    function GetRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+    function parseParam(param, key) {
+
+        var paramStr = "";
+
+        if (param instanceof String || param instanceof Number || param instanceof Boolean)
+        {
+
+            paramStr += "&" + key + "=" + encodeURIComponent(param);
+
+        }
+        else
+        {
+
+            $.each(param, function (i) {
+
+                var k = key == null ? i : key + (param instanceof Array ? "[" + i + "]" : "." + i);
+                paramStr += '&' + parseParam(this, k);
+
+            });
+
+        }
+
+        return paramStr.substr(1);
+    }
+
+    /**
+     * 获取指定的URL参数值
+     * URL:http://www.quwan.com/index?name=tyler
+     * 参数：paramName URL参数
+     * 调用方法:getParam("name")
+     * 返回值:tyler
+     */
+    function getParam(paramName) {
+        paramValue = "", isFound = !1;
+        if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+            arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+            while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+        }
+        return paramValue == "" && (paramValue = null), paramValue
+    }
+    //获取url参数的值：name是参数名
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return (r[2]);
+        }
+        return null;
+    }
+</script>
+#end

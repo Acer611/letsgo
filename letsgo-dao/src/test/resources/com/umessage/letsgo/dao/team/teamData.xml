@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<t_team id="1001" travel_id="1001" name="泰国五日豪华之旅" status="1" total_count="5" />
+	
+	<t_travel_agency id="1001" name="中青旅" />
+	
+	<t_member id="1001" user_id="1001" team_id="1001" group_id="-1" real_name="杨导" phone="13763435434" sex="1" role="1" type="1" is_admin="1" is_leader="0" join_status="1" />
+	<t_member id="1002" user_id="-1" team_id="1001" group_id="-1" real_name="郭富城" phone="18868895434" sex="1" role="3" type="1" is_admin="0" is_leader="0" join_status="1" />
+	<t_member id="1003" user_id="1002" team_id="1001" group_id="1001" real_name="杨丞琳" phone="15068895434" sex="0" role="3" type="1" is_admin="0" is_leader="1" join_status="1" />
+	<t_member id="1004" user_id="-1" team_id="1001" group_id="1001" real_name="李晨" phone="13768896714" sex="1" role="3" type="1" is_admin="0" is_leader="0" join_status="0" />
+	<t_member id="1005" user_id="1003" team_id="1001" group_id="-1" real_name="邓超" phone="13768895434" sex="1" role="3" type="1" is_admin="0" is_leader="0" join_status="1" />
+
+	<t_group id="1001" team_id="1001" name="一号家庭" total_count="1" />
+</dataset>

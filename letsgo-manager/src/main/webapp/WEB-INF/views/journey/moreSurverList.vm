@@ -1,0 +1,210 @@
+#set($pageTitle="满意度调研问卷")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+
+  <div >
+    <!-- Site wrapper -->
+    <div class="wrapper">
+
+
+
+      #parse("/WEB-INF/views/common/leftbar.vm")
+
+      <!-- =============================================== -->
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            团队行程管理
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="$!{link.contextPath}/schedule/main"><i class="fa fa-home"></i> 首页</a></li>
+            <li class="active">满意度调研问卷</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+			<div class="box box-success">
+			    <div class="box-header with-border">
+                  <h3 class="box-title">
+                      所有调查问卷
+                  </h3>
+                </div><!-- /.box-header -->
+			    <div class="box-body content">
+			  		 <table class="table table-hover" id="table2">
+						<thead>
+							<tr>
+							  <th>行程名称</th>
+                                <th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+                        #if($list.size()>0)
+
+                        #foreach( $Detail in $list)
+							<tr>
+							  <td>$!{Detail.title}</td>
+							  <td>
+                                  <div><a href="$!{link.contextPath}/survey/getOneSurvey?surveyId=$Detail.id">根据此问卷创建满意度调研问卷</a></div>
+                               </td>
+
+							</tr>
+	                        #end
+                        #else
+                            <td  colspan='7'>没有结果</td>
+                        #end
+						  </tbody>
+						  </table>
+
+                    <div id="pagination" class="paginationjs paginationjs-small">
+
+                    </div>
+
+
+						  </div><!-- /.box-body -->
+				</div><!-- /.box -->
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+		#parse("/WEB-INF/views/common/footer.vm")
+
+    </div><!-- ./wrapper -->
+  </div>
+
+  #define($scriptBlock)
+	<script>
+
+
+		//iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+          checkboxClass: 'icheckbox_minimal-blue',
+          radioClass: 'iradio_minimal-blue'
+        });
+
+
+##            $('#pagination').pagination({
+##                dataSource: delQueStr(delQueStr(window.location.href, "pageNum"), "pageSize"),
+##                locator: 'data',
+##                totalNumber: $!{response.totals},
+##                pageSize: 10,
+##                alias: {
+##                    pageNumber: 'pageNum',
+##                    pageSize: 'pageSize'
+##                },
+##                ajax: {
+##                    dataType: 'html',
+##                    beforeSend: function () {
+##                        $("#table2").find("tbody").empty().html('<td  colspan="7">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parents(".box:eq(0)").show();
+##                    }
+##                },
+##//            formatAjaxError:function(jqXHR, textStatus, errorThrown){
+##//                //$("#table2").find("tbody").empty().html($(jqXHR.responseText).find("tbody").html())
+##//                //console.log(jqXHR)
+##//            },
+##                callback: function (data, pagination) {
+##                    if($(data).find("tbody").find("tr").length>0){
+##                        $("#table2").find("tbody").empty().html($(data).find("tbody").html());
+##                        $("#pagination").show();
+##                    }else{
+##                        $("#table2").find("tbody").empty().html($(data).find("tbody").html());
+##
+##                    }
+##
+##                }
+##            })
+        //获取url参数的值：name是参数名
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return (r[2]);
+            }
+            return null;
+        }
+        //设置url参数值，ref参数名,value新的参数值
+        function changeURLPar(url, ref, value){
+            var str = "";
+            if (url.indexOf('?') != -1)
+                str = url.substr(url.indexOf('?') + 1);
+            else
+                return url + "?" + ref + "=" + value;
+            var returnurl = "";
+            var setparam = "";
+            var arr;
+            var modify = "0";
+
+            if (str.indexOf('&') != -1) {
+                arr = str.split('&');
+
+                for (i in arr) {
+                    if (arr[i].split('=')[0] == ref) {
+                        setparam = value;
+                        modify = "1";
+                    }
+                    else {
+                        setparam = arr[i].split('=')[1];
+                    }
+                    returnurl = returnurl + arr[i].split('=')[0] + "=" + setparam + "&";
+                }
+
+                returnurl = returnurl.substr(0, returnurl.length - 1);
+
+                if (modify == "0")
+                    if (returnurl == str)
+                        returnurl = returnurl + "&" + ref + "=" + value;
+            }
+            else {
+                if (str.indexOf('=') != -1) {
+                    arr = str.split('=');
+
+                    if (arr[0] == ref) {
+                        setparam = value;
+                        modify = "1";
+                    }
+                    else {
+                        setparam = arr[1];
+                    }
+                    returnurl = arr[0] + "=" + setparam;
+                    if (modify == "0")
+                        if (returnurl == str)
+                            returnurl = returnurl + "&" + ref + "=" + value;
+                }
+                else
+                    returnurl = ref + "=" + value;
+            }
+            return url.substr(0, url.indexOf('?')) + "?" + returnurl;
+        }
+        //删除参数值
+        function delQueStr(url, ref) {
+            var str = "";
+            if (url.indexOf('?') != -1) {
+                str = url.substr(url.indexOf('?') + 1);
+            }
+            else {
+                return url;
+            }
+            var arr = "";
+            var returnurl = "";
+            var setparam = "";
+            if (str.indexOf('&') != -1) {
+                arr = str.split('&');
+                for (i in arr) {
+                    if (arr[i].split('=')[0] != ref) {
+                        returnurl = returnurl + arr[i].split('=')[0] + "=" + arr[i].split('=')[1] + "&";
+                    }
+                }
+                return url.substr(0, url.indexOf('?')) + "?" + returnurl.substr(0, returnurl.length - 1);
+            }
+            else {
+                arr = str.split('=');
+                if (arr[0] == ref) {
+                    return url.substr(0, url.indexOf('?'));
+                }
+                else {
+                    return url;
+                }
+            }
+        }
+	</script>
+#end

@@ -1,0 +1,321 @@
+#set($pageTitle="地图")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/map.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/infobubble.js","https://maps.googleapis.com/maps/api/js?region=cn&language=zh-CN&key=AIzaSyBok03gYzNXxJPWYkfnlaZi7_XVdkc1MVo&libraries=places","$!{STATIC_URL}/resources/js/zTouch.js"])
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+</style>
+	<input id="pac-input" class="controls" type="text" placeholder="搜索">
+
+	<div id="gMap"></div>
+	<div id="pin"></div>
+
+#define($scriptBlock)
+		<script>
+var markers = [];
+var map;
+var marker;
+var projection;
+var infoBubble2;
+var defaultZoom = 16;
+var neighborhood=[];
+
+function initialize() {
+	var myLatlng = new google.maps.LatLng(39.9087243,116.3952912);
+	map = new google.maps.Map(document.getElementById('gMap'), {
+		zoom: defaultZoom,
+		center: myLatlng,
+		disableDefaultUI: true,
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		draggable: false,
+		scrollwheel: false,
+		disableDoubleClickZoom: true,
+		maxZoom:18,
+		minZoom:5
+	});
+	var input = /** @type {HTMLInputElement} */(
+      document.getElementById('pac-input'));
+
+  // Create the autocomplete helper, and associate it with
+  // an HTML text input box.
+  var autocomplete = new google.maps.places.Autocomplete(input);
+  autocomplete.bindTo('bounds', map);
+   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+   // infowindow.close();
+    var place = autocomplete.getPlace();
+    if (!place.geometry) {
+      return;
+    }
+
+    if (place.geometry.viewport) {
+      map.fitBounds(place.geometry.viewport);
+    } else {
+      map.setCenter(place.geometry.location);
+      map.setZoom(17);
+    }
+
+    // Set the position of the marker using the place ID and location.
+   // marker.setPlace(/** @type {!google.maps.Place} */ ({
+    //  placeId: place.place_id,
+    //  location: place.geometry.location
+    //}));
+    //marker.setVisible(true);
+
+    /*infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+        'Place ID: ' + place.place_id + '<br>' +
+        place.formatted_address + '</div>');*/
+    //infowindow.open(map, marker);
+  });
+ 
+
+
+	marker = new google.maps.Marker({
+		position: myLatlng,
+		optimized: false,
+		map: map,
+	  icon: {
+			path: google.maps.SymbolPath.CIRCLE,
+			scale: 8,
+  		strokeColor: '#fff',
+  		strokeWeight: 3,
+  		fillColor: '#1484ff',
+  		fillOpacity: 1,
+		},
+	});
+	var txt="";
+	
+	 infoBubble2 = new InfoBubble({
+					map: map,
+					content: '<div class="txiconf" style="margin:0;">学友</div>',
+				 // position: new google.maps.LatLng(0, 0),
+					shadowStyle: 0,
+					padding: 0,
+					backgroundColor: 'none',
+					borderRadius: 0,
+					arrowSize: '0px',
+					borderWidth: 'none',
+					borderColor: '#2c2c2c',
+					disableAutoPan: true,
+					hideCloseButton: true,
+					arrowPosition: '55%',
+					backgroundClassName: 'transparent',
+					arrowStyle: 0
+				});
+
+
+	var trafficLayer = new google.maps.TrafficLayer();
+	trafficLayer.setMap(map);
+	
+	//var transitLayer = new google.maps.TransitLayer();
+	//transitLayer.setMap(map);
+	
+	//var bikeLayer = new google.maps.BicyclingLayer();
+	//bikeLayer.setMap(map);
+	
+	var myCity = new google.maps.Circle({
+		strokeColor: '#1484ff',
+			strokeOpacity: 0.15,
+			strokeWeight: 0,
+			fillColor: '#1484ff',
+			fillOpacity:0.15,
+			map: map,
+			center: myLatlng,
+			radius: 50
+	});
+
+	//map.setMyLocationEnabled();
+ myCity.setMap(map);
+ pixelsnew(marker.getPosition());
+ pixels(marker.getPosition());
+ map.addListener('dragend', function() {
+	 pixels();
+ });
+
+	
+zoomChange2();
+}
+var ii=1;
+var timer=[];
+function zoomChange2(){
+ args={
+	iniAngle:180,
+	iniL:100,//X方向滑动的最小距离
+		iniT:100,//Y方向滑动的最大距离
+	beforeCallback:function(tPoint){
+		//MapSucessDisWork();
+		var _this=tPoint.self,
+			_width=map.getZoom();
+		tPoint.setAttr("startScale",_width);  
+	},
+	sCallback:function(tPoint){
+	 //e.touches.length
+	 ii=1;
+	},
+	mCallback:function(tPoint){
+		//MapSucessDisWork();
+		var _this=tPoint.self,
+			img=map;
+		if(tPoint.mutiTouch){
+				
+			MapSucessDisWork();
+			if(!tPoint.startScale){
+				tPoint.setAttr("startScale",map.getZoom());
+			}else{
+			ii++;
+				//_curScale=parseInt(tPoint.startScale+(Math.ceil(tPoint.scale))*10);
+				timer.push(setTimeout(function(){
+					
+					//timer.shift();
+				if(tPoint.scale>1){
+					_curScale=parseInt(tPoint.startScale++);
+				}else{
+					_curScale=parseInt(tPoint.startScale--);
+				}
+				
+				if(_curScale>=19||_curScale<6){
+					return
+				}
+				//_curScale=Math.ceil(tPoint.gStartDis*100)/100 Math.ceil(tPoint.gEndDis*100)/100
+				//img.css("width",_curScale*100+"%");
+				//alert(_curScale)
+				//_curScale=Math.floor(tPoint.scale);
+				//if(tPoint.scale>1){
+				//var time=100*ii
+					map.setZoom(_curScale)
+				//}else{
+					//map.setZoom(_curScale--);
+				//}
+				tPoint.setAttr("curScale",_curScale);
+				//$("#showT").html("起始缩放:"+tPoint.startScale+"<br>当前缩放:"+tPoint.curScale);  
+				//$("#showT").html("缩放:"+tPoint.scale+"<br>起始距离:"+Math.round(tPoint.gStartDis*100)/100+" 当前距离"+Math.round(tPoint.gEndDis*100)/100+"<br>旋转角度:"+tPoint.rotation);   
+			},300*ii));
+			}
+		}else{
+			MapSucessWork();
+		}
+		//$("#showT").html(tPoint.gStartDis+"  "+tPoint.gEndDis);
+		//$("#showT").html(tPoint.rotation+"  "+tPoint.gStartAngle+"  "+tPoint.gEndAngle);
+	},
+	eCallback:function(tPoint){
+		for(var i=0;i<timer.length;i++){
+			clearTimeout(timer[i]);
+		}
+		ii=1;
+		if(tPoint.curScale){
+			tPoint.setAttr("startScale",tPoint.curScale);
+		}   
+	}
+}
+$('#gMap').Swipe(args);
+
+}
+function drop() {
+	clearMarkers();
+	for (var i = 0; i < neighborhood.length; i++) {
+		addMarkerWithTimeout(neighborhood[i], i * 200);
+	}
+	 
+}
+var latlng_new;
+var pixel,pixelold;
+function pixels(){
+	var overlay = new google.maps.OverlayView();
+	overlay.draw = function() {};
+	overlay.onAdd = function() {
+		projection = this.getProjection();
+		//pixel =projection.fromLatLngToContainerPixel(p2);
+	latlng_new=projection.fromContainerPixelToLatLng(new google.maps.Point((pixelold.x),(pixelold.y-($("#pin").height()))) ) ;
+	pixel_new=projection.fromLatLngToContainerPixel(latlng_new)
+	//https://maps.googleapis.com/maps/api/geocode/json?latlng=39.8974446,116.4038432&key=
+	//$.getJSON('https://maps.googleapis.com/maps/api/geocode/json?latlng='+latlng_new.lat() +','+latlng_new.lng() +'&key=', function(data){
+	 // console.log(data.results[0].formatted_address)
+	//})
+	console.log(latlng_new)
+	console.log(pixel_new);
+	//map.setCenter(latlng_new);
+	/*var infowindow = new google.maps.InfoWindow({
+		content: 'Latitude: ' + latlng_new.lat() +
+		'<br>Longitude: ' + latlng_new.lng()+
+	'<br>zoom:'+map.getZoom()
+	});*/
+	//infowindow.open(map,new google.maps.Point((pixelold.x-$("#pin").width()/2),(pixelold.y-$("#pin").height())) );
+	};
+	overlay.setMap(map);
+ return latlng_new;
+
+}
+function pixelsnew(p2){
+console.log(p2)
+	var overlay2 = new google.maps.OverlayView();
+	overlay2.draw = function() {};
+	overlay2.onAdd = function() {
+		projection2 = this.getProjection();
+		pixelold =projection2.fromLatLngToContainerPixel(p2);
+	$("#pin").css({left:(pixelold.x-$("#pin").width()/2),top:(pixelold.y-$("#pin").height()),visibility:'visible'});
+	};
+	overlay2.setMap(map);
+}
+function addMarkerWithTimeout(position, timeout) {
+	window.setTimeout(function() {
+		markers.push(new google.maps.Marker({
+			position: position,
+			map: map,
+			animation: google.maps.Animation.DROP
+		}));
+	}, timeout);
+ 
+}
+function MapSucessWork() {
+		map.setOptions({ draggable: true });
+}
+function MapSucessDisWork() {
+		map.setOptions({ draggable: false});
+}
+function clearMarkers() {
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+	}
+	markers = [];
+}
+
+//use
+ 
+function showNewRect(i,txt){
+		setTimeout(function(){
+      markers[i].addListener('click', function() {
+        infoBubble2.setContent('<div class="txiconf">'+txt+'</div>');
+        //txt=txt;
+         //infoBubble.open(map,  markers[i]);
+         infoBubble2.open(map,  markers[i]);
+         //infowindow.open(map, markers[i]); 
+      })
+    },i*200)
+		
+}
+
+function detectBrowser() {
+	var useragent = navigator.userAgent;
+	var mapdiv = document.getElementById("gMap");
+
+	if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+		mapdiv.style.width = '100%';
+		mapdiv.style.height = '100%';
+	} else {
+		mapdiv.style.width = '600px';
+		mapdiv.style.height = '800px';
+	}
+}
+//detectBrowser()
+// Run the initialize function when the window has finished loading.
+google.maps.event.addDomListener(window, 'load', initialize);
+
+		</script>
+
+#end

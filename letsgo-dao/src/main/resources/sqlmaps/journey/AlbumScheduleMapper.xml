@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.AlbumScheduleDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.AlbumScheduleEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="schedule_detail_id" property="scheduleDetailId" jdbcType="BIGINT" />
+        <result column="object_id" property="objectId" jdbcType="BIGINT" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_album_schedule
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.AlbumScheduleEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_album_schedule (schedule_id, schedule_detail_id, object_id, type, photo_url, create_time, update_time)
+        values (#{scheduleId,jdbcType=BIGINT}, #{scheduleDetailId,jdbcType=BIGINT}, #{objectId,jdbcType=BIGINT},
+            #{type,jdbcType=INTEGER}, #{photoUrl,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.AlbumScheduleEntity" >
+        update j_album_schedule
+        set schedule_id = #{scheduleId,jdbcType=BIGINT},
+            schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT},
+            object_id = #{hotelName,jdbcType=BIGINT},
+            type = #{delta,jdbcType=INTEGER},
+            photo_url = #{country,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, schedule_id, schedule_detail_id, object_id, type, photo_url, create_time, update_time
+        from j_album_schedule
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, schedule_id, schedule_detail_id, object_id, type, photo_url, create_time, update_time
+        from j_album_schedule
+    </select>
+
+    <!--批量插入-->
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
+        insert into j_album_schedule (schedule_id, schedule_detail_id, object_id, type, photo_url, create_time, update_time)
+        VALUES <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.scheduleId,jdbcType=BIGINT}, #{item.scheduleDetailId,jdbcType=BIGINT}, #{item.objectId,jdbcType=BIGINT},
+        #{item.type,jdbcType=INTEGER}, #{item.photoUrl,jdbcType=VARCHAR},
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByContents" parameterType="com.umessage.letsgo.domain.po.journey.AlbumScheduleEntity" >
+        delete from j_album_schedule
+        <where>
+            1=1
+            <if test="scheduleId != null">
+                AND schedule_id = #{scheduleId,jdbcType=BIGINT}
+            </if>
+            <if test="scheduleDetailId != null">
+                AND schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT}
+            </if>
+            <if test="objectId != null">
+            AND object_id = #{objectId,jdbcType=BIGINT}
+            </if>
+            <if test="type != null">
+            AND type = #{type,jdbcType=INTEGER}
+            </if>
+        </where>
+    </delete>
+
+    <select id="selectAlbumsByScheduleDetailId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, schedule_id, schedule_detail_id, object_id, type, photo_url, create_time, update_time
+        from j_album_schedule
+        where schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getAlbumScheduleByScheduleId" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.journey.AlbumScheduleEntity" >
+        select ID, schedule_id, schedule_detail_id, object_id, type, photo_url, create_time, update_time
+        from j_album_schedule
+        WHERE schedule_id = #{scheduleId,jdbcType=BIGINT}
+        AND object_id = #{objectId,jdbcType=BIGINT}
+        AND type = #{type,jdbcType=INTEGER}
+    </select>
+
+    <select id="getAlbumSchedule" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.po.journey.AlbumScheduleEntity" >
+        select ID, schedule_id, schedule_detail_id, object_id, type, photo_url, create_time, update_time
+        from j_album_schedule
+        WHERE schedule_detail_id = #{scheduleDetailId,jdbcType=BIGINT}
+        AND object_id = #{objectId,jdbcType=BIGINT}
+        AND type = #{type,jdbcType=INTEGER}
+    </select>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.journey.ScoreDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.journey.ScoreEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="schedule_detail_comment_id" property="scheduleDetailCommentId" jdbcType="BIGINT" />
+        <result column="evaluate_option" property="evaluateOption" jdbcType="INTEGER" />
+        <result column="evaluate_proposal" property="evaluateProposal" jdbcType="VARCHAR" />
+        <result column="evaluate_id" property="evaluateId" jdbcType="VARCHAR" />
+        <result column="evaluate_sub_info" property="evaluateSubInfo" jdbcType="VARCHAR" />
+        <result column="score_option" property="scoreOption" jdbcType="VARCHAR" />
+        <result column="score" property="score" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <resultMap id="ScoreRecordResultMap" type="com.umessage.letsgo.domain.po.journey.ScoreRecordEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="team_num" property="teamNum" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="schedule_date" property="scheduleDate" jdbcType="TIMESTAMP" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="satisfied_status" property="satisfiedStatus" jdbcType="INTEGER" />
+        <result column="evaluate_option" property="evaluateOption" jdbcType="INTEGER" />
+        <result column="evaluate_id" property="evaluateId" jdbcType="VARCHAR" />
+        <result column="score_option" property="scoreOption" jdbcType="VARCHAR" />
+        <result column="score" property="score" jdbcType="INTEGER" />
+        <result column="evaluate_sub_info" property="evaluateSubInfo" jdbcType="VARCHAR" />
+        <result column="evaluate_proposal" property="evaluateProposal" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from j_score
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.journey.ScoreEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into j_score (schedule_detail_comment_id, evaluate_option, evaluate_proposal,
+            evaluate_id, evaluate_sub_info, score_option, score, create_time,
+            version)
+        values (#{scheduleDetailCommentId,jdbcType=BIGINT}, #{evaluateOption,jdbcType=INTEGER}, #{evaluateProposal,jdbcType=VARCHAR},
+            #{evaluateId,jdbcType=VARCHAR}, #{evaluateSubInfo,jdbcType=VARCHAR}, #{scoreOption,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+            #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.journey.ScoreEntity" >
+        update j_score
+        set schedule_detail_comment_id = #{scheduleDetailCommentId,jdbcType=BIGINT},
+            evaluate_option = #{evaluateOption,jdbcType=INTEGER},
+            evaluate_proposal = #{evaluateProposal,jdbcType=VARCHAR},
+            evaluate_id = #{evaluateId,jdbcType=VARCHAR},
+            evaluate_sub_info = #{evaluateSubInfo,jdbcType=VARCHAR},
+            score_option = #{scoreOption,jdbcType=VARCHAR},
+            score = #{score,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, schedule_detail_comment_id, evaluate_option, evaluate_proposal, evaluate_id, evaluate_sub_info, score_option, score, create_time,
+        version
+        from j_score
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, schedule_detail_comment_id, evaluate_option, evaluate_proposal, evaluate_id, evaluate_sub_info, score_option, score, create_time,
+        version
+        from j_score
+    </select>
+    <select id="selectAllByScheduleDate" resultMap="ScoreRecordResultMap" parameterType="com.umessage.letsgo.domain.po.journey.ScoreEntity">
+        SELECT sc.ID,t.team_num,s.`name`,sd.schedule_date,tm.real_name,tm.sex,tm.phone,sdc.satisfied_status,sc.evaluate_option,sc.evaluate_id,sc.score_option,sc.score,sc.evaluate_sub_info,sc.evaluate_proposal
+        FROM j_score AS sc
+        JOIN j_schedule_detail_comment AS sdc ON sdc.ID = sc.schedule_detail_comment_id
+        JOIN j_schedule_detail AS sd ON sd.ID = sdc.schedule_detail_id
+        JOIN j_schedule AS s ON s.ID = sd.jour_id
+        JOIN t_team AS t ON t.ID = s.team_id
+        JOIN t_member as tm ON tm.t_id = t.ID
+        JOIN s_user AS u ON u.ID = tm.user_id
+        WHERE DATE_FORMAT(sd.schedule_date, '%Y-%m-%d') = DATE_FORMAT(#{createTime}, '%Y-%m-%d')
+        AND sdc.user_id = tm.user_id
+    </select>
+</mapper>

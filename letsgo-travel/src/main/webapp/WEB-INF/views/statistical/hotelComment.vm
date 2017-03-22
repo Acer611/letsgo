@@ -1,0 +1,251 @@
+#set($pageTitle="酒店评价数据")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/dist/js/page.js","$!{STATIC_URL}/resources/dist/js/jquery.form.js"])
+
+<style>
+    .disabled{
+        cursor:no-drop;
+    }
+</style>
+		<div class="wrapper">
+			#parse("/WEB-INF/views/common/leftbar.vm")
+
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+			                                    统计报表
+			        </h1>
+					<ol class="breadcrumb">
+						<li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-dashboard"></i> 首页</a></li>
+						<li class="active">查看统计报表</li>
+					</ol>
+				</section>
+
+				<!-- Main content -->
+				<section class="content" style="min-height: 600px;">
+						<div class="box box-info">
+							<div class="box-header with-border">
+								<h3 class="box-title">酒店评价数据</h3>
+								<!--<div class="box-tools"><a class="btn btn-default btn-sm" href="#">预览</a></div>-->
+							</div>
+							<!-- /.box-header -->
+
+							<div class="box-body">
+									<form  class="form-horizontal" role="form" action="$!{link.contextPath}/hotel/selectHotel"  method="post" id="form1">
+										<div class="form-group col-md-4" >
+											<label for="exampleInputName2"  class="control-label  col-lg-5">大洲：</label>
+											<div class="col-lg-7">
+												<select class="form-control" name="continent" tabindex="-1" aria-hidden="true">
+													<option value="10" #if($!{hotelValuationsRequest.continent}=="10") selected
+													#end>亚洲</option>
+													<option value="11" #if($!{hotelValuationsRequest.continent}=="11") selected
+													#end>欧洲</option>
+													<option value="12" #if($!{hotelValuationsRequest.continent}=="12") selected
+													#end>北美洲</option>
+													<option value="13" #if($!{hotelValuationsRequest.continent}=="13") selected
+													#end>南美洲</option>
+                                                    <option value="14" #if($!{hotelValuationsRequest.continent}=="14") selected
+													#end>非洲</option>
+                                                    <option value="15" #if($!{hotelValuationsRequest.continent}=="15") selected
+													#end>大洋洲</option>
+                                                    <option value="16" #if($!{hotelValuationsRequest.continent}=="16") selected
+													#end>南极洲</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group col-md-4">
+											<label for="exampleInputEmail2"  class="control-label col-lg-5">国家：</label>
+                                            <div class="col-lg-7">
+												<select class="form-control" name="state" tabindex="-1" aria-hidden="true">
+
+												</select>
+											</div>
+										</div>
+										<div class="form-group col-md-4">
+											<label for="inputEmail3"  class="control-label  col-lg-5">星级：</label>
+                                            <div class="col-lg-7">
+												<select class="form-control" name="hotelLevel" tabindex="-1" aria-hidden="true">
+
+													<option value="3" #if($!{hotelValuationsRequest.hotelLevel}=="3") selected
+													#end>3星</option>
+													<option value="4" #if($!{hotelValuationsRequest.hotelLevel}=="4") selected
+													#end>4星</option>
+													<option value="5" #if($!{hotelValuationsRequest.hotelLevel}=="5") selected
+													#end>5星</option>
+													<option value="6" #if($!{hotelValuationsRequest.hotelLevel}=="6") selected
+													#end>6星</option>
+												</select>
+											</div>
+										</div>
+									<!--时间日期-->
+
+									<div class="form-group col-md-4">
+
+										<label for="inputEmail3"  class="control-label  col-lg-5" for="startPlace">月份：</label>
+                                        <div class="col-lg-7">
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input type="text" class="form-control pull-right" placeholder="yyyy-mm" value="$!date.format('yyyy-MM',$!{hotelValuationsRequest.startDate})" readonly autocomplete="off" name="startDate" id="startDate">
+											</div>
+										</div>
+									</div>
+									<div class="form-group col-md-4">
+										<!-- /.input group -->
+                                        <label class="col-lg-1 control-label text-center" style="padding-left:10px;padding-right:10px;">至</label>
+                                        <div class="col-lg-7 ">
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input type="text" id="endDate" name="endDate"  value="$!date.format('yyyy-MM',$!{hotelValuationsRequest.endDate})" placeholder="yyyy-mm" class="form-control" readonly autocomplete="off">
+											</div>
+										</div>
+
+									</div>
+									<div class="col-md-12">
+                                        <div class="col-md-2 col-md-offset-5">
+											<button type="button" id="btns" class="btn btn-block  btn-primary">查询</button>
+										</div>
+									</div>
+									</form>
+								<div class="col-xs-12  table-responsive" style="margin-top:20px;" >
+                                    <table class="table table-bordered" id="table2" style="display:none;">
+                                        <thead>
+                                        <tr>
+                                            <th>酒店名称</th>
+                                            <th>酒店级别</th>
+                                            <th>评价总人数</th>
+                                            <th>综合评分</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                    <div id="pagination" class="paginationjs paginationjs-small">
+
+                                    </div>
+								</div>
+
+							</div>
+
+						</div>
+				</section>
+				<!-- /.content -->
+				</div>
+				<!-- /.content-wrapper -->
+
+			#parse("/WEB-INF/views/common/footer.vm")
+
+				<!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+				<div class="control-sidebar-bg"></div>
+			</div>
+			<!-- ./wrapper -->
+#define($scriptBlock)
+<script>
+	$('#startDate').datetimepicker({
+		language:  'zh-CN',
+		format: 'yyyy-mm',
+		autoclose: true,
+        startView: 3,
+		minView: 3,
+    }).on("click",function(ev){
+			$("#startDate").datetimepicker("setEndDate", $("#endDate").val());
+	});
+	$('#endDate').datetimepicker({
+		language:  'zh-CN',
+		format: 'yyyy-mm',
+		autoclose: true,
+        startView: 3,
+		minView: 3
+		}).on("click", function (ev) {
+			$("#endDate").datetimepicker("setStartDate", $("#startDate").val());
+	});
+	var areaid="$!{hotelValuationsRequest.state}";
+    $.ajax({
+        type: "GET",
+        url:  CONTEXTPATH + "/region/getCountry",//根据大洲编码获取国家
+        data: {delta:$("[name=continent]").val()},
+        async:false,
+        dataType: "json",
+        success: function (data) {
+            $("[name=state]").empty();
+            $.each(data, function (i, item) {
+                $("[name=state]").append('<option '+(item.areaid==areaid?"selected":"")+'  value="'+item.areaid+'">'+item.alias+'</option>')
+
+            })
+        }
+    });
+	$("[name=continent]").on("change",function(){
+		var _value=$(this).val();
+        $.ajax({
+            type: "GET",
+            url:  CONTEXTPATH + "/region/getCountry",//根据大洲编码获取国家
+            data: {delta:_value},
+            async:false,
+            dataType: "json",
+            success: function (data) {
+                $("[name=state]").empty();
+                $.each(data, function (i, item) {
+                    $("[name=state]").append('<option value="'+item.areaid+'">'+item.alias+'</option>')
+
+                })
+            }
+        });
+	})
+	$("#btns").on("click",function(){
+        $.ajax({
+            type: "POST",
+            url:  CONTEXTPATH + "/hotel/selectHotel",
+            data: {continent:$("[name=continent]").val(),state:$("[name=state]").val(),hotelLevel:$("[name=hotelLevel]").val(),startDate:$("[name=startDate]").val(),endDate:$("[name=endDate]").val()},
+            dataType: "HTML",
+            success: function (data) {
+                $("#table2").find("tbody").empty().html(data);
+                $("#table2").show();
+                $("#pagination").show();
+                if(data.indexOf("没有符合条件的数据")>=0){
+                    $("#pagination").hide();
+                }
+                $('#pagination').pagination({
+                    dataSource: CONTEXTPATH + "/hotel/selectHotel",
+                    locator: 'data',
+                    totalNumber: totalpages,
+                    pageSize: 10,
+					pageRange:1,
+                    alias: {
+                        pageNumber: 'pageNum',
+                        pageSize: 'pageSize'
+                    },
+                    ajax: {
+                        //url:delQueStr(delQueStr(window.location.href, "pageNum"), "pageSize"),
+                        type: "POST",
+                        data: {continent:$("[name=continent]").val(),state:$("[name=state]").val(),hotelLevel:$("[name=hotelLevel]").val(),startDate:$("[name=startDate]").val(),endDate:$("[name=endDate]").val()},
+                        dataType: 'html',
+                        beforeSend: function () {
+                            //$("#table2").empty().html('<td  colspan="7">  <div class="overlays"> <i class="fa fa-refresh fa-spin"></i> </div></td>').end().parent().show();
+                        }
+                    },
+//            formatAjaxError:function(jqXHR, textStatus, errorThrown){
+//                //$("#table2").find("tbody").empty().html($(jqXHR.responseText).find("tbody").html())
+//                //console.log(jqXHR)
+//            },
+                    callback: function (data, pagination) {
+
+                            $("#table2").find("tbody").empty().html(data);
+                    }
+                })
+
+            }
+        });
+
+    })
+
+
+</script>
+
+#end

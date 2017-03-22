@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.TeamAblumDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.TeamAblumEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="team_id" property="teamId" jdbcType="VARCHAR" />
+        <result column="photo_url" property="photoUrl" jdbcType="VARCHAR" />
+        <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+        <result column="im_photo_url" property="imPhotoUrl" jdbcType="VARCHAR" />
+        <result column="im_large_url" property="imLargeUrl" jdbcType="VARCHAR" />
+        <result column="im_thumbnail_url" property="imThumbnailUrl" jdbcType="VARCHAR" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="location" property="location" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="lng" property="lng" jdbcType="VARCHAR" />
+        <result column="photograph_time" property="photographTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+    </resultMap>
+    <select id="getTeamAblum" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.TeamAblumRequest" >
+        SELECT t.ID, t.team_id, t.photo_url, t.thumbnail_url, t.im_photo_url, t.im_large_url, t.im_thumbnail_url,
+         t.author, t.location, t.lat, t.lng, t.photograph_time, t.create_time, t.version,t.type
+        FROM t_team_album t
+        where t.team_id = #{teamId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getTeamAblumByTime" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.TeamAblumRequest" >
+        SELECT t.ID, t.team_id, t.photo_url, t.thumbnail_url, t.im_photo_url, t.im_large_url, t.im_thumbnail_url,
+        t.author, t.location, t.lat, t.lng, t.photograph_time, t.create_time, t.version,t.type
+        FROM t_team_album t
+        where t.team_id = #{teamId,jdbcType=VARCHAR}
+        <if test="startDate != null">
+            AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &gt;= DATE_FORMAT(#{startDate}, '%Y-%m-%d')
+        </if>
+        <if test="endDate != null">
+            AND DATE_FORMAT(t.create_time, '%Y-%m-%d') &lt;= DATE_FORMAT(#{endDate}, '%Y-%m-%d')
+        </if>
+        order by t.create_time desc
+    </select>
+
+    <select id="getTeamAblumCreateTimeByTime" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.TeamAblumRequest" >
+        SELECT t.ID, t.team_id, t.photo_url, t.thumbnail_url, t.im_photo_url, t.im_large_url, t.im_thumbnail_url,
+        t.author, t.location, t.lat, t.lng, t.photograph_time, t.create_time, t.version,t.type
+        FROM t_team_album t
+        where t.team_id = #{teamId,jdbcType=VARCHAR}
+        GROUP BY DATE_FORMAT(t.create_time, '%Y-%m-%d')
+        LIMIT #{startIndex,jdbcType=INTEGER},3
+    </select>
+
+    <insert id="savePhotoUrl" parameterType="com.umessage.letsgo.domain.po.team.TeamAblumEntity" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_team_album (team_id,photo_url, thumbnail_url, im_photo_url, im_large_url, im_thumbnail_url,
+        author,location,lat,lng,photograph_time,create_time,version,type)
+        values (#{teamId,jdbcType=VARCHAR}, #{photoUrl,jdbcType=VARCHAR}, #{thumbnailUrl,jdbcType=VARCHAR},
+        #{imPhotoUrl,jdbcType=VARCHAR}, #{imLargeUrl,jdbcType=VARCHAR}, #{imThumbnailUrl,jdbcType=VARCHAR},
+        #{author,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR},
+        #{lng,jdbcType=VARCHAR}, #{photographTime,jdbcType=TIMESTAMP},
+        #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}
+        )
+    </insert>
+
+   <update id="updatePhotoType" parameterType="com.umessage.letsgo.domain.po.team.TeamAblumEntity">
+          update t_team_album t set t.type =#{type} where t.ID =#{id,jdbcType=BIGINT}
+   </update>
+
+</mapper>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>接口调用说明</title>
+  <link rel="icon" type="image/png" href="images/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="images/favicon-16x16.png" sizes="16x16" />
+  <link href='css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='css/reset.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='css/reset.css' media='print' rel='stylesheet' type='text/css'/>
+  <link href='css/print.css' media='print' rel='stylesheet' type='text/css'/>
+
+  </head>
+  
+<body class="swagger-section">
+<div id='header'>
+  <div class="swagger-ui-wrap">
+    <a id="logo" href="http://12580.10086.cn/">跟上</a>
+  </div>
+</div>
+
+<div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+
+
+<div id="swagger-ui-container" class="swagger-ui-wrap"><div class="info" id="api_info">
+  <div class="info_title">API调用说明</div>
+    <h2>
+    <div class="toggleEndpointList"><p>调用介绍</p></div>
+  </h2>
+  <div class="info_description markdown">
+  	<p>Access Token是所有API调用的必选参数之一，对于调用不涉及用户隐私的API，可以使用Client-side flow 获取访问令牌（access_token），并使用该访问令牌（access_token）作为参数；
+		对于调用获取用户隐私信息的API（如：学生课程、订单等），需要使用Username and Password Flow 获取访问令牌（access_token），并使用该访问令牌（access_token）作为参数。</p>
+		<p>也就是说，使用Client-side flow 获取的访问令牌（access_token）只能调用不涉及用户隐私的API；使用Username and Password Flow 获取的访问令牌（access_token）可以调用所有API。</p>
+</div>
+   
+</div>
+<div class="container" id="resources_container">
+  <ul id="resources"><li id="resource_student" class="resource active"><div class="heading">
+  <h2>
+    <div class="toggleEndpointList"><p>公共参数</p></div>
+  </h2>
+</div>
+<ul class="endpoints">
+<li class="endpoint">
+  <ul class="operations">
+    <li class="post operation">
+      <div class="content" style="display: block;">
+        <h4><span data-sw-translate="">说明</span></h4>
+        <div class="markdown"><p>调用API ，必须传入公共参数和应用参数。公共参数详细介绍如下；应用参数则根据不同API 具体入参，更多请参考API 文档。</p></div>
+
+          <div style="margin:0;padding:0;display:inline"></div>
+          <h4 data-sw-translate="">参数</h4>
+          <table class="fullwidth">
+          <thead>
+            <tr>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">参数</th>
+            <th style="width: 310px; max-width: 310px" data-sw-translate="">值</th>
+            <th style="width: 200px; max-width: 200px" data-sw-translate="">描述</th>
+            <th style="width: 100px; max-width: 100px" data-sw-translate="">参数类型</th>
+            <th style="width: 220px; max-width: 230px" data-sw-translate="">数据类型</th>
+            </tr>
+          </thead>
+          <tbody class="operation-params">
+		  <tr><td class="code"><label for="ver0.1120594434318173">ver</label></td>
+			  <td>
+				  <label class="parameter"  >1.0</label>
+			  </td>
+			  <td class="markdown">API版本号</td>
+			  <td>query</td>
+			  <td>
+				  <span class="model-signature">string</span>
+			  </td>
+		  </tr>
+          <tr><td class="code"><label for="mid0.11205948633141816">client_id</label></td>
+						<td>
+						<label class="parameter"  >例如：H50DFEB86</label>
+						</td>
+						<td class="markdown">分配给应用的唯一ID</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="muserId0.06408716994337738">access_token</label></td>
+						<td>
+						<label class="parameter"  >例如：dc45a131e-a62b-4d75-a7e5-5089bb2166b1</label>
+						</td>
+						<td class="markdown">通过授权（参考：<a href="oauth2.html">用户授权介绍</a>）得到的Bearer类型Token。</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">timestamp</label></td>
+						<td>
+						<label class="parameter"  >例如：1463114607</label>
+						</td>
+						<td class="markdown">时间戳，格林威治时间1970年01月01日00时00分00秒起至现在的总秒数</td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>						
+						</tr><tr><td class="code"><label for="mname0.13992229755967855">sign</label></td>
+						<td>
+						<label class="parameter"  >例如：47DE7E8026A82C69E8BE51F1D46CD20B</label>
+						</td>
+						<td class="markdown">签名参数。签名算法参考如下 ：<a href="#sign">签名算法</a></td>
+						<td>query</td>
+						<td>
+							<span class="model-signature">string</span>
+						</td>
+					</tr>
+          </tbody>
+          </table>
+		  <div style="margin:0;padding:0;display:inline"></div>
+		  <h4><span data-sw-translate="">补充</span></h4>
+		  <div class="markdown"><p>在OAuth2协议中，access_token参数可以用两种方式传递，除了上面介绍的以参数方式传递外，还可以使用http header方式传递。例如：<br>
+			  Authorization: Bearer dc45a131e-a62b-4d75-a7e5-5089bb2166b1</p></div>
+	</div>
+</li>
+</ul>
+
+<ul><li class="resource active"><div class="heading">
+  <h2>
+    <div class="toggleEndpointList"><p>业务参数</p></div>
+  </h2>
+</div>
+<ul class="endpoints" >
+<li class="endpoint">
+  <ul class="operations">
+    <li class="post operation">
+      <div class="content" style="display: block;">
+        <h4><span data-sw-translate="">说明</span></h4>
+        <div class="markdown"><p>API调用除了必须包含公共参数外，如果API本身有业务级的参数也必须传入，每个API的业务级参数请考<a href="index.html">API文档</a>说明。</p>
+        </div>
+          <div style="margin:0;padding:0;display:inline"></div>
+          <br>
+</li>
+</ul>
+
+<ul><li class="resource active"><div class="heading">
+  <h2>
+    <div class="toggleEndpointList"><p>签名算法</p></div>
+  </h2>
+</div>
+<ul class="endpoints" >
+<li class="endpoint">
+  <ul class="operations">
+    <li class="post operation">
+      <div class="content" style="display: block;">
+        <h4><span data-sw-translate="">说明</span></h4>
+        <div class="markdown"><p>调用API 时需要对请求参数进行签名验证，API服务器也会对该请求参数进行验证是否合法的。方法如下：</p>
+      <p>根据参数名称（除签名和图片）将所有请求参数按照字母先后顺序排序:key + value .... key + value </p>
+      <p>例如：将foo=1,bar=2,baz=3 排序为bar=2,baz=3,foo=1，参数名和参数值链接后，得到拼装字符串bar2baz3foo1</p>
+
+      <p>系统支持MD5加密方式: 将client_secret 拼接到参数字符串头、尾进行md5加密后，再转化成大写，格式是：byte2hex(md5(client_secretkey1value1key2value2...secret))</p>
+
+      <p>注：hex为自定义方法，JAVA中MD5是对字节数组加密，加密结果是16字节，我们需要的是32位的大写字符串，图片参数不用加入签名中。</p></div>
+		
+          <div style="margin:0;padding:0;display:inline"></div>
+		<h4><span data-sw-translate="">JAVA签名示例代码</span></h4>
+          <p><span class="model-signature"><div><div>
+<div>
+
+<div class="signature-container">
+  <div class="description" style="display: none;">
+    <span class="strong">StudentResponse {</span><div><span class="propName ">id</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">userId</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">name</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">age</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">phoneNumber</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">school</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">location</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">createTime</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">updateTime</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">version</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">descn</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">user</span> (<span class="propType">UserEntity</span>, <span class="propOptKey">optional</span>)</div><span class="strong">}</span><br><span class="strong">UserEntity {</span><div><span class="propName ">id</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">username</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">password</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">phoneNumber</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">mailAddress</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">status</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">realName</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">photoUrl</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">weixinUsername</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">weixinToken</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><span class="propWrap"><div><span class="propName ">gendar</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>) = <span class="propVals">['UNKNOWN', 'MAN', 'WOMEN']</span><table class="optionsWrapper"><tbody><tr><th colspan="2">string</th></tr><tr><td class="optionName">Enum:</td><td>"UNKNOWN", "MAN", "WOMEN"</td></tr></tbody></table>,</div><div><span class="propName ">birthday</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">address</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">createTime</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">updateTime</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">country</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">city</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">province</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">project</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">unionid</span> (<span class="propType">string</span>, <span class="propOptKey">optional</span>),</div><div><span class="propName ">version</span> (<span class="propType">integer</span>, <span class="propOptKey">optional</span>)</div><span class="strong">}</span>
+  </span></div>
+
+  <div class="snippet" style="display: block;">
+    <pre>
+public class SignUtil {
+
+	private static final Logger logger = LoggerFactory.getLogger(SignUtil.class);
+
+	/**
+	 * 使用secret对paramValues按以下算法进行签名： 
+	 * uppercase(hex(md5(secretkey1value1key2value2...secret))
+	 * 
+	 * @param paramNames 需要签名的参数名
+	 * @param paramValues  参数列表
+	 * @param secret 密钥
+	 * @return
+	 */
+	public static HashMap<String, String> sign(Map<String, String> paramValues,
+			String secret) {
+		return sign(paramValues, null, secret);
+	}
+
+	/**
+	 * 对paramValues进行签名，其中ignoreParamNames这些参数不参与签名
+	 * 
+	 * @param paramValues
+	 * @param ignoreParamNames
+	 * @param secret
+	 * @return
+	 */
+	public static HashMap<String, String> sign(Map<String, String> paramValues,
+			List<String> ignoreParamNames, String secret) {
+		try {
+			HashMap<String, String> signMap = new HashMap<String, String>();
+			StringBuilder sb = new StringBuilder();
+			List<String> paramNames = new ArrayList<String>(paramValues.size());
+			paramNames.addAll(paramValues.keySet());
+			if (ignoreParamNames != null && ignoreParamNames.size() > 0) {
+				for (String ignoreParamName : ignoreParamNames) {
+					paramNames.remove(ignoreParamName);
+				}
+			}
+			Collections.sort(paramNames);
+
+			sb.append(secret);
+			for (String paramName : paramNames) {
+				sb.append(paramName).append(paramValues.get(paramName));
+			}
+			sb.append(secret);
+			byte[] md5Digest = getMD5Digest(sb.toString());
+			String sign = byte2hex(md5Digest);
+			signMap.put("appParam", sb.toString());
+			signMap.put("appSign", sign);
+			return signMap;
+		} catch (IOException e) {
+			throw new SignatureException("加密签名计算失败", e);
+		}
+	}
+
+	public static String utf8Encoding(String value, String sourceCharsetName) {
+		try {
+			return new String(value.getBytes(sourceCharsetName), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	private static byte[] getSHA1Digest(String data) throws IOException {
+		byte[] bytes = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+			bytes = md.digest(data.getBytes("UTF-8"));
+		} catch (GeneralSecurityException gse) {
+			throw new IOException(gse);
+		}
+		return bytes;
+	}
+
+	private static byte[] getMD5Digest(String data) throws IOException {
+		byte[] bytes = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			bytes = md.digest(data.getBytes("UTF-8"));
+		} catch (GeneralSecurityException gse) {
+			throw new IOException(gse);
+		}
+		return bytes;
+	}
+
+	/**
+	 * 二进制转十六进制字符串
+	 * 
+	 * @param bytes
+	 * @return
+	 */
+	private static String byte2hex(byte[] bytes) {
+		StringBuilder sign = new StringBuilder();
+		for (int i = 0; i < bytes.length; i++) {
+			String hex = Integer.toHexString(bytes[i] & 0xFF);
+			if (hex.length() == 1) {
+				sign.append("0");
+			}
+			sign.append(hex.toUpperCase());
+		}
+		return sign.toString();
+	}
+
+	public static String getUUID() {
+		UUID uuid = UUID.randomUUID();
+		return uuid.toString().toUpperCase();
+	}
+
+}
+	</pre>
+    <small class="notice"></small>
+  </div>
+</div>
+
+</div></div></div></span></p>		
+          <br>
+</li>
+</ul>
+
+  <div class="footer">
+    <h4 style="color: #999">[ <span style="font-variant: small-caps">base url</span>: /openapi
+]
+    </h4>
+    </div>
+</div>
+</div>
+
+</body>
+</html>

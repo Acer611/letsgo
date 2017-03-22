@@ -1,0 +1,113 @@
+#set($pageTitle="找老师")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{request.getAttribute('STATIC_URL')}/resources/css/home.css"])
+<div class="mui-content">
+	<div class="top-wrap">
+		<div id="slider" class="mui-slider">
+			<div class="mui-slider-group mui-slider-loop">
+				<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/banner3.jpg">
+					</a>
+				</div>
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/banner2.jpg">
+					</a>
+				</div>
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/banner1.jpg">
+					</a>
+				</div>
+				<div class="mui-slider-item">
+					<a href="#">
+						<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/banner3.jpg">
+					</a>
+				</div>
+				<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+				<div class="mui-slider-item mui-slider-item-duplicate">
+					<a href="#">
+						<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/banner2.jpg">
+					</a>
+				</div>
+			</div>
+			<div class="mui-slider-indicator mui-text-right">
+				<div class="mui-indicator mui-active"></div>
+				<div class="mui-indicator"></div>
+				<div class="mui-indicator"></div>
+			</div>
+		</div>
+	</div>
+	<div id="cont-wrap" class="found-box">
+		<div class="cont1-wrap found-list">
+			<div class="cont1 mui-text-center">
+				<a href="$!{link.contextPath}/customize">
+					<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/dingzhi.png" width="40px"/>
+					<p>我要定制</p>
+				</a>
+			</div>
+		</div>
+		<div class="cont2-wrap found-list">
+			<div class="cont2 mui-text-center">
+				<a href="$!{link.contextPath}/appointHome">
+					<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/mingshi.png" width="40px"/>
+					<p>预约名师</p>
+				</a>
+			</div>
+		</div>
+		<div class="cont3 mui-text-center found-list">
+			<a href="$!{link.contextPath}/teacher">
+				<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/look.png" width="40px"/>
+				<p>随便看看</p>
+			</a>
+		</div>
+		<div class="foot-wrap found-list">
+			<div class="footer mui-text-center">
+				<a href="$!{link.contextPath}/order">
+					<img src="$!{request.getAttribute('STATIC_URL')}/resources/images/dingdan.png" width="40px"/>
+					<p>我的订单</p>
+				</a></div>
+		</div>
+	</div>
+	<input type="hidden" value="$!gpsLatitude" id="lat" name="gpsLatitude" />
+	<input type="hidden" value="$!gpsLongitude" id="lng" name="gpsLongitude" />
+	<input type="hidden" value="$!address" id="addr" name="address" />
+</div>
+</script>
+#define($scriptBlock)
+<script>
+	/*高度自适应*/
+	var hgt = $(window).width();
+	var height = $(window).height() - (hgt/2);
+	$("#cont-wrap").height(height);
+	$(".cont1").css("padding-top",$(".cont1").height()/2);
+	$(".cont2").css("padding-top",$(".cont2").height()/2.2);
+	$(".cont3").css("padding-top",$(".cont3").height()/2.5);
+	$(".footer").css("padding-top",$(".footer").height()/2);
+	
+	/*轮播图*/
+	var slider = mui("#slider");
+	slider.slider({
+		interval: 6000
+	});
+	
+	/*页面点击进入事件*/
+	mui(".found-box").on('tap','.found-list',function(){
+	  	//获取连接
+  		var link  = this.querySelector("a").href;
+	  	var text = this.querySelector("p").innerHTML;
+	  	var longitude = document.getElementById("lng").value;
+		var latitude = document.getElementById("lat").value;
+		var address = document.getElementById("addr").value;
+	  	if(text == '预约名师') {
+			link = link + "?gpsLongitude="+longitude+"&gpsLatitude="+latitude+"&address="+address;
+	  	}
+	  	if(text=='随便看看') {
+			link = link + "?gpsLongitude="+longitude+"&gpsLatitude="+latitude;
+	  	}
+	  	document.location.href = link;
+	});
+</script>
+#end

@@ -1,0 +1,371 @@
+#set($pageTitle="行程介绍")
+#set($layout="/WEB-INF/views/common/layout/layoutindex.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/mainnew.css?t=1.0","$!{STATIC_URL}/resources/css/new.css?t=1.9"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+
+<input type="checkbox" id="joacims-menu"/>
+<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+<style>
+    .layui-m-layerchild{border-radius: 0.078125rem}
+    .layui-m-layer0 .layui-m-layerchild{width:90%;max-width:9rem;}
+    .layui-m-layer a{color:#40AFFE}
+    .layui-m-layercont{padding:15% 9%;line-height:150%;text-align:center}
+    .layui-m-layerbtn{display:box;display:-moz-box;display:-webkit-box;width:100%;height:1.25rem;line-height:1.25rem;font-size:0;border-top:0.015625rem solid #D0D0D0;background-color:#F2F2F2}
+    .layui-m-layerbtn span[no]{border-right:0.015625rem solid #D0D0D0;border-radius:0 0 0 0.078125rem}
+    .layui-m-layerbtn span:active{background-color:#F6F6F6}
+    .layui-m-layerbtn,.layui-m-layerbtn span{position:relative;text-align:center;border-radius:0 0 0.078125rem 0.078125rem}
+
+    .layui-m-layerchild{font-size:14px;}
+    [data-dpr="2"] .layui-m-layerchild{font-size:28px}
+    [data-dpr="3"] .layui-m-layerchild{font-size:42px}
+    .layui-m-layerbtn span{font-size:14px;}
+    [data-dpr="2"] .layui-m-layerbtn span{font-size:28px}
+    [data-dpr="3"] .layui-m-layerbtn span{font-size:42px}
+</style>
+<div class="main warp">
+    <section >
+        <div class="daytree">
+            #set($lengthtotal = $response.scheduleEntity.scheduleDetailList.size())
+            <div class="start">
+                <div class="startIcon">
+#if(${response.isWeChat}=="Wechat")
+<a href="$!{link.contextPath}/wechat/getScheduleShow?flag=overView&teamId=$!{response.teamId}">
+#else
+    <a href="$!{link.contextPath}$!{link.requestPath}?flag=overView&teamId=$!{response.teamId}&client_id=${response.signMap.get('overView').client_id}&ver=${response.signMap.get('overView').ver}&sign=${response.signMap.get('overView').sign}&timestamp=${response.signMap.get('overView').timestamp}&access_token=${response.signMap.get('overView').access_token}">
+        #end 启程</a></div>
+                <div class="rightcrlstart"></div>
+                <div class="pytreestart">
+                    <div class="place">
+                        #if(${response.isWeChat}=="Wechat")
+                            <a href="$!{link.contextPath}/wechat/getScheduleShow?flag=overView&teamId=$!{response.teamId}">
+                        #else
+                            <a href="$!{link.contextPath}$!{link.requestPath}?flag=overView&teamId=$!{response.teamId}&client_id=${response.signMap.get('overView').client_id}&ver=${response.signMap.get('overView').ver}&sign=${response.signMap.get('overView').sign}&timestamp=${response.signMap.get('overView').timestamp}&access_token=${response.signMap.get('overView').access_token}">
+                        #end
+
+                            行程概述</a></div>
+                    <div class="hline"><div class="drop"><div class="dropt"></div></div></div>
+                </div>
+            </div>
+#foreach( $Detail in $response.scheduleEntity.scheduleDetailList)
+            <!--D${velocityCount}-->
+    #set($r = $velocityCount % 6)
+            <div class="daycon">
+                <div class="line$r"></div>
+                <div class="linco$r linkicon">
+                    #if($response.teamId&&$response.teamId!="")
+                        #if(${response.isWeChat}=="Wechat")
+                            <a href='$!{link.contextPath}/wechat/getScheduleShow?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}'> </a>
+                        #else
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'></a>
+                        #end
+                    #else
+                        #if(${response.isWeChat}=="Wechat")
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}'>
+                            </a>
+                        #else
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'>
+                            </a>
+                        #end
+                    #end
+                </div>
+                <div class="daynum$r">
+                    #if($response.teamId&&$response.teamId!="")
+                        #if(${response.isWeChat}=="Wechat")
+                            <a href='$!{link.contextPath}/wechat/getScheduleShow?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}'>
+                                <div class="wgcrl$r">D$!Detail.dayNum</div>
+                                #if(${velocityCount}!=${lengthtotal})
+                                <div class="leftcrl$r"></div>
+                                <div class="rightcrl$r"></div>
+                                    <div class="dropwrep$r"><div class="pointd$r"></div></div>
+                                    #else
+                                        <div class="leftcrl$r"></div>
+                                #end
+
+
+                            </a>
+                        #else
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'>
+
+                                    <div class="wgcrl$r">D$!Detail.dayNum</div>
+
+                                #if(${velocityCount}!=${lengthtotal})
+                                    <div class="leftcrl$r"></div>
+                                    <div class="rightcrl$r"></div>
+                                    <div class="dropwrep$r"><div class="pointd$r"></div></div>
+                                #else
+                                    <div class="leftcrl$r"></div>
+                                #end
+
+                            </a>
+                        #end
+                    #else
+                        #if(${response.isWeChat}=="Wechat")
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}'>
+
+                                    <div class="wgcrl$r">D$!Detail.dayNum</div>
+                                #if(${velocityCount}!=${lengthtotal})
+                                    <div class="leftcrl$r"></div>
+                                    <div class="rightcrl$r"></div>
+                                    <div class="dropwrep$r"><div class="pointd$r"></div></div>
+                                #else
+                                    <div class="leftcrl$r"></div>
+                                #end
+
+                            </a>
+                        #else
+
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'>
+                                <div class="wgcrl$r">D$!Detail.dayNum</div>
+                                #if(${velocityCount}!=${lengthtotal})
+                                    <div class="leftcrl$r"></div>
+                                    <div class="rightcrl$r"></div>
+                                    <div class="dropwrep$r"><div class="pointd$r"></div></div>
+                                #else
+                                    <div class="leftcrl$r"></div>
+                                #end
+
+                            </a>
+                        #end
+                    #end
+
+                </div>
+                <div class="pytree$r">
+
+                    #if($response.teamId&&$response.teamId!="")
+                        #if(${response.isWeChat}=="Wechat")
+                            <a href='$!{link.contextPath}/wechat/getScheduleShow?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}'>
+                                <div class="place">
+                                    #set($startPlace = "")
+                                    #set($destination1="")
+                                    #set($destination2="")
+                                    #set($destination3="")
+                                    #set($destination4="")
+
+                                    #if( $Detail.startPlace&&$Detail.startPlace!="" )
+                                        #set($startPlace = "$!Detail.startPlace" )
+
+                                    #end
+                                    #if( $Detail.destination1&&$Detail.destination1!="" )
+                                        #set($destination1 = ">$!Detail.destination1" )
+
+                                    #end
+                                    #if( $Detail.destination2&&$Detail.destination2!="" )
+                                        #set($destination2 = ">$!Detail.destination2" )
+
+                                    #end
+                                    #if( $Detail.destination3&&$Detail.destination3!="" )
+                                        #set($destination3 = ">$!Detail.destination3" )
+                                    #end
+                                    #if($Detail.destination4&&$Detail.destination4!="" )
+                                        #set($destination4 = ">$!Detail.destination4" )
+                                    #end
+                                    #if($Detail.startPlace== $Detail.destination1)
+                                        #set($placeall =$!startPlace+$!destination2+$!destination3+$!destination4)
+
+                                    #else
+                                        #set($placeall =$!startPlace+ $!destination1+$!destination2+$!destination3+$!destination4)
+
+                                    #end
+                                    #if($placeall.length()>6)
+                                        #set($placeall=$placeall.substring(0,6))
+                                        $placeall ...
+                                    #else
+                                        $placeall
+                                    #end
+                                </div>
+                                <div class="hline"><div class="drop"><div class="dropt"></div></div></div>
+                                <div class="timer">$!date.format('yyyy年MM月dd日',$Detail.scheduleDate)</div>
+                            </a>
+                        #else
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'>
+                                <div class="place">
+                                    #set($startPlace = "")
+                                    #set($destination1="")
+                                    #set($destination2="")
+                                    #set($destination3="")
+                                    #set($destination4="")
+
+                                    #if( $Detail.startPlace&&$Detail.startPlace!="" )
+                                        #set($startPlace = "$!Detail.startPlace" )
+
+                                    #end
+                                    #if( $Detail.destination1&&$Detail.destination1!="" )
+                                        #set($destination1 = ">$!Detail.destination1" )
+
+                                    #end
+                                    #if( $Detail.destination2&&$Detail.destination2!="" )
+                                        #set($destination2 = ">$!Detail.destination2" )
+
+                                    #end
+                                    #if( $Detail.destination3&&$Detail.destination3!="" )
+                                        #set($destination3 = ">$!Detail.destination3" )
+                                    #end
+                                    #if($Detail.destination4&&$Detail.destination4!="" )
+                                        #set($destination4 = ">$!Detail.destination4" )
+                                    #end
+                                    #if($Detail.startPlace== $Detail.destination1)
+                                        #set($placeall =$!startPlace+$!destination2+$!destination3+$!destination4)
+
+                                    #else
+                                        #set($placeall =$!startPlace+ $!destination1+$!destination2+$!destination3+$!destination4)
+
+                                    #end
+                                    #if($placeall.length()>6)
+                                        #set($placeall=$placeall.substring(0,6))
+                                        $placeall ...
+                                    #else
+                                        $placeall
+                                    #end
+                                </div>
+                                <div class="hline"><div class="drop"><div class="dropt"></div></div></div>
+                                <div class="timer">$!date.format('yyyy年MM月dd日',$Detail.scheduleDate)</div>
+                            </a>
+                        #end
+                    #else
+                        #if(${response.isWeChat}=="Wechat")
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}'>
+                                <div class="place">
+                                    #set($startPlace = "")
+                                    #set($destination1="")
+                                    #set($destination2="")
+                                    #set($destination3="")
+                                    #set($destination4="")
+
+                                    #if( $Detail.startPlace&&$Detail.startPlace!="" )
+                                        #set($startPlace = "$!Detail.startPlace" )
+
+                                    #end
+                                    #if( $Detail.destination1&&$Detail.destination1!="" )
+                                        #set($destination1 = ">$!Detail.destination1" )
+
+                                    #end
+                                    #if( $Detail.destination2&&$Detail.destination2!="" )
+                                        #set($destination2 = ">$!Detail.destination2" )
+
+                                    #end
+                                    #if( $Detail.destination3&&$Detail.destination3!="" )
+                                        #set($destination3 = ">$!Detail.destination3" )
+                                    #end
+                                    #if($Detail.destination4&&$Detail.destination4!="" )
+                                        #set($destination4 = ">$!Detail.destination4" )
+                                    #end
+                                    #if($Detail.startPlace== $Detail.destination1)
+                                        #set($placeall =$!startPlace+$!destination2+$!destination3+$!destination4)
+
+                                    #else
+                                        #set($placeall =$!startPlace+ $!destination1+$!destination2+$!destination3+$!destination4)
+
+                                    #end
+                                    #if($placeall.length()>6)
+                                        #set($placeall=$placeall.substring(0,6))
+                                        $placeall ...
+                                    #else
+                                        $placeall
+                                    #end
+                                </div>
+                                <div class="hline"><div class="drop"><div class="dropt"></div></div></div>
+                                <div class="timer">$!date.format('yyyy年MM月dd日',$Detail.scheduleDate)</div>
+                               </a>
+                        #else
+
+                            <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'>
+                                <div class="place">
+                                    #set($startPlace = "")
+                                    #set($destination1="")
+                                    #set($destination2="")
+                                    #set($destination3="")
+                                    #set($destination4="")
+
+                                    #if( $Detail.startPlace&&$Detail.startPlace!="" )
+                                        #set($startPlace = "$!Detail.startPlace" )
+
+                                    #end
+                                    #if( $Detail.destination1&&$Detail.destination1!="" )
+                                        #set($destination1 = ">$!Detail.destination1" )
+
+                                    #end
+                                    #if( $Detail.destination2&&$Detail.destination2!="" )
+                                        #set($destination2 = ">$!Detail.destination2" )
+
+                                    #end
+                                    #if( $Detail.destination3&&$Detail.destination3!="" )
+                                        #set($destination3 = ">$!Detail.destination3" )
+                                    #end
+                                    #if($Detail.destination4&&$Detail.destination4!="" )
+                                        #set($destination4 = ">$!Detail.destination4" )
+                                    #end
+                                    #if($startPlace==$destination1)
+                                        #set($placeall =$!startPlace+$!destination2+$!destination3+$!destination4)
+                                    #elseif($destination1==$!destination2)
+                                            #set($placeall =$!startPlace+$!destination3+$!destination4)
+                                    #elseif($destination2==$!destination3)
+                                        #set($placeall =$!startPlace+$!destination3+$!destination4)
+                                    #end
+                                    #if($Detail.startPlace== $Detail.destination1)
+                                        #set($placeall =$!startPlace+$!destination2+$!destination3+$!destination4)
+
+                                    #else
+                                        #set($placeall =$!startPlace+ $!destination1+$!destination2+$!destination3+$!destination4)
+
+                                    #end
+                                    #if($placeall.length()>6)
+                                        #set($placeall=$placeall.substring(0,6))
+                                        $placeall ...
+                                    #else
+                                        $placeall
+                                    #end
+                                </div>
+                                <div class="hline"><div class="drop"><div class="dropt"></div></div></div>
+                                <div class="timer">$!date.format('yyyy年MM月dd日',$Detail.scheduleDate)</div>
+                            </a>
+                        #end
+                    #end
+                </div>
+            </div>
+    #end
+
+
+        </div>
+    </section>
+</div>
+#if($!response.scheduleEntity.processStatus==4)
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+#parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+<script type="text/javascript">
+    var teamId="$!{response.scheduleEntity.teamId}";
+    var iswechat="${response.isWeChat}";
+    $(function(){
+        $(".overlay").click(function(){
+            $("#joacims-menu").prop("checked",false)
+        })
+
+        $(".warp").parents("html").css("backgroundColor","#fffeec");
+    })
+    var mapd="${response.signMap}";
+    $(".qitaicon").on("click",function(){
+        if($(".qita").is(":visible")){
+            $(".qita").slideUp();
+            $(this).addClass("qitaicons");
+        }else{
+            $(".qita").slideDown();
+            $(this).removeClass("qitaicons");
+        }
+
+    })
+    //添加节点去除白色线段
+    $("section ul li:last-child").append('<div class="trans-line"></div>');
+        $(".pytreestart").css({top:$(".start").height()/2-$(".pytreestart").find(".hline").height()-$(".pytreestart").find(".place").height()});
+        $(".pytree1").css({top:$(".daynum1").height()/2+$(".line1").height()+parseFloat($(".line1").css("top"))*2-$(".pytree1").find(".place").height()})
+        $(".pytree2").css({top:$(".daynum2").height()/2+$(".line2").height()+parseFloat($(".line2").css("top"))*2-$(".pytree2").find(".place").height()})
+        $(".pytree3").css({top:$(".daynum3").height()/2+$(".line3").height()+parseFloat($(".line3").css("top"))*2-$(".pytree3").find(".place").height()})
+        $(".pytree4").css({top:$(".daynum4").height()/2+$(".line4").height()+parseFloat($(".line4").css("top"))*2-$(".pytree4").find(".place").height()})
+        $(".pytree5").css({top:$(".daynum5").height()/2+$(".line5").height()+parseFloat($(".line5").css("top"))*2-$(".pytree5").find(".place").height()})
+        $(".pytree0").css({top:$(".daynum0").height()/2+$(".line0").height()+parseFloat($(".line0").css("top"))*2-$(".pytree0").find(".place").height()})
+
+</script>
+#end

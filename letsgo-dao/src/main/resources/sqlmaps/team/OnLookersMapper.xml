@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.team.OnlookersDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.team.OnlookersEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+        <result column="is_system_info" property="isSystemInfo" jdbcType="INTEGER" />
+        <result column="schedule_id" property="scheduleId" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="photos_url" property="photosUrl" jdbcType="VARCHAR" />
+        <result column="thumbnail_url" property="thumbnailUrl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+        <result column="wide" property="wide" jdbcType="VARCHAR" />
+        <result column="height" property="height" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="BaseListMap" type="com.umessage.letsgo.domain.vo.team.respone.WatchMessageResponse" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <id column="onlookersMes" property="onlookersMes" jdbcType="VARCHAR" />
+        <result column="onlookersImg" property="onlookersImg" jdbcType="VARCHAR" />
+        <result column="onlookersDate" property="onlookersDate" jdbcType="TIMESTAMP" />
+        <result column="isSystemInfo" property="isSystemInfo" jdbcType="INTEGER" />
+        <result column="wide" property="wide" jdbcType="VARCHAR" />
+        <result column="height" property="height" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="ReplyListMap" type="com.umessage.letsgo.domain.vo.team.respone.ReplyInfo">
+        <id column="d_ID" property="id" jdbcType="BIGINT" />
+        <result column="message" property="message" jdbcType="VARCHAR" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="reId" property="reId" jdbcType="BIGINT" />
+        <result column="byReId" property="byReId" jdbcType="BIGINT" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="isLike" property="isLike" jdbcType="INTEGER" />
+    </resultMap>
+<insert id="sendOnlookers" parameterType="com.umessage.letsgo.domain.po.team.OnlookersEntity">
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_onlookers (schedule_id,user_id,is_system_info,content,
+    thumbnail_url,photos_url,send_time,create_time,version,wide,height
+    )
+    values (#{scheduleId,jdbcType=BIGINT},#{userId,jdbcType=BIGINT}, #{isSystemInfo,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
+    #{thumbnailUrl,jdbcType=VARCHAR},#{photosUrl,jdbcType=VARCHAR},#{sendTime,jdbcType=TIMESTAMP},#{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}, #{wide,jdbcType=VARCHAR},#{height,jdbcType=VARCHAR}
+    )
+</insert>
+<select id="getWatchOwner" resultMap="BaseListMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersRequest">
+        SELECT t.ID,t.is_system_info as isSystemInfo,t.photos_url as onlookersImg ,t.content as onlookersMes,DATE_FORMAT(t.create_time, '%Y-%m-%d %H:%i:%s') as onlookersDate,t.wide,t.height
+          from t_onlookers t
+         where t.schedule_id=#{scheduleId,jdbcType=BIGINT}
+        and t.user_id=#{ownerId,jdbcType=BIGINT}
+        order by  t.create_time desc
+</select>
+    <select id="getWatchOwner2" resultMap="ReplyListMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersRequest">
+        SELECT d.ID AS d_ID,d.reply_id as reId,d.by_reply_id as byReId,d.content as message,
+        d.create_time as createTime,d.is_like AS isLike,d.type as type
+        from t_onlookers_details d
+        where d.onlookers_id=#{onlookersId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getWatchOther" resultMap="BaseListMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersRequest">
+        SELECT t.ID,t.is_system_info as isSystemInfo,t.photos_url as onlookersImg ,t.content as onlookersMes,DATE_FORMAT(t.create_time, '%Y-%m-%d %H:%i:%s') as onlookersDate,t.wide,t.height
+        from t_onlookers t
+        where t.schedule_id=#{scheduleId,jdbcType=BIGINT}
+        and t.user_id=#{ownerId,jdbcType=BIGINT}
+        order by  t.create_time desc
+    </select>
+    <select id="getWatchOther2" resultMap="ReplyListMap" parameterType="com.umessage.letsgo.domain.vo.team.requset.OnlookersRequest">
+        SELECT d.ID AS d_ID,d.reply_id as reId,d.by_reply_id as byReId,d.content as message,
+        d.create_time as createTime,d.is_like AS isLike,d.type as type
+        from t_onlookers_details d
+        where d.onlookers_id=#{onlookersId,jdbcType=BIGINT} and (d.user_id=#{otherId,jdbcType=BIGINT} or d.by_reply_id = #{otherId,jdbcType=BIGINT} or d.user_id=#{ownerId,jdbcType=BIGINT})
+    </select>
+    <select id="getSystemMess" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT t.thumbnail_url,t.content,t.create_time
+        from t_onlookers t WHERE t.schedule_id=#{scheduleId,jdbcType=BIGINT} AND  t.is_system_info=1
+    </select>
+
+    <select id="getOnlookersById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID,schedule_id,user_id,is_system_info,content,thumbnail_url,photos_url,send_time,create_time,version,wide,height
+        from t_onlookers
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+</mapper>

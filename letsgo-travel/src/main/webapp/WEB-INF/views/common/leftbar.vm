@@ -1,0 +1,368 @@
+
+<header class="main-header">
+    <!-- Logo -->
+    <a href="$!{link.contextPath}/schedule/mainPage" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><img src="$!{STATIC_URL}/resources/dist/images/logo.png" style="vertical-align:middle;width:28px;height:auto;"/></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img src="$!{STATIC_URL}/resources/dist/images/logo.png" style="vertical-align:middle;margin-right:3px;width:28px;height:auto;"/><span style="vertical-align: middle;">跟上旅行社</span></span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="javascript:;" class="sidebar-toggle" data-toggle="offcanvas" role="button" style="display:block;">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li class="user user-menu" id="messageNum">
+                    <a href="$!{link.contextPath}/message/getSubjectMessageList?pageStart=1&pageSize=10&status=0" style="display:inline-block;float:left;">
+                        <img src="$!{STATIC_URL}/resources/dist/images/messagebg.png" class="user-image" alt="User Image" style="margin-right:0;">
+                        <span class="hidden-xs">$!{travel.name}</span>
+                        <em class="numbg" style="display:none;">2</em>
+                        <p class="tipnum" style="display:none;"> 您有<strong>1</strong>条未读的行程问题反馈 </p>
+                    </a>
+                </li>
+#if($!{currentUser.role}!=7&&$!{currentUser.role}!=6)
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="user user-menu">
+                    <a href="$!{link.contextPath}/travelAgency/travelPreview" style="display:inline-block;float:left;">
+                        <img src="$!{STATIC_URL}/resources/dist/images/userbg.png" class="user-image" alt="User Image" style="margin-right:0;">
+                        <span class="hidden-xs">$!{travel.name}</span>
+                    </a>
+
+                </li>
+    #end
+                <li class="user user-menu">
+                    <a href="$!{link.contextPath}/user/userEdit" style="display:inline-block;float:left;">
+                        <img src="$!{STATIC_URL}/resources/dist/images/setting.png" class="user-image" alt="User Image" style="margin-right:0;">
+                        <span class="hidden-xs">$!{travel.name}</span>
+                    </a>
+                </li>
+                <!-- Control Sidebar Toggle Button -->
+                <li class="user user-menu">
+                    <a href="$!{link.contextPath}/singout" style="display:inline-block;float:left;">
+                        <img src="$!{STATIC_URL}/resources/dist/images/onoff.png" class="user-image" alt="User Image" style="margin-right:0;">
+                        <span class="hidden-xs">$!{travel.name}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<style>
+
+    .fa-cctash,.fa-team,.fa-usere,.fa-geare,.fa-tongji,.fa-rizhi,.fa-zhanghu,.fa-cphoto{background: url($!{STATIC_URL}/resources/dist/images/iconm12.png) center center no-repeat;width:20px;vertical-align: middle;display:inline-block;height:20px; }
+    .fa-tongji{background: url($!{STATIC_URL}/resources/dist/images/tongji.png) center center no-repeat;}
+    .fa-team{background: url($!{STATIC_URL}/resources/dist/images/iconm121.png) center center no-repeat;}
+    .fa-usere{background: url($!{STATIC_URL}/resources/dist/images/iconm123.png) center center no-repeat;}
+    .fa-geare{background: url($!{STATIC_URL}/resources/dist/images/iconm124.png) center center no-repeat;}
+    .fa-rizhi{background: url($!{STATIC_URL}/resources/dist/images/rizhi.png) center center no-repeat;}
+    .fa-zhanghu{background: url($!{STATIC_URL}/resources/dist/images/zhanghu.png) center center no-repeat;}
+    .fa-cphoto{background: url($!{STATIC_URL}/resources/dist/images/inco_03.png) center center no-repeat;}
+    .main-header .logo{text-decoration: none;}
+    .main-header .sidebar-toggle{text-decoration: none;}
+    .navbar-nav > .user-menu .user-image{width:30px;height:30px;}
+    .nav > li > a{padding-left:35px;padding-right:35px;}
+    .navbar-nav > li > a{padding-bottom:10px;padding-top:12px;}
+    .numbg{position:absolute;right:24px;top:5px;background: url($!{STATIC_URL}/resources/dist/images/numbg.png) 0 0 no-repeat;background-size:100% auto;width:18px;height:18px;display: block;color:#fff;text-align: center;line-height: 18px;
+    font-size:12px;font-style:normal;
+    }
+    .tipnum{position: absolute;top:40px;left:31px;width:219px;height:35px;color:#fff;padding-top:5px;
+        line-height:30px;background: url($!{STATIC_URL}/resources/dist/images/make.png) 0 0 no-repeat;text-align: center;}
+    .tipnum strong{color:#de524b;}
+</style>
+<!-- =============================================== -->
+
+<!-- Left side column. contains the sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+#if($!{currentUser.role}!=7)
+
+            <li class="treeview"> <!--class="treeview"-->
+                <a href="$!{link.contextPath}/schedule/mainPage">
+                    <i class="fa fa-team"></i>
+                    <span>团队行程管理</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+               <ul class="treeview-menu">
+                   <li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-circle-o"></i> 行程列表</a></li>
+                    <li><a href="$!{link.contextPath}/schedule/scheduleInit?pageNum=1&pageSize=10"><i class="fa fa-circle-o"></i> 创建行程</a></li>
+        #if($!{currentUser.role}!=6)
+                    <li><a href="$!{link.contextPath}/event/getEventList?pageNum=1&pageSize=10"><i class="fa fa-circle-o"></i> 事件查看</a></li>
+        #end
+                   <li><a href="$!{link.contextPath}/schedule/travelMonitor"><i class="fa fa-circle-o"></i> 行程监控</a></li>
+                   <li><a href="$!{link.contextPath}/message/getSubjectMessageList?pageStart=1&pageSize=10&status=-1"><i class="fa fa-circle-o"></i> 行程问题反馈</a></li>
+               </ul>
+            </li>
+#end
+            <li>
+                <a href="$!{link.contextPath}/schedule/getTeamList?pageNum=1">
+                    <i class="fa-cphoto"></i> <span>团队相册</span> <small class="label pull-right bg-green"></small>
+                </a>
+                <!--<ul class="treeview-menu">
+                    <li><a href="$!{link.contextPath}/leader/search?pageNum=1&pageSize=10"><i class="fa fa-circle-o"></i> 领队导游管理</a></li>
+                    <li><a href="$!{link.contextPath}/leader/leaderInit"><i class="fa fa-circle-o"></i> 添加领队</a></li>
+                </ul>-->
+            </li>
+            <li class="treeview"> <!--class="treeview"-->
+                <a href="$!{link.contextPath}/hotel/selectHotelOne">
+                    <i class="fa fa-tongji"></i>
+                    <span>统计报表</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="$!{link.contextPath}/hotel/selectHotelOne"><i class="fa fa-circle-o"></i> 酒店评价数据</a></li>
+                    <li><a href="$!{link.contextPath}/lineEvaluate/goLineList"><i class="fa fa-circle-o"></i> 线路评价数据</a></li>
+                    <li><a href="$!{link.contextPath}/data/searchTouristData"><i class="fa fa-circle-o"></i> 游客数据</a></li>
+                </ul>
+            </li>
+#if($!{currentUser.role}!=7&&$!{currentUser.role}!=6)
+            <li>
+                <a href="$!{link.contextPath}/leader/search?pageNum=1&pageSize=10">
+                    <i class="fa-cctash"></i> <span>领队导游管理</span> <small class="label pull-right bg-green"></small>
+                </a>
+                <!--<ul class="treeview-menu">
+                    <li><a href="$!{link.contextPath}/leader/search?pageNum=1&pageSize=10"><i class="fa fa-circle-o"></i> 领队导游管理</a></li>
+                    <li><a href="$!{link.contextPath}/leader/leaderInit"><i class="fa fa-circle-o"></i> 添加领队</a></li>
+                </ul>-->
+            </li>
+#end
+#if($!{currentUser.role}!=7&&$!{currentUser.role}!=6)
+            <li>
+                <a href="$!{link.contextPath}/logManage/goLogList">
+                    <i class="fa-rizhi"></i> <span>日志管理</span> <small class="label pull-right bg-green"></small>
+                </a>
+                <!--<ul class="treeview-menu">
+                    <li><a href="$!{link.contextPath}/leader/search?pageNum=1&pageSize=10"><i class="fa fa-circle-o"></i> 领队导游管理</a></li>
+                    <li><a href="$!{link.contextPath}/leader/leaderInit"><i class="fa fa-circle-o"></i> 添加领队</a></li>
+                </ul>-->
+            </li>
+    #end
+            <!--<li class="treeview">
+                <a href="javascript:;">
+                    <i class="fa fa-usere"></i>
+                    <span>游客管理</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="$!{link.contextPath}/member/search?pageNum=1&pageSize=10"><i class="fa fa-circle-o"></i> 游客管理</a></li>
+                    <li><a href="$!{link.contextPath}/member/memberCreate"><i class="fa fa-circle-o"></i> 添加游客</a></li>
+                </ul>
+            </li>-->
+#if($!{currentUser.role}!=7&&$!{currentUser.role}!=6)
+            <li>
+                <a href="$!{link.contextPath}/member/search?pageNum=1&pageSize=10">
+                    <i class="fa fa-usere"></i> <span>游客管理</span> <small class="label pull-right bg-green"></small>
+                </a>
+            </li>
+    #end
+#if($!{currentUser.role}!=7&&$!{currentUser.role}!=6)
+            <li>
+                <a href="$!{link.contextPath}/user/getSonAccountList?pageNo=1">
+                    <i class="fa-zhanghu"></i> <span>账户管理</span> <small class="label pull-right bg-green"></small>
+                </a>
+                <!--<ul class="treeview-menu">
+                    <li><a href="$!{link.contextPath}/leader/search?pageNum=1&pageSize=10"><i class="fa fa-circle-o"></i> 领队导游管理</a></li>
+                    <li><a href="$!{link.contextPath}/leader/leaderInit"><i class="fa fa-circle-o"></i> 添加领队</a></li>
+                </ul>-->
+            </li>
+    #end
+            <li>
+                <a href="$!{link.contextPath}/travelAgency/travelPreview?method=edit">
+                    <i class="fa fa-geare"></i> <span>我的设置</span> <small class="label pull-right bg-green"></small>
+                </a>
+            </li>
+
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>
+
+<!-- =============================================== -->
+<script>
+    window.onload=function() {
+        var href = window.location.href;
+        $(".sidebar-menu").find("li>a").each(function () {
+            if(href.indexOf("schedule") > 0) {
+                if (href.indexOf("mainPage") > 0) {
+                    if ($(this).attr("href").indexOf("mainPage") > 0 && $(this).attr("href").indexOf("?") <= 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }
+                if (href.indexOf("mainPageMore") > 0) {
+                    if ($(this).attr("href").indexOf("mainPageMore") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }
+                if (href.indexOf("mainPage") > 0) {
+                    if ($(this).attr("href").indexOf("mainPage") > 0 && $(this).attr("href").indexOf("?") <= 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }
+                if (href.indexOf("scheduleInit") > 0) {
+                    if ($(this).attr("href").indexOf("scheduleInit") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }
+                if (href.indexOf("getTeamList") > 0) {
+                    if ($(this).attr("href").indexOf("getTeamList") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }
+                if (href.indexOf("travelMonitor") > 0) {
+                    if ($(this).attr("href").indexOf("travelMonitor") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }
+//               else{
+//                    $(".treeview").eq(0).addClass("active").siblings().removeClass("active");
+//                    $(".treeview:eq(0)").find("li").each(function(i){
+//                        $(this).removeClass("active");
+//                    })
+//                }
+            }
+            if (href.indexOf("message") > 0) {
+                if ($(this).attr("href").indexOf("message") > 0) {
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parents("li.treeview").addClass("active");
+                    $(this).parents("li.treeview").siblings("li").removeClass("active");
+                }
+            }
+            if (href.indexOf("event") > 0) {
+                if ($(this).attr("href").indexOf("event") > 0) {
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parents("li.treeview").addClass("active");
+                    $(this).parents("li.treeview").siblings("li").removeClass("active");
+                }
+            }
+            if (href.indexOf("logManage") > 0) {
+                if ($(this).attr("href").indexOf("logManage") > 0) {
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parents("li.treeview").addClass("active");
+                    $(this).parents("li.treeview").siblings("li").removeClass("active");
+                }
+            }
+            if (href.indexOf("teamAlbum") > 0) {
+                if ($(this).attr("href").indexOf("getTeamList") > 0) {
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parents("li.treeview").addClass("active");
+                    $(this).parents("li.treeview").siblings("li").removeClass("active");
+                }
+            }
+            if (href.indexOf("user") > 0) {
+                if ($(this).attr("href").indexOf("user") > 0) {
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parents("li.treeview").addClass("active");
+                    $(this).parents("li.treeview").siblings("li").removeClass("active");
+                }
+            }
+            if (href.indexOf("hotel") > 0) {
+                if ($(this).attr("href").indexOf("hotel") > 0) {
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parents("li.treeview").addClass("active");
+                    $(this).parents("li.treeview").siblings("li").removeClass("active");
+                }
+            }
+            if (href.indexOf("lineEvaluate") > 0) {
+                if ($(this).attr("href").indexOf("lineEvaluate") > 0) {
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parents("li.treeview").addClass("active");
+                    $(this).parents("li.treeview").siblings("li").removeClass("active");
+                }
+            }
+            if (href.indexOf("data") > 0) {
+                if ($(this).attr("href").indexOf("data") > 0) {
+                    $(this).parent("li").addClass("active").siblings().removeClass("active");
+                    $(this).parents("li.treeview").addClass("active");
+                    $(this).parents("li.treeview").siblings("li").removeClass("active");
+                }
+            }
+            if(href.indexOf("leader") > 0) {
+                if (href.indexOf("leaderInit") > 0) {
+                    if ($(this).attr("href").indexOf("leaderInit") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }else if (  href.indexOf("search") > 0) {
+                    if ($(this).attr("href").indexOf("leader") > 0 && $(this).attr("href").indexOf("search") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }else{
+                    $(".treeview").eq(2).addClass("active").siblings().removeClass("active");
+                    $(".treeview:eq(2)").find("li").each(function(i){
+                        $(this).removeClass("active");
+                    })
+                }
+            }
+            if(href.indexOf("member") > 0) {
+                if (href.indexOf("leaderInit") > 0) {
+                    if ($(this).attr("href").indexOf("leaderInit") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }else if (  href.indexOf("search") > 0) {
+                    if ($(this).attr("href").indexOf("member") > 0 && $(this).attr("href").indexOf("search") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }else if (  href.indexOf("memberCreate") > 0) {
+                    if ($(this).attr("href").indexOf("member") > 0 && $(this).attr("href").indexOf("memberCreate") > 0) {
+                        $(this).parent("li").addClass("active").siblings().removeClass("active");
+                        $(this).parents("li.treeview").addClass("active");
+                        $(this).parents("li.treeview").siblings("li").removeClass("active");
+                    }
+                }else{
+                    $(".treeview").eq(3).addClass("active").siblings().removeClass("active");
+                    $(".treeview:eq(3)").find("li").each(function(i){
+                        $(this).removeClass("active");
+                    })
+                }
+            }
+        })
+        $.ajax({
+            type :  'POST',
+            url : CONTEXTPATH + "/message/getNotRedSubjectMessage",
+            data : {},
+            dataType : "json",
+            cache : false,
+            success : function(data){
+                if(data&&data>0){
+                    $("#messageNum").find("em").show().text(data);
+                }
+
+//                $(".tipnum").show().find("strong").text(data);
+//                setTimeout(function(){
+//                    $(".tipnum").hide()
+//                },5000)
+            },
+            error : function(){
+
+            }
+        });
+
+    }
+</script>

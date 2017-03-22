@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.ValidationCodeDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.ValidationCodeEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="valid_time" property="validTime" jdbcType="BIGINT" />
+        <result column="scope" property="scope" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_validation_code
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.ValidationCodeEntity" >
+        insert into s_validation_code (ID, code, phone, 
+            valid_time, scope, create_time, version
+            )
+        values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+            #{validTime,jdbcType=BIGINT}, #{scope,jdbcType=INTEGER},
+            #{createTime,jdbcType=TIMESTAMP}, #{version,jdbcType=BIGINT}
+            )
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.ValidationCodeEntity" >
+        update s_validation_code
+        set code = #{code,jdbcType=VARCHAR},
+            phone = #{phone,jdbcType=VARCHAR},
+            valid_time = #{validTime,jdbcType=BIGINT},
+            scope = #{scope,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            version = version + 1
+        where ID = #{id,jdbcType=BIGINT} and version = #{version,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, code, phone, valid_time, scope, create_time, version
+        from s_validation_code
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, code, phone, valid_time, scope, create_time, version
+        from s_validation_code
+    </select>
+    <select id="selectLatestWithPhone" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select ID, code, phone, valid_time, scope, create_time, version
+        from s_validation_code as c
+        where c.phone = #{phone}
+        AND c.create_time = (SELECT MAX(create_time) FROM s_validation_code WHERE phone = c.phone );
+    </select>
+
+    <select id="selectLatestWithPhoneAndScope" resultMap="BaseResultMap" parameterType="com.umessage.letsgo.domain.vo.system.request.ValidationCodeRequest" >
+        select ID, code, phone, valid_time, scope, create_time, version
+        from s_validation_code as c
+        where c.phone = #{phone} AND c.scope = #{scope}
+        AND c.create_time = (SELECT MAX(create_time) FROM s_validation_code WHERE phone = c.phone );
+    </select>
+</mapper>

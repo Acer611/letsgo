@@ -1,0 +1,15 @@
+#set($pageTitle="验证成功")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+<div class="mt50 mui-text-center">
+	<P><img src="$!{request.getAttribute('STATIC_URL')}/resources/images/qr-icon.png"/></P>
+	<p>您的手机已经验证成功</p>
+	<p>可以找老师啦~</p>
+	<button type="button" class="mui-btn btn-w210 mui-btn-primary" id="foundTeacher">找老师</button>
+</div>
+#define($scriptBlock)
+<script>
+	document.getElementById("foundTeacher").addEventListener("tap",function(){
+		document.location.href = "$!{link.contextPath}/home";
+	});
+</script>
+#end

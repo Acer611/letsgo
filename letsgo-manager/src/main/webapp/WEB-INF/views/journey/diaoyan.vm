@@ -1,0 +1,390 @@
+#set($pageTitle="团队行程管理")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["$!{STATIC_URL}/resources/plugins/iCheck/icheck.min.js","$!{STATIC_URL}/resources/dist/js/diaoyan.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+<style type="text/css">
+    ul,li{
+        list-style: none;
+    }
+    .quesNum{
+        margin:0;
+    }
+    .quesNum ul li .box{
+        border-top:0;
+    }
+    .quesNum ul li .box h3{
+        font-weight: 900;
+    }
+    .tab-pane{
+        width:100%;
+        min-height:500px;
+    }
+    .question{
+        border-bottom: 1px solid #ccc;
+    }
+    .quesNum .question:last-child{
+        border-bottom:0;
+    }
+    .quesNum{
+        width:100%;
+        min-height:100px;
+
+    }
+    .question .quesTitle{
+        font-weight: 900;
+        font-size: 20px;
+    }
+    .question .quesTitle1{
+        font-weight: 900;
+        font-size: 20px;
+        margin-top:5px;
+    }
+    .col-two{
+        margin-left:10px;
+    }
+    .col-two li{
+        line-height:20px;
+    }
+    .additem{
+        width:100px;
+        height:34px;
+        line-height: 34px;
+        padding:0 0 0 20px !important;
+        font-weight:100;
+    }
+
+    .tab-pane-two div{
+        text-align: center;
+        margin-top:20px;
+    }
+    .tab-pane-two div img{
+        width:150px;
+        height:200px;
+    }
+    .tab-pane-two div p{
+        text-align: center;
+        line-height:30px;
+        margin-bottom:0;
+    }
+    .nav-tabs-custom{
+        box-shadow: 0 1px 1px rgba(0,0,0,0.0);
+    }
+    .progress{
+        margin:5px 0;
+    }
+    .tab-pane-three{
+        padding:30px 50px;
+    }
+    .tab-pane-three-div .span-title{
+        font-weight: 900;
+        font-size: 16px;
+        height:30px;
+    }
+    .tab-pane-three-div li  .satisfy-col{
+        height:30px;
+        line-height: 30px;
+        width:180px;
+    }
+    .checkbox{
+        margin-top:0;
+        margin-bottom:10px;
+    }
+    .checkbox-inline+.checkbox-inline, .radio-inline+.radio-inline{
+        margin-left:0;
+    }.addQues{
+         border:1px solid #ccc;
+         min-height:100px;
+         margin:20px 10%;
+     }
+    .tijiao{
+        margin-bottom:20px;
+    }
+    .zidingyi{
+        border-top:1px solid #ddd;
+    }
+    .nav-title li a{
+        font-size: 24px;
+        font-weight: 900;
+    }
+    .prog{
+        padding-left:0;
+        padding-right:0;
+    }
+    .questionTitle{display:inline;_zoom:1;display:inline-block;}
+    .question span,.question p{display:inline;_zoom:1;display:inline-block;}
+</style>
+
+
+<!-- Site wrapper -->
+<div class="wrapper">
+
+	#parse("/WEB-INF/views/common/leftbar.vm")
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                行程管理
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="$!{link.contextPath}/schedule/main"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active">行程管理</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">满意度调研</h3>
+                    <!--<div class="box-tools"><a class="btn btn-default btn-sm" href="#">预览</a></div>-->
+                </div>
+                <!-- /.box-header -->
+
+                <div class="box-body  content">
+                    <div class="col-md-12">
+                        <!-- Custom Tabs -->
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs nav-title">
+                                <li class="active"><a href="#">问卷设计</a></li>
+                                <li class=""><a href="$!{link.contextPath}/survey/getQuestionnaireList?surveyId=$surveyEntity.id" >问卷回收</a></li>
+                               <!-- <li class=""><a href="#">问卷统计</a></li>-->
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1">
+                                    <!--满意度调查问题模板-->
+                                    <div style="min-height:90px;border-bottom:1px solid #ddd;">
+                                        <p style="margin:20px;font-size: 20px;">满意度调查问题模板</p>
+                                        <div class="form-group" id="deleteQuestion">
+                                            <div class="checkbox checkbox-inline">
+                                                <label>
+                                                    <input type="checkbox" id="allpj" checked>&nbsp;&nbsp;&nbsp;整体评价
+                                                </label>
+                                            </div>
+                                            <div class="checkbox checkbox-inline">
+                                                <label>
+                                                    <input type="checkbox" id="hotelpj" checked>&nbsp;&nbsp;&nbsp;酒店评价
+                                                </label>
+                                            </div>
+                                            <div class="checkbox checkbox-inline">
+                                                <label>
+                                                    <input type="checkbox" id="foodpj" checked>&nbsp;&nbsp;&nbsp;餐饮评价
+                                                </label>
+                                            </div>
+                                            <div class="checkbox checkbox-inline">
+                                                <label>
+                                                    <input type="checkbox" id="secpj" checked>&nbsp;&nbsp;&nbsp;景点评价
+                                                </label>
+                                            </div>
+
+                                            <div class="checkbox checkbox-inline">
+                                                <label>
+                                                    <input type="checkbox" id="severpj" checked>&nbsp;&nbsp;&nbsp;服务人员
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <form role="form" action="$!{link.contextPath}/survey/saveQuestionAndOpiton" method="post" id="form1" class="form-horizontal">
+                                        <input type="hidden" name="surveyId" value="$!surveyId"/>
+                                        <!--模板问题-->
+                                        <div class="quesNum row">
+                                            <div class="col-xs-12">
+                                                <h3 style="font-weight: 900;padding-left:30px;height:100%;">模板问题</h3>
+                                            </div>
+                                            <div class="question col-md-10 col-md-offset-1" id="allQue">
+                                                <h3 class="quesTitle col-md-12">
+                                                    <div class="col-md-10 list-inline">问题<span></span>：<p class="questionTitle">你对本次旅游整体满意吗？</p></div>
+                                                    <input type="hidden" value="4" name="questionTypesub"/>
+
+                                                    <button type="button" class="col-md-2 btn btn-block btn-danger btn-sm list-inline" style="width:70px;">删除</button>
+                                                </h3>
+
+                                            </div>
+                                            <div class="question col-md-10 col-md-offset-1"  id="hotelQue">
+                                                <h3 class="quesTitle col-md-12">
+                                                    <div class="col-md-10 list-inline">问题<span></span>：<p class="questionTitle">你对本次旅游酒店安排满意吗？</p></div>
+                                                    <input type="hidden" value="4" name="questionTypesub"/>
+                                                    <button type="button" class="col-md-2 btn btn-block btn-danger btn-sm list-inline" style="width:70px;">删除</button>
+                                                </h3>
+
+
+
+                                            </div>
+                                            <div class="question col-md-10 col-md-offset-1"  id="fullQue">
+                                                <h3 class="quesTitle col-md-12">
+                                                    <div class="col-md-10 list-inline">问题<span></span>：<p class="questionTitle">你对本次旅游用餐安排满意吗？</p></div>
+                                                    <input type="hidden" value="4" name="questionTypesub"/>
+                                                    <button type="button" class="col-md-2 btn btn-block btn-danger btn-sm list-inline" style="width:70px;">删除</button>
+                                                </h3>
+
+
+
+                                            </div>
+                                            <div class="question col-md-10 col-md-offset-1" id="jdQue">
+                                                <h3 class="quesTitle col-md-12">
+                                                    <div class="col-md-10 list-inline">问题<span></span>：<p class="questionTitle">你对本次旅游景点安排满意吗？</p></div>
+                                                    <input type="hidden" value="4" name="questionTypesub"/>
+                                                    <button type="button" class="col-md-2 btn btn-block btn-danger btn-sm list-inline" style="width:70px;">删除</button>
+                                                </h3>
+                                            </div>
+                                            <div class="question col-md-10 col-md-offset-1" id="severQue">
+                                                <h3 class="quesTitle col-md-12">
+                                                    <div class="col-md-10 list-inline">问题<span></span>：<p class="questionTitle">你对本次旅游服务人员满意吗？</p></div>
+                                                    <input type="hidden" value="4" name="questionTypesub"/>
+                                                    <button type="button" class="col-md-2 btn btn-block btn-danger btn-sm list-inline" style="width:70px;">删除</button>
+                                                </h3>
+                                            </div>
+                                            <div class="question col-md-10 col-md-offset-1" id="ldQue">
+                                                <h3 class="quesTitle col-md-12">
+                                                    <div class="col-md-10 list-inline">问题<span></span>：<p class="questionTitle"> 你对本次旅游领队的服务满意吗？</p></div>
+                                                    <input type="hidden" value="4" name="questionTypesub"/>
+                                                    <button type="button" class="col-md-2 btn btn-block btn-danger btn-sm list-inline" style="width:70px;">删除</button>
+                                                </h3>
+                                            </div>
+                                            <div class="question col-md-10 col-md-offset-1"  id="dyQue">
+                                                <h3 class="quesTitle col-md-12">
+                                                    <div class="col-md-10 list-inline">问题<span></span>：<p class="questionTitle">你对本次旅游导游的服务满意吗？</p></div>
+                                                    <input type="hidden" value="4" name="questionTypesub"/>
+                                                    <button type="button" class="col-md-2 btn btn-block btn-danger btn-sm list-inline" style="width:70px;">删除</button>
+                                                </h3>
+
+
+
+                                            </div>
+                                            <div class="question col-md-10 col-md-offset-1" id="sjQue">
+                                                <h3 class="quesTitle col-md-12">
+                                                    <div class="col-md-10 list-inline">问题<span></span>：<p class="questionTitle">你对本次旅游用车及司机的服务满意吗？</p></div>
+                                                    <input type="hidden" value="4" name="questionTypesub"/>
+                                                    <button type="button" class="col-md-2 btn btn-block btn-danger btn-sm list-inline" style="width:70px;">删除</button>
+                                                </h3>
+                                            </div>
+
+                                        </div>
+                                        <!--自定义问题-->
+                                        <div class="quesNum row zidingyi" style="border-bottom:0;">
+                                            <div class="col-xs-12">
+                                                <h3 style="font-weight: 900;padding-left:30px;height:100%;">自定义问题</h3>
+                                            </div>
+											<div id="questionsub">
+
+
+											</div>
+                                        </div>
+                                        <!--填写问题-->
+                                        <div class="addQues col-md-10 col-md-offset-1">
+                                            <form class="form-horizontal" action="$!{link.contextPath}/survey/saveQuestion"  method="post" id="form2" style="margin:10px 20px;height:200px;">
+                                                <div class="form-group" style="margin-top:20px;">
+                                                    <label for="" class="col-sm-1 control-label" style="width:100px;height:34px;line-height: 34px;padding:0 0 0 20px;">填写问题：</label>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" class="form-control writeQues" placeholder="填写内容...">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <select class="form-control" name="questionType">
+                                                            <option value="1">单选</option>
+                                                            <option value="2">多选</option>
+                                                            <option value="3">开放性问题</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group itemAdd" style="margin-top:20px;">
+                                                    <label for="" class="col-sm-1 control-label additem">选项<span>1</span>、</label>
+                                                    <i class="fa fa-times" style="margin-top:10px;"></i>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" class="form-control" placeholder="输入内容...">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group itemAdd" style="margin-top:20px;">
+                                                    <label for="" class="col-sm-1 control-label additem">选项<span>2</span>、</label>
+                                                    <i class="fa fa-times" style="margin-top:10px;"></i>
+                                                    <div class="col-sm-3">
+                                                        <input type="text" class="form-control" placeholder="输入内容...">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group brforeInsert" style="margin-top:20px;">
+                                                    <div class="col-md-3 col-md-offset-1">
+                                                        <i class="fa fa-fw fa-plus addItem" style="font-size: 25px;"></i>
+                                                        <span style="vertical-align: middle;color:#999999;">添加选项</span>
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="tijiao btn btn-primary col-md-1 col-md-offset-1">保存</button>
+                                        </div>
+                                        <!--保存按钮-->
+                                        <div style="min-height:50px;">
+                                            <button type="button" class="btn btn-primary col-md-1 col-md-offset-5" id="btns" style="font-size: 18px;margin-bottom:20px;">提交</button>
+                                        </div>
+                                    </form>
+
+
+                                </div>
+
+                                <!-- /.tab-pane -->
+                            </div>
+                            <!-- /.tab-content -->
+                        </div>
+                        <!-- nav-tabs-custom -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+	#parse("/WEB-INF/views/common/footer.vm")
+
+
+    <!-- Add the sidebar's background. This div must be placed
+   immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<div id="dialogModal" style="display:none">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">消息</h4>
+            </div>
+            <div class="modal-body" style="text-align:center;font-size:14px;">
+                <p></p>
+            </div>
+            <div class="modal-footer text-center" style="text-align:center;">
+                <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                <button class="btn btn-primary" onclick="blockUIClose()" type="button">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div id="dialogModal2" style="display:none">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                    <span aria-hidden="true">×</span></button>-->
+                <h4 class="modal-title">消息</h4>
+            </div>
+            <div class="modal-body" style="text-align:center;font-size:14px;">
+                <p></p>
+            </div>
+            <div class="modal-footer text-center" style="text-align:center;">
+                <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                <button class="btn btn-primary" id="sure" type="button">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+#define($scriptBlock)
+<script>
+    var id="$!surveyId";
+    var title="$!title";
+    var teamId="$!teamId";
+    var surveyStatus="$!surveyEntity.surveyStatus";
+</script>
+#end

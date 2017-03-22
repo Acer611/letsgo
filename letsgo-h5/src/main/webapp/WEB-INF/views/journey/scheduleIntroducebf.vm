@@ -1,0 +1,85 @@
+	#set($pageTitle="行程介绍")
+	#set($layout="/WEB-INF/views/common/layout/layout.vm")
+	#set($styleUrls=["$!{STATIC_URL}/resources/css/mainnew.css"])
+	#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+    <input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main warp">
+		<div class="zw_top"></div>
+		<section class="cd-container" id="cd-timeline">
+			<ul>
+				<li class="cd-timeline-label">
+					<div class="cd-timeline-img1 cd-picture"> 
+			            启程
+			        </div>  
+			      
+				</li>
+				#foreach( $Detail in $response.scheduleEntity.scheduleDetailList)
+                    　　  <li class="cd-timeline-block">
+							<div class="cd-timeline-img cd-picture">
+                               D$!Detail.dayNum
+							</div>
+							<div class="cd-timeline-line"></div>
+							<div class="cd-timeline-content">
+								#if($response.teamId&&$response.teamId!="")
+									#if(${response.isWeChat}=="Wechat")
+                                        <a href='$!{link.contextPath}/wechat/getScheduleShow?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}'>
+                                            <h2> $!date.format('yyyy-MM-dd',$Detail.scheduleDate)</h2>
+                                            <p> $!Detail.destination1#if( $Detail.destination2 )>$Detail.destination2 #end#if( $Detail.destination3 )>$Detail.destination3 #end#if($Detail.destination4 )>$Detail.destination4 #end</p>
+                                        </a>
+									#else
+											<a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&teamId=$!{response.teamId}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'>
+												<h2> $!date.format('yyyy-MM-dd',$Detail.scheduleDate)</h2>
+												<p> $!Detail.destination1#if( $Detail.destination2 )>$Detail.destination2 #end#if( $Detail.destination3 )>$Detail.destination3 #end#if($Detail.destination4 )>$Detail.destination4 #end</p>
+											</a>
+									#end
+								#else
+									#if(${response.isWeChat}=="Wechat")
+                                        <a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}'>
+                                            <h2> $!date.format('yyyy-MM-dd',$Detail.scheduleDate)</h2>
+                                            <p> $!Detail.destination1#if( $Detail.destination2 )>$Detail.destination2 #end#if( $Detail.destination3 )>$Detail.destination3 #end#if($Detail.destination4 )>$Detail.destination4 #end</p>
+                                        </a>
+									#else
+
+									<a href='$!{link.contextPath}$!{link.requestPath}?flag=preview&scheduleId=$!{response.scheduleEntity.id}&scheduleDetaildId=$!{Detail.id}&client_id=${response.signMap.get("$!{Detail.id}preview").client_id}&ver=${response.signMap.get("$!{Detail.id}preview").ver}&sign=${response.signMap.get("$!{Detail.id}preview").sign}&timestamp=${response.signMap.get("$!{Detail.id}preview").timestamp}&access_token=${response.signMap.get("$!{Detail.id}preview").access_token}'>
+										<h2> $!date.format('yyyy-MM-dd',$Detail.scheduleDate)</h2>
+										<p> $!Detail.destination1#if( $Detail.destination2 )>$Detail.destination2 #end#if( $Detail.destination3 )>$Detail.destination3 #end#if($Detail.destination4 )>$Detail.destination4 #end</p>
+									</a>
+									#end
+									#end
+							</div>
+						</li>
+				#end
+                #*<li class="cd-timeline-end">
+                    <div class="c_crule">
+
+                    </div>
+                </li>*#
+				</ul>
+		</section>
+	</div>
+	#if($!response.scheduleEntity.processStatus==4)
+    <div class="zw-footer">
+        <input type="button" id="errorSchedule" value="报错">
+        <input type="button" id="confirmSchedule" value="确认无误">
+    </div>
+	#end
+	#parse("/WEB-INF/views/common/leftbar.vm")
+	#define($scriptBlock)
+	<script type="text/javascript">
+        var teamId="$!{response.scheduleEntity.teamId}";
+        var iswechat="${response.isWeChat}";
+		$(function(){
+			$(".overlay").click(function(){
+				$("#joacims-menu").prop("checked",false)
+			})
+
+			$(".warp").parents("html").css("backgroundColor","#1fbad1");
+		})
+		var mapd="${response.signMap}";
+
+        //添加节点去除白色线段
+        $("section ul li:last-child").append('<div class="trans-line"></div>');
+
+	</script>
+	#end

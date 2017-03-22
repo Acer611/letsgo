@@ -1,0 +1,117 @@
+#set($pageTitle="满意度调研问卷")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/sign.css","$!{STATIC_URL}/resources/js/iCheck/minimal/blue.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/iCheck/icheck.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/getSurveyWithSign.js"])
+<div id="survey-container">
+    <!--title-->
+    <div class="surveyTitle">
+        <div class="surveyTitle1">
+            <div class="survey-title-img">
+                <img src="$!{STATIC_URL}/resources/images/img/title.png" />
+            </div>
+            <div class="survey-title-text">
+                <p>$!response.title</p>
+            </div>
+        </div>
+    </div>
+    <!--问题-->
+    <div class="quest">
+        <p style="position: absolute;left:20px;top:-12px;color:#48c6d9;font-size:20px;padding:0 5px;background:#fff;font-weight:900;">问卷内容</p>
+        <div style="clear:both;overflow:hidden;">
+            #set ($i=0)
+            #foreach($list in $response.questionList)
+                #set($i=$i+1)
+                <div class="ques1">
+                    <div class="quesTitle">
+                        <span>$!i.</span>$!list.title
+                    </div>
+                    <div class="itemList">
+                        <ul>
+                            #if($list.questionType==4)
+                            #*<li>
+                                <span>$!list.optionAnswer</span>
+                            </li>*#
+                                <div class="pingfen">
+##                                    #set($doubleString = $list.optionAnswer)
+##                                    #set($Double = 0.0)
+                                    $list.optionAnswer
+                                    #if(!$list.optionAnswer)
+                                        <b class="">暂无答案</b>
+##                                    #elseif( $Double.parseDouble($doubleString)<=5.0 &&  $Double.parseDouble($doubleString)>4.5)
+##                                        <b class="star50"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=4.5 && $Double.parseDouble($doubleString)>4)
+##                                        <b class="star45"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=4 && $Double.parseDouble($doubleString)>3.5)
+##                                        <b class="star40"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=3.5 && $Double.parseDouble($doubleString)>3)
+##                                        <b class="star35"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=3 && $Double.parseDouble($doubleString)>2.5)
+##                                        <b class="star30"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=2.5 && $Double.parseDouble($doubleString)>2)
+##                                        <b class="star25"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=2 && $Double.parseDouble($doubleString)>1.5)
+##                                        <b class="star20"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=1.5 && $Double.parseDouble($doubleString)>1)
+##                                        <b class="star15"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=1 && $Double.parseDouble($doubleString)>0.5)
+##                                        <b class="star10"></b>
+##                                    #elseif($Double.parseDouble($doubleString)<=0.5 && $Double.parseDouble($doubleString)>0)
+##                                        <b class="star05"></b>
+##                                    #elseif($Double.parseDouble($doubleString)==0)
+##                                        <b class="star0"></b>
+                                    #end
+                                </div>
+
+                            #end
+                            #if($list.questionType==1)
+                                #foreach($list1 in $list.optionList)
+                                    #if($list.questionOptionId==$list1.id)
+                                        <li id="$list.id" class="anwer">
+                                            <span>$!list1.questionOption</span>
+                                        </li>
+                                    #end
+                                #end
+                            #end
+                            #if($list.questionType==2)
+                                #foreach($list1 in $list.optionList)
+                                    #foreach($optionList in $list.moreOptionList)
+                                        #if($optionList==$list1.id)
+                                            <li  class="anwer" id="$list.id">
+                                                <span>$!list1.questionOption</span>
+
+                                            </li>
+                                        #end
+                                    #end
+                                #end
+                            #end
+                            #if($list.questionType==3)
+                                <li  class="anwer"  id="$list.id">
+                                    <span>$!list.content</span>
+                                </li>
+
+                            #end
+
+                        </ul>
+                    </div>
+                </div>
+            #end
+
+
+
+        </div>
+    </div>
+    #if($!{response.signUrl}&&$!{response.signUrl}!="")
+    <div class="pict">
+        <p>游客签名</p>
+        <img src="$!{response.signUrl}" alt=""/>
+    </div>
+    #end
+    #if($response.confirmStatus==0)
+
+        <div class="padding50">
+
+        </div>
+        <!--提交-->
+        <input type="submit" value="确认" id="confirmSurvey" class="survey-submit"/>
+    #end
+</div>

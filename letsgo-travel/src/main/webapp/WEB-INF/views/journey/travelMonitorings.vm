@@ -1,0 +1,27 @@
+#set($layout="/WEB-INF/views/common/layout/layoutnew.vm")
+
+
+#if($response.scheduleList.size()>0)
+	#foreach( $Detail in $response.scheduleList)
+    <tr>
+        <td>$!{Detail.name}</td>
+        <td>$!date.format('yyyy-MM-dd',$!Detail.startDate)</td>
+        <td>$!{Detail.totalCount}</td>
+        <td>$!{Detail.leadName}</td>
+        <td>$!{Detail.phone}</td>
+    </tr>
+
+	#end
+
+#else
+<tr><td colspan="5">没有符合条件的数据</td></tr>
+#end
+
+
+
+
+<script type="text/javascript">
+
+
+    var totalpages="$!{response.totals}";
+</script>

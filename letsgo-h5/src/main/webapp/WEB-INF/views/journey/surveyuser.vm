@@ -1,0 +1,483 @@
+#set($pageTitle="满意度调研问卷")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/survey.css","$!{STATIC_URL}/resources/js/iCheck/minimal/blue.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/iCheck/icheck.min.js","$!{STATIC_URL}/resources/js/layer_mobile/layer.js"])
+		<div id="survey-container">
+			<!--title-->
+			<div class="surveyTitle">
+				<div class="surveyTitle1">
+					<div class="survey-title-img">
+						<img src="$!{STATIC_URL}/resources/images/img/title.png" />
+					</div>
+					<div class="survey-title-text">
+						<p>$!{response.title}</p>
+					</div>
+				</div>
+			</div>
+			#set ($i=0)
+#foreach($list in $response.questionList)
+	#set($i=$i+1)
+	##if($list.questionType!=4)
+			<div class="ques1">
+                    <div class="quesTitle" questionType="$!list.questionType" #if($list.questionType==4) type="$!{list.type}" #end>
+                        <span class="xu">1.</span><span id="$!list.id" class="questionTit">$!list.title</span>
+					#if($list.questionType==4)
+                        <input type="hidden" name="type" value="${list.type}"/>
+						#end
+                        <input type="hidden" name="surveyId" value="$list.surveyId"/>
+                        <input type="hidden" name="answerId" value="$!list.answerId">
+##                        <input type="hidden" name="isRequired" value="$!list.isRequired">
+                        <input type="hidden" name="isRequired" value="1">
+                    </div>
+				<div class="itemList">
+					<ul>
+						#if($list.questionType==1)
+							#foreach($list1 in $list.optionList)
+								#if($list.questionOptionId==$list1.id)
+									#if($response.state!=2)
+									<li>
+										<input type="radio" checked name="reasonForSpots$!{i}" id="$!list1.id" value="$!list1.id">
+										<label for="$!list1.id">$!list1.questionOption</label>
+									</li>
+										#else
+                                        <li>
+                                            <span>$!list1.questionOption</span>
+										</li>
+										#end
+									#else
+										#if($response.state!=2)
+										<li>
+											<input type="radio" name="reasonForSpots$!{i}" id="$list1.id" value="$!list1.id">
+											<label for="$list1.id">$!{list1.questionOption}</label>
+										</li>
+											#end
+								#end
+							#end
+
+						#end
+						#if($list.questionType==2)
+							#foreach($list1 in $list.optionList)
+                                #if($list.moreOptionList.size()>0)
+                                            #if($response.state!=2)
+                                                <li>
+                                                    <input type="checkbox"
+                                                        #foreach($morelist in $list.moreOptionList)
+                                                           #if($morelist==$list1.id)
+                                                                checked
+                                                           #end
+                                                         #end
+                                                           name="reasonForSpots$!{i}" id="$!list1.id" value="$!list1.id">
+                                                    <label for="$!list1.id" >$!{list1.questionOption}</label>
+                                                </li>
+                                            #else
+                                                #foreach($morelist in $list.moreOptionList)
+                                                    #if($morelist==$list1.id)
+                                                        <li><span >$!list1.questionOption</span></li>
+                                                    #end
+                                                #end
+
+                                            #end
+                                #else
+                                        #if($response.state!=2)
+                                            <li>
+                                                <input type="checkbox"  name="reasonForSpots$!{i}" id="$!list1.id" value="$!list1.id">
+                                                <label for="$!list1.id" >$!{list1.questionOption}</label>
+                                            </li>
+                                        #end
+                                #end
+							#end
+						#end
+						#if($list.questionType==3)
+							#if($response.state!=2)
+							<textarea   cols="30" rows="5" placeholder="请写下您的意见或建议...">$!list.content</textarea>
+								#else
+									<li>$!list.content</li>
+								#end
+						#end
+						#if($list.questionType==4)
+								#if($response.state!=2)
+                                    #set($zimumore = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"])
+                                    <li>
+                                        <input type="radio" #if($list.optionAnswer==5) checked #end name="modelquestion$!{i}" id="verymod$!{i}$!{zimumore.get(0)}0"  value="5">
+                                        <label for="verymod$!{i}$!{zimumore.get(0)}0">非常同意</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" #if($list.optionAnswer==4) checked #end name="modelquestion$!{i}" id="verymod$!{i}$!{zimumore.get(1)}1"  value="4">
+
+                                        <label for="verymod$!{i}$!{zimumore.get(1)}1">同意</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" #if($list.optionAnswer==3) checked #end name="modelquestion$!{i}" id="verymod$!{i}$!{zimumore.get(2)}2"  value="3">
+                                        <label for="verymod$!{i}$!{zimumore.get(2)}2">一般</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" #if($list.optionAnswer==2) checked #end name="modelquestion$!{i}" id="verymod$!{i}$!{zimumore.get(3)}3"  value="2">
+                                        <label for="verymod$!{i}$!{zimumore.get(3)}3">不同意</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" #if($list.optionAnswer==1) checked #end name="modelquestion$!{i}" id="verymod$!{i}$!{zimumore.get(4)}4"  value="1">
+                                        <label for="verymod$!{i}$!{zimumore.get(4)}4">特别不同意</label>
+                                    </li>
+								#else
+                                    <li>
+                                        <span>
+											#if($list.optionAnswer==5)
+                                                非常同意
+											#elseif($list.optionAnswer==4)
+												同意
+											#elseif($list.optionAnswer==3)
+                                                一般
+											#elseif($list.optionAnswer==2)
+                                                不同意
+											#elseif($list.optionAnswer==1)
+                                                特别不同意
+											#end
+										</span>
+                                    </li>
+								#end
+						#end
+					</ul>
+				</div>
+			</div>
+	##end
+#end
+			#if($response.state!=2)
+				<div class="padding50">
+
+				</div>
+				<!--提交-->
+				<a href="javascript:;"  class="survey-submit" id="actionTo">下一步</a>
+			#end
+		</div>
+#define($scriptBlock)
+	<script>
+        var moreOption;
+        var flag=GetRequest(window.location.href);
+	#if(${isWeChat} == "Wechat")
+    var submitSurvey_url=CONTEXTPATH+"/wechat/submitSurvey?"+parseParam(flag);
+    $(".survey-submit").attr("href","javascript:;");
+		#else
+        var submitSurvey_url=CONTEXTPATH+"/web/survey/submitSurvey?"+parseParam(flag);
+			#end
+		$(document).ready(function() {
+			#foreach($list in $response.questionList)
+				#if($list.questionType==2)
+					#if($response.state!=2)
+                        moreOption="$list.moreOption".split(";");
+                        for(var m=0;m<moreOption.length;m++){
+                            $("[type=checkbox]").each(function(i){
+                                if($(this).val()==moreOption[m]){
+                                    $("#"+$(this).val()).iCheck('check');
+                                }
+                            })
+                        }
+					#end
+
+				#end
+			#end
+			//iCheck
+			$('.itemList input').iCheck({
+				checkboxClass: 'icheckbox_minimal-blue',
+				radioClass: 'iradio_minimal-blue',
+				increaseArea: '20%' // optional
+			});
+			//背景灰色
+			$(".itemList ul li").hover(function(){
+				$(this).css("background","#f0eff5");
+			},function(){
+				$(this).css("background","transparent");
+			});
+			$("label").hover(function(){
+				$(this).parent().css("background","#f0eff5");
+			},function(){
+				$(this).parent().css("background","transparent");
+			});
+            $("ins").hover(function(){
+                $(this).parent().parent().css("background","#f0eff5");
+            },function(){
+                $(this).parent().parent().css("background","transparent");
+            });
+			//问题号
+			var len = $(".quesTitle span.xu").length;//总长度
+        	for(var i=0;i<len;i++){
+        		$(".quesTitle span.xu").eq(i).html(i+1+".");
+        	}
+            montor();
+            //监听是否全部选中
+            $('input').on('ifChanged', function(event){
+                montor();
+            });
+            //监听是否全部选中
+            $('textarea').on('input', function(event){
+                montor();
+            });
+			//提交
+            $(".survey-submit").click(function(){
+                layer.open({type: 2,shadeClose:false});
+				var that=$(this);
+                var question={};
+				var finsh=true;
+                question.answerList=[];
+                $(".ques1").each(function(){
+					var surveyId=$(this).find(".quesTitle").find("[name=surveyId]").val();
+                    var answerId=$(this).find(".quesTitle").find("[name=answerId]").val();
+                    var isRequired=$(this).find(".quesTitle").find("[name=isRequired]").val();
+                    if(answerId) {
+                        question.state = 1;
+                    }else{
+                        question.state = 0;
+                    }
+					if($(this).find(".quesTitle").attr("questionType")==1) {
+						questionOptionId= $(this).find(".itemList").find("input[type=radio]:checked").attr("id");
+                        if(isRequired==1){
+                            if(questionOptionId){
+                                finsh=true;
+							}else{
+                                finsh=false;
+                                return false;
+							}
+                        }
+						question.answerList.push({
+							content: "",
+							id: answerId,
+							moreOption: "",
+							questionId: $(this).find(".quesTitle").find(".questionTit").attr("id"),
+							questionOptionId: questionOptionId,
+							surveyId: surveyId
+						})
+					} else if($(this).find(".quesTitle").attr("questionType")==2) {
+                        var questionOptionIdmoreStr="";
+						var questionOptionIdmore=[];
+						$(this).find(".itemList").find("input[type=checkbox]").each(function(){
+							if($(this).is(":checked")){
+								questionOptionIdmore.push($(this).attr("id"))
+							}
+						})
+                        questionOptionIdmoreStr=questionOptionIdmore.join(";");
+                        if(isRequired==1){
+                            if(questionOptionIdmoreStr){
+                                finsh=true;
+							}else{
+                                finsh=false;
+								return false;
+                            }
+                        }
+						question.answerList.push({
+							content: "",
+							id: answerId,
+							moreOption: questionOptionIdmoreStr,
+							questionId: $(this).find(".quesTitle").find(".questionTit").attr("id"),
+							questionOptionId:"",
+							surveyId: surveyId
+						})
+					} else if($(this).find(".quesTitle").attr("questionType")==3) {
+						var content=$(this).find(".itemList").find("textarea").val();
+                        if(isRequired==1){
+                            if(content){
+                                finsh=true;
+							}else{
+                                finsh=false;
+                                return false;
+                            }
+                        }
+						question.answerList.push({
+							content: content,
+							id: answerId,
+							moreOption: "",
+							questionId: $(this).find(".quesTitle").find(".questionTit").attr("id"),
+							questionOptionId: "",
+							surveyId: surveyId
+						})
+					} else if($(this).find(".quesTitle").attr("questionType")==4) {
+                        if(isRequired==1){
+                            if($(this).find(".itemList").find("input[type=radio]:checked").val()){
+                                finsh=true;
+                            }else{
+                                finsh=false;
+                                return false;
+                            }
+                        }
+                        question.answerList.push({
+                            id: answerId,
+                            optionAnswer: $(this).find(".itemList").find("input[type=radio]:checked").val(),
+                            questionId: $(this).find(".quesTitle").find(".questionTit").attr("id"),
+                            type:$(this).find(".quesTitle").attr("type"),
+                            surveyId: surveyId
+                        })
+                    }
+                })
+				if(!finsh){
+                    layer.closeAll();
+                    layer.open({
+                        btn: [ '确定'],
+                        content:"请填写必填问题后在进行下一步"
+                    })
+					return false;
+				}
+                $.ajax({
+                    type:"post",
+                    url:submitSurvey_url,
+                    data:JSON.stringify(question),
+                    contentType:'application/json;charset=utf-8',
+                    dataType:"json",
+                    success:function(data){
+                        #if($!{isWeChat}=="Wechat")
+                           window.location.href=CONTEXTPATH+"/wechat/getSign?txGroupId=$!{txGroupId}";
+                        #else
+                            that.attr("href","tlt:");
+                        #end
+                        if(data.retCode==0){
+							#if($!{isWeChat}=="Wechat")
+                                window.location.href=CONTEXTPATH+"/wechat/getSign?txGroupId=$!{txGroupId}";
+							#else
+                            	that.attr("href","tlt:");
+//                                var e = document.createEvent('MouseEvent');
+//                                e.initEvent('click', false, false);
+//                                setTimeout(document.getElementById("actionTo").dispatchEvent(e),2000);
+
+                            #end
+                            layer.closeAll();
+                        }else{
+                            layer.open({
+                                btn: [ '确定'],
+                                content:data.retMsg,
+                                shadeClose:false
+                            })
+                        }
+                    },
+					error:function(){
+                        layer.closeAll();
+					}
+                });
+            })
+		});
+        function creatTouchstartEventAndDispatch (el) {
+            var event = document.createEvent('Events');
+            event.initEvent('touchstart', true, true);
+            el.dispatchEvent(event);
+        }
+        function montor(){
+            var isBoolsee=false;
+            $(".ques1").each(function() {
+                var isRequired = $(this).find(".quesTitle").find("[name=isRequired]").val();
+                if ($(this).find(".quesTitle").attr("questionType") == 1) {
+                    questionOptionIdbool = $(this).find(".itemList").find("input[type=radio]:checked").attr("id");
+                    if (isRequired == 1) {
+                        if (questionOptionIdbool) {
+                            isBoolsee = true;
+                        } else {
+                            isBoolsee = false;
+                            return false;
+                        }
+                    }
+
+                } else if ($(this).find(".quesTitle").attr("questionType") == 2) {
+                    var questionOptionIdmoreStrbool = "";
+                    var questionOptionIdmorebool = [];
+                    $(this).find(".itemList").find("input[type=checkbox]").each(function () {
+                        if ($(this).is(":checked")) {
+                            questionOptionIdmorebool.push($(this).attr("id"))
+                        }
+                    })
+                    questionOptionIdmoreStrbool = questionOptionIdmorebool.join(";");
+                    if (isRequired == 1) {
+                        if (questionOptionIdmoreStrbool) {
+                            isBoolsee = true;
+                        } else {
+                            isBoolsee = false;
+                            return false;
+                        }
+                    }
+
+                } else if ($(this).find(".quesTitle").attr("questionType") == 3) {
+                    var contentbool = $(this).find(".itemList").find("textarea").val();
+                    if (isRequired == 1) {
+                        if (contentbool) {
+                            isBoolsee = true;
+                        } else {
+                            isBoolsee = false;
+                            return false;
+                        }
+                    }
+
+                } else if ($(this).find(".quesTitle").attr("questionType") == 4) {
+                    if (isRequired == 1) {
+                        if ($(this).find(".itemList").find("input[type=radio]:checked").val()) {
+                            isBoolsee = true;
+                        } else {
+                            isBoolsee = false;
+                            return false;
+                        }
+                    }
+                }
+            })
+            if(isBoolsee){
+                $("#actionTo").attr("href","tlt:");
+            }else{
+                $("#actionTo").attr("href","javascript:;");
+            }
+        }
+        function GetRequest() {
+            var url = location.search; //获取url中"?"符后的字串
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for(var i = 0; i < strs.length; i ++) {
+                    theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+        }
+
+        function parseParam(param, key) {
+
+            var paramStr = "";
+
+            if (param instanceof String || param instanceof Number || param instanceof Boolean)
+            {
+
+                paramStr += "&" + key + "=" + encodeURIComponent(param);
+
+            }
+            else
+            {
+
+                $.each(param, function (i) {
+
+                    var k = key == null ? i : key + (param instanceof Array ? "[" + i + "]" : "." + i);
+                    paramStr += '&' + parseParam(this, k);
+
+                });
+
+            }
+
+            return paramStr.substr(1);
+        }
+
+        /**
+         * 获取指定的URL参数值
+         * URL:http://www.quwan.com/index?name=tyler
+         * 参数：paramName URL参数
+         * 调用方法:getParam("name")
+         * 返回值:tyler
+         */
+        function getParam(paramName) {
+            paramValue = "", isFound = !1;
+            if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+                arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+                while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+            }
+            return paramValue == "" && (paramValue = null), paramValue
+        }
+        //获取url参数的值：name是参数名
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return (r[2]);
+            }
+            return null;
+        }
+	</script>
+#end

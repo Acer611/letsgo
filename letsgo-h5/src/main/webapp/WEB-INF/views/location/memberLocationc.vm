@@ -1,0 +1,428 @@
+#set($pageTitle="地图")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/map.css"])
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+</style>
+<div id="gMap"></div>
+<div class="mapTop swiper-container">
+    <div class="swiper-wrapper">
+
+    </div>
+</div>
+<div class="mapBottom">
+    <div class="person">
+        <div class="txiconf"><img src=""/></div><div class="nametxt">范冰冰</div>
+    </div>
+    <div class="message"><a href="sms:18688888888">信息</a></div>
+    <div class="telphone"><a href="tel:18688888888">电话</a></div>
+</div>
+
+#define($scriptBlock)
+<script>
+    //$("#gMap").css("height",$("body").height()-$(".mapTop ").height());
+    var markers = [];
+    var map;
+    var marker;
+    //var projection;
+    //var infowindow;
+    var infoBubble2;
+    var defaultZoom = 18;
+    var neighborhood=[];
+    var neighborhood2=[];
+    var neighborhoods = [
+        {lat: 39.2974446, lng: 116.4038432},
+        {lat:39.9047983, lng:  116.980915},
+        {lat:39.0087243,lng:116.1752912},
+        {lat:39.1087243,lng:116.3752912},
+        {lat:38.1087243,lng:115.2752912},
+        {lat:40.9087243,lng:116.4052912}
+    ];
+    var listpostion="$!{response.locationEntityList}";
+    var refresh="$!{link.contextPath}/web/location/refreshMemberLocation?teamId=$!{response.teamId}&client_id=$!{response.signMap.get('refreshMemberLocation').client_id}&ver=$!{response.signMap.get('refreshMemberLocation').ver}&timestamp=$!{response.signMap.get('refreshMemberLocation').timestamp}&sign=$!{response.signMap.get('refreshMemberLocation').sign}&access_token=$!{response.signMap.get('refreshMemberLocation').access_token}";
+    function getSone(){
+        $.ajax({
+            type: 'get',
+            url: refresh,
+            data: { },
+            dataType: 'json',
+            timeout: 3000,
+            context: $('body'),
+            success: function(data){
+                // Supposing this JSON payload was received:
+                //   {"project": {"id": 42, "html": "<div>..." }}
+                // append the HTML to context object.
+                //this.append(data.project.html)
+                var locationEntityList=data.locationEntityList;
+                var html='';
+                for(var i=0;i<locationEntityList.length;i++){
+                    var userEntity=locationEntityList[i].memberEntity.userEntity;
+                    var phone=locationEntityList[i].memberEntity.phone;
+                    var longitude=locationEntityList[i].longitude;
+                    var latitude=locationEntityList[i].latitude;
+                    neighborhood.push({position:{lat:longitude,lng:latitude},text:userEntity.photoUrl,sex:userEntity.sex});
+                    neighborhood2.push({lat:longitude,lng:latitude});
+                    if(locationEntityList[i].memberEntity.role==1){
+                        if(userEntity.sex==2){
+                            html+='<dl class="swiper-slide fe" phone="'+phone+'" sex="'+userEntity.sex+'">'+
+                                    '<dt><div><img src="'+userEntity.photoUrl+'"/></div></dt>'+
+                                    '<dd>'+userEntity.realName+'</dd>'+
+                                    '</dl>';
+                        }else{
+                            html+='<dl class="swiper-slide " phone="'+phone+'" sex="'+userEntity.sex+'">'+
+                                    '<dt><div><img src="'+userEntity.photoUrl+'"/></div></dt>'+
+                                    '<dd>'+userEntity.realName+'</dd>'+
+                                    '</dl>';
+                        }
+
+                    }
+
+                }
+                $(".swiper-wrapper").empty().append(html);
+                drop();
+                neighborhood2.push({lat:myLatlng.lat,lng:myLatlng.lng})
+                var centerui=map.getCenter();
+                var len2=neighborhood2.length;
+                var bounds = new google.maps.LatLngBounds();
+                while(len2--){
+                    bounds.extend(new google.maps.LatLng(neighborhood2[len2].lat
+                            ,neighborhood2[len2].lng));
+                }
+                map.fitBounds(bounds);
+
+                var displayInfoProcess=google.maps.event.addListener(map, 'bounds_changed', function(){
+                    //map.setCenter(centerui);
+                    //pixelsnew(marker.getPosition());
+                    for(var i=0;i<markers.length;i++){
+                        showNewRect(i,neighborhood[i].text,neighborhood[i].sex);
+                    }
+                    if(displayInfoProcess) {
+                        google.maps.event.removeListener(displayInfoProcess);
+                    }
+                });
+                //console.log(bounds.contains(new   google.maps.LatLng(40.4087243,116.4052912)));
+                // console.log(bounds.getNorthEast());
+                //console.log(bounds.getSouthWest());
+
+                //地图缩放时触发，当地图的缩放比例大于默认比例时，恢复为默认比例
+                google.maps.event.addListener(map, 'zoom_changed', function () {
+                    if (map.getZoom() > defaultZoom){
+                        map.setZoom(defaultZoom);
+                    }
+                });
+            },
+            error: function(xhr, type){
+                alert('Ajax error!')
+            }
+        })
+
+    }
+    //var myLatlng = new google.maps.LatLng(39.9087243,116.3952912);
+    var myLatlng = {lat: 39.92788, lng:116.4056912};
+    var myLatlngCenter;
+    function initialize() {
+        myLatlngCenter=new google.maps.LatLng(myLatlng.lat,myLatlng.lng);
+        map = new google.maps.Map(document.getElementById('gMap'), {
+            zoom: defaultZoom,
+            center: myLatlng,
+            disableDefaultUI: true,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            draggable: true,
+            scrollwheel: true,
+            disableDoubleClickZoom: false,
+            maxZoom:18,
+            minZoom:5
+        });
+
+        marker = new google.maps.Marker({
+            position: myLatlng,
+            optimized: false,
+            map: map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                strokeColor: '#fff',
+                strokeWeight: 3,
+                fillColor: '#1484ff',
+                fillOpacity: 1,
+            },
+        });
+        var txt="";
+        //pixels(marker.getPosition());
+        infoBubble2 = new InfoBubble({
+            map: map,
+            content: '<div class="txiconf" style="margin:0;"></div>',
+            // position: new google.maps.LatLng(0, 0),
+            shadowStyle: 0,
+            padding: 0,
+            backgroundColor: 'none',
+            borderRadius: 0,
+            arrowSize: '0px',
+            borderWidth: 'none',
+            borderColor: '#2c2c2c',
+            disableAutoPan: true,
+            hideCloseButton: true,
+            arrowPosition: '55%',
+            backgroundClassName: 'transparent',
+            arrowStyle: 0
+        });
+
+
+        var trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
+
+        //var transitLayer = new google.maps.TransitLayer();
+        //transitLayer.setMap(map);
+
+        //var bikeLayer = new google.maps.BicyclingLayer();
+        //bikeLayer.setMap(map);
+
+        var myCity = new google.maps.Circle({
+            strokeColor: '#1484ff',
+            strokeOpacity: 0.15,
+            strokeWeight: 0,
+            fillColor: '#1484ff',
+            fillOpacity:0.15,
+            map: map,
+            center: myLatlng,
+            radius: 50
+        });
+
+        //map.setMyLocationEnabled();
+        myCity.setMap(map);
+        //pixelsnew(marker.getPosition());
+        /*map.addListener('dragend', function() {
+            //pixels();
+        });*/
+        /* var curZoom=map.getZoom();
+     map.addListener('dblclick', function() {
+
+         curZoom=map.getZoom();
+         if(curZoom>defaultZoom||curZoom<5){
+             //return;
+         }
+         map.setZoom(curZoom+1);
+
+
+     });*/
+
+
+//zoomChange2();
+        getSone();
+    }
+    //var ii=1;
+    var timer=[];
+    /*function zoomChange2(){
+     args={
+        iniAngle:180,
+        iniL:100,//X方向滑动的最小距离
+            iniT:100,//Y方向滑动的最大距离
+        beforeCallback:function(tPoint){
+            //MapSucessDisWork();
+            var _this=tPoint.self,
+                _width=map.getZoom();
+            tPoint.setAttr("startScale",_width);
+        },
+        sCallback:function(tPoint){
+         //e.touches.length
+         ii=1;
+        },
+        mCallback:function(tPoint){
+            //MapSucessDisWork();
+            var _this=tPoint.self,
+                img=map;
+            if(tPoint.mutiTouch){
+
+                MapSucessDisWork();
+                if(!tPoint.startScale){
+                    tPoint.setAttr("startScale",map.getZoom());
+                }else{
+                ii++;
+                    //_curScale=parseInt(tPoint.startScale+(Math.ceil(tPoint.scale))*10);
+                    timer.push(setTimeout(function(){
+
+                        //timer.shift();
+                    if(tPoint.scale>1){
+                        _curScale=parseInt(tPoint.startScale++);
+                    }else{
+                        _curScale=parseInt(tPoint.startScale--);
+                    }
+
+                    if(_curScale>=19||_curScale<6){
+                        return
+                    }
+                    //_curScale=Math.ceil(tPoint.gStartDis*100)/100 Math.ceil(tPoint.gEndDis*100)/100
+                    //img.css("width",_curScale*100+"%");
+                    //alert(_curScale)
+                    //_curScale=Math.floor(tPoint.scale);
+                    //if(tPoint.scale>1){
+                    //var time=100*ii
+                        map.setZoom(_curScale)
+                    //}else{
+                        //map.setZoom(_curScale--);
+                    //}
+                    tPoint.setAttr("curScale",_curScale);
+                    //$("#showT").html("起始缩放:"+tPoint.startScale+"<br>当前缩放:"+tPoint.curScale);
+                    //$("#showT").html("缩放:"+tPoint.scale+"<br>起始距离:"+Math.round(tPoint.gStartDis*100)/100+" 当前距离"+Math.round(tPoint.gEndDis*100)/100+"<br>旋转角度:"+tPoint.rotation);
+                },300*ii));
+                }
+            }else{
+                MapSucessWork();
+            }
+            //$("#showT").html(tPoint.gStartDis+"  "+tPoint.gEndDis);
+            //$("#showT").html(tPoint.rotation+"  "+tPoint.gStartAngle+"  "+tPoint.gEndAngle);
+        },
+        eCallback:function(tPoint){
+            for(var i=0;i<timer.length;i++){
+                clearTimeout(timer[i]);
+            }
+            ii=1;
+            if(tPoint.curScale){
+                tPoint.setAttr("startScale",tPoint.curScale);
+            }
+        }
+    }
+    $('#gMap').Swipe(args);
+
+    }*/
+    function drop() {
+        clearMarkers();
+        for (var i = 0; i < neighborhood.length; i++) {
+            addMarkerWithTimeout(neighborhood[i].position, i * 200);
+        }
+
+    }
+    /*var latlng_new;
+    var pixel,pixelold;
+    function pixels(){
+    //console.log(p2)
+        var overlay = new google.maps.OverlayView();
+        overlay.draw = function() {};
+        overlay.onAdd = function() {
+            projection = this.getProjection();
+            //pixel =projection.fromLatLngToContainerPixel(p2);
+        latlng_new=projection.fromContainerPixelToLatLng(new google.maps.Point((pixelold.x-$("#pin").width()/2),(pixelold.y-$("#pin").height())) ) ;
+        pixel_new=projection.fromLatLngToContainerPixel(latlng_new)
+        //https://maps.googleapis.com/maps/api/geocode/json?latlng=39.8974446,116.4038432&key=
+        //$.getJSON('https://maps.googleapis.com/maps/api/geocode/json?latlng='+latlng_new.lat() +','+latlng_new.lng() +'&key=', function(data){
+         // console.log(data.results[0].formatted_address)
+        //})
+        console.log(latlng_new)
+        console.log(pixel_new);
+        //map.setCenter(latlng_new);
+        /*var infowindow = new google.maps.InfoWindow({
+            content: 'Latitude: ' + latlng_new.lat() +
+            '<br>Longitude: ' + latlng_new.lng()+
+        '<br>zoom:'+map.getZoom()
+        });*/
+    //infowindow.open(map,new google.maps.Point((pixelold.x-$("#pin").width()/2),(pixelold.y-$("#pin").height())) );
+    //};
+    /*overlay.setMap(map);*/
+    //return latlng_new;
+
+    //}*/
+    /*function pixelsnew(p2){
+    //console.log(p2)
+        var overlay2 = new google.maps.OverlayView();
+        overlay2.draw = function() {};
+        overlay2.onAdd = function() {
+        projection2 = this.getProjection();
+        pixelold =projection2.fromLatLngToContainerPixel(p2);
+        $("#pin").css({left:(pixelold.x-$("#pin").width()/2),top:(pixelold.y-$("#pin").height()),visibility:'visible'});
+        };
+        overlay2.setMap(map);
+    }*/
+    function addMarkerWithTimeout(position, timeout) {
+        window.setTimeout(function() {
+            markers.push(new google.maps.Marker({
+                position: position,
+                map: map,
+                animation: google.maps.Animation.DROP
+            }));
+        }, timeout);
+
+    }
+    /*function MapSucessWork() {
+            map.setOptions({ draggable: true });
+    }
+    function MapSucessDisWork() {
+            map.setOptions({ draggable: false});
+    }*/
+    function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+
+    //use
+
+    function showNewRect(i,txt,sex){
+        setTimeout(function(){
+            markers[i].addListener ('click', function(event) {
+                if(sex==1) {
+                    infoBubble2.setContent('<div class="txiconf"><img src="' + txt + '"/></div>');
+                }else{
+                    infoBubble2.setContent('<div class="txiconfe"><img src="' + txt + '"/></div>');
+                }
+                //infoBubble.open(map,  markers[i]);
+                infoBubble2.open(map,  markers[i]);
+                //infowindow.open(map, markers[i]);
+                $(".mapTop").find("dl").trigger("click");
+                return false;
+            })
+        },i*200)
+    }
+
+    function detectBrowser() {
+        var useragent = navigator.userAgent;
+        var mapdiv = document.getElementById("gMap");
+
+        if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+            mapdiv.style.width = '100%';
+            mapdiv.style.height = '100%';
+        } else {
+            mapdiv.style.width = '600px';
+            mapdiv.style.height = '800px';
+        }
+    }
+    $(function(){
+        $(".mapTop").on("click","dl",function(){
+            $(this).addClass("active").siblings().removeClass("active");
+            var phone=$(this).attr("phone");
+            $(".mapBottom").show();
+            if($(this).attr("sex")!=1){
+                $(".mapBottom>.txiconf").addClass("txiconfe");
+            }
+            $(".mapBottom").find(".person").find("img").attr("src",$(this).find("dt").find("div").find("img").attr("src"));
+            $(".nametxt").text($(this).find("dd").text());
+            $(".message>a").attr("href","sms:"+phone);
+            $(".telphone>a").attr("href","tel:"+phone);
+            if($(this).attr("sex")==1) {
+                infoBubble2.setContent('<div class="txiconf"><img src="' + $(this).find("dt").find("div").find("img").attr("src") + '"/></div>');
+            }else{
+                infoBubble2.setContent('<div class="txiconfe"><img src="' + $(this).find("dt").find("div").find("img").attr("src") + '"/></div>');
+            }
+            infoBubble2.open(map,  markers[$(".mapTop").find("dl").index()]);
+
+        })
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 'auto',
+            spaceBetween: 0
+        });
+    })
+    //detectBrowser()
+    window.onload=function(){
+        initialize();
+    }
+</script>
+
+#end
+<script src="http://maps.google.cn/maps/api/js?region=cn&language=zh-CN&key=AIzaSyBok03gYzNXxJPWYkfnlaZi7_XVdkc1MVo" async defer></script>
+
+

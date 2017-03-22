@@ -1,0 +1,65 @@
+#set($pageTitle="购物场所")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/style.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/layer_mobile/layer.js","$!{STATIC_URL}/resources/js/schedule.js"])
+
+	<input type="checkbox" id="joacims-menu"/>
+	<label class="bottomLabel fellLabel" for="joacims-menu"></label>
+	<div class="main">
+		<section class="cd-container feiyong">
+			<dl>
+				<dt></dt>
+				<dd>
+					<ul>
+						<!--<li>
+							 <div>
+							 银座 1小时；
+							</div>
+						</li>
+						<li>
+							 <div>
+							 乐天 2小时；
+							</div>
+						</li>
+						<li>
+							 <div>
+							 免税店 1小时；
+							</div>
+						</li>-->
+                        <li>
+                            <div>
+								$!response.shopPlaceVo.shoppingPlace.replaceAll("\n|\r","<br/>")
+                            </div>
+                        </li>
+
+					</ul>
+				</dd>
+			</dl>
+			<div class="continue_loding">
+					<div></div>
+					<span>已经到底,点击左侧查看更多!</span>
+			</div>
+		</section>
+	</div>
+#if($!response.scheduleEntity.processStatus==4)
+<div class="zw-footer">
+    <input type="button" id="errorSchedule" value="报错">
+    <input type="button" id="confirmSchedule" value="确认无误">
+</div>
+#end
+#parse("/WEB-INF/views/common/leftbar.vm")
+#define($scriptBlock)
+	<script type="text/javascript">
+        var teamId="$!{response.scheduleEntity.teamId}";
+        var iswechat="${response.isWeChat}";
+		$(function(){
+			$(".overlay").click(function(){
+				$("#joacims-menu").prop("checked",false)
+			})
+		  	/*判断是否显示已经到底*/
+		  	if($(window).height()>$("body").height()){
+		  		$(".continue_loding").hide();
+		  	} 
+		})
+	</script>
+#end

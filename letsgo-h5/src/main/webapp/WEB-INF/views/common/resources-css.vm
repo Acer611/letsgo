@@ -1,0 +1,5 @@
+<link rel="stylesheet" href="$!{STATIC_URL}/resources/css/swiper.min.css"/>
+<script type="text/javascript">
+var CONTEXTPATH='$!{link.contextPath}';
+var REQUESTPATH='${link.requestPath}';
+</script>

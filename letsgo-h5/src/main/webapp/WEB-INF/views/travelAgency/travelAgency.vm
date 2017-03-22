@@ -1,0 +1,19 @@
+#set($pageTitle="旅行社信息")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/travelAgency.css"])
+	<div id="travel-container">
+#if( ${response.travelAgencyInfo}&&${response.travelAgencyInfo}!=""||${response.groupClubInfo}&&${response.groupClubInfo}!="")
+
+	#if($!{response.travelAgencyInfo})
+		<p class="travel-title">组团社信息:</p>
+		<p class="travel-content">$!{response.travelAgencyInfo}</p>
+	#end
+		#if($!{response.groupClubInfo})
+		<p class="travel-title">地接社信息:</p>
+            <p class="travel-content">$!{response.groupClubInfo}</p>
+			#end
+	#else
+    <p class="travel-content">暂无信息</p>
+	#end
+	</div>
+	

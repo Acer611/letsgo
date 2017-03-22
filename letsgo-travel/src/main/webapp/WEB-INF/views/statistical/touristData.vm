@@ -1,0 +1,334 @@
+#set($pageTitle="游客数据")
+#set($layout="/WEB-INF/views/common/layout/layout.vm")
+#set($scriptUrls=["http://cdn.hcharts.cn/highcharts/highcharts.js","$!{STATIC_URL}/resources/plugins/blockUI/jquery.blockUI.js"])
+
+		<style type="text/css">
+			table tr td,
+			table tr th {
+				text-align: center;
+			}
+			
+			table tr td img {
+				margin: 3px 3px;
+			}
+			
+			.picture {
+				border: 1px solid #ccc;
+				width: 400px;
+				height: 300px;
+			}
+		</style>
+
+
+
+		<!-- Site wrapper -->
+		<div class="wrapper">
+
+			#parse("/WEB-INF/views/common/leftbar.vm")
+
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+            统计报表
+          </h1>
+					<ol class="breadcrumb">
+						<li><a href="$!{link.contextPath}/schedule/mainPage"><i class="fa fa-dashboard"></i> 首页</a></li>
+						<li class="active">查看统计报表</li>
+					</ol>
+				</section>
+
+				<!-- Main content -->
+				<section class="content">
+					<div class="box box-info">
+						<div class="box-header with-border">
+							<h3 class="box-title">游客数据</h3>
+							<!--<div class="box-tools"><a class="btn btn-default btn-sm" href="#">预览</a></div>-->
+						</div>
+						<!-- /.box-header -->
+						<div class="box-body">
+							<div>
+								<form class="form-horizontal" role="form" action="$!{link.contextPath}/data/searchTouristData"  method="get" id="form1">
+                                    <div class="form-group col-md-5" >
+                                        <label for="exampleInputName2"  class="control-label  col-md-5">大洲：</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="continent" tabindex="-1" aria-hidden="true">
+                                                <option value="10" #if($!{request.continent}=="10") selected
+                                                #end>亚洲</option>
+                                                <option value="11" #if($!{request.continent}=="11") selected
+                                                #end>欧洲</option>
+                                                <option value="12" #if($!{request.continent}=="12") selected
+                                                #end>北美洲</option>
+                                                <option value="13" #if($!{request.continent}=="13") selected
+                                                #end>南美洲</option>
+                                                <option value="14" #if($!{request.continent}=="14") selected
+                                                #end>非洲</option>
+                                                <option value="15" #if($!{request.continent}=="15") selected
+                                                #end>大洋洲</option>
+                                                <option value="16" #if($!{request.continent}=="16") selected
+                                                #end>南极洲</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="exampleInputEmail2"  class="control-label col-md-5">目的地国家：</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="destination" tabindex="-1" aria-hidden="true">
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <!--时间日期-->
+                                    <div class="form-group col-md-5 row">
+
+                                        <label for="inputEmail3"  class="control-label col-md-5" for="startPlace">月份：</label>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control pull-right" placeholder="yyyy-mm" value="$!{request.startTime}" readonly autocomplete="off" name="startTime" id="startDate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-5 row" style="padding-left:0;margin-left:0;">
+                                        <!-- /.input group -->
+                                        <label class="col-md-1 control-label text-center" style="padding-left:10px;padding-right:10px;">至</label>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" id="endDate" name="endTime"  value="$!{request.endTime}" placeholder="yyyy-mm" class="form-control" readonly autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12" style="margin-bottom:20px;">
+                                        <div class="col-md-2 col-md-offset-5">
+                                            <button type="button" id="btns" class="btn btn-block  btn-primary">查询</button>
+                                        </div>
+                                    </div>
+
+								</form>
+##                                $response.areaDataList.size()
+##                                $response.ageDataList.size()
+                                #if($response.areaDataList.size() == 0 && $response.ageDataList.size() == 0 && $response.sexDataList.size() == 0)
+                                   <div class="col-md-12 text-center" style="margin-top:20px;">没有更多的游客数据</div>
+                                #end
+
+                                <div id="province" class="col-md-4"  style="#if($response.areaDataList.size() == 0 ) display:none;#end"></div>
+                                <div id="age" class="col-md-4" style="#if($response.ageDataList.size() == 0 ) display:none;#end"></div>
+                                <div id="sex" class="col-md-4"  style="#if($response.sexDataList.size() == 0 ) display:none;#end"></div>
+							</div>
+							
+						</div>
+					</div>
+				</section>
+				<!-- /.content -->
+				</div>
+				<!-- /.content-wrapper -->
+
+			#parse("/WEB-INF/views/common/footer.vm")
+
+				<!-- Add the sidebar's background. This div must be placed
+           immediately after the control sidebar -->
+				<div class="control-sidebar-bg"></div>
+			</div>
+			<!-- ./wrapper -->
+            <div id="dialogModal" style="display:none">
+                <div class="modal-dialog" style="width:400px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button aria-label="Close" data-dismiss="modal" class="close" type="button" onclick="blockUIClose()">
+                                <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">消息</h4>
+                        </div>
+                        <div class="modal-body" style="text-align:center;font-size:14px;">
+                            <p></p>
+                        </div>
+                        <div class="modal-footer text-center" style="text-align:center;">
+                            <!--<button data-dismiss="modal" class="btn btn-default pull-left" type="button" onclick="blockUIClose()">关闭</button>-->
+                            <button class="btn btn-primary" onclick="blockUIClose()" type="button">确定</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+#define($scriptBlock)
+
+			<script>
+
+                $('#startDate').datetimepicker({
+                    language:  'zh-CN',
+                    format: 'yyyy-mm',
+                    autoclose: true,
+                    startView: 3,
+                    minView: 3,
+                }).on("click",function(ev){
+                    $("#startDate").datetimepicker("setEndDate", $("#endDate").val());
+                });
+                $('#endDate').datetimepicker({
+                    language:  'zh-CN',
+                    format: 'yyyy-mm',
+                    autoclose: true,
+                    startView: 3,
+                    minView: 3
+                }).on("click", function (ev) {
+                    $("#endDate").datetimepicker("setStartDate", $("#startDate").val());
+                });
+                var alias="$!{request.destination}";
+                $.ajax({
+                    type: "GET",
+                    url:  CONTEXTPATH + "/region/getCountry",//根据大洲编码获取国家
+                    data: {delta:$("[name=continent]").val()},
+                    async:false,
+                    dataType: "json",
+                    success: function (data) {
+                        $("[name=destination]").empty();
+                        $.each(data, function (i, item) {
+                            $("[name=destination]").append('<option '+(item.alias==alias?"selected":"")+'  value="'+item.alias+'">'+item.alias+'</option>')
+
+                        })
+                    }
+                });
+                $("[name=continent]").on("change",function(){
+                    var _value=$(this).val();
+                    $.ajax({
+                        type: "GET",
+                        url:  CONTEXTPATH + "/region/getCountry",//根据大洲编码获取国家
+                        data: {delta:_value},
+                        async:false,
+                        dataType: "json",
+                        success: function (data) {
+                            $("[name=destination]").empty();
+                            $.each(data, function (i, item) {
+                                $("[name=destination]").append('<option value="'+item.areaid+'">'+item.alias+'</option>')
+
+                            })
+                        }
+                    });
+                })
+                //province
+                $('#province').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: '城市所占比例'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: '用户数',
+                        data: [
+                            #foreach( $Detail in $response.areaDataList)
+                                ['$Detail.dataName',  $Detail.dataCount],
+
+                            #end
+
+                        ]
+                    }]
+                });
+                $('#province').find("text:last-child").html("");
+                $("#btns").on("click",function() {
+                    if (!$("[name=startTime]").val() || !$("[name=endTime]").val()) {
+                        $("#dialogModal").find(".modal-body>p").html("请输入开始时间和结束时间");
+                        blockUIOpenShare("dialogModal");
+                        return false;
+                    }
+                    $("#form1").submit();
+                })
+                //age
+                $('#age').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: '游客数据'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: '游客年龄',
+                        data: [
+    #foreach( $Detail in $response.ageDataList)
+                            ['$Detail.dataName',  $Detail.dataCount],
+
+        #end
+                        ]
+                    }]
+                });
+                $('#age').find("text:last-child").html("");
+                //sex
+                $('#sex').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: '游客性别'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: '性别',
+                        data: [
+                            #foreach( $Detail in $response.sexDataList)
+                                ['$Detail.dataName',  $Detail.dataCount],
+
+                            #end
+
+                        ]
+                    }]
+                });
+                $('#sex').find("text:last-child").html("");
+
+
+			</script>
+#end

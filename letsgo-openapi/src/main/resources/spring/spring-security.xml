@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+       http://www.springframework.org/schema/security/oauth2  http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
+
+    <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <property name="tokenStore" ref="tokenStore"/>
+        <property name="supportRefreshToken" value="true"/>
+        <property name="clientDetailsService" ref="clientDetailsService"/>
+    </bean>
+
+    <bean id="clinetAuthenticationEntryPoint"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <property name="exceptionRenderer" ref="handlerOAuth2ExceptionRenderer"/>
+    </bean>
+
+    <bean id="customerSignatureProcessingFilter"
+          class="com.umessage.letsgo.core.extensions.springsecurity.CustomerSignatureProcessingFilter">
+        <property name="clientDetailsService" ref="clientDetailsService"/>
+        <property name="authenticationEntryPoint" ref="clinetAuthenticationEntryPoint"/>
+    </bean>
+
+    <oauth2:resource-server id="resourceServerFilter" resource-id="letsgo-resource" token-services-ref="tokenServices"
+                            entry-point-ref="clinetAuthenticationEntryPoint"/>
+
+    <bean id="handlerOAuth2ExceptionRenderer"
+          class="com.umessage.letsgo.core.errorhandler.HandlerOAuth2ExceptionRenderer">
+        <property name="messageConverters">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                        <property name="serializationInclusion" value="NON_NULL"/>
+                        <property name="featuresToDisable">
+                            <array>
+                                <util:constant
+                                        static-field="com.fasterxml.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS"/>
+                            </array>
+                        </property>
+                    </bean>
+                </property>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>application/*+json;charset=UTF-8</value>
+                        <value>text/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="accessDeniedHandler"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler">
+        <property name="exceptionRenderer" ref="handlerOAuth2ExceptionRenderer"/>
+    </bean>
+    <!-- 
+    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter"/>
+                <bean class="org.springframework.security.access.vote.RoleVoter"/>
+                <bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+            </list>
+        </constructor-arg>
+    </bean>
+     -->
+    <security:http pattern="/api/user/toBindingFirst" security="none"/>
+    <security:http pattern="/api/user/toBindingSecond" security="none"/>
+
+    <security:http pattern="/api/**" create-session="never" entry-point-ref="clinetAuthenticationEntryPoint">
+        <security:anonymous enabled = "true" username = "anonymousUser" granted-authority = "ROLE_ANONYMOUS" />
+        <security:intercept-url pattern="/api/system/**" access="ROLE_ADMIN,ROLE_CAPTAIN,ROLE_GUIDE,ROLE_TOURIST,ROLE_ANONYMOUS"/>
+        <security:intercept-url pattern="/api/register/**" access="ROLE_ADMIN,ROLE_CAPTAIN,ROLE_GUIDE,ROLE_TOURIST,ROLE_ANONYMOUS"/>
+        <security:intercept-url pattern="/api/**" access="ROLE_ADMIN,ROLE_CAPTAIN,ROLE_GUIDE,ROLE_TOURIST"/>
+        <security:custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER"/>
+        <security:custom-filter ref="customerSignatureProcessingFilter" before="ANONYMOUS_FILTER"/>
+        <security:access-denied-handler ref="accessDeniedHandler"/>
+    </security:http>
+
+    <security:http pattern="/callback/**" security="none"/>
+    <!--user-->
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="userAuthenticationProvider">
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <!--user-->
+</beans>

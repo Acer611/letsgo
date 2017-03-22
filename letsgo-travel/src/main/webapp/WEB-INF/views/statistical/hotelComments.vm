@@ -1,0 +1,28 @@
+#set($layout="/WEB-INF/views/common/layout/layoutnew.vm")
+
+
+        #if($hotelValuationsResponse.page.size()>0)
+
+            #foreach( $Detail in $hotelValuationsResponse.page)
+            <tr>
+                <td> ${Detail.hotelName}</td>
+                <td>${Detail.hotelLevel}星</td>
+                <td>${Detail.evaluateCount}</td>
+                <td>${Detail.totalScore}</td>
+            </tr>
+
+            #end
+        #else
+        <tr><td colspan="4">没有符合条件的数据</td></tr>
+        #end
+
+
+
+
+<script type="text/javascript">
+
+
+      var totalpages="$!{hotelValuationsResponse.totals}";
+
+
+</script>

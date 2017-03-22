@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.system.CatalogDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.system.CatalogEntity" >
+        <id column="catalog_code" property="catalogCode" jdbcType="VARCHAR" />
+        <result column="catalog_name" property="catalogName" jdbcType="VARCHAR" />
+        <result column="descn" property="descn" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.String" >
+        delete from s_catalog
+        where catalog_code = #{catalogCode,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.system.CatalogEntity" >
+        insert into s_catalog (catalog_code, catalog_name, descn, 
+            create_time)
+        values (#{catalogCode,jdbcType=VARCHAR}, #{catalogName,jdbcType=VARCHAR}, #{descn,jdbcType=VARCHAR}, 
+            #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.system.CatalogEntity" >
+        update s_catalog
+        set catalog_name = #{catalogName,jdbcType=VARCHAR},
+            descn = #{descn,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where catalog_code = #{catalogCode,jdbcType=VARCHAR}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select catalog_code, catalog_name, descn, create_time
+        from s_catalog
+        where catalog_code = #{catalogCode,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select catalog_code, catalog_name, descn, create_time
+        from s_catalog
+    </select>
+</mapper>

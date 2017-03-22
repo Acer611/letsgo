@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            -webkit-transform:translate3d(0,0,0)
+        }
+
+        #gMap {
+            height: 100%;
+            -webkit-transform:translate3d(0,0,0)
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="resources/dist/css/mapsetting.css">
+</head>
+<body>
+<div id="gMap"></div>
+<div id="pin" style="display:none;"></div>
+<script src="resources/plugins/jQuery/jQuery-2.1.4.min.js">
+</script>
+
+<script src="resources/dist/js/mapsearch.js">
+</script>
+<script src="http://maps.google.cn/maps/api/js?key=AIzaSyBJm0v_D7f-Oywc2ZIxRApmC8tAQI1q07k&signed_in=false" async defer>
+</script>
+
+<script>
+    _lngnow=window.parent._lngnow;
+    _latnow=window.parent._latnow;
+    window.onload=function(){
+        initialize()
+    }
+    var newlng="";
+    var newlat="";
+    $(function() {
+        $(".header .r_f").on("click", function (event) {
+            event.preventDefault();
+            showToast(placenow.lat(), placenow.lng(), placenowloc);
+        })
+
+    })
+</script>
+</body>
+</html>

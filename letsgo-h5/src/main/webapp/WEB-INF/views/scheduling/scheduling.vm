@@ -1,0 +1,393 @@
+#set($pageTitle="我的排期")
+#set($layout="/WEB-INF/views/common/layout/layoutnew.vm")
+#set($styleUrls=["$!{STATIC_URL}/resources/css/reset.css","$!{STATIC_URL}/resources/css/calendar.css"])
+#set($scriptUrls=["$!{STATIC_URL}/resources/js/jqmobi.js","$!{STATIC_URL}/resources/js/calendar.js"])
+    <style>
+        .act {
+            margin-top: 85px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .act button {
+            margin-right: 30px;
+        }
+    </style>
+
+
+<!--<div class="head">
+    <h1>选择日期</h1>
+    <i class="ic-back"></i>
+</div>-->
+<div id="rl-bg"></div>
+<div class="wrap">
+    <ul class="rl-title">
+        <li>一</li>
+        <li>二</li>
+        <li>三</li>
+        <li>四</li>
+        <li>五</li>
+        <li class="wk">六</li>
+        <li class="wk">日</li>
+    </ul>
+
+    <div id="rl-container"></div>
+
+    <!--<P class="act">
+        <button id="prevMonth">上一月</button>
+        <button id="nextMonth">下一月</button>
+    </P>-->
+</div>
+<!--查看-->
+<div id="rl-look">
+    <div id="rl-look-con">
+        <p>
+            <span class="rl-look-title">名称：</span>
+            <span class="rl-look-con name">春樱漫赏-日本本周6日风情赏樱之旅</span>
+        </p>
+        <p>
+            <span class="rl-look-title">团号：</span>
+            <span class="rl-look-con teamNum">2198281501</span>
+        </p>
+        <p>
+            <span class="rl-look-title">出发地：</span>
+            <span class="rl-look-con startPlace">北京</span>
+        </p>
+        <p>
+            <span class="rl-look-title">出发时间：</span>
+            <span class="rl-look-con startDate">2016年7月7日</span>
+        </p>
+        <p>
+            <span class="rl-look-title">集合时间：</span>
+            <span class="rl-look-con collectionTime">提前3个小时</span>
+        </p>
+        <p>
+            <span class="rl-look-title">集合地点：</span>
+            <span class="rl-look-con collectionPlace">北京南苑机场</span>
+        </p>
+    </div>
+
+</div>
+<!--查看结束-->
+<!--忙碌-->
+<div id="rl-reset">
+    <div class="rl-reset-con">
+        <p class="rl-p1">将接下来几天设为忙碌</p>
+        <div class="choose-day">
+            <div class="choose-btn">
+                <span class="nextbtn">-</span>
+            </div>
+            <input type="text" value="1" readonly class="dayNum"/>
+            <div class="choose-btn">
+                <span class="prevbtn">+</span>
+            </div>
+        </div>
+        <p class="rl-p2">设为忙碌后旅行社将不可给您安排包含此日期的团！</p>
+    </div>
+    <form action="" class="rl-reset-btn">
+        <input type="button" value="取消" class="cancel"/>
+        <input type="submit" value="确定" class="submit"/>
+    </form>
+</div>
+<!--忙碌结束-->
+<!--空闲-->
+<div id="rl-time">
+    <div class="rl-time-con">
+        <p class="rl-p1">将接下来几天设为空闲</p>
+        <div class="choose-day">
+            <div class="choose-btn">
+                <span class="nextbtn">-</span>
+            </div>
+            <input type="text" value="1" readonly class="dayNum"/>
+            <div class="choose-btn">
+                <span class="prevbtn">+</span>
+            </div>
+        </div>
+        <p class="rl-p2">设为空闲后旅行社将可以把合适的团队派给您！</p>
+    </div>
+    <form action="" class="rl-reset-btn">
+        <input type="button" value="取消" class="cancel"/>
+        <input type="submit" value="确定" class="submit"/>
+    </form>
+</div>
+<!--空闲结束-->
+
+
+#define($scriptBlock)
+<script>
+    var currentdate,selectorangeDate=[],selectblueDate=[],selectblueDatenew,scheduleList=[];
+    #foreach($list in $response.busyList)
+    selectblueDate.push("$list")
+    #end
+    #foreach($list in $response.travelList)
+    selectorangeDate.push(getDays("$!date.format('yyyy-MM-dd',$list.startDate)", "$!date.format('yyyy-MM-dd',$list.endDate)",(DateDiff( "$!date.format('yyyy-MM-dd',$list.startDate)","$!date.format('yyyy-MM-dd',$list.endDate)")+1)));
+    scheduleList.push({id:"$!list.id",name:"$!list.name",teamNum:"$!list.teamNum",startPlace:"$!list.startPlace",endDate:"$!date.format('yyyy-MM-dd',$list.endDate)",startDate:"$!date.format('yyyy-MM-dd',$!list.startDate)",collectionTime:"$!date.format('yyyy-MM-dd HH:mm:ss',$!list.collectionTime)",collectionPlace:"$!list.collectionPlace"})
+    #end
+##        #foreach($list in $response.freeList)
+##            //$list
+##        #end
+    selectblueDatenew= blueDate(selectblueDate)
+    function blueDate(d){
+        var newd=d;
+        for(var i=1;i<d.length;i++){
+            if(DateDiff(d[i],d[i-1])>1) {
+                newd.splice(i,0,"|")
+            }
+        }
+        selectnewd=newd.join(",").split("|");
+        for(var m=0;m<selectnewd.length;m++){
+            selectnewd[m]= selectnewd[m].split(",");
+        }
+        for(var s=0;s<selectnewd.length;s++){
+            for(var p=0;p<selectnewd[s].length;p++){
+                if(!selectnewd[s][p]){
+                    selectnewd[s].splice(p,1)
+                }
+            }
+        }
+        return selectnewd;
+    }
+    (function() {
+        calendarIns = new calendar.calendar({
+            count: 5,
+            el:'#rl-container',
+            selectorangeDate:selectorangeDate,
+            selectblueDate: selectblueDatenew,
+            selectDateName: '空闲',
+            minDate: new Date(),
+            //maxDate: new Date( +new Date() + 100 * 86400000 ),
+            isShowHoliday: true,
+            isShowWeek: false
+        } );
+
+        $.bind( calendarIns, 'afterSelectDate', function( event ) {
+            var curItem = event.curItem,
+                    date = event.date,
+                    dateName = event.dateName;
+            currentdate=date;
+
+            //calendarIns.setSelectDate( date );
+            if ( curItem.hasClass( 'active-orange-bg' ) ) {
+                for(var i=0;i<scheduleList.length;i++){
+                    if(date>=scheduleList[i].startDate&&date<=scheduleList[i].endDate){
+                        $(".name").text(scheduleList[i].name);
+                        $(".teamNum").text(scheduleList[i].teamNum);
+                        $(".startPlace").text(scheduleList[i].startPlace);
+                        $(".startDate").text(scheduleList[i].startDate);
+                        if(scheduleList[i].collectionTime){
+                            $(".collectionTime").text(scheduleList[i].collectionTime);
+                            $(".collectionTime").parent().show()
+                        }else{
+                            $(".collectionTime").text(scheduleList[i].collectionTime);
+                            $(".collectionTime").parent().hide()
+                        }
+                        if(scheduleList[i].collectionTime){
+                            $(".collectionPlace").text(scheduleList[i].collectionPlace);
+                            $(".collectionPlace").parent().show()
+                        }else{
+                            $(".collectionPlace").text(scheduleList[i].collectionPlace);
+                            $(".collectionPlace").parent().hide();
+                        }
+
+                    }
+                }
+                $("#rl-look").css("display","block");
+                $("#rl-bg").css("display","block");
+            }
+            else if ( curItem.hasClass( 'active-blue-bg' ) ) {
+                $("#rl-time").css("display","block");
+                $("#rl-bg").css("display","block");
+            }else if ( !curItem.hasClass( 'active-blue-bg' )&&!curItem.hasClass( 'active-orange-bg' )&&!curItem.hasClass( 'iv' ) ) {
+
+                $("#rl-reset").css("display","block");
+                $("#rl-bg").css("display","block");
+            }
+        } );
+        $("#rl-bg").on("click",function(){
+            $("#rl-reset").css("display","none");
+            $("#rl-time").css("display","none");
+            $("#rl-look").css("display","none");
+            $("#rl-bg").css("display","none");
+        });
+        $( '#prevMonth' ).on( 'click', function() {
+            calendarIns.prevMonth();
+        });
+
+        $( '#nextMonth' ).on( 'click', function() {
+            calendarIns.nextMonth();
+        });
+
+    })();
+    var sum=$(".dayNum").val();
+    var sumbusy=$(".dayNumbusy").val();
+
+    $(".prevbtn").on("touchstart",function(){
+        if(sum>=10){
+            return false;
+        }
+        sum++;
+
+        $(".dayNum").val(sum);
+    })
+    $(".nextbtn").on("touchstart",function(){
+
+        if(sum<=1){
+            sum=1;
+            return false;
+        }
+        sum--;
+        $(".dayNum").val(sum);
+    });
+    $(".prevbtnbusy").on("touchstart",function(){
+        if(sum>=10){
+            return false;
+        }
+        sum++;
+        $(".dayNumbusy").val(sum);
+    })
+    $(".nextbtnbusy").on("touchstart",function(){
+
+        if(sum<=1){
+            sum=1;
+            return false;
+        }
+        sum--;
+        $(".dayNumbusy").val(sum);
+    });
+    $(".cancel").on("touchstart",function(event){
+        event.preventDefault();
+        $("#rl-time").css("display","none");
+        $("#rl-reset").css("display","none");
+        $("#rl-bg").css("display","none");
+    });
+    //设置空闲
+    $("#rl-time form.rl-reset-btn").on("submit",function(event){
+        event.preventDefault();
+        var newdate=AddDays(currentdate,$(".dayNum").val());
+        var dayNumArr=getDays(currentdate, newdate,$(".dayNum").val());
+        calendarIns.setSelectFreeDate( dayNumArr );
+        dataStr={dates:dayNumArr,status:2}
+        $.ajax({
+            type:"post",
+            url:'$!{link.contextPath}/web/user/saveMyWaiting?client_id='+getQueryString("client_id")+'&ver='+getQueryString("ver")+'&timestamp='+getQueryString("timestamp")+'&sign='+getQueryString("sign")+'&access_token='+getQueryString("access_token"),
+            data:JSON.stringify(dataStr),
+            contentType:'application/json;charset=utf-8',
+            dataType:'application/json',
+            success:function(data){
+
+            }
+        });
+        $("#rl-time").css("display","none");
+        $("#rl-bg").css("display","none");
+    });
+    //设置忙碌
+    $("#rl-reset form.rl-reset-btn").on("submit",function(event){
+        event.preventDefault();
+        var newdate=AddDays(currentdate,$(".dayNum").val());
+        var dayNumArr=getDays(currentdate,newdate, $(".dayNum").val());
+//        calendarIns.setSelectBusyDate( dayNumArr );
+        dataStr={dates:dayNumArr,status:1}
+       $.ajax({
+            type:"post",
+            url:'$!{link.contextPath}/web/user/saveMyWaiting?client_id='+getQueryString("client_id")+'&ver='+getQueryString("ver")+'&timestamp='+getQueryString("timestamp")+'&sign='+getQueryString("sign")+'&access_token='+getQueryString("access_token"),
+            data:JSON.stringify(dataStr),
+            contentType:'application/json;charset=utf-8',
+            dataType:'application/json',
+            success:function(data){
+                var dataObj=eval("("+data+")");
+                var selectblueDatenew1= blueDate(dataObj.busyList);
+                calendarIns.setSelectBusyDate( selectblueDatenew1 );
+            }
+        });
+
+        $("#rl-reset").css("display","none");
+        $("#rl-bg").css("display","none");
+    });
+
+    //获取url参数的值：name是参数名
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return (r[2]);
+        }
+        return null;
+    }
+    function AddDays(date,days){
+        var nd = new Date(date);
+        nd = nd.valueOf();
+        nd = nd + days * 24 * 60 * 60 * 1000;
+        nd = new Date(nd);
+        //alert(nd.getFullYear() + "年" + (nd.getMonth() + 1) + "月" + nd.getDate() + "日");
+        var y = nd.getFullYear();
+        var m = nd.getMonth()+1;
+        var d = nd.getDate();
+        if(m <= 9) m = "0"+m;
+        if(d <= 9) d = "0"+d;
+        var cdate = y+"-"+m+"-"+d;
+        return cdate;
+    }
+    function DateDiff(sDate1, sDate2)
+    {
+        var aDate, oDate1, oDate2, iDays
+        aDate = sDate1.split("-")
+        oDate1 = new Date(aDate[0] + '-' + aDate[1] + '-' + aDate[2]) ;
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[0] + '-' + aDate[1] + '-' + aDate[2])
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 /24) ;
+        return iDays
+    }
+    // 获取间隔天数
+    function getDays(day1, day2,num) {
+        // 获取入参字符串形式日期的Date型日期
+        var st = new Date(day1);
+        var et = new Date(day2);
+
+        var retArr = [];
+
+        // 获取开始日期的年，月，日
+       /* var yyyy = st.getFullYear(),
+                mm = st.getMonth()+1,
+                dd = st.getDate(),
+                ddend=et.getDate(),
+                newdd;
+        if(mm <= 9) mm = "0"+mm;*/
+
+
+        // 循环
+        while (num--) {
+            //newst=st;
+            newst=AddDays(st,num)
+            //newdd=dd++
+           // if(newdd <= 9) newdd = "0"+newdd;
+            // 使用dd++进行天数的自增
+           // st = yyyy+"-"+mm+"-"+newdd;;
+            retArr.push(newst);
+        }
+        // 将结束日期的天放进数组
+        //retArr.push(yyyy+"-"+mm+"-"+(ddend<=9?"0"+ddend:ddend));
+
+        return retArr.reverse(); // 或可换为return ret;
+    }
+    // 给Date对象添加getYMD方法，获取字符串形式的年月日
+    function getYMD(date){
+
+        // 将结果放在数组中，使用数组的join方法返回连接起来的字符串，并给不足两位的天和月十位上补零
+        return [date.getFullYear(), fz(date.getMonth() + 1), fz(date.getDate())].join("-");
+    }
+
+    // 给String对象添加getDate方法，使字符串形式的日期返回为Date型的日期
+    String.prototype.getDatenew = function(){
+        var strArr = this.split('-');
+        return new Date(strArr[0], strArr[1] - 1, strArr[2]);
+    }
+
+    // 给月和天，不足两位的前面补0
+    function fz(num) {
+        if (num < 10) {
+            num = "0" + num;
+        }
+        return num
+    }
+</script>
+#end

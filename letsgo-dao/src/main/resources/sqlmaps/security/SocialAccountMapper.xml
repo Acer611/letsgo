@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.umessage.letsgo.dao.security.SocialAccountDao" >
+    <resultMap id="BaseResultMap" type="com.umessage.letsgo.domain.po.security.SocialAccountEntity" >
+        <id column="ID" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="account" property="account" jdbcType="VARCHAR" />
+        <result column="account_password" property="accountPassword" jdbcType="VARCHAR" />
+        <result column="account_type" property="accountType" jdbcType="INTEGER" />
+        <result column="account_openid" property="accountOpenid" jdbcType="VARCHAR" />
+        <result column="openid_timestamp" property="openidTimestamp" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="version" property="version" jdbcType="BIGINT" />
+    </resultMap>
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_social_account
+        where ID = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.umessage.letsgo.domain.po.security.SocialAccountEntity" >
+        insert into s_social_account (ID, user_id, account, 
+            account_password, account_type, account_openid, 
+            openid_timestamp, create_time, update_time, 
+            version)
+        values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{account,jdbcType=VARCHAR}, 
+            #{accountPassword,jdbcType=VARCHAR}, #{accountType,jdbcType=INTEGER}, #{accountOpenid,jdbcType=VARCHAR}, 
+            #{openidTimestamp,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+            #{version,jdbcType=BIGINT})
+    </insert>
+    <update id="update" parameterType="com.umessage.letsgo.domain.po.security.SocialAccountEntity" >
+        update s_social_account
+        set user_id = #{userId,jdbcType=BIGINT},
+            account = #{account,jdbcType=VARCHAR},
+            account_password = #{accountPassword,jdbcType=VARCHAR},
+            account_type = #{accountType,jdbcType=INTEGER},
+            account_openid = #{accountOpenid,jdbcType=VARCHAR},
+            openid_timestamp = #{openidTimestamp,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            version = #{version,jdbcType=BIGINT}
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select ID, user_id, account, account_password, account_type, account_openid, openid_timestamp, 
+        create_time, update_time, version
+        from s_social_account
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap" >
+        select ID, user_id, account, account_password, account_type, account_openid, openid_timestamp, 
+        create_time, update_time, version
+        from s_social_account
+    </select>
+</mapper>
